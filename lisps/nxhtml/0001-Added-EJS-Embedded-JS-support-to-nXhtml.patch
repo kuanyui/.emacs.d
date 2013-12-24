@@ -1,0 +1,171 @@
+From 89b8b1c03fb9f5e88df9fc55895b618ce90b551b Mon Sep 17 00:00:00 2001
+From: Stefan Thomas <justmoon@members.fsf.org>
+Date: Thu, 16 Dec 2010 18:38:34 +0000
+Subject: [PATCH] Added EJS (Embedded JS) support to nXhtml.
+
+---
+ nxhtml/nxhtml-autoload.el |    1 +
+ nxhtml/nxhtml-mumamo.el   |   17 +++++++++++++++++
+ util/majmodpri.el         |    1 +
+ util/mumamo-chunks.el     |   31 +++++++++++++++++++++++++++++++
+ util/mumamo-fun.el        |   37 +++++++++++++++++++++++++++++++++++++
+ util/ourcomments-util.el  |    1 +
+ 6 files changed, 88 insertions(+), 0 deletions(-)
+
+diff --git a/nxhtml/nxhtml-autoload.el b/nxhtml/nxhtml-autoload.el
+index 370d45f..619ba0f 100644
+--- a/nxhtml/nxhtml-autoload.el
++++ b/nxhtml/nxhtml-autoload.el
+@@ -113,6 +113,7 @@ order."
+   (add-to-list 'auto-mode-alist '("\\.erb\\'"      . eruby-javascript-mumamo-mode))
+   (add-to-list 'auto-mode-alist '("\\.erb.html\\'" . eruby-html-mumamo-mode))
+   (add-to-list 'auto-mode-alist '("\\.html.erb\\'" . eruby-html-mumamo-mode))
++  (add-to-list 'auto-mode-alist '("\\.ejs\\'"      . ejs-nxhtml-mumamo-mode))
+   (add-to-list 'auto-mode-alist '("\\.phps\\'"     . smarty-nxhtml-mumamo-mode))
+   (add-to-list 'auto-mode-alist '("\\.epl\\'"      . embperl-nxhtml-mumamo-mode))
+   (add-to-list 'auto-mode-alist '("\\.ghtml\\'"    . genshi-nxhtml-mumamo-mode))
+diff --git a/nxhtml/nxhtml-mumamo.el b/nxhtml/nxhtml-mumamo.el
+index 12ce18c..e44fe11 100644
+--- a/nxhtml/nxhtml-mumamo.el
++++ b/nxhtml/nxhtml-mumamo.el
+@@ -279,6 +279,23 @@ This also covers inlined style and javascript."
+     )))
+ 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++;;;; EJS
++
++;;;###autoload
++(define-mumamo-multi-major-mode ejs-nxhtml-mumamo-mode
++  "Turn on multiple major modes for EJS with main mode `nxhtml-mode'.
++This also covers inlined style and javascript."
++  ("EJS nXhtml Family" nxhtml-mode
++   (mumamo-chunk-ejs-comment
++    mumamo-chunk-ejs=
++    mumamo-chunk-ejs
++    mumamo-chunk-inlined-style
++    mumamo-chunk-inlined-script
++    mumamo-chunk-style=
++    mumamo-chunk-onjs=
++    )))
++
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;; ASP
+ 
+ ;;;###autoload
+diff --git a/util/majmodpri.el b/util/majmodpri.el
+index 264fc7b..7ee2bec 100644
+--- a/util/majmodpri.el
++++ b/util/majmodpri.el
+@@ -335,6 +335,7 @@ before applying."
+     smarty-nxhtml-mumamo-mode
+     smarty-html-mumamo-mode
+     ;;tt-html-mumamo-mode
++    ejs-nxhtml-mumamo-mode
+ 
+     nxhtml-mumamo-mode
+     html-mumamo-mode
+diff --git a/util/mumamo-chunks.el b/util/mumamo-chunks.el
+index d9a7034..af3dd7c 100644
+--- a/util/mumamo-chunks.el
++++ b/util/mumamo-chunks.el
+@@ -1156,6 +1156,37 @@ part of a comment."
+ 
+ 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++;;;; EJS (Embedded JavaScript)
++
++(defun mumamo-chunk-ejs (pos max)
++  "Find <% ... %>.  Return range and 'javascript-mode.
++See `mumamo-possible-chunk-forward' for POS and MAX."
++  (let ((chunk (mumamo-quick-chunk-forward pos max '("<%-?" . t) '("-?%>" . t) 'borders 'javascript-mode)))
++    (when chunk
++      ;; Put indentation type on 'mumamo-next-indent on the chunk:
++      (setcdr (last chunk) '(mumamo-template-indentor))
++      chunk)))
++
++(defun mumamo-chunk-ejs= (pos max)
++  "Find <%= ... %>.  Return range and 'javascript-mode.
++See `mumamo-possible-chunk-forward' for POS and MAX."
++  (let ((chunk (mumamo-quick-chunk-forward pos max "<%=" '("-?%>" . t) 'borders 'javascript-mode)))
++    (when chunk
++      ;; Put indentation type on 'mumamo-next-indent on the chunk.
++      ;; See nXhtml bug 579581 for a case where it is needed.
++      (setcdr (last chunk) '(mumamo-template-indentor))
++      chunk)))
++
++(defun mumamo-chunk-ejs-comment (pos max)
++  "Find <%# ... %>.  Return range and 'mumamo-comment-mode.
++See `mumamo-possible-chunk-forward' for POS and MAX.
++
++This is needed since otherwise the end marker is thought to be
++part of a comment."
++  (mumamo-quick-chunk-forward pos max "<%#" "%>" 'borders 'mumamo-comment-mode))
++
++
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;; heredoc
+ 
+ (defcustom mumamo-heredoc-modes
+diff --git a/util/mumamo-fun.el b/util/mumamo-fun.el
+index 71e32ff..ae705a2 100644
+--- a/util/mumamo-fun.el
++++ b/util/mumamo-fun.el
+@@ -332,6 +332,43 @@ information about <%% ... %%>, % and %%."
+ 
+ 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++;;;; EJS (Embedded JavaScript)
++
++;; See also http://embeddedjs.com/
++
++;; ;;;###autoload
++;; (define-mumamo-multi-major-mode ejs-mumamo-mode
++;;   "Turn on multiple major mode for EJS with unspecified main mode.
++;; Current major-mode will be used as the main major mode."
++;;   ("EJS Family" nil
++;;    (mumamo-chunk-ejs-comment
++;;     mumamo-chunk-ejs=
++;;     mumamo-chunk-ejs
++;;     )))
++
++;;;###autoload
++(define-mumamo-multi-major-mode ejs-html-mumamo-mode
++  "Turn on multiple major modes for EJS with main mode `html-mode'.
++This also covers inlined style and javascript.
++
++The EJS chunks handled are:
++
++       <% JavaScript code -- inline with output %>
++       <%= JavaScript expression -- replace with result %>
++       <%# comment -- ignored -- useful in testing %>"
++  ("EJS Html Family" html-mode
++   (
++    mumamo-chunk-ejs-comment
++    mumamo-chunk-ejs=
++    mumamo-chunk-ejs
++    mumamo-chunk-inlined-style
++    mumamo-chunk-inlined-script
++    mumamo-chunk-style=
++    mumamo-chunk-onjs=
++    )))
++
++
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;; heredoc
+ 
+ ;;;###autoload
+diff --git a/util/ourcomments-util.el b/util/ourcomments-util.el
+index 2f07b74..63177a4 100644
+--- a/util/ourcomments-util.el
++++ b/util/ourcomments-util.el
+@@ -515,6 +515,7 @@ With prefix ARG fill only current line."
+ ;; (major-modep 'django-nxhtml-mumamo-mode)
+ ;; (major-modep 'eruby-nxhtml-mumamo-mode)
+ ;; (major-modep 'eruby-nxhtml-mumamo-mode)
++;; (major-modep 'ejs-nxhtml-mumamo-mode)
+ ;; (major-modep 'smarty-nxhtml-mumamo-mode)
+ ;; (major-modep 'embperl-nxhtml-mumamo-mode)
+ ;; (major-modep 'laszlo-nxml-mumamo-mode)
+-- 
+1.7.1
+

@@ -1,0 +1,45 @@
+<!-- -*- mode: markdown -*- -->
+
+<!-- # Twittering-mode -->
+
+Twittering-mode is an Emacs major mode for Twitter. You can check
+timelines, tweet, mark posts as favorites and so on with Emacs.
+
+[![](http://twitter-badges.s3.amazonaws.com/follow_me-a.png)](http://www.twitter.com/twmode)
+
+## Screenshot
+
+![](./images/screen-user.png)
+
+and [more](./screenshot.html)
+
+## Download
+
+* Latest release (2013/5/7): [twittering-mode-3.0.0](http://sourceforge.net/projects/twmode/files/)
+* Development version: [GitHub repository](http://github.com/hayamiz/twittering-mode/)
+
+See the [history](http://github.com/hayamiz/twittering-mode/commits/master/twittering-mode.el).
+
+## Documentation
+For the latest release, see [README.markdown](http://github.com/hayamiz/twittering-mode/blob/3.0.x/README.markdown).
+For the development version, see [README.markdown](http://github.com/hayamiz/twittering-mode/blob/master/README.markdown).
+
+## Getting involved
+
+See [how to contribute](./how-to-contribute.html) for detailed information.
+
+### Mailing lists
+
+Join [twittering-mode ML](http://sourceforge.net/mail/?group_id=288615).
+
+### Repository
+
+You can clone the git repository:
+
+    git clone git://github.com/hayamiz/twittering-mode.git
+
+Or fork on [GitHub](http://github.com/hayamiz/twittering-mode)
+
+## See also
+
+* [EmacsWiki: TwitteringMode](http://www.emacswiki.org/emacs/TwitteringMode)

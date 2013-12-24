@@ -1,0 +1,154 @@
+# smart-window v0.6 (beta)
+
+This package improves Emacs window system with window moving commands (not moving focus between windows) and window splitting commands that takes addtional options to edit a file or a buffer.
+
+## INSTALL
+
+If you have [marmalade][marmalade] or [melpa][melpa] and emacs24 installed, simply type
+
+    M-x package-install smart-window
+
+In your .emacs
+
+    (require 'smart-window)
+
+If you don't have marmalade installed, add these to your .emacs
+
+    (require 'package)
+    (add-to-list 'package-archives 
+        '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (package-initialize)
+
+`M-x eval-buffer` to evaluate it, and then do `M-x package-refresh-contents` to load in the package listing.
+
+## SYNOPSIS
+
+`smart-window.el` provides the following commands
+
+    M-x smart-window-move
+    M-x smart-window-buffer-split
+    M-x smart-window-file-split
+    M-x smart-window-rotate
+    
+    M-x sw-above
+    M-x sw-below
+    M-x sw-left
+    M-x sw-right
+
+and the following key bindings.
+
+    C-x w   => smart-window-move
+    C-x W   => smart-window-buffer-split
+    C-x M-w => smart-window-file-split
+    C-x R   => smart-window-rotate
+    C-x 2   => sw-below
+    C-x 3   => sw-right
+
+The last two key bindings has overrided default window splitting commands. To switch back to the default, put this in your `.emacs` file.
+
+    (setq smart-window-remap-keys 0)
+    
+### smart-window-move
+
+`smart-window-move` command move the current window to the edge of the frame. The edge options are `left/right/above/below`, where `below` is the default.
+
+For example, if you chose `above`, then the current window would be at the very top of the frame, using the full width of the screen.
+
+    +--------------+-------------+
+    |              |             |
+    |      W1      |     W2      |
+    |              |             |
+    +--------------+-------------+
+    |              |             |
+    |      W3      |     W4      |
+    |   (current)  |             |
+    +--------------+-------------+
+    
+                   |
+    "choose `above` in smart-window-move
+                   |
+                   V
+    
+    +----------------------------+
+    |                            |
+    |         W3 (current)       |
+    |                            |
+    +--------------+-------------+
+    |              |     W2      |
+    |      W1      +-------------+
+    |              |     W4      |
+    +--------------+-------------+
+
+It works like closing the current window and attaching a new window to the top edge of the screen.
+
+### smart-window-rotate
+
+`smart-window-rotate` rotates the windows downwards and rightwards. It is bound to `C-x R`.
+
+    +----------------------------+
+    |                            |
+    |         W3 (current)       |
+    |                            |
+    +--------------+-------------+
+    |              |     W2      |
+    |      W1      +-------------+
+    |              |     W4      |
+    +--------------+-------------+
+    
+                   |
+          smart-window-rotate
+                   |
+                   V
+    +----------------------------+
+    |                            |
+    |             W4             |
+    |                            |
+    +--------------+-------------+
+    |              |     W1      |
+    |      W3      +-------------+
+    |  (current)   |     W2      |
+    +--------------+-------------+
+
+### smart-window-buffer-split
+
+`smart-window-buffer-split` works like normal window splitting, except that you can pick buffer from the buffer list before you split it and choose which direction to split (left, right, above, and below.) It is bounded to `C-x W`.
+
+There are four derived functions for `smart-window-buffer-split`:
+
+* `M-x sw-above` allows you to split a window above the current window with the buffer you chose.
+
+* `M-x sw-below` allows you to split a window below the current window with the buffer you chose.
+
+* `M-x sw-left` allows you to split a window left to the current window with the buffer you chose.
+
+* `M-x sw-right` allows you to split a window right to the current window with the buffer you chose.
+
+* `C-x 2` is bounded to `sw-below`.
+* `C-x 3` is bounded to `sw-right`.
+
+### smart-window-file-split
+
+`smart-window-file-split` is similar to `smart-window-buffer-split`, except you choose file from minibuffer instead of buffer list. It is bounded to `C-x M-w`.
+
+## LICENSE
+
+Copyright (C) 2013 by Felix Chern
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+[GNU General Public License][gpl] for more details.
+
+You should have received a copy of the GNU General Public License
+along with GNU Emacs; see the file COPYING.  If not, write to the
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
+
+[marmalade]: http://marmalade-repo.org
+[melpa]: http://melpa.milkbox.net
+[gpl]: http://www.gnu.org/licenses/gpl.html
