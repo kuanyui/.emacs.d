@@ -1,5 +1,4 @@
 ;;kuanyui's ~/.emacs
-;;Time-stamp: "此文件最後是在2013-12-25 01:18:04由kuanyui修改"
 
 ;;掃描~/.emacs.d目錄
 (add-to-list 'load-path "~/.emacs.d")
@@ -124,6 +123,9 @@
     (insert (format-time-string "%Y/%m/%d（%a）" (current-time))))
 ))
 (global-set-key (kbd "C-c d") 'my-insert-date)
+
+;; 煩死了直接拿org-mode來用就好了。我幹麼自找麻煩啊真白痴。
+(global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
 
 (defun display-prefix (arg)
   "Display the value of the raw prefix arg."
@@ -257,19 +259,19 @@
   (interactive)
   (insert " ** ")
   (backward-char 2))
-(global-set-key (kbd "C-c b") 'org-insert-bold)
+(define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
 
 (defun org-insert-blockquote ()
   "Insert *bold* at cursor point."
   (interactive)
   (move-end-of-line 1)(newline 2)(insert "#+BEGIN_QUOTE")(newline 2)(insert "#+END_QUOTE")(previous-line 1))
-(global-set-key (kbd "C-c i q") 'org-insert-blockquote)
+(define-key org-mode-map (kbd "C-c i q") 'org-insert-blockquote)
 
 (defun org-insert-center-block ()
   "Insert *bold* at cursor point."
   (interactive)
   (move-end-of-line 1)(newline 2)(insert "#+BEGIN_CENTER")(newline 2)(insert "#+END_CENTER")(previous-line 1))
-(global-set-key (kbd "C-c i c") 'org-insert-center-block)
+(define-key org-mode-map (kbd "C-c i c") 'org-insert-center-block)
 
 
 (defun org-insert-image ()
@@ -277,7 +279,7 @@
   (interactive)
   (let* ((insert-default-directory nil))
 	(insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
-(global-set-key (kbd "C-c i i") 'org-insert-image)
+(define-key org-mode-map (kbd "C-c i i") 'org-insert-image)
 
 
 
@@ -851,11 +853,11 @@
 (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
 
 ;; set-mark, multiple-cursors & cua-mode
-(cua-mode t)
-(setq cua-enable-cua-keys nil) ;;変なキーバインド禁止
-(global-set-key (kbd "C-c C-@") 'cua-set-rectangle-mark)
+;; (cua-mode t)
+;; (setq cua-enable-cua-keys nil) ;;変なキーバインド禁止
+;; (global-set-key (kbd "C-c C-@") 'cua-set-rectangle-mark)
 (global-set-key (kbd "M-RET") 'set-mark-command) ;這他媽的會跟org-mode衝啊！
-(global-set-key (kbd "C-c RET") 'cua-set-rectangle-mark)
+;; (global-set-key (kbd "C-c RET") 'cua-set-rectangle-mark)
 (global-set-key (kbd "C-x RET") 'mc/edit-lines)
 
 (add-hook 'org-mode-hook
@@ -1108,8 +1110,41 @@
       (setq end (point)))
     (describe-function (intern (buffer-substring-no-properties begin end)))))
 
+(defun lookup-elisp-variable-doc ()
+  "Look up the variable under the cursor."
+  (interactive)
+  (let (begin end)
+    (save-excursion
+      (re-search-backward "[^A-z-_/]")
+      (right-char)
+      (setq begin (point))
+      (re-search-forward "[^A-z-_/]")
+      (left-char 1)
+      (setq end (point)))
+    (describe-variable (intern (buffer-substring-no-properties begin end)))))
+
 (define-key emacs-lisp-mode-map (kbd "C-h 1") 'lookup-elisp-function-doc)
+(define-key emacs-lisp-mode-map (kbd "C-h 2") 'lookup-elisp-variable-doc)
 (define-key lisp-interaction-mode-map (kbd "C-h 1") 'lookup-elisp-function-doc)
+(define-key lisp-interaction-mode-map (kbd "C-h 2") 'lookup-elisp-variable-doc)
+
+;; Makes eval elisp sexp more convenient
+(defun eval-elisp-sexp ()
+  "Eval Elisp code at the point, and remove current s-exp
+With one `C-u' prefix, insert output following an arrow"
+  (interactive)
+  (cond ((equal current-prefix-arg nil)      ;if no prefix
+         (let ((OUTPUT (eval (preceding-sexp))))
+           (kill-sexp -1)
+           (insert (format "%s" OUTPUT))))
+        ((equal current-prefix-arg '(4)) ;one C-u prefix
+         (save-excursion
+           (let ((OUTPUT (eval (preceding-sexp))))
+             (insert (format "%s%s" " => " OUTPUT)))))))
+
+(global-set-key (kbd "C-c C-x C-e") 'eval-elisp-sexp)
+;; avoid key-binding conflict with org
+(define-key org-mode-map (kbd "C-c C-x C-e") 'org-clock-modify-effort-estimate)
 
 ;;確認後再關掉Emacs啦
 (defun save-buffers-kill-terminal-after-confirm ()
@@ -1139,12 +1174,18 @@
 (set-face-foreground 'widget-button "orange")
 
 ;;插入blog的動態行間註解(需搭配CSS)
-(defun hexo-insert-inline-note ()
+(defun md-insert-inline-note ()
   (interactive)
   (insert "<span class=\"note\"><span class=\"content\"></span></span>")
   (backward-char 36))
-(define-key markdown-mode-map (kbd "C-c i n") 'hexo-insert-inline-note)
+(define-key markdown-mode-map (kbd "C-c i n") 'md-insert-inline-note)
 
+(defun md-insert-image ()
+  (interactive)
+  (let ((LINK (read-from-minibuffer "Page's link: "))
+        (IMG (read-from-minibuffer "Image's link:")))
+    (insert (format "<a href=\"%s\"><img src=\"%s\" alt=\"\" class=\"\">" LINK IMG))))
+(define-key markdown-mode-map (kbd "C-c i i") 'md-insert-image)
 ;;(require 'highlight-indentation)
 ;;(add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode)
 ;;(add-hook 'prog-mode-hook 'highlight-indentation-mode)
@@ -1248,6 +1289,8 @@ date: %Y-%m-%d %H:%M:%S
 <span style='font-style:italic;color:#999;font-size:0.8em;'>此頁面於%Y/%m/%d  %H:%M:%S產生</span></blockquote>" (current-time))
                  ))
         (save-buffer)))))
+
+
 
 ;;discover-mode
 (global-discover-mode 1)
