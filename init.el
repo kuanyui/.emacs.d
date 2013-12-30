@@ -1184,7 +1184,7 @@ With one `C-u' prefix, insert output following an arrow"
   (interactive)
   (let ((LINK (read-from-minibuffer "Page's link: "))
         (IMG (read-from-minibuffer "Image's link:")))
-    (insert (format "<a href=\"%s\"><img src=\"%s\" alt=\"\" class=\"\">" LINK IMG))))
+    (insert (format "<a href=\"%s\"><img src=\"%s\" alt=\"\" class=\"\"></a>" LINK IMG))))
 (define-key markdown-mode-map (kbd "C-c i i") 'md-insert-image)
 ;;(require 'highlight-indentation)
 ;;(add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode)
