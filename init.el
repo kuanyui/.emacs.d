@@ -43,8 +43,10 @@
 ;;行號
 (global-linum-mode t)
 
+;; Highlight line number
 (require 'hlinum)
 (hlinum-activate)
+
 
 ;;當前行高亮顯示
 ;;(global-hl-line-mode 1)
@@ -225,7 +227,7 @@
 (add-to-list 'auto-mode-alist '("\\.mdown\\'" . markdown-mode))
 
 (setq markdown-enable-math t)
-
+(setq markdown-command "/usr/lib/node_modules/marked/bin/marked")
 
 ;;把markdown的outline搞得跟org-mode的key-binding接近一點
 ;;靠背老子寫不出來啦
@@ -242,8 +244,13 @@
 ;;Org-mode專區===========================================
 ;;安裝最新版org-mode
 ;;(add-to-list 'load-path "~/.emacs.d/lisps/org-mode/lisp/")
-(add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
-(require 'org-install)
+;;(add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
+;;(require 'org-install)
+(require 'org)
+;;(require 'org-odt)
+;;(require 'org-html)
+;;(require 'ox-odt)
+;;(require 'ox-html)
 
 (setq org-directory "~/org")
 
@@ -281,8 +288,68 @@
 	(insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
 (define-key org-mode-map (kbd "C-c i i") 'org-insert-image)
 
-
-
+;;(setq org-export-default-language "zh"
+;;      org-export-html-extension "html"
+;;      org-export-with-timestamps nil
+;;      org-export-with-section-numbers nil
+;;      org-export-with-tags 'not-in-toc
+;;      org-export-skip-text-before-1st-heading nil
+;;      org-export-with-sub-superscripts '{}
+;;      org-export-with-LaTeX-fragments t
+;;      org-export-with-archived-trees nil
+;;      org-export-highlight-first-table-line t
+;;      org-export-latex-listings-w-names nil
+;;      org-html-head-include-default-style nil
+;;      org-html-head ""
+;;      org-export-htmlize-output-type 'css
+;;      org-startup-folded nil
+;;      org-export-allow-BIND t
+;;      org-publish-list-skipped-files t
+;;      org-publish-use-timestamps-flag t
+;;      org-export-babel-evaluate nil
+;;      org-confirm-babel-evaluate nil)
+;;
+;;;;輸出上下標？
+;;(setq org-export-with-sub-superscripts nil)
+;;
+;;(org-export-html-style "<style type=\"text/css\">
+;;body { text-align: center; }
+;;#content { 
+;;  margin: 0px auto;
+;;  width: 800px; text-align:left; }
+;;
+;;h1 { border-bottom: 1px solid black; }
+;;
+;;.outline-2 { padding: 0px 16px; }
+;;.outline-3 { padding: 0px 16px; }
+;;
+;;.outline-text-2 { padding: 0px 16px; }
+;;.outline-text-3 { padding: 0px 16px; }
+;;
+;;.example { }
+;;pre {
+;;        border: 1pt solid #AEBDCC;
+;;        background-color: #F3F5F7;
+;;        padding: 5pt;
+;;        font-family: courier, monospace;
+;;        font-size: 90%;
+;;        overflow:auto;
+;;}
+;;
+;;code {
+;;        border: 1pt solid #AEBDCC;
+;;        background-color: #F3F5F7;
+;;        font-family: courier, monospace;
+;;        font-size: 90%;
+;;}
+;;
+;;.todo { color: red; }
+;;.done { color: green; }
+;;.tag { float:right; color:red; }
+;;
+;;#postamble { display:none; }
+;;</style>")
+;;
 ;; 指定agenda檔案位置清單
 (setq org-agenda-files (list (concat org-directory "/todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
@@ -375,13 +442,13 @@
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline (concat org-directory "/todo.org") "Tasks")
-         "** TODO %?\n  %i\n  %a")
+         "** TODO %?\n  %i")
         ("b" "Buy" entry (file+headline (concat org-directory "/todo.org") "Buy")
-         "** TODO %?\n  %i\n  %a")
+         "** TODO %?\n  %i")
         ("r" "Reading" entry (file+headline (concat org-directory "/todo.org") "Reading")
-         "** %? %i :Reading:\n")
-        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary_2013.org")
-                                          "* %?\nEntered on %U\n  %i\n  %a"))))
+         "** %? %i :Reading:")
+        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org")
+                                          "* %?\n %i"))))
 
 ;; capture jump to link
 (define-key global-map "\C-cx"
@@ -534,6 +601,18 @@
 (define-key twittering-mode-map (kbd "C-w") 'twittering-push-uri-onto-kill-ring)
 (define-key twittering-mode-map (kbd "D") 'twittering-direct-messages-timeline)
 
+;;讓twittering-status-buffer支援換行
+(setq twittering-status-format
+      "%i %s,%p %@:
+%FOLD[  ]{%T // from %f%L%r%R}
+ ")
+
+(setq twittering-retweet-format
+      '(nil _ " RT: %t (via @%s)")
+      )
+
+;; [FIXME] twittering-update-status沒有hook可用，看看要不要自己定義一個發推用function，可以把發出的推也一起加入diary.org的結尾。
+
 ;;類似pentadactyl按[f]後輸入數字開啟連結
 (autoload 'twittering-numbering "twittering-numbering" nil t)
 (add-hook 'twittering-mode-hook 'twittering-numbering)
@@ -592,7 +671,7 @@
   (twittering-myfav-export-to-html)
   (write-file "~/Dropbox/Blog/kuanyui.github.io/source/twittering_myfav.html" nil)
   (goto-char (point-min))
-  (insert "layout: false\n---\n")
+  (insert "layout: false\n---\n\n")
   (save-buffer))
 
 ;;有了tmux就不須要Emacs裡那個問題多多的terminal emulator了。
@@ -600,11 +679,26 @@
 (global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
 (defun zsh () (interactive) (term "/bin/zsh"))
 
-;;用f5~f8調整frame大小
-(global-set-key (kbd "C-x <f5>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-x <f6>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-x <f7>") 'shrink-window)
-(global-set-key (kbd "C-x <f8>") 'enlarge-window)
+;;一個簡單的minor-mode，用來調整frame大小
+(define-minor-mode resize-frame
+  "A simple minor mode to resize-frame.
+C-c C-c to apply."
+  ;; The initial value.
+  :init-value nil
+  ;; The indicator for the mode line.
+  :lighter " ResizeFrame"
+  ;; The minor mode bindings.
+  :keymap
+  `(([up] . enlarge-window)
+    ([down] . shrink-window)
+    ([right] . enlarge-window-horizontally)
+    ([left] . shrink-window-horizontally)
+    ("\C-c\C-c" . (lambda ()
+                         (interactive)
+                         (setq resize-frame nil)
+                         (message "Done."))))
+  :global t)
+(global-set-key (kbd "C-x <f5>") 'resize-frame)
 
 (global-set-key (kbd "<f9>") 'open-note)
 (defun open-note ()
@@ -629,7 +723,7 @@
 (global-set-key (kbd "C-x <f11>") 'open-diary)
 (defun open-diary ()
   "Open diary."
-  (interactive)(find-file (concat org-directory "/diary/diary_2013.org")))
+  (interactive)(find-file (concat org-directory "/diary/diary.org")))
 
 (global-set-key (kbd "<f11>") 'open-material-notes)
 (defun open-material-notes ()
@@ -682,8 +776,6 @@
      (shell-command-to-string
       (concat "sdcv -n "
 			  (buffer-substring begin end))))))
-
-
 
 ;;Term下不要使用當行高亮，避免使用如MOC(music on console)等程式時出現的無意義當行高亮。
 (add-hook 'term-mode-hook
@@ -751,6 +843,9 @@
 ;;(global-set-key (kbd "C-c C-f") 'helm-for-files)
 ;;(global-set-key (kbd "M-x") 'helm-M-x)
 
+;;======================================================
+;; 多重 Frames 操作加強
+;;======================================================
 ;; smart-window.el
 (add-to-list 'load-path "~/.emacs.d/lisps/smart-window/")
 (require 'smart-window)
@@ -762,40 +857,27 @@
 (global-set-key (kbd "C-x 2") 'sw-below)
 (global-set-key (kbd "C-x 3") 'sw-right)
 
-;;rainbow-mode
-(require 'rainbow-mode)
-(global-set-key (kbd "C-x r a") 'rainbow-mode)
-(add-hook 'prog-mode-hook 'rainbow-mode)
-
-
-;; CSS and Rainbow modes
-(defun all-css-modes() (css-mode) (rainbow-mode))
-(add-to-list 'auto-mode-alist '("\\.css$" . all-css-modes)) ;; Load both major and minor modes in one call based on file type
-
-(defun my-xml-mode () (rainbow-mode) (xml-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . my-xml-mode))
-
-(defun my-stylus-mode () (stylus-mode) (rainbow-mode))
-(add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
-(add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
-
-
-;;switch frames in a visual way
+;;switch frames in a visual way (C-x o)
 (require 'switch-window)
 
-;;customize theme =w=+
-(add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/") ;;Emacs24之後的theme路徑指定
+;;======================================================
+;; Theme
+;;======================================================
+
+;;Emacs24之後的theme路徑指定
+(add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
 (load-theme 'moe-light t)
-
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
-
 ;;(enable-theme 'moe-dark)
 
+;;======================================================
+;; zlc
+;;======================================================
 ;;;;Zsh style completetion!
-;;(add-to-list 'load-path "~/.emacs.d/lisps/emacs-zlc-master")
-;;(require 'zlc)
-;;(zlc-mode t)
-;;(let ((map minibuffer-local-map))
+;;  目前zlc有bug尚未修復，故不使用
+;;  (require 'zlc)
+;;  (zlc-mode t)
+;;  (let ((map minibuffer-local-map))
 ;;  ;;; like menu select
 ;;  (define-key map (kbd "<down>")  'zlc-select-next-vertical)
 ;;  (define-key map (kbd "<up>")    'zlc-select-previous-vertical)
@@ -814,7 +896,9 @@
 (define-key minibuffer-local-map "\C-n" 'next-history-element)
 
 
-;;自動補全auto-complete
+;;======================================================
+;; Auto-complete
+;;======================================================
 ;;(add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
 (require 'auto-complete-config)
 (add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict")
@@ -836,11 +920,15 @@
             (add-to-list 'ac-sources 'ac-source-company-css)))
 
 (setq ac-use-menu-map t)
-(define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch) ;;我真的無法理解為何連這個都必須自己設定勒？
+;; 讓C-s可以在auto-complete選單裡使用。
+(define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch)
 (define-key ac-complete-mode-map (kbd "M-p") 'ac-quick-help-scroll-up)
 (define-key ac-complete-mode-map (kbd "M-n") 'ac-quick-help-scroll-down)
 
+;;======================================================
 ;; multiple-cursors
+;;======================================================
+;;
 (require 'multiple-cursors)
 (global-set-key (kbd "C-x C-@") 'mc/edit-lines)
 ;;以下四種key-binding皆無法在terminal下使用orz改用M-'與M-"應該就沒問題，有空再來研究。
@@ -856,9 +944,9 @@
 ;; (cua-mode t)
 ;; (setq cua-enable-cua-keys nil) ;;変なキーバインド禁止
 ;; (global-set-key (kbd "C-c C-@") 'cua-set-rectangle-mark)
-(global-set-key (kbd "M-RET") 'set-mark-command) ;這他媽的會跟org-mode衝啊！
+;; (global-set-key (kbd "M-RET") 'set-mark-command) ;這他媽的會跟org-mode衝啊！
 ;; (global-set-key (kbd "C-c RET") 'cua-set-rectangle-mark)
-(global-set-key (kbd "C-x RET") 'mc/edit-lines)
+;;(global-set-key (kbd "C-x RET") 'mc/edit-lines)
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -874,9 +962,13 @@
 (global-set-key (kbd "C-x j") 'goto-last-change)
 (global-set-key (kbd "C-x C-j") 'goto-last-change-reverse)
 
-;; dired+
+;;======================================================
+;; Dired
+;;======================================================
+
 (require 'dired+)
 
+;; M-RET to call `kde-open` to open file.
 (defun dired-open-file ()
   "Open file with external program in dired"
   (interactive)
@@ -889,18 +981,13 @@
 		  (lambda ()
 			(define-key dired-mode-map (kbd "M-RET") 'dired-open-file)))
 
-;; use single dired buffer
+;; Use single dired buffer.
 (require 'dired-single)
 (define-key dired-mode-map (kbd "C-x RET") 'dired-find-file)
-
-;; dired renaming like GUI file manager
-;;(require 'dired-efap)
-;;(define-key dired-mode-map [f2] 'dired-efap)
 
 ;; dired hide/show detail infomation
 (require 'dired-details)
 (dired-details-install)
-
 (defun my-dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."
@@ -920,14 +1007,9 @@
   ;; it's not loaded yet, so add our bindings to the load-hook
   (add-hook 'dired-load-hook 'my-dired-init))
 
-(global-set-key [(f5)] 'dired-single-magic-buffer)
-(global-set-key (kbd "C-x <f5>") (function
-								  (lambda nil (interactive)
-									(dired-single-magic-buffer default-directory))))
-(global-set-key (kbd "C-c <f5>") (function
-								  (lambda nil (interactive)
-									(message "Current directory is: %s" default-directory))))
-(global-set-key [(meta f5)] 'dired-single-toggle-buffer-name)
+;; 這玩意我根本從沒用過，不確定是什麼。
+;; (global-set-key [(f5)] 'dired-single-magic-buffer)
+;; (global-set-key [(meta f5)] 'dired-single-toggle-buffer-name)
 
 ;;hide didden file
 (require 'dired-x)
@@ -944,7 +1026,7 @@
 (defun dired-directory-sort ()
   "Dired sort hoOBok to list directories first."
   (save-excursion
-	(let (buffer-read-only)
+	(let (buffer-read-only)             ; 原來解除read-only是這樣寫的OAO...
 	  (forward-line 2) ;; beyond dir. header
 	  (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max))))
   (and (featurep 'xemacs)
@@ -995,12 +1077,20 @@
 (define-key dired-mode-map (kbd "M-a") 'dired-add-to-smplayer-playlist)
 (define-key dired-mode-map (kbd "<f2>") 'wdired-change-to-wdired-mode)
 
+;;======================================================
+;; Magit!
+;;======================================================
+
 (require 'magit)
 (global-set-key (kbd "C-x g i t s") 'magit-status)
 (global-set-key (kbd "C-x g i t l") 'magit-log)
 (define-key magit-mode-map (kbd "C-x p") 'magit-pull)
 
+;;======================================================
+;; Templates
+;;======================================================
 
+;; 開新檔案名為 .gitignore 時，自動插入template
 (add-hook 'find-file-hooks 'insert-gitignore-template)
 (defun insert-gitignore-template ()
   (interactive)
@@ -1009,12 +1099,36 @@
          (eq 1 (point-max)))
     (insert-file "~/.emacs.d/templates/gitignore")))
 
+;;======================================================
+;; Rainbow-delimiters 括號上色
+;;======================================================
 (require 'rainbow-delimiters)
+;; 只在程式相關mode中使用
 (add-hook 'prog-mode-hook
           (lambda ()
             (rainbow-delimiters-mode t)
             (setq show-trailing-whitespace t)))
-;;(remove-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+;;======================================================
+;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
+;;======================================================
+(require 'rainbow-mode)
+(global-set-key (kbd "C-x r a") 'rainbow-mode)
+(add-hook 'prog-mode-hook 'rainbow-mode)
+
+
+;; CSS and Rainbow modes
+(defun all-css-modes() (css-mode) (rainbow-mode))
+(add-to-list 'auto-mode-alist '("\\.css$" . all-css-modes)) ;; Load both major and minor modes in one call based on file type
+
+(defun my-xml-mode () (rainbow-mode) (xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$" . my-xml-mode))
+
+(defun my-stylus-mode () (stylus-mode) (rainbow-mode))
+(add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
+(add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
+
+
 
 ;;(setq-default show-trailing-whitespace nil)
 (defun toggle-show-trailing-whitespace ()
@@ -1030,7 +1144,9 @@
 
 (require 'org-html5presentation)
 
+;;======================================================
 ;; SLIME
+;;======================================================
 (require 'slime)
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
@@ -1050,10 +1166,10 @@
 ;;  (lazy-highlight-cleanup)(keyboard-quit))
 ;;(global-set-key (kbd "C-g") 'keyboard-quit-custom)
 
-;; Paredit
-;;(add-hook 'prog-mode-hook 'paredit-everywhere-mode) ; paredit-everywhere
+;;======================================================
+;; mmm-mode
+;;======================================================
 
-  ;;; mmm-mode
 (require 'mmm-mode)
 (require 'mmm-auto)
 (setq mmm-global-mode 'maybe)
@@ -1072,14 +1188,15 @@
     :back "\n?[ \t]*</script>"
     )
    ))
-
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-ml-javascript-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-ml-css-mode)
-;;(load "~/.emacs.d/lisps/nxhtml/autostart.el")
-;;(setq mumamo-background-colors nil)
 
+;;======================================================
+;; Emacs Lisp 相關加強
+;;======================================================
+;;
 ;; 超混亂lisp的function highlight
-
+;;
 ;;(defvar font-lock-func-face
 ;;  (defface font-lock-func-face
 ;;      '((nil (:weight bold))
@@ -1093,10 +1210,6 @@
 						  ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
 						  ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)
 						  ))
-
-(global-unset-key (kbd "C-z"))
-
-(global-set-key (kbd "C-x SPC") 'goto-line)
 
 (defun lookup-elisp-function-doc ()
   "Look up the elisp function under the cursor."
@@ -1136,17 +1249,21 @@ With one `C-u' prefix, insert output following an arrow"
   (cond ((equal current-prefix-arg nil)      ;if no prefix
          (let ((OUTPUT (eval (preceding-sexp))))
            (kill-sexp -1)
-           (insert (format "%s" OUTPUT))))
+           (insert (format "%S" OUTPUT))))
         ((equal current-prefix-arg '(4)) ;one C-u prefix
          (save-excursion
            (let ((OUTPUT (eval (preceding-sexp))))
-             (insert (format "%s%s" " => " OUTPUT)))))))
+             (insert (format "%s%S" " => " OUTPUT)))))))
 
 (global-set-key (kbd "C-c C-x C-e") 'eval-elisp-sexp)
 ;; avoid key-binding conflict with org
 (define-key org-mode-map (kbd "C-c C-x C-e") 'org-clock-modify-effort-estimate)
 
-;;確認後再關掉Emacs啦
+;;======================================================
+;; Emacs 本身key-binding改進
+;;======================================================
+
+;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
 (defun save-buffers-kill-terminal-after-confirm ()
   "老是不小心關掉Emacs，揪咪。"
   (interactive)
@@ -1156,55 +1273,57 @@ With one `C-u' prefix, insert output following an arrow"
 (global-unset-key (kbd "C-x C-c"))
 (global-set-key (kbd "C-x C-c") 'save-buffers-kill-terminal-after-confirm)
 
+;; C-z 太常按錯了，直接關掉這binding
+(global-unset-key (kbd "C-z"))
+
+;; 跳到行號
+(global-set-key (kbd "C-x SPC") 'goto-line)
+
+
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 
+;;======================================================
+;; pangu-spacing： 中英文之間自動插入空白
+;;======================================================
+
 (require 'pangu-spacing)
+
+;; 只在 org-mode 和 markdown-mode 中啟用 pangu-spacing
 (add-hook 'org-mode-hook
           '(lambda ()
              (set (make-local-variable 'pangu-spacing-real-insert-separtor) nil)))
-
 (add-hook 'markdown-mode-hook
 		  '(lambda ()
 			 (pangu-spacing-mode 1)
 			 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+
+;;======================================================
+;; Tree-mode 樹狀顯示檔案清單
+;;======================================================
 
 (require 'tree-mode)
 (require 'windata)
 (require 'dirtree)
 (set-face-foreground 'widget-button "orange")
 
-;;插入blog的動態行間註解(需搭配CSS)
-(defun md-insert-inline-note ()
-  (interactive)
-  (insert "<span class=\"note\"><span class=\"content\"></span></span>")
-  (backward-char 36))
-(define-key markdown-mode-map (kbd "C-c i n") 'md-insert-inline-note)
-
-(defun md-insert-image ()
-  (interactive)
-  (let ((LINK (read-from-minibuffer "Page's link: "))
-        (IMG (read-from-minibuffer "Image's link:")))
-    (insert (format "<a href=\"%s\"><img src=\"%s\" alt=\"\" class=\"\"></a>" LINK IMG))))
-(define-key markdown-mode-map (kbd "C-c i i") 'md-insert-image)
-;;(require 'highlight-indentation)
-;;(add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode)
-;;(add-hook 'prog-mode-hook 'highlight-indentation-mode)
-;;(set-face-background 'highlight-indentation-face "#e3e3d3")
-;;(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-;;(setq highlight-indentation-set-offset '2)
-
+;;======================================================
+;; "[FIXME]"高亮，但這個會讓web-mode的faces失效
+;;======================================================
 ;;(add-hook 'prog-mode-hook
 ;;          (lambda ()
 ;;            (font-lock-add-keywords nil
 ;;                                    '(("\\<\\(FIXME\\|DEBUG\\)" 1 font-lock-warning-face prepend)))))
 
+;;======================================================
+;; EShell
+;;======================================================
 (defun jsc ()
   (interactive)
   (eshell "JSC")
   (insert "rhino")
   (eshell-send-input ""))
 
-;;eshell prompt&color
+;; 如果當前user是root，prompt改成#
 (setq eshell-prompt-function
       '(lambda ()
          (concat
@@ -1214,6 +1333,8 @@ With one `C-u' prefix, insert output following an arrow"
             (eshell/pwd))
           (if (= (user-uid) 0) " # " " $ "))))
 
+
+;; 高亮 prompt...好像不是很有必要
 (defun colorfy-eshell-prompt ()
   "Colorfy eshell prompt according to `user@hostname' regexp."
   (let* ((mpoint)
@@ -1222,11 +1343,11 @@ With one `C-u' prefix, insert output following an arrow"
       (goto-char (point-min))
       (while (re-search-forward (concat user-string-regexp ".*[$#]") (point-max) t)
         (setq mpoint (point))
-        (overlay-put (make-overlay (point-at-bol) mpoint) 'face '(:foreground "dodger blue")))
+        (overlay-put (make-overlay (point-at-bol) mpoint) 'face '(:foreground "#729fcf")))
       (goto-char (point-min))
       (while (re-search-forward user-string-regexp (point-max) t)
         (setq mpoint (point))
-        (overlay-put (make-overlay (point-at-bol) mpoint) 'face '(:foreground "green3"))
+        (overlay-put (make-overlay (point-at-bol) mpoint) 'face '(:foreground "#72cf6c"))
         ))))
 
 ;; Make eshell prompt more colorful
@@ -1237,6 +1358,19 @@ With one `C-u' prefix, insert output following an arrow"
 ;; Show column-number in the mode line
 ;;(column-number-mode t)
 
+;;======================================================
+;; Hexo相關
+;;======================================================
+
+;;插入blog的動態行間註解(需搭配CSS)
+;; [FIXME] 請想個更好的function名...這個太容易忘記了
+(defun md-insert-inline-note ()
+  (interactive)
+  (insert "<span class=\"note\"><span class=\"content\"></span></span>")
+  (backward-char 36))
+(define-key markdown-mode-map (kbd "C-c i n") 'md-insert-inline-note)
+
+;; 在hexo根目錄下執行，會呼叫`hexo new`新增文章，並自動打開。
 (defun hexo-new ()
   (interactive)
   (let (OUTPUT)
@@ -1245,9 +1379,7 @@ With one `C-u' prefix, insert output following an arrow"
   (string-match "/.*\\.md$" OUTPUT)
   (find-file (match-string 0 OUTPUT))))
 
-;;    (call-process "kde-open" nil 0 nil file)
-
-
+;; [自用] 
 (defun hexo-opml-to-markdown ()
   (interactive)
   (let (output-markdown opml-copy-to trans input-file)
@@ -1291,15 +1423,122 @@ date: %Y-%m-%d %H:%M:%S
         (save-buffer)))))
 
 
+(add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
+(require 'xfrp_find_replace_pairs)
+
+;;======================================================
+;; Python
+;;======================================================
+
+(require 'highlight-indentation)
+(add-hook 'python-mode-hook 'highlight-indentation)
+(add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
+(set-face-background 'highlight-indentation-face "#e3e3d3")
+(set-face-background 'highlight-indentation-current-column-face "#ffafff")
+(setq highlight-indentation-set-offset '2)
+
+;; Info-look
+(require 'info-look)
+(info-lookup-add-help
+ :mode 'python-mode
+ :regexp "[[:alnum:]_]+"
+ :doc-spec
+ '(("(python)Index" nil "")))
+
+(setq
+ python-shell-interpreter "python3"
+ python-shell-interpreter-args ""
+ python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+ python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+ python-shell-completion-setup-code
+   "from IPython.core.completerlib import module_completion"
+ python-shell-completion-module-string-code
+   "';'.join(module_completion('''%s'''))\n"
+ python-shell-completion-string-code
+   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+
+;;======================================================
+;; Color code convert (from Xah Lee's CSS Mode)
+;;======================================================
+;; (I rename the functions because they are easier to memorize...)
+
+(require 'color)
+(defun color-code-rgb-to-hsl ()
+  "Convert color spec under cursor from “#rrggbb” to CSS HSL format.
+#ffefd5 → hsl(37,100%,91%)"
+  (interactive)
+  (let* (
+         (bds (bounds-of-thing-at-point 'word))
+         (p1 (car bds))
+         (p2 (cdr bds))
+         (currentWord (buffer-substring-no-properties p1 p2)))
+
+    (if (string-match "[a-fA-F0-9]\\{6\\}" currentWord)
+        (progn
+          (delete-region p1 p2 )
+          (if (looking-back "#") (delete-char -1))
+          (insert (color-code-hex-to-hsl currentWord )))
+      (progn
+        (error "The current word 「%s」 is not of the form #rrggbb." currentWord)
+        )
+      )))
+
+(defun color-code-hex-to-hsl (hexStr)
+  "Convert hexStr color to CSS HSL format.
+Return a string.
+ (color-code-hex-to-hsl \"#ffefd5\") ⇒ \"hsl(37,100%,91%)\""
+  (let* (
+         (colorVec (color-code-convert-hex-to-vec hexStr))
+         (xR (elt colorVec 0))
+         (xG (elt colorVec 1))
+         (xB (elt colorVec 2))
+         (hsl (color-rgb-to-hsl xR xG xB) )
+         (xH (elt hsl 0))
+         (xS (elt hsl 1))
+         (xL (elt hsl 2))
+         )
+    (format "hsl(%d,%d%%,%d%%)" (* xH 360) (* xS 100) (* xL 100) )
+    ))
+
+(defun color-code-convert-hex-to-vec (hexcolor)
+  "Convert HEXCOLOR from “\"rrggbb\"” string to a elisp vector [r g b], where the values are from 0 to 1.
+Example:
+ (color-code-convert-hex-to-vec \"00ffcc\") ⇒ [0.0 1.0 0.8]
+
+Note: The input string must NOT start with “#”. If so, the return value is nil."
+  (vector
+   (color-code-normalize-number-scale
+    (string-to-number (substring hexcolor 0 2) 16) 255)
+   (color-code-normalize-number-scale
+    (string-to-number (substring hexcolor 2 4) 16) 255)
+   (color-code-normalize-number-scale
+    (string-to-number (substring hexcolor 4) 16) 255)
+   ))
+
+(defun color-code-normalize-number-scale (myVal rangeMax)
+  "Return a number between [0, 1] that's a rescaled myVal.
+myVal's original range is [0, rangeMax].
+
+The arguments can be int or float.
+Return value is float."
+  (/ (float myVal) (float rangeMax)))
+
 
 ;;discover-mode
 (global-discover-mode 1)
 
+;;Emacs Speaks Statistics
+;;(add-to-list 'load-path "~/.emacs.d/lisps/ESS/lisp/")
+;;(load "ess-site")
+;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(custom-safe-themes (quote ("f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
  '(delete-selection-mode nil)
  '(ido-everywhere t)
  '(mark-even-if-inactive t)
