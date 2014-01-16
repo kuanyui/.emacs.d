@@ -58,9 +58,12 @@
 ;;把捲軸移到右側
 (customize-set-variable 'scroll-bar-mode 'right)
 
+;;======================================================
+;; IBuffer
+;;======================================================
+
 ;;啟用ibuffer
-;;(add-to-list 'load-path "~/.emacs.d/lisps")
-;;(require 'ibuffer)
+(require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
@@ -113,6 +116,10 @@
 ;;讓Isearch不會再主動清除搜尋的高亮顯示
 (setq lazy-highlight-cleanup nil)
 
+;;======================================================
+;; 插入時間
+;;======================================================
+
 ;;我最愛的插入日期，格式為習慣的YYYY/mm/dd（星期），使用方法為C-c d
 (defun my-insert-date ()
   (interactive)
@@ -134,20 +141,16 @@
   (interactive "P")
   (message "%s" arg))
 
-
 ;;凸顯括號位置（而不是來回彈跳）
 (show-paren-mode t)
 ;;(setq show-paren-style 'parentheses)
 (setq show-paren-style 'expression) ;;另一種突顯方式(突顯整個括號範圍)
 
-;;隱藏工具列
+;; 隱藏沒在用的工具列
 (tool-bar-mode -1)
-
-;;隱藏選單
+;; 隱藏沒在用的選單
 (menu-bar-mode -1)
-
-
-;;X Clipboard在光標處插入，而不是滑鼠點擊的地方插入。
+;;X Clipboard在游標處插入，而不是滑鼠點擊的地方插入。
 (setq mouse-yank-at-point t)
 
 ;;讓Emacs可以直接打開/顯示圖片。
@@ -193,7 +196,7 @@
 ;;關閉煩人的錯誤提示音，改為在螢幕上提醒。
 (setq visible-bell t)
 
-;;超大kill ring. 防止不小心删掉重要的東西。
+;;超大kill-ring. 防止不小心删掉重要的東西。
 (setq kill-ring-max 200)
 
 ;;设置tab为4个空格的宽度
@@ -211,13 +214,10 @@
       "此文件最後是在%04y-%02m-%02d %02H:%02M:%02S由%:u修改"
       time-stamp-active t
       time-stamp-warn-inactive t)
-;;這個marco太多此一舉了......先暫時註解保留看情形(不然重寫好麻煩)。
-;;(fset 'insert-time-stamp
-;;   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ("Time-stamp: \" \"" 0 "%d")) arg)))
-;;(global-set-key (kbd "C-c t i m e") 'insert-time-stamp)
+;;======================================================
+;; Markdown
+;;======================================================
 
-
-;;安裝最新版markdown.el
 (require 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
@@ -229,23 +229,15 @@
 (setq markdown-enable-math t)
 (setq markdown-command "/usr/lib/node_modules/marked/bin/marked")
 
-;;把markdown的outline搞得跟org-mode的key-binding接近一點
-;;靠背老子寫不出來啦
-;;(defun markdown-insert-new-header ()
-;;  "Insert a new line along with a header"
-;;  (interactive)
-;;  (move-end-of-line)(newline)(markdown-insert-header-dwim))
-;;
-;;(add-hook 'markdown-mode-hook
-;;          (lambda () (define-key markdown-mode-map (kbd "C-c RET") 'markdown-insert-new-header)))
+;; [FIXME] 把markdown的outline搞得跟org-mode的key-binding接近一點
 
-;;(define-key markdown-mode-map (kbd "C-c RET") 'markdown-insert-new-header)
-
-;;Org-mode專區===========================================
-;;安裝最新版org-mode
-;;(add-to-list 'load-path "~/.emacs.d/lisps/org-mode/lisp/")
-;;(add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
-;;(require 'org-install)
+;;======================================================
+;; Org-mode
+;;======================================================
+;; 不要安裝最新版org-mode，export 一堆問題
+;; (add-to-list 'load-path "~/.emacs.d/lisps/org-mode/lisp/")
+;; (add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
+;; (require 'org-install)
 (require 'org)
 ;;(require 'org-odt)
 ;;(require 'org-html)
@@ -523,8 +515,9 @@
   )
 (global-set-key (kbd "C-c i t") 'org-export-skeleton)
 
-
-;;Org-mode結束===========================================
+;;======================================================
+;; shell-script-mode
+;;======================================================
 
 ;;較完整地支援shell script語法高亮。
 (defface font-lock-system-command-face
@@ -674,31 +667,6 @@
   (insert "layout: false\n---\n\n")
   (save-buffer))
 
-;;有了tmux就不須要Emacs裡那個問題多多的terminal emulator了。
-(global-set-key (kbd "<f1>") 'kmacro-start-macro-or-insert-counter)
-(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
-(defun zsh () (interactive) (term "/bin/zsh"))
-
-;;一個簡單的minor-mode，用來調整frame大小
-(define-minor-mode resize-frame
-  "A simple minor mode to resize-frame.
-C-c C-c to apply."
-  ;; The initial value.
-  :init-value nil
-  ;; The indicator for the mode line.
-  :lighter " ResizeFrame"
-  ;; The minor mode bindings.
-  :keymap
-  `(([up] . enlarge-window)
-    ([down] . shrink-window)
-    ([right] . enlarge-window-horizontally)
-    ([left] . shrink-window-horizontally)
-    ("\C-c\C-c" . (lambda ()
-                         (interactive)
-                         (setq resize-frame nil)
-                         (message "Done."))))
-  :global t)
-(global-set-key (kbd "C-x <f5>") 'resize-frame)
 
 (global-set-key (kbd "<f9>") 'open-note)
 (defun open-note ()
@@ -737,11 +705,6 @@ C-c C-c to apply."
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
 
-;;調用word-count-for-emacs來計算字數 （能較正確計算中英文夾雜文件的字數）
-(global-set-key (kbd "C-c w c") 'word-count)
-(defun word-count nil "Count words in buffer (include CJK characters)"
-  (interactive)
-  (shell-command-on-region (point-min) (point-max) "word-count-for-emacs"))
 
 ;;(global-set-key (kbd "C-c t") 'test-light-theme)
 ;;(defun test-light-theme () "test new theme"
@@ -777,27 +740,18 @@ C-c C-c to apply."
       (concat "sdcv -n "
 			  (buffer-substring begin end))))))
 
-;;Term下不要使用當行高亮，避免使用如MOC(music on console)等程式時出現的無意義當行高亮。
-(add-hook 'term-mode-hook
-		  (lambda () (setq global-hl-line-mode nil)))
 
-;;Linux下與其他Applications的剪貼簿
-;;(setq x-select-enable-clipboard t)
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-;;(load-file "~/.emacs.d/lisps/copypaste.el")
-(defun cp ()
-  (interactive)
-  (if (region-active-p)
-	  (progn
-        (shell-command-on-region (region-beginning) (region-end) "xsel -i")
-		(message "Yanked region to clipboard!")
-		(deactivate-mark))
-	(message "No region active; can't yank to clipboard!")))
+;; Stardict in Emacs
+;; (require 'sdcv-mode)
+;; (global-set-key (kbd "C-c s") 'sdcv-search)
 
-;;Stardict in Emacs
-(require 'sdcv-mode)
-(global-set-key (kbd "C-c s") 'sdcv-search)
+;;======================================================
+;; Tmux 相關設定
+;;======================================================
+
+(global-set-key (kbd "<f1>") 'kmacro-start-macro-or-insert-counter)
+(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
+(defun zsh () (interactive) (term "/bin/zsh"))
 
 ;;解決tmux下無法切換buffer以及一些key-binding的問題
 (global-set-key (kbd "C-x M-[ d") 'previous-buffer)
@@ -817,6 +771,20 @@ C-c C-c to apply."
 
 (global-set-key (kbd "C-c C-e") 'eval-buffer) ;;這樣測試.emacs方便多了...
 
+;;Linux下與其他Applications的剪貼簿
+(setq x-select-enable-clipboard t)
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+;; [FIXME] 這不知是啥
+;;(load-file "~/.emacs.d/lisps/copypaste.el")
+(defun cp ()
+  (interactive)
+  (if (region-active-p)
+	  (progn
+        (shell-command-on-region (region-beginning) (region-end) "xsel -i")
+		(message "Yanked region to clipboard!")
+		(deactivate-mark))
+	(message "No region active; can't yank to clipboard!")))
+
 ;; xclip-mode
 (load "~/.emacs.d/lisps/xclip-1.0.el")
 (define-minor-mode xclip-mode
@@ -826,6 +794,16 @@ C-c C-c to apply."
       (turn-on-xclip)
     (turn-off-xclip)))
 (xclip-mode t)
+
+;;======================================================
+;; misc 雜項
+;;======================================================
+
+;;調用word-count-for-emacs來計算字數 （能較正確計算中英文夾雜文件的字數）
+(global-set-key (kbd "C-c w c") 'word-count)
+(defun word-count nil "Count words in buffer (include CJK characters)"
+  (interactive)
+  (shell-command-on-region (point-min) (point-max) "word-count-for-emacs"))
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
@@ -844,7 +822,7 @@ C-c C-c to apply."
 ;;(global-set-key (kbd "M-x") 'helm-M-x)
 
 ;;======================================================
-;; 多重 Frames 操作加強
+;; Frames 操作加強
 ;;======================================================
 ;; smart-window.el
 (add-to-list 'load-path "~/.emacs.d/lisps/smart-window/")
@@ -859,6 +837,27 @@ C-c C-c to apply."
 
 ;;switch frames in a visual way (C-x o)
 (require 'switch-window)
+
+;;一個簡單的minor-mode，用來調整frame大小
+(define-minor-mode resize-frame
+  "A simple minor mode to resize-frame.
+C-c C-c to apply."
+  ;; The initial value.
+  :init-value nil
+  ;; The indicator for the mode line.
+  :lighter " ResizeFrame"
+  ;; The minor mode bindings.
+  :keymap
+  `(([up] . enlarge-window)
+    ([down] . shrink-window)
+    ([right] . enlarge-window-horizontally)
+    ([left] . shrink-window-horizontally)
+    ("\C-c\C-c" . (lambda ()
+                         (interactive)
+                         (setq resize-frame nil)
+                         (message "Done."))))
+  :global t)
+(global-set-key (kbd "C-x <f5>") 'resize-frame)
 
 ;;======================================================
 ;; Theme
@@ -1315,8 +1314,13 @@ With one `C-u' prefix, insert output following an arrow"
 ;;                                    '(("\\<\\(FIXME\\|DEBUG\\)" 1 font-lock-warning-face prepend)))))
 
 ;;======================================================
-;; EShell
+;; EShell/Term
 ;;======================================================
+;;Term下不要使用當行高亮，避免使用如MOC(music on console)等程式時出現的無意義當行高亮。
+(add-hook 'term-mode-hook
+		  (lambda () (setq global-hl-line-mode nil)))
+
+;; open javascript interactive shell.
 (defun jsc ()
   (interactive)
   (eshell "JSC")
@@ -1379,7 +1383,7 @@ With one `C-u' prefix, insert output following an arrow"
   (string-match "/.*\\.md$" OUTPUT)
   (find-file (match-string 0 OUTPUT))))
 
-;; [自用] 
+;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (defun hexo-opml-to-markdown ()
   (interactive)
   (let (output-markdown opml-copy-to trans input-file)
@@ -1538,11 +1542,12 @@ Return value is float."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-safe-themes (quote ("f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
+ '(custom-safe-themes (quote ("4ac7461877fa6fe579cf80f4b07a3557690cb1706a9de9f9d6d10bb3bfe31dad" "f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
  '(delete-selection-mode nil)
  '(ido-everywhere t)
  '(mark-even-if-inactive t)
  '(org-agenda-files (quote ("~/org/todo.org")))
+ '(recentf-mode t)
  '(scroll-bar-mode (quote right))
  '(tooltip-mode nil)
  '(transient-mark-mode 1))
