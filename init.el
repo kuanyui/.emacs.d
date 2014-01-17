@@ -15,6 +15,18 @@
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
 
+;;======================================================
+;; GUI Emacs
+;;======================================================
+
+;;　GUI版本下的中文字體問題
+(if (window-system)
+    (progn (dolist (charset '(han kana symbol cjk-misc bopomofo))
+             (set-fontset-font (frame-parameter nil 'font)
+                               charset
+                               (font-spec :family "文泉驛等寬微米黑" :size nil)))
+           ) nil)
+
 ;;GUI Emacs調整字體大小
 (defun sacha/increase-font-size ()
   (interactive)
@@ -32,6 +44,10 @@
 								(face-attribute 'default :height)))))
 (global-set-key (kbd "C-+") 'sacha/increase-font-size)
 (global-set-key (kbd "C--") 'sacha/decrease-font-size)
+
+;;======================================================
+;; 基本設定
+;;======================================================
 
 ;;超變態的undo-tree-mode
 ;;(提醒：redo會變成C-?)
@@ -214,6 +230,7 @@
       "此文件最後是在%04y-%02m-%02d %02H:%02M:%02S由%:u修改"
       time-stamp-active t
       time-stamp-warn-inactive t)
+
 ;;======================================================
 ;; Markdown
 ;;======================================================
@@ -306,7 +323,7 @@
 ;;
 ;;(org-export-html-style "<style type=\"text/css\">
 ;;body { text-align: center; }
-;;#content { 
+;;#content {
 ;;  margin: 0px auto;
 ;;  width: 800px; text-align:left; }
 ;;
@@ -342,6 +359,21 @@
 ;;#postamble { display:none; }
 ;;</style>")
 ;;
+
+;; org輸出html時中文不要有奇怪的空白。（by coldnew the God）
+(defadvice org-html-paragraph (before org-html-paragraph-advice
+                                      (paragraph contents info) activate)
+  "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to html."
+  (let* ((origin-contents (ad-get-arg 1))
+         (fix-regexp "[[:multibyte:]]")
+         (fixed-contents
+          (replace-regexp-in-string
+           (concat
+            "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+
+    (ad-set-arg 1 fixed-contents)))
+
 ;; 指定agenda檔案位置清單
 (setq org-agenda-files (list (concat org-directory "/todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
@@ -414,6 +446,7 @@
         ))
 
 ;;To save the clock history across Emacs sessions, use
+
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
 ;; Use a drawer to place clocking info
@@ -1207,8 +1240,7 @@ C-c C-c to apply."
                         '(
 						  ("'[-a-zA-Z_][-a-zA-Z0-9_/]*" 0 'font-lock-constant-face)
 						  ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
-						  ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)
-						  ))
+						  ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
 
 (defun lookup-elisp-function-doc ()
   "Look up the elisp function under the cursor."
@@ -1262,6 +1294,9 @@ With one `C-u' prefix, insert output following an arrow"
 ;; Emacs 本身key-binding改進
 ;;======================================================
 
+;;discover-mode
+(global-discover-mode 1)
+
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
 (defun save-buffers-kill-terminal-after-confirm ()
   "老是不小心關掉Emacs，揪咪。"
@@ -1278,6 +1313,29 @@ With one `C-u' prefix, insert output following an arrow"
 ;; 跳到行號
 (global-set-key (kbd "C-x SPC") 'goto-line)
 
+(defun twittering-scroll-up()
+  "Scroll up if possible; otherwise invoke `twittering-goto-next-status',
+which fetch older tweets on non reverse-mode."
+  (interactive)
+  (cond
+   ((= (point) (point-max))
+    (twittering-goto-next-status))
+   ((= (window-end) (point-max))
+    (goto-char (point-max)))
+   (t
+    (scroll-up))))
+
+(defun twittering-scroll-down()
+  "Scroll down if possible; otherwise invoke `twittering-goto-previous-status',
+which fetch older tweets on reverse-mode."
+  (interactive)
+  (cond
+   ((= (point) (point-min))
+    (twittering-goto-previous-status))
+   ((= (window-start) (point-min))
+    (goto-char (point-min)))
+   (t
+    (scroll-down))))
 
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 
@@ -1529,12 +1587,10 @@ Return value is float."
   (/ (float myVal) (float rangeMax)))
 
 
-;;discover-mode
-(global-discover-mode 1)
 
-;;Emacs Speaks Statistics
-;;(add-to-list 'load-path "~/.emacs.d/lisps/ESS/lisp/")
-;;(load "ess-site")
+;;======================================================
+;; customize 以下為Emacs自動生成，不要動
+;;======================================================
 ;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1542,12 +1598,11 @@ Return value is float."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-safe-themes (quote ("4ac7461877fa6fe579cf80f4b07a3557690cb1706a9de9f9d6d10bb3bfe31dad" "f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
+ '(custom-safe-themes (quote ("afc4fc38f504ea0e7e7fe2037681bda77aa64e053a7a40f4fbecfa361545182f" "f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
  '(delete-selection-mode nil)
  '(ido-everywhere t)
  '(mark-even-if-inactive t)
  '(org-agenda-files (quote ("~/org/todo.org")))
- '(recentf-mode t)
  '(scroll-bar-mode (quote right))
  '(tooltip-mode nil)
  '(transient-mark-mode 1))
