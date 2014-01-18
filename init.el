@@ -53,7 +53,7 @@
 ;;(提醒：redo會變成C-?)
 ;;C-x u 進入 undo-tree-visualizer-mode，t顯示時間戳。
 (require 'undo-tree)
-(global-undo-tree-mode)
+(global-undo-tree-mode 1)
 (global-set-key (kbd"C-M-_") 'undo-tree-redo)
 
 ;;行號
@@ -832,11 +832,51 @@ unwanted space when exporting org-mode to html."
 ;; misc 雜項
 ;;======================================================
 
-;;調用word-count-for-emacs來計算字數 （能較正確計算中英文夾雜文件的字數）
-(global-set-key (kbd "C-c w c") 'word-count)
-(defun word-count nil "Count words in buffer (include CJK characters)"
+;; 「較準確地」統計中/日文與英文字數
+(defvar wc-regexp-chinese-char-and-punc
+      (rx (category chinese)))
+(defvar wc-regexp-chinese-punc
+     "[。，！？；：「」『』（）、【】《》〈〉—]")
+(defvar wc-regexp-english-word
+      "[a-zA-Z0-9-]+")
+
+(defun wc ()
+  "「較精確地」統計中/日/英文字數。
+- 平假名與片假名亦包含在「中日文字數」內，每個平/片假名都算單獨一個字（但片假
+  名不含連音「ー」）。
+- 英文只計算「單字數」，不含標點。
+- 韓文不包含在內。
+
+※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
+。且中日文標點的計算標準要看Emacs如何定義特殊標點符號如ヴァランタン・アルカン
+中間的點也被Emacs算為一個字而不是標點符號。"
   (interactive)
-  (shell-command-on-region (point-min) (point-max) "word-count-for-emacs"))
+  (let ((chinese-char-and-punc 0)
+        (chinese-punc 0)
+        (english-word 0)
+        (chinese-char 0))
+    (save-excursion
+      ;; 中文（含標點、片假名）
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
+        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
+      ;; 中文標點符號
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
+        (setq chinese-punc (1+ chinese-punc)))
+      ;; 英文字數（不含標點）
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-english-word nil :no-error)
+        (setq english-word (1+ english-word))))
+    (setq chinese-char (- chinese-char-and-punc chinese-punc))
+    (message
+     (format "中日文字數（不含標點）：%s
+中日文字數（包含標點）：%s
+英文字數（不含標點）：%s
+=======================
+中英文合計（不含標點）：%s"
+            chinese-char chinese-char-and-punc english-word
+            (+ chinese-char english-word)))))
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
@@ -1017,9 +1057,10 @@ C-c C-c to apply."
 (require 'dired-single)
 (define-key dired-mode-map (kbd "C-x RET") 'dired-find-file)
 
-;; dired hide/show detail infomation
+;; use ( or ) to hide/show detail infomation
 (require 'dired-details)
 (dired-details-install)
+
 (defun my-dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."
@@ -1031,13 +1072,29 @@ C-c C-c to apply."
 	 (lambda nil (interactive) (dired-single-buffer ".."))))
   (define-key dired-mode-map "q"
 	(function
-	 (lambda nil (interactive) (dired-single-buffer "..")))))
+	 (lambda nil (interactive)
+       ;; 讓回到上一頁時游標會處於之前打開的目錄
+       (save-match-data
+         (let ((curdir (dired-current-directory)))
+           (string-match "\\([^/]+\\)/$" curdir)
+           (dired-single-buffer "..")
+           (if (re-search-forward (format "%s" (match-string 1 curdir)))
+               (beginning-of-line)
+               (goto-char (point-min))
+         )))))))
+;;       (dired-single-buffer ".."))
+;;     )))
+
+
 ;; if dired's already loaded, then the keymap will be bound
 (if (boundp 'dired-mode-map)
 	;; we're good to go; just add our bindings
 	(my-dired-init)
   ;; it's not loaded yet, so add our bindings to the load-hook
-  (add-hook 'dired-load-hook 'my-dired-init))
+  (add-hook 'dired-load-hook 'my-dire-init))
+
+
+
 
 ;; 這玩意我根本從沒用過，不確定是什麼。
 ;; (global-set-key [(f5)] 'dired-single-magic-buffer)
@@ -1497,7 +1554,7 @@ date: %Y-%m-%d %H:%M:%S
 (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
 (set-face-background 'highlight-indentation-face "#e3e3d3")
 (set-face-background 'highlight-indentation-current-column-face "#ffafff")
-(setq highlight-indentation-set-offset '2)
+(setq highlight-indentation-set-offset '4)
 
 ;; Info-look
 (require 'info-look)
