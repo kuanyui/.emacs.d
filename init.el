@@ -24,8 +24,7 @@
     (progn (dolist (charset '(han kana symbol cjk-misc bopomofo))
              (set-fontset-font (frame-parameter nil 'font)
                                charset
-                               (font-spec :family "文泉驛等寬微米黑" :size nil)))
-           ) nil)
+                               (font-spec :family "文泉驛等寬微米黑" :size nil)))) nil)
 
 ;;GUI Emacs調整字體大小
 (defun sacha/increase-font-size ()
@@ -53,7 +52,7 @@
 ;;(提醒：redo會變成C-?)
 ;;C-x u 進入 undo-tree-visualizer-mode，t顯示時間戳。
 (require 'undo-tree)
-(global-undo-tree-mode 1)
+(global-undo-tree-mode)
 (global-set-key (kbd"C-M-_") 'undo-tree-redo)
 
 ;;行號
@@ -832,14 +831,13 @@ unwanted space when exporting org-mode to html."
 ;; misc 雜項
 ;;======================================================
 
-;; 「較準確地」統計中/日文與英文字數
+;; 統計中英日文字數
 (defvar wc-regexp-chinese-char-and-punc
       (rx (category chinese)))
 (defvar wc-regexp-chinese-punc
      "[。，！？；：「」『』（）、【】《》〈〉—]")
 (defvar wc-regexp-english-word
       "[a-zA-Z0-9-]+")
-
 (defun wc ()
   "「較精確地」統計中/日/英文字數。
 - 平假名與片假名亦包含在「中日文字數」內，每個平/片假名都算單獨一個字（但片假
@@ -848,8 +846,8 @@ unwanted space when exporting org-mode to html."
 - 韓文不包含在內。
 
 ※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
-。且中日文標點的計算標準要看Emacs如何定義特殊標點符號如ヴァランタン・アルカン
-中間的點也被Emacs算為一個字而不是標點符號。"
+。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
+中間的點也被 Emacs 算為一個字而不是標點符號。"
   (interactive)
   (let ((chinese-char-and-punc 0)
         (chinese-punc 0)
@@ -877,6 +875,7 @@ unwanted space when exporting org-mode to html."
 中英文合計（不含標點）：%s"
             chinese-char chinese-char-and-punc english-word
             (+ chinese-char english-word)))))
+
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
@@ -1057,10 +1056,10 @@ C-c C-c to apply."
 (require 'dired-single)
 (define-key dired-mode-map (kbd "C-x RET") 'dired-find-file)
 
-;; use ( or ) to hide/show detail infomation
+;; dired hide/show detail infomation
+;; [FIXME] Emacs 24.4 will build-in `dired-hide-details-mode'.
 (require 'dired-details)
 (dired-details-install)
-
 (defun my-dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."
@@ -1072,29 +1071,13 @@ C-c C-c to apply."
 	 (lambda nil (interactive) (dired-single-buffer ".."))))
   (define-key dired-mode-map "q"
 	(function
-	 (lambda nil (interactive)
-       ;; 讓回到上一頁時游標會處於之前打開的目錄
-       (save-match-data
-         (let ((curdir (dired-current-directory)))
-           (string-match "\\([^/]+\\)/$" curdir)
-           (dired-single-buffer "..")
-           (if (re-search-forward (format "%s" (match-string 1 curdir)))
-               (beginning-of-line)
-               (goto-char (point-min))
-         )))))))
-;;       (dired-single-buffer ".."))
-;;     )))
-
-
+	 (lambda nil (interactive) (dired-single-buffer "..")))))
 ;; if dired's already loaded, then the keymap will be bound
 (if (boundp 'dired-mode-map)
 	;; we're good to go; just add our bindings
 	(my-dired-init)
   ;; it's not loaded yet, so add our bindings to the load-hook
-  (add-hook 'dired-load-hook 'my-dire-init))
-
-
-
+  (add-hook 'dired-load-hook 'my-dired-init))
 
 ;; 這玩意我根本從沒用過，不確定是什麼。
 ;; (global-set-key [(f5)] 'dired-single-magic-buffer)
@@ -1433,7 +1416,9 @@ which fetch older tweets on reverse-mode."
 ;;======================================================
 ;;Term下不要使用當行高亮，避免使用如MOC(music on console)等程式時出現的無意義當行高亮。
 (add-hook 'term-mode-hook
-		  (lambda () (setq global-hl-line-mode nil)))
+		  (lambda ()
+            (setq global-hl-line-mode nil)
+            (setq global-linum-mode nil)))
 
 ;; open javascript interactive shell.
 (defun jsc ()
@@ -1483,20 +1468,113 @@ which fetch older tweets on reverse-mode."
 
 ;;插入blog的動態行間註解(需搭配CSS)
 ;; [FIXME] 請想個更好的function名...這個太容易忘記了
-(defun md-insert-inline-note ()
+(defun html-insert-inline-note ()
   (interactive)
   (insert "<span class=\"note\"><span class=\"content\"></span></span>")
   (backward-char 36))
-(define-key markdown-mode-map (kbd "C-c i n") 'md-insert-inline-note)
+(define-key markdown-mode-map (kbd "C-c i n") 'html-insert-inline-note)
 
 ;; 在hexo根目錄下執行，會呼叫`hexo new`新增文章，並自動打開。
+;; (defun hexo-new ()
+;;   (interactive)
+;;   (let (OUTPUT current-dir)
+;;     (setq current-dir )
+;;     (setq OUTPUT (shell-command-to-string
+;;      (concat "hexo new '" (read-from-minibuffer "Title of the new article: ") "'")))
+;;   (string-match "/.*\\.md$" OUTPUT)
+;;   (find-file (match-string 0 OUTPUT))))
+
+;; 如果在一個 hexo repository 下，執行 hexo new
+(require 'dired-single) ; 如果已經 require 過就不需要再加這行。
 (defun hexo-new ()
+  "Call `hexo new` if under a hexo's child directory."
   (interactive)
-  (let (OUTPUT)
-   (setq OUTPUT (shell-command-to-string
-     (concat "hexo new '" (read-from-minibuffer "Title of the new article: ") "'")))
-  (string-match "/.*\\.md$" OUTPUT)
-  (find-file (match-string 0 OUTPUT))))
+  (let (BUFFER-STRING OUTPUT)
+    (if (file-exists-p (format "%s%s" default-directory "_config.yml")) ;用這個
+        (progn
+          (with-temp-buffer
+            (insert-file-contents (format "%s%s" default-directory "_config.yml"))
+            (setq BUFFER-STRING (buffer-string)))
+          (if (and (string-match "title: " BUFFER-STRING)
+             (string-match "url: " BUFFER-STRING)
+             (string-match "new_post_name: " BUFFER-STRING))
+              (progn
+                (setq OUTPUT (shell-command-to-string
+                              (concat "hexo new '"
+                                      (read-from-minibuffer
+                                       "Title of the new article: ") "'")))
+          (string-match "/.*\\.md$" OUTPUT)
+          (find-file (match-string 0 OUTPUT)))))
+      (progn
+        (find-file default-directory)
+        (if (not (equal default-directory "/"))
+          (progn (dired-single-buffer "..")
+                 (hexo-new))
+          (progn
+            (kill-buffer)
+            (message "Not in a hexo or its child directory.")))))))
+
+;; 根據文章內容來 touch -t 文章以方便按照時間排序。
+(defun hexo-touch-files-in-dir-by-time ()
+  "`touch' markdown article files according their \"date: \" to
+make it easy to sort file according date in Dired.
+Please run this under _post/ or _draft/ within Dired buffer."
+  (interactive)
+  (let (current-file-name file-list)
+    (setq file-list (directory-files (dired-current-directory)))
+    (progn
+      (mapcar
+       (lambda (current-file-name)
+         (if (and (not (string-match "#.+#$" current-file-name))
+                  (not (string-match ".+~$" current-file-name))
+                  (not (string-match "^\.\.?$" current-file-name))
+                  (string-match ".+\.md$" current-file-name))
+             (let (touch-cmd head)
+               (setq head
+                     (shell-command-to-string
+                      (format "head -n 5 '%s'" current-file-name)))
+               (save-match-data
+                 (string-match "^date: \\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\) \\([0-9]+\\):\\([0-9]+\\):\\([0-9]+\\)$" head)
+                 (setq touch-cmd
+                       (format "touch -t %s%s%s%s%s.%s %s"
+                               (match-string 1 head)
+                               (match-string 2 head)
+                               (match-string 3 head)
+                               (match-string 4 head)
+                               (match-string 5 head)
+                               (match-string 6 head)
+                               current-file-name
+                               )))
+               (shell-command touch-cmd))
+           ))
+       file-list))) ;; 這個file-list為lambda的arg
+  (revert-buffer)
+  (message "Done."))
+
+
+;; 將當前檔案在 _post 與 _drafts 兩者之間切換（mv）。
+(defun hexo-move-article ()
+  "Move current file between _post and _draft"
+  (interactive)
+  (let* ((cur-file (buffer-name))
+         (cur-dir default-directory)
+         (cur-path (buffer-file-name)))
+    (save-buffer)
+    (save-match-data
+      (if (string-match "\\(.+/\\)_posts/$" cur-dir)
+          (let* ((new-file-name (format "%s%s%s" (match-string 1 cur-dir) "_drafts/" cur-file)))
+            (kill-buffer)
+            (rename-file cur-path new-file-name)
+            (find-file new-file-name)
+            (message "Now in \"_drafts\""))
+        (if (string-match "\\(.+/\\)_drafts/$" cur-dir)
+            (let* ((new-file-name (format "%s%s%s" (match-string 1 cur-dir) "_posts/" cur-file)))
+              (kill-buffer)
+              (rename-file cur-path new-file-name)
+              (find-file new-file-name)
+              (message "Now in \"_posts\""))
+          (message "Current file doesn't in _posts or _drafts directory."))))))
+
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (defun hexo-opml-to-markdown ()
@@ -1541,9 +1619,13 @@ date: %Y-%m-%d %H:%M:%S
                  ))
         (save-buffer)))))
 
-
+;;======================================================
+;; 寫作加強
+;;======================================================
+;; 在 Markdown-mode中插入URL或Flickr圖片等。
 (add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
-(require 'xfrp_find_replace_pairs)
+(load-file "~/.emacs.d/git/writing-utils/writing-utils.el")
+(load-file "~/.emacs.d/private/flickr.el")
 
 ;;======================================================
 ;; Python
@@ -1554,7 +1636,7 @@ date: %Y-%m-%d %H:%M:%S
 (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
 (set-face-background 'highlight-indentation-face "#e3e3d3")
 (set-face-background 'highlight-indentation-current-column-face "#ffafff")
-(setq highlight-indentation-set-offset '4)
+(setq highlight-indentation-set-offset '2)
 
 ;; Info-look
 (require 'info-look)
@@ -1643,25 +1725,33 @@ The arguments can be int or float.
 Return value is float."
   (/ (float myVal) (float rangeMax)))
 
-
+(global-set-key (kbd "C-c m l") (lambda () (interactive) (load-theme 'moe-light t nil)))
+(global-set-key (kbd "C-c m d") (lambda () (interactive) (load-theme 'moe-dark t nil)))
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
 ;;
+
+
+(add-hook 'find-file-hook (lambda ()
+                            (when (> (buffer-size) (* 1024 1024))
+                              (setq buffer-read-only t)
+                              (buffer-disable-undo)
+                              (fundamental-mode))))
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(custom-safe-themes (quote ("afc4fc38f504ea0e7e7fe2037681bda77aa64e053a7a40f4fbecfa361545182f" "f8c6a8f2ad83c4cb527a132b691814bf679b256195e015670c49d8a50479acbd" "b5e478c8e066e8f1b21d6db40b1360076249c310e39147abc692e421e0e9fcd0" "f3cdcccf179917f32c3763d89eb743d8e24262d3e12dd964a113d5bb8b1a0df5" default)))
+ '(custom-safe-themes (quote ("4aefb3d815e8d213a98daf4f9df2b7e5a5b28c7bef15bb6888e3c5c0167587e0" "3c280746ff819d8fe0401c741d87df4c56d8efb376f3443d2d5b4d1ed5d2a445" "b97acd24cc1e0950615a6e3f7c268545c7dacec6ec47b726b0d6ea4403397021" "93bc7d202a4998dea11418f9ae6f0f22624163ecf0a33f682120ec17034e342f" "2f85648f9ff48e27813785d2957a0a6c97e102e24d3f83807eda62aa783f8e9a" "375fef1743f37f8edb2e7c63baf23eca4bd8a06c8032fbd92e8da3b56b121816" "fbba7f62760576fe6fff88a2142d5525775e32dafef43b4ad3e961665db19c4e" "d78aba22833c68af294d0ea1f230f545333771e2a81843505abd3c2ae2758439" "c4e7093112c19043c0b298fa5b37e2d97a11fd62a89ff13410a64ec8a15e7af3" "68d331ff1b24f3c52a5627164130d8eda4efe3352684238cebd9ebbabc2b33b0" "60aa93155442cd44d1568cd4625b2d651e0c8185e37cee009571db519ec32d10" "3a2d2ae5ece5dbc2503f16a64003a9e86016069165da2ef359d8d1ccd10e665d" "852b10ef15fd084da1fae2619742dd0eea8b940d26f394e93a9c799c6cb8e317" "ec113c6bdd2f77db04d5d373ddb8d55bc6151bb63603a7fe1add2c9ac3d48687" "7fbd09e680514a3d72ab9d38437fb8cab41451e723bddd4f30d32b6f6c34b829" "b560a433c6cc597c23c1f8d6f00f1e90b283919efcab55b6d8f539ba521c75a7" "85c10f7ff016781cf1321187d39d5aa272e3e34da65f7361e8261a63db1fa470" "23ff648407cecc34327572880651c2ec3d8236840a8736642e50bbf57b08babb" "4ac7461877fa6fe579cf80f4b07a3557690cb1706a9de9f9d6d10bb3bfe31dad" "afc4fc38f504ea0e7e7fe2037681bda77aa64e053a7a40f4fbecfa361545182f" default)))
  '(delete-selection-mode nil)
- '(ido-everywhere t)
  '(mark-even-if-inactive t)
- '(org-agenda-files (quote ("~/org/todo.org")))
  '(scroll-bar-mode (quote right))
- '(tooltip-mode nil)
  '(transient-mark-mode 1))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
