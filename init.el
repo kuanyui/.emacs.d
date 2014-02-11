@@ -20,11 +20,14 @@
 ;;======================================================
 
 ;;　GUI版本下的中文字體問題
-(if (window-system)
-    (progn (dolist (charset '(han kana symbol cjk-misc bopomofo))
-             (set-fontset-font (frame-parameter nil 'font)
-                               charset
-                               (font-spec :family "文泉驛等寬微米黑" :size nil)))) nil)
+(defun apply-font-setting ()
+  (interactive)
+  (if (window-system)
+      (progn (dolist (charset '(han kana symbol cjk-misc bopomofo))
+               (set-fontset-font (frame-parameter nil 'font)
+                                 charset
+                                 (font-spec :family "文泉驛等寬微米黑" :size nil)))) nil))
+(apply-font-setting)
 
 ;;GUI Emacs調整字體大小
 (defun sacha/increase-font-size ()
@@ -33,14 +36,18 @@
                       nil
                       :height
                       (ceiling (* 1.10
-                                  (face-attribute 'default :height)))))
+                                  (face-attribute 'default :height))))
+  (apply-font-setting))
+
 (defun sacha/decrease-font-size ()
   (interactive)
   (set-face-attribute 'default
                       nil
                       :height
                       (floor (* 0.9
-								(face-attribute 'default :height)))))
+								(face-attribute 'default :height))))
+  (apply-font-setting))
+
 (global-set-key (kbd "C-+") 'sacha/increase-font-size)
 (global-set-key (kbd "C--") 'sacha/decrease-font-size)
 
@@ -57,6 +64,9 @@
 
 ;;行號
 (global-linum-mode t)
+;; 已經有行號就不用modeline裡的行號
+(setq line-number-mode nil)
+(column-number-mode)
 
 ;; Highlight line number
 (require 'hlinum)
@@ -64,7 +74,7 @@
 
 
 ;;當前行高亮顯示
-;;(global-hl-line-mode 1)
+;; (global-hl-line-mode 1)
 
 ;;在標題顯示文件名稱(%b)與路徑(%f)
 (setq frame-title-format "%n%b (%f) - %F")
@@ -1200,7 +1210,8 @@ C-c C-c to apply."
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
-
+;; 去你的C-j
+(define-key stylus-mode-map (kbd "RET") 'newline-and-indent)
 
 ;;(setq-default show-trailing-whitespace nil)
 (defun toggle-show-trailing-whitespace ()
@@ -1727,6 +1738,38 @@ Return value is float."
 
 (global-set-key (kbd "C-c m l") (lambda () (interactive) (load-theme 'moe-light t nil)))
 (global-set-key (kbd "C-c m d") (lambda () (interactive) (load-theme 'moe-dark t nil)))
+
+
+
+;;======================================================
+;; gnus
+;;======================================================
+;;
+(setq user-mail-address "azazabc123@gmail.com")
+(setq user-full-name "kuanyui")
+
+(setq gnus-select-method
+      '(nnimap "gmail"
+	       (nnimap-address "imap.gmail.com")
+	       (nnimap-server-port 993)
+	       (nnimap-stream ssl)))
+
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587
+				   "azazabc123@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+
+(setq gnus-default-charset 'utf-8)
+
+;; 發信用coding-system
+(setq mm-coding-system-priorities '(utf-8))
+
+(setq gnus-thread-sort-functions
+      '((not gnus-thread-sort-by-score)))
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
