@@ -6,7 +6,7 @@ function run-installer () {
     mkdir -p private
     touch private/flickr.el
     touch private/twittering-filter-users.el
-    if [-f ~/.emacs] ; then
+    if [ -f ~/.emacs ]; then
         mv ~/.emacs ~/.emacs_backup
     fi
     emacs --batch ./auto-install-packages.el
