@@ -1,4 +1,4 @@
-function run-installer () {
+run_installer() {
     git clone https://github.com/kuanyui/moe-theme.el.git git/moe-theme
     git clone https://github.com/kuanyui/moedict.el git/moedict
     git clone https://github.com/kuanyui/twittering-myfav.el.git git/twittering-myfav
@@ -18,7 +18,7 @@ function run-installer () {
 while true; do
     read -p "Do you really want to install kuanyui's Emacs config?" yn
     case $yn in
-        [Yy]* ) run-installer; break;;
+        [Yy]* ) run_installer; break;;
         [Nn]* ) exit;;
         * ) echo "Please answer yes or no.";;
     esac
