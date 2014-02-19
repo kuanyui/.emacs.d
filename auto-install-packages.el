@@ -1,6 +1,6 @@
 (require 'cl)
 (require 'package)
-(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (setq package-enable-at-startup nil)
 (package-initialize)
 
