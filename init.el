@@ -1635,8 +1635,8 @@ date: %Y-%m-%d %H:%M:%S
 ;; 寫作加強
 ;;======================================================
 ;; 在 Markdown-mode中插入URL或Flickr圖片等。
-(add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
-(load-file "~/.emacs.d/git/writing-utils/writing-utils.el")
+(add-to-list 'load-path "~/.emacs.d/git/writing-utils.el/")
+(load-file "~/.emacs.d/git/writing-utils.el/writing-utils.el")
 (load-file "~/.emacs.d/private/flickr.el")
 
 ;;======================================================
