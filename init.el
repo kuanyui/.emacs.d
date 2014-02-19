@@ -19,16 +19,6 @@
 ;; GUI Emacs
 ;;======================================================
 
-;;　GUI版本下的中文字體問題
-(defun apply-font-setting ()
-  (interactive)
-  (if (window-system)
-      (progn (dolist (charset '(han kana symbol cjk-misc bopomofo))
-               (set-fontset-font (frame-parameter nil 'font)
-                                 charset
-                                 (font-spec :family "文泉驛等寬微米黑" :size nil)))) nil))
-(apply-font-setting)
-
 ;;GUI Emacs調整字體大小
 (defun sacha/increase-font-size ()
   (interactive)
@@ -47,6 +37,21 @@
                       (floor (* 0.9
 								(face-attribute 'default :height))))
   (apply-font-setting))
+
+;;　GUI版本下的中文字體問題
+(defun apply-font-setting ()
+  (interactive)
+  (if (window-system)
+      (progn
+        (dolist (charset '(han kana symbol cjk-misc bopomofo))
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "文泉驛等寬微米黑" :size nil))))))
+
+(if (window-system)
+    (progn
+      (set-face-attribute 'default nil :height 90)
+      (apply-font-setting)))
 
 (global-set-key (kbd "C-+") 'sacha/increase-font-size)
 (global-set-key (kbd "C--") 'sacha/decrease-font-size)
@@ -746,18 +751,6 @@ unwanted space when exporting org-mode to html."
   (interactive)(find-file "~/Dropbox/Blog"))
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
-
-
-;;(global-set-key (kbd "C-c t") 'test-light-theme)
-;;(defun test-light-theme () "test new theme"
-;;  (interactive)
-;;  (load-theme 'moe-light))
-;;
-;;(global-set-key (kbd "C-c r") 'test-dark-theme)
-;;(defun test-dark-theme () "test new theme"
-;;  (interactive)
-;;  (load-theme 'moe-dark))
-
 ;; StarDict for Emacs
 ;; author: pluskid
 ;; 调用 stardict 的命令行接口来查辞典，如果选中了 region 就查询 region 的内容，否则就查询当前光标所在的词
@@ -921,25 +914,25 @@ unwanted space when exporting org-mode to html."
 (require 'switch-window)
 
 ;;一個簡單的minor-mode，用來調整frame大小
-(define-minor-mode resize-frame
-  "A simple minor mode to resize-frame.
-C-c C-c to apply."
-  ;; The initial value.
-  :init-value nil
-  ;; The indicator for the mode line.
-  :lighter " ResizeFrame"
-  ;; The minor mode bindings.
-  :keymap
-  `(([up] . enlarge-window)
-    ([down] . shrink-window)
-    ([right] . enlarge-window-horizontally)
-    ([left] . shrink-window-horizontally)
-    ("\C-c\C-c" . (lambda ()
-                         (interactive)
-                         (setq resize-frame nil)
-                         (message "Done."))))
-  :global t)
-(global-set-key (kbd "C-x <f5>") 'resize-frame)
+;;(define-minor-mode resize-frame
+;;  "A simple minor mode to resize-frame.
+;;C-c C-c to apply."
+;;  ;; The initial value.
+;;  :init-value nil
+;;  ;; The indicator for the mode line.
+;;  :lighter " ResizeFrame"
+;;  ;; The minor mode bindings.
+;;  :keymap
+;;  `(([up] . enlarge-window)
+;;    ([down] . shrink-window)
+;;    ([right] . enlarge-window-horizontally)
+;;    ([left] . shrink-window-horizontally)
+;;    ("\C-c\C-c" . (lambda ()
+;;                         (interactive)
+;;                         (setq resize-frame nil)
+;;                         (message "Done."))))
+;;  :global t)
+;;(global-set-key (kbd "C-x <f5>") 'resize-frame)
 
 ;;======================================================
 ;; Theme
@@ -947,8 +940,11 @@ C-c C-c to apply."
 
 ;;Emacs24之後的theme路徑指定
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
-(load-theme 'moe-light t)
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
+(require 'moe-theme)
+(setq moe-theme-highlight-buffer-id nil)
+(moe-light)
+
 ;;(enable-theme 'moe-dark)
 
 ;;======================================================
@@ -1211,7 +1207,10 @@ C-c C-c to apply."
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
 ;; 去你的C-j
+(require 'stylus-mode)
+(require 'web-mode)
 (define-key stylus-mode-map (kbd "RET") 'newline-and-indent)
+(define-key web-mode-map (kbd "RET") 'newline-and-indent)
 
 ;;(setq-default show-trailing-whitespace nil)
 (defun toggle-show-trailing-whitespace ()
@@ -1771,11 +1770,41 @@ Return value is float."
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-score)))
 
-;;======================================================
-;; customize 以下為Emacs自動生成，不要動
-;;======================================================
-;;
 
+;;======================================================
+;; Flymake
+;;======================================================
+(require 'flymake)
+
+(defun flymake-elisp-init ()
+  (unless (string-match "^ " (buffer-name))
+    (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                         'flymake-create-temp-inplace))
+           (local-file  (file-relative-name
+                         temp-file
+                         (file-name-directory buffer-file-name))))
+      (list
+       (expand-file-name invocation-name invocation-directory)
+       (list
+        "-Q" "--batch" "--eval" 
+        (prin1-to-string
+         (quote
+          (dolist (file command-line-args-left)
+            (with-temp-buffer
+              (insert-file-contents file)
+              (condition-case data
+                  (scan-sexps (point-min) (point-max))
+                (scan-error
+                 (goto-char(nth 2 data))
+                 (princ (format "%s:%s: error: Unmatched bracket or quote\n"
+                                file (line-number-at-pos)))))))
+          )
+         )
+        local-file)))))
+(push '("\\.el$" flymake-elisp-init) flymake-allowed-file-name-masks)
+(add-hook 'emacs-lisp-mode-hook
+          ;; workaround for (eq buffer-file-name nil)
+          (function (lambda () (if buffer-file-name (flymake-mode)))))
 
 (add-hook 'find-file-hook (lambda ()
                             (when (> (buffer-size) (* 1024 1024))
@@ -1785,15 +1814,22 @@ Return value is float."
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+;;======================================================
+;; customize 以下為Emacs自動生成，不要動
+;;======================================================
+;;
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("4aefb3d815e8d213a98daf4f9df2b7e5a5b28c7bef15bb6888e3c5c0167587e0" "3c280746ff819d8fe0401c741d87df4c56d8efb376f3443d2d5b4d1ed5d2a445" "b97acd24cc1e0950615a6e3f7c268545c7dacec6ec47b726b0d6ea4403397021" "93bc7d202a4998dea11418f9ae6f0f22624163ecf0a33f682120ec17034e342f" "2f85648f9ff48e27813785d2957a0a6c97e102e24d3f83807eda62aa783f8e9a" "375fef1743f37f8edb2e7c63baf23eca4bd8a06c8032fbd92e8da3b56b121816" "fbba7f62760576fe6fff88a2142d5525775e32dafef43b4ad3e961665db19c4e" "d78aba22833c68af294d0ea1f230f545333771e2a81843505abd3c2ae2758439" "c4e7093112c19043c0b298fa5b37e2d97a11fd62a89ff13410a64ec8a15e7af3" "68d331ff1b24f3c52a5627164130d8eda4efe3352684238cebd9ebbabc2b33b0" "60aa93155442cd44d1568cd4625b2d651e0c8185e37cee009571db519ec32d10" "3a2d2ae5ece5dbc2503f16a64003a9e86016069165da2ef359d8d1ccd10e665d" "852b10ef15fd084da1fae2619742dd0eea8b940d26f394e93a9c799c6cb8e317" "ec113c6bdd2f77db04d5d373ddb8d55bc6151bb63603a7fe1add2c9ac3d48687" "7fbd09e680514a3d72ab9d38437fb8cab41451e723bddd4f30d32b6f6c34b829" "b560a433c6cc597c23c1f8d6f00f1e90b283919efcab55b6d8f539ba521c75a7" "85c10f7ff016781cf1321187d39d5aa272e3e34da65f7361e8261a63db1fa470" "23ff648407cecc34327572880651c2ec3d8236840a8736642e50bbf57b08babb" "4ac7461877fa6fe579cf80f4b07a3557690cb1706a9de9f9d6d10bb3bfe31dad" "afc4fc38f504ea0e7e7fe2037681bda77aa64e053a7a40f4fbecfa361545182f" default)))
+ '(ansi-color-names-vector ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
+
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
+ '(resize-frame t)
  '(scroll-bar-mode (quote right))
  '(transient-mark-mode 1))
 (custom-set-faces
