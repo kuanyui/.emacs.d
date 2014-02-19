@@ -697,7 +697,7 @@ unwanted space when exporting org-mode to html."
 
 ;;(assq 'text (twittering-find-status (twittering-get-id-at)))
 
-(load-file "~/.emacs.d/git/twittering-myfav.el/twittering-myfav.el")
+(load-file "~/.emacs.d/git/twittering-myfav/twittering-myfav.el")
 (require 'twittering-myfav)
 (setq twittering-myfav-file-name "twittering_myfav") ; The org and html file's name.
 (setq twittering-myfav-file-path "~/Dropbox/Blog/kuanyui.github.io/source/") ; remember "/" in the end
@@ -936,7 +936,6 @@ unwanted space when exporting org-mode to html."
 ;; Theme
 ;;======================================================
 
-;;Emacs24之後的theme路徑指定
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
 (require 'moe-theme)
@@ -944,6 +943,13 @@ unwanted space when exporting org-mode to html."
 (moe-light)
 
 ;;(enable-theme 'moe-dark)
+
+
+;;======================================================
+;; moedict 萌典
+;;======================================================
+(add-to-list 'load-path "~/.emacs.d/git/moedict/")
+(require 'moedict)
 
 ;;======================================================
 ;; zlc
@@ -1635,8 +1641,8 @@ date: %Y-%m-%d %H:%M:%S
 ;; 寫作加強
 ;;======================================================
 ;; 在 Markdown-mode中插入URL或Flickr圖片等。
-(add-to-list 'load-path "~/.emacs.d/git/writing-utils.el/")
-(load-file "~/.emacs.d/git/writing-utils.el/writing-utils.el")
+(add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
+(load-file "~/.emacs.d/git/writing-utils/writing-utils.el")
 (load-file "~/.emacs.d/private/flickr.el")
 
 ;;======================================================
