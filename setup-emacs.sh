@@ -9,7 +9,7 @@ function run-installer () {
     if [ -f ~/.emacs ]; then
         mv ~/.emacs ~/.emacs_backup
     fi
-    emacs --batch ./auto-install-packages.el
+    emacs --load ./auto-install-packages.el
 }
 
 while true; do
