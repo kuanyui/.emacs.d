@@ -9,7 +9,10 @@ function run-installer () {
     if [ -f ~/.emacs ]; then
         mv ~/.emacs ~/.emacs_backup
     fi
-    emacs --load ./auto-install-packages.el
+    emacs --load ./auto-install-packages.el && emacs --load ./auto-install-packages.el && emacs --load ./auto-install-packages.el && emacs --load ./auto-install-packages.el && emacs --load ./auto-install-packages.el && emacs
+    echo "If you encounter problem after installing packages, runs:"
+    echo "emacs --load ./auto-install-packages.el"
+    echo "manually again (or more times)."
 }
 
 while true; do

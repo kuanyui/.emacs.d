@@ -92,3 +92,4 @@
         dotfiles-packages-list))
 
 (dotfiles-auto-install-packages)
+(save-buffers-kill-emacs)
