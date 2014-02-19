@@ -1,5 +1,8 @@
 ;;kuanyui's ~/.emacs
 
+(setq user-mail-address "azazabc123@gmail.com")
+(setq user-full-name "kuanyui")
+
 ;;掃描~/.emacs.d目錄
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/lisps")
@@ -270,11 +273,6 @@
 ;; (add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
 ;; (require 'org-install)
 (require 'org)
-;;(require 'org-odt)
-;;(require 'org-html)
-;;(require 'ox-odt)
-;;(require 'ox-html)
-
 (setq org-directory "~/org")
 
 ;;解决org-mode下中文不自动换行的问题
@@ -546,7 +544,7 @@ unwanted space when exporting org-mode to html."
   "Title: "
   "#+TITLE:     " str | " *** Title *** " " " \n
   "#+AUTHOR:    "(getenv "USER")" " \n
-  "#+EMAIL:     azazabc123@gmail.com" \n
+  "#+EMAIL:     user-mail-address" \n
   "#+DATE:      "(insert (format-time-string "%Y/%m/%d（%a）%H:%M" )) \n
   "#+DESCRIPTION:" \n
   "#+KEYWORDS:" \n
@@ -1182,10 +1180,14 @@ unwanted space when exporting org-mode to html."
 ;;======================================================
 (require 'rainbow-delimiters)
 ;; 只在程式相關mode中使用
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (rainbow-delimiters-mode t)
-            (setq show-trailing-whitespace t)))
+(require 'cl)
+(dolist (x '(emacs-lisp-mode-hook
+             lisp-mode-hook
+             lisp-interaction-mode-hook))
+  (add-hook x
+            (lambda ()
+              (rainbow-delimiters-mode t)
+              (setq show-trailing-whitespace t))))
 
 ;;======================================================
 ;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
@@ -1744,8 +1746,7 @@ Return value is float."
 ;; gnus
 ;;======================================================
 ;;
-(setq user-mail-address "azazabc123@gmail.com")
-(setq user-full-name "kuanyui")
+
 
 (setq gnus-select-method
       '(nnimap "gmail"
@@ -1755,8 +1756,7 @@ Return value is float."
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials '(("smtp.gmail.com" 587
-				   "azazabc123@gmail.com" nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 user-mail-address nil))
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
