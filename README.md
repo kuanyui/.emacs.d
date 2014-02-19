@@ -1,4 +1,8 @@
 # ˊ・ω・ˋ Emacs~~
-**Don't use this** unless you know what you are doing.
+This is an init file for non-programmer.
 
-This `.emacs.d` aims for dotfiles auto installer, and **not recommended** for beginner who want an out-of-the-box Emacs config files.
+## Installation
+
+```shell
+git clone https://github.com/kuanyui/.emacs.d ; cd .emacs.d ; ./setup-emacs.sh
+```
