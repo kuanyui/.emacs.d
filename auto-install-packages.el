@@ -84,12 +84,12 @@
     ))
 
 (defun dotfiles-auto-install-packages ()
-  (interactive)
   (package-refresh-contents)
   (mapc #'(lambda (package)
             (unless (package-installed-p package)
               (package-install package)))
-        dotfiles-packages-list))
+        dotfiles-packages-list)
+  (save-buffers-kill-emacs))
 
 (dotfiles-auto-install-packages)
-(save-buffers-kill-emacs)
+
