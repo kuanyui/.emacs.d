@@ -36,6 +36,7 @@
     god-mode
     goto-chg
     haml-mode
+    htmlize
     helm
     highlight-defined
     highlight-indentation

@@ -339,6 +339,8 @@
                       ("\\.mm\\'" . default)
                       ("\\.x?html?\\'" . "xdg-open %s")
                       ("\\.pdf\\'" . default)))
+;; Syntax Highlight in outputed files
+(setq org-src-fontify-natively t)
 
 (setq org-html-style "<style type=\"text/css\">
 * {
@@ -446,8 +448,10 @@ h2 {
 .outline-text-3 { padding: 0px 0px; }
 .example { }
 pre {
-    border: 1pt solid #AEBDCC;
-    background-color: #F3F5F7;
+    border: 1pt solid #ddd;
+    background-color: #f2f2f2;
+    box-shadow: 0 0 1em rgba(0,0,0,0.05);
+    border-radius:5px;
     padding: 5pt;
     font-family: courier, monospace;
     font-size: 90%;
@@ -455,9 +459,22 @@ pre {
     margin: 0.5em 2em;
 }
 
+pre.src:before {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    top: -10px;
+    right: 10px;
+    padding: 3px 7px;
+    position: absolute;
+}
+
 code {
-    border: 1pt solid #AEBDCC;
-    background-color: #F3F5F7;
+    border: 1pt solid #ddd;
+    background-color: #eee;
+    padding: 0 3px;
+    border-radius: 3px;
     position: relative;
     margin-top: -3px;
     font-family: courier, monospace;
