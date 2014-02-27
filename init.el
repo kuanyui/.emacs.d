@@ -4,7 +4,6 @@
 (setq user-full-name "kuanyui")
 
 ;;掃描~/.emacs.d目錄
-(add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
 ;;Emacs24開始內建的package.el相關設定
@@ -271,8 +270,10 @@
 ;; 不要安裝最新版org-mode，export 一堆問題
 ;; (add-to-list 'load-path "~/.emacs.d/lisps/org-mode/lisp/")
 ;; (add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
-;; (require 'org-install)
+(require 'org-install)
 (require 'org)
+(require 'ox)
+(require 'ob)
 (setq org-directory "~/org")
 
 ;;解决org-mode下中文不自动换行的问题
@@ -309,10 +310,11 @@
 	(insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
 (define-key org-mode-map (kbd "C-c i i") 'org-insert-image)
 
+
 ;;(setq org-export-default-language "zh"
 ;;      org-export-html-extension "html"
 ;;      org-export-with-timestamps nil
-;;      org-export-with-section-numbers nil
+;;      org-export-with-section-numbers t
 ;;      org-export-with-tags 'not-in-toc
 ;;      org-export-skip-text-before-1st-heading nil
 ;;      org-export-with-sub-superscripts '{}
@@ -329,50 +331,202 @@
 ;;      org-publish-use-timestamps-flag t
 ;;      org-export-babel-evaluate nil
 ;;      org-confirm-babel-evaluate nil)
-;;
-;;;;輸出上下標？
-;;(setq org-export-with-sub-superscripts nil)
-;;
-;;(org-export-html-style "<style type=\"text/css\">
-;;body { text-align: center; }
-;;#content {
-;;  margin: 0px auto;
-;;  width: 800px; text-align:left; }
-;;
-;;h1 { border-bottom: 1px solid black; }
-;;
-;;.outline-2 { padding: 0px 16px; }
-;;.outline-3 { padding: 0px 16px; }
-;;
-;;.outline-text-2 { padding: 0px 16px; }
-;;.outline-text-3 { padding: 0px 16px; }
-;;
-;;.example { }
-;;pre {
-;;        border: 1pt solid #AEBDCC;
-;;        background-color: #F3F5F7;
-;;        padding: 5pt;
-;;        font-family: courier, monospace;
-;;        font-size: 90%;
-;;        overflow:auto;
-;;}
-;;
-;;code {
-;;        border: 1pt solid #AEBDCC;
-;;        background-color: #F3F5F7;
-;;        font-family: courier, monospace;
-;;        font-size: 90%;
-;;}
-;;
-;;.todo { color: red; }
-;;.done { color: green; }
-;;.tag { float:right; color:red; }
-;;
-;;#postamble { display:none; }
-;;</style>")
-;;
 
-;; org輸出html時中文不要有奇怪的空白。（by coldnew the God）
+;;輸出上下標？
+;;(setq org-export-with-sub-superscripts nil)
+
+(setq org-file-apps '((auto-mode . emacs)
+                      ("\\.mm\\'" . default)
+                      ("\\.x?html?\\'" . "xdg-open %s")
+                      ("\\.pdf\\'" . default)))
+
+(setq org-html-style "<style type=\"text/css\">
+* {
+    font-family:WenQuanYi Micro Hei,Microsoft JhengHei,Helvetica,sans-serif;
+    color: #555555;
+    }
+
+body {
+    text-align: center;
+    background-color: hsl(45,30%,80%);
+    background-image:
+    repeating-linear-gradient(120deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 2px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 2px, transparent 1px, transparent 60px),
+    linear-gradient(60deg, rgba(0,0,0,.06) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.06) 75%, rgba(0,0,0,.06)),
+    linear-gradient(120deg, rgba(0,0,0,.06) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.06) 75%, rgba(0,0,0,.06));
+    background-size: 70px 120px;
+}
+
+#content {
+    margin: 0px auto;
+    width: 800px;
+    text-align:left;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 7px 7px 0 0;
+    box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
+    padding-bottom: 30px;
+}
+
+#postamble {
+    position: relative;
+    z-index: 1;
+    font-size:0.8em;
+    color: #ffffff !important;
+    background-color: #555555 !important;
+    margin: -1.2em auto 0;
+    width: 780px;
+    background-color: #ffffff;
+    border-radius: 0 0 7px 7px;
+    padding: 30px 10px 10px 10px;
+    box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
+    text-shadow: 0px -1px rgba(0, 0, 0, 0.3);
+
+    background-color: #828282;
+    background-image: radial-gradient(#707070 50%, transparent 51%);
+    background-size: 4px 4px;
+}
+#postamble p {
+    margin: 0;
+    color: #eeeeee !important;
+}
+
+#postamble a {
+    color: #5fafd7;
+}
+
+#table-of-contents {
+    margin: 0 30px;
+    padding: 0 15px 10px 15px;
+    border-top: 4px solid #D4DDE0;
+    border-bottom: 4px solid #D4DDE0;
+    background-color: #E9EEF1;
+    text-shadow: 0 1px 0 hsl(202,100%,100%);
+}
+
+#table-of-contents h2 {
+    color: hsl(202,40%,52%);
+    text-shadow: 0 1px 0 hsl(202,100%,100%);
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+a {
+    color: #005f87;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #005f87;
+    text-decoration: underline;
+}
+
+h1 {
+    color: #eeeeee;
+    text-shadow: 0px -1px rgba(0, 0, 0, 0.5);
+    font-family: Lato,Lucida Grande,LiHei Pro,WenQuanYi Micro Hei,Arial,sans-serif;
+    font-weight: 400;
+    margin-top: 0px;
+    padding: 20px 0 10px 0;
+    background-color: #828282;
+    background-image: radial-gradient(#707070 50%, transparent 51%);
+    background-size: 4px 4px;
+    border-radius: 7px 7px 0 0;
+}
+h2 {
+    color: #777;
+    border-left: 5px solid #777;
+    margin-left: -30px;
+    padding-left: 25px;
+}
+
+.outline-2 { padding: 0px 30px; }
+.outline-3 { padding: 0px 30px; }
+
+.outline-text-2 { padding: 0px 0px; }
+.outline-text-3 { padding: 0px 0px; }
+.example { }
+pre {
+    border: 1pt solid #AEBDCC;
+    background-color: #F3F5F7;
+    padding: 5pt;
+    font-family: courier, monospace;
+    font-size: 90%;
+    overflow:auto;
+    margin: 0.5em 2em;
+}
+
+code {
+    border: 1pt solid #AEBDCC;
+    background-color: #F3F5F7;
+    position: relative;
+    margin-top: -3px;
+    font-family: courier, monospace;
+    font-size: 80%;
+}
+
+blockquote {
+    font-style:italic;
+    background: hsl(44,80%,95%);
+    border-left: 5px solid hsl(44,25%,70%);
+    margin: 1.5em 2em;
+    padding: 0.5em 10px 0.5em 4em;
+    quotes: '\\201C''\\201D''\\2018''\\2019';
+}
+blockquote:before {
+    color: #ccc;
+    position: absolute;
+    margin-top: -0.1em;
+    margin-left: -1.3em;
+    color: hsl(44,25%,85%);
+    font-size: 5em;
+    content: '\\201C' !important;
+}
+blockquote p {
+    display: inline;
+    font-family:'Times New Roman', Times, serif !important;
+}
+blockquote p a {
+    font-family:'Times New Roman', Times, serif !important;
+      }
+
+.done {
+    background-color: #d7ff87;
+    color: #008700;
+    border: 1px solid #5faf00;
+    border-radius: 3px;
+    padding:0px 2px;
+    top: -1px;
+    position: relative;
+    font-family:WenQuanYi Micro Hei,Microsoft JhengHei,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size:0.8em;
+}
+.todo {
+    background-color: #ffafaf;
+    color: #a40000;
+    border: 1px solid #dd0000;
+    border-radius: 3px;
+    padding:0px 2px;
+    top: -1px;
+    position: relative;
+    font-family:WenQuanYi Micro Hei,Microsoft JhengHei,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size:0.8em;
+}
+.tag { float:right; color:red; }
+
+</style>")
+
+;;(add-function :override org-html-checkbox 
+;;(defun org-html-checkbox (checkbox)
+;;  "Format CHECKBOX into HTML."
+;;  (case checkbox (on "<code>[X]</code>")
+;;	(off "<code>[&#xa0;]</code>")
+;;	(trans "<code>[-]</code>")
+;;	(t "")))
+
+
+;;org輸出html時中文不要有奇怪的空白。（by coldnew the God）
 (defadvice org-html-paragraph (before org-html-paragraph-advice
                                       (paragraph contents info) activate)
   "Join consecutive Chinese lines into a single long line without
@@ -998,7 +1152,8 @@ unwanted space when exporting org-mode to html."
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
 (add-hook 'css-mode-hook
           (lambda ()
-            (add-to-list 'ac-sources 'ac-source-company-css)))
+;;            (add-to-list 'ac-sources 'ac-source-company-css)
+            (define-key css-mode-map (kbd "<RET>") 'newline-and-indent)))
 
 (setq ac-use-menu-map t)
 ;; 讓C-s可以在auto-complete選單裡使用。
@@ -1033,7 +1188,7 @@ unwanted space when exporting org-mode to html."
           (lambda ()
             (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
             (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-word-mode)
-            (define-key org-mode-map (kbd "C-c C-e") 'org-export)
+            (define-key org-mode-map (kbd "C-c C-e") 'org-export-dispatch)
             ))
 
 ;; ace-jump
@@ -1232,7 +1387,7 @@ unwanted space when exporting org-mode to html."
                (delete-trailing-whitespace))))))
 (global-set-key (kbd "C-x ,") 'toggle-show-trailing-whitespace)
 
-(require 'org-html5presentation)
+;;(require 'org-html5presentation)
 
 ;;======================================================
 ;; SLIME
@@ -1743,8 +1898,8 @@ The arguments can be int or float.
 Return value is float."
   (/ (float myVal) (float rangeMax)))
 
-(global-set-key (kbd "C-c m l") (lambda () (interactive) (load-theme 'moe-light t nil)))
-(global-set-key (kbd "C-c m d") (lambda () (interactive) (load-theme 'moe-dark t nil)))
+(global-set-key (kbd "C-c m l") (lambda () (interactive) (moe-light)))
+(global-set-key (kbd "C-c m d") (lambda () (interactive) (moe-dark)))
 
 
 
@@ -1792,7 +1947,7 @@ Return value is float."
       (list
        (expand-file-name invocation-name invocation-directory)
        (list
-        "-Q" "--batch" "--eval" 
+        "-Q" "--batch" "--eval"
         (prin1-to-string
          (quote
           (dolist (file command-line-args-left)
@@ -1831,8 +1986,11 @@ Return value is float."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
-
+ '(ansi-color-names-vector
+   ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
+ '(custom-safe-themes
+   (quote
+    ("6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
  '(resize-frame t)
