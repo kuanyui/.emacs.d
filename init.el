@@ -1109,6 +1109,7 @@ unwanted space when exporting org-mode to html."
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
+(require 'powerline)
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
 (moe-light)
@@ -1330,6 +1331,22 @@ unwanted space when exporting org-mode to html."
 
 (define-key dired-mode-map (kbd "M-a") 'dired-add-to-smplayer-playlist)
 (define-key dired-mode-map (kbd "<f2>") 'wdired-change-to-wdired-mode)
+
+
+(defun dired-tar (tarname files &optional arg)
+  "A dired-mode extension to archive files marked.
+With one prefix argument, the tarball is gziped."
+  (interactive (let ((files (dired-get-marked-files)))
+                 (list (read-string "Tarball name: "
+                                    (concat (file-relative-name (car files)) ".tar.gz"))
+                       files "P")))
+  (let ((tar (if arg
+                 (if dired-guess-shell-gnutar
+                     (concat dired-guess-shell-gnutar " zcf %s %s")
+                   "tar cf - %2s | gzip > %1s")
+               "tar cf %s %s")))
+    (shell-command (format tar tarname (mapconcat 'file-relative-name files " ")))))
+(add-hook 'dired-load-hook (lambda () (define-key dired-mode-map "T" 'dired-tar)))
 
 ;;======================================================
 ;; Magit!
@@ -2007,7 +2024,7 @@ Return value is float."
    ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
  '(custom-safe-themes
    (quote
-    ("6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+    ("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
  '(resize-frame t)
