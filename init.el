@@ -338,7 +338,7 @@
 (setq org-file-apps '((auto-mode . emacs)
                       ("\\.mm\\'" . default)
                       ("\\.x?html?\\'" . "xdg-open %s")
-                      ("\\.pdf\\'" . default)))
+                      ("\\.pdf\\'" . "kde-open %s")))
 ;; Syntax Highlight in outputed files
 (setq org-src-fontify-natively t)
 
@@ -492,7 +492,7 @@ blockquote {
 blockquote:before {
     color: #ccc;
     position: absolute;
-    margin-top: -0.1em;
+    margin-top: -0.03em;
     margin-left: -1.3em;
     color: hsl(44,25%,85%);
     font-size: 5em;
@@ -721,7 +721,7 @@ unwanted space when exporting org-mode to html."
   "#+KEYWORDS:" \n
   "#+LANGUAGE:  zh" \n
   "#+OPTIONS:   H:3 num:nil toc:nil \\n:t @:t ::t |:t ^:t -:t f:t *:t <:t" \n
-  "#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc" \n
+  "#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc email:t" \n
   "#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js" \n
   "#+EXPORT_SELECT_TAGS: export" \n
   "#+EXPORT_EXCLUDE_TAGS: noexport" \n
@@ -730,6 +730,99 @@ unwanted space when exporting org-mode to html."
   "#+XSLT:" \n
   )
 (global-set-key (kbd "C-c i t") 'org-export-skeleton)
+
+(setq org-latex-classes
+      '(("article"
+         "
+\\documentclass[12pt,a4paper]{article}
+\\usepackage{fontspec}
+\\setromanfont{cwTeXMing}
+
+\\usepackage{etoolbox}  % Quote部份的字型設定
+\\newfontfamily\\quotefont{cwTeXFangSong}
+\\AtBeginEnvironment{quote}{\\quotefont\\small}
+
+\\setmonofont[Scale=0.9]{Courier} % 等寬字型 [FIXME] Courier 中文會爛掉！
+\\font\\cwSong=''cwTeXFangSong'' at 10pt
+%\\font\\cwHei=''cwTeXHeiBold'' at 10p %不知為何會爆掉
+\\font\\cwYen=''cwTeXYen'' at 10pt
+\\font\\cwKai=''cwTeXKai'' at 10pt
+\\font\\cwMing=''cwTeXMing'' at 10pt
+\\font\\wqyHei=''文泉驛正黑'' at 10pt
+\\font\\wqyHeiMono=''文泉驛等寬正黑'' at 10pt
+\\font\\wqyHeiMicro=''文泉驛微米黑'' at 10pt
+\\XeTeXlinebreaklocale ``zh''
+\\XeTeXlinebreakskip = 0pt plus 1pt
+\\linespread{1.36}
+
+% [FIXME] ox-latex 的設計不良導致hypersetup必須在這裡插入
+\\usepackage{hyperref}
+\\hypersetup{
+  colorlinks=true, %把紅框框移掉改用字體顏色不同來顯示連結
+  linkcolor=[rgb]{0,0.37,0.53},
+  citecolor=[rgb]{0,0.47,0.68},
+  filecolor=[rgb]{0,0.37,0.53},
+  urlcolor=[rgb]{0,0.37,0.53},
+  pagebackref=true,
+  linktoc=all,}
+"
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+;; [FIXME]
+;; 原本是不要讓org插入hypersetup（因為org-mode這部份設計成沒辦法自訂，或許可以去report一下？）
+;; 改成自行插入，但這樣pdfcreator沒辦法根據Emacs版本插入，pdfkeyword也會無效...幹。
+(setq org-latex-with-hyperref t)
+
+;; 把預設的fontenc拿掉
+;; 經過測試XeLaTeX輸出PDF時有fontenc[T1]的話中文會無法顯示。
+;; hyperref也拿掉，改從classes處就插入，原因見上面 org-latex-with-hyperref 的說明。
+(setq org-latex-default-packages-alist
+      '(("" "hyperref" nil)
+        ("AUTO" "inputenc" t)
+        ("" "fixltx2e" nil)
+        ("" "graphicx" t)
+        ("" "longtable" nil)
+        ("" "float" nil)
+        ("" "wrapfig" nil)
+        ("" "rotating" nil)
+        ("normalem" "ulem" t)
+        ("" "amsmath" t)
+        ("" "textcomp" t)
+        ("" "marvosym" t)
+        ("" "wasysym" t)
+        ("" "amssymb" t)
+        "\\tolerance=1000"))
+
+
+;; Use XeLaTeX to export PDF in Org-mode
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"))
+;;;; Dependancies: wrapfig
+;;;;(setq org-latex-default-class "ltjsarticle")
+;;;;(setq org-latex-pdf-process '("lualatex %b" "lualatex %b"))
+
+;;======================================================
+;; TeX
+;;======================================================
+;;(add-to-list 'tex-compile-commands '("xelatex %r"))
+(setq tex-compile-commands '(("xelatex %r")))
+(setq tex-command "xelatex")
+
+;;======================================================
+;; Abbrevs
+;;======================================================
+(setq abbrev-file-name "~/.emacs.d/abbrev_defs")
+(setq save-abbrevs 'sliently)
+(setq-default abbrev-mode t)
+;;(quietly-read-abbrev-file)       ;; reads the abbreviations file
+;; (if (file-exists-p abbrev-file-name)
+;;     (quietly-read-abbrev-file))
 
 ;;======================================================
 ;; shell-script-mode
