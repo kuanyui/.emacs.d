@@ -952,6 +952,11 @@ unwanted space when exporting org-mode to html."
 ;;;;(setq org-latex-default-class "ltjsarticle")
 ;;;;(setq org-latex-pdf-process '("lualatex %b" "lualatex %b"))
 
+(require 'ob-latex)
+(setq org-src-fontify-natively t)
+
+(require 'ox-html5slide)
+
 ;;======================================================
 ;; LaTeX
 ;;======================================================
