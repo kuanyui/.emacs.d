@@ -156,6 +156,7 @@
 ;;把捲軸移到右側
 (customize-set-variable 'scroll-bar-mode 'right)
 
+(hungry-delete-mode t)
 ;;======================================================
 ;; IBuffer
 ;;======================================================
@@ -165,6 +166,12 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
+(add-hook 'ibuffer-mode-hook 'hl-line-mode)
+;; Kill ibuffer after quit
+(defadvice ibuffer-quit (after kill-ibuffer activate)
+  "Kill the ibuffer buffer on exit."
+  (kill-buffer "*Ibuffer*"))
+
 ;; Let's group buffers with ibuffer!!!
 (setq ibuffer-saved-filter-groups
       (quote (("default"
@@ -173,34 +180,72 @@
 						(name . "^diary$")
 						(mode . markdown-mode)
 						(mode . rst-mode)))
-			   ("Web" (or
+			   ("Web Development" (or
 					   (mode . css-mode)
 					   (mode . html-mode)
 					   (mode . stylus-mode)
 					   (mode . web-mode)
 					   (mode . javascript-mode)
 					   (name . "\\.yml$")))
-			   ("Programming" (or
-							   (mode . emacs-lisp-mode)
-							   (mode . lisp-mode)))
                ("Org" (or
                        (mode . org-mode)
                        (name . "^\\*Calendar\\*$")))
+               ("LaTeX" (or (mode . latex-mode)
+                            (name . "*.tex$")))
 			   ("IRC" (or
 					   (mode . erc-mode)
 					   (mode . rcirc-mode)))
+               ("Lisp" (or
+                        (mode . emacs-lisp-mode)
+                        (mode . lisp-mode)))
+
 			   ("Twitter" (mode . twittering-mode))
+               ("Magit" (or (name . "*magit*")
+                            (mode . magit-mode)))
                ("Emacs" (or
                          (name . "^\\*scratch\\*$")
                          (name . "^\\*Messages\\*$")
-						 (name . "^\\*Compile-Log\\*$")
-                         (name . "^\\.emacs$")))
-               ("Magit" (name . "*magit*"))
-               ("Help" (or
-                        (name . "\*Help\*")
-                        (name . "\*Apropos\*")
-                        (mode . "help")
-                        (name . "\*info\*")))))))
+						 (name . "^\\*Compile-Log\\*$")))
+               ("Help" (or (mode . woman-mode)
+                           (mode . man-mode)
+                           (mode . info-mode)
+                           (mode . help-mode)
+                           (name . "\\*Help\\*$")
+                           (name . "\\*info\\*$")))
+               ("Shell Script" (or (mode . shell-script-mode)
+                                   (mode . shell-mode)
+                                   (mode . sh-mode)
+                                   (mode . ruby-mode)))
+               ("Perl"  (or (mode . cperl-mode)
+                            (mode . perl-mode)))
+               ("Python" (or (mode . python-mode)
+                             (mode . ipython-mode)))
+               ("Terminal" (or (mode . eshell-mode)
+                               (mode . term-mode)
+                               (mode . inferior-python-mode)
+                               (mode . eshell-mode)
+                               (mode . comint-mode)
+                               (name . "\\*scheme\\*$")))
+               ))))
+
+;; Use human readable Size column instead of original one
+(define-ibuffer-column size-h
+  (:name "Size" :inline t)
+  (cond
+   ((> (buffer-size) 1000) (format "%7.1fK" (/ (buffer-size) 1000.0)))
+   ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+   (t (format "%8dB" (buffer-size)))))
+
+;; Modify the default ibuffer-formats
+(setq ibuffer-formats
+      '((mark modified read-only " "
+              (name 18 18 :left :elide)
+              " "
+              (size-h 9 -1 :right)
+              " "
+              (mode 16 16 :left :elide)
+              " "
+              filename-and-process)))
 
 ;; auto update ibuffer
 (add-hook 'ibuffer-mode-hook
