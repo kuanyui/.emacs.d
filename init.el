@@ -127,7 +127,10 @@
 ;;======================================================
 ;; 基本設定
 ;;======================================================
-
+(setq tab-width 8)
+(setq indent-tabs-mode nil)             ;不使用tab縮排
+;;(setq line-spacing 4) ;;行距....要這幹麻啊orz
+(setq require-final-newline t)
 ;;超變態的undo-tree-mode
 ;;(提醒：redo會變成C-?)
 ;;C-x u 進入 undo-tree-visualizer-mode，t顯示時間戳。
