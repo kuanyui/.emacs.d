@@ -825,7 +825,6 @@ unwanted space when exporting org-mode to html."
 
 (define-key org-mode-map (kbd "C-c C-x t") 'org-clock-sum-today-by-tags)
 
-;;快速插入自訂org export template
 (define-skeleton org-export-skeleton
   "Inserts my org export skeleton into current buffer.
     This only makes sense for empty buffers."
@@ -954,7 +953,7 @@ unwanted space when exporting org-mode to html."
 ;;;;(setq org-latex-pdf-process '("lualatex %b" "lualatex %b"))
 
 ;;======================================================
-;; TeX
+;; LaTeX
 ;;======================================================
 ;;(add-to-list 'tex-compile-commands '("xelatex %r"))
 (setq tex-compile-commands '(("xelatex %r")))
@@ -963,7 +962,8 @@ unwanted space when exporting org-mode to html."
 ;;======================================================
 ;; Abbrevs
 ;;======================================================
-(setq abbrev-file-name "~/.emacs.d/abbrev_defs")
+(setq abbrev-file-name "~/.emacs.d/abbrev_defs.el")
+(quietly-read-abbrev-file)
 (setq save-abbrevs 'sliently)
 (setq-default abbrev-mode t)
 ;;(quietly-read-abbrev-file)       ;; reads the abbreviations file
@@ -1065,6 +1065,9 @@ unwanted space when exporting org-mode to html."
 (autoload 'twittering-numbering "twittering-numbering" nil t)
 (add-hook 'twittering-mode-hook 'twittering-numbering)
 
+
+(add-hook 'twittering-mode-hook 'auto-fill-mode)
+
 ;;;; Filtering for Tweets
 (defvar twittering-filter-users '()
   "*List of strings containing usernames (without '@' prefix) whose tweets should not be displayed in timeline.")
@@ -1089,7 +1092,6 @@ unwanted space when exporting org-mode to html."
 
 (setq twittering-filter-tweets '("http://4sq.com/.*" "http://adf.ly/.*" "I liked a @YouTube video" "我喜歡一部 .*@YouTube 影片" "爆卦" "中時" "郭董" "nikeplus" "采潔" ))
 
-(load-file "~/.emacs.d/private/twittering-filter-users.el")
 
 ;;高亮特定使用者，但搞不出來先擺著。
 ;;(defface twittering-star-username-face
@@ -1146,7 +1148,7 @@ unwanted space when exporting org-mode to html."
 (global-set-key (kbd "C-x <f11>") 'open-diary)
 (defun open-diary ()
   "Open diary."
-  (interactive)(find-file (concat org-directory "/diary/diary.org")))
+  (interactive)(find-file (concat org-directory "/diary/diary.gpg")))
 
 (global-set-key (kbd "<f11>") 'open-material-notes)
 (defun open-material-notes ()
@@ -1212,7 +1214,7 @@ unwanted space when exporting org-mode to html."
 (global-set-key (kbd "C-c <C-up>") 'backward-up-list)
 (global-set-key (kbd "C-c <C-down>") 'down-list)
 
-(global-set-key (kbd "C-c C-e") 'eval-buffer) ;;這樣測試.emacs方便多了...
+(define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer) ;;這樣測試.emacs方便多了...
 
 ;;Linux下與其他Applications的剪貼簿
 (setq x-select-enable-clipboard t)
@@ -1393,8 +1395,12 @@ unwanted space when exporting org-mode to html."
 ;;======================================================
 ;;(add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
 (require 'auto-complete-config)
-(add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict")
+(add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict") ;;我原本只有放user這個
+;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict") ; 原本沒有
 (ac-config-default)
+
+
+
 (global-auto-complete-mode 1)
 
 (define-key ac-mode-map (kbd "C-c h") 'ac-last-quick-help)
@@ -1784,17 +1790,11 @@ With one `C-u' prefix, insert output following an arrow"
 (global-discover-mode 1)
 
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
-(defun save-buffers-kill-terminal-after-confirm ()
-  "老是不小心關掉Emacs，揪咪。"
-  (interactive)
-  (if (yes-or-no-p "Really quit Emacs?")
-      (save-buffers-kill-terminal)
-    "好極了！"))
-(global-unset-key (kbd "C-x C-c"))
-(global-set-key (kbd "C-x C-c") 'save-buffers-kill-terminal-after-confirm)
+(setq confirm-kill-emacs 'yes-or-no-p)
 
 ;; C-z 太常按錯了，直接關掉這binding
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
 
 ;; 跳到行號
 (global-set-key (kbd "C-x SPC") 'goto-line)
@@ -1832,10 +1832,15 @@ which fetch older tweets on reverse-mode."
 (require 'pangu-spacing)
 
 ;; 只在 org-mode 和 markdown-mode 中啟用 pangu-spacing
-(add-hook 'org-mode-hook
-          '(lambda ()
-             (set (make-local-variable 'pangu-spacing-real-insert-separtor) nil)))
+;; (add-hook 'org-mode-hook
+;;           '(lambda ()
+;;              (set (make-local-variable 'pangu-spacing-real-insert-separtor) nil)))
 (add-hook 'markdown-mode-hook
+		  '(lambda ()
+			 (pangu-spacing-mode 1)
+			 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+
+(add-hook 'org-mode-hook
 		  '(lambda ()
 			 (pangu-spacing-mode 1)
 			 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
@@ -2071,7 +2076,17 @@ date: %Y-%m-%d %H:%M:%S
 ;; 在 Markdown-mode中插入URL或Flickr圖片等。
 (add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
 (load-file "~/.emacs.d/git/writing-utils/writing-utils.el")
-(load-file "~/.emacs.d/private/flickr.el")
+
+;;======================================================
+;; 私人的東西
+;;======================================================
+
+(mapcar (lambda (x)
+          (when (file-exists-p x)
+            (load-file x)))
+        '("~/.emacs.d/private/school.el"
+          "~/.emacs.d/private/twittering-filter-users.el"
+          "~/.emacs.d/private/flickr.el"))
 
 ;;======================================================
 ;; Python
@@ -2204,6 +2219,10 @@ Return value is float."
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-score)))
 
+(setq gnus-thread-sort-functions
+      '(gnus-thread-sort-by-number
+        gnus-thread-sort-by-date))
+
 
 ;;======================================================
 ;; Flymake
@@ -2240,6 +2259,8 @@ Return value is float."
           ;; workaround for (eq buffer-file-name nil)
           (function (lambda () (if buffer-file-name (flymake-mode)))))
 
+
+;; vlf
 (add-hook 'find-file-hook (lambda ()
                             (when (> (buffer-size) (* 1024 1024))
                               (setq buffer-read-only t)
@@ -2247,6 +2268,29 @@ Return value is float."
                               (fundamental-mode))))
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+;; Swoop
+(require 'swoop)
+(global-set-key (kbd "C-z")   'swoop)
+(global-set-key (kbd "C-x C-z") 'swoop-multi)
+(global-set-key (kbd "M-z")   'swoop-pcre-regexp)
+(global-set-key (kbd "C-x z") 'swoop-back-to-last-position)
+(global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
+
+;; Visual Regexp
+(require 'visual-regexp-steroids)
+(define-key global-map (kbd "C-c v r") 'vr/replace)
+(define-key global-map (kbd "C-c v q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c v m") 'vr/mc-mark)
+;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch, also include the following lines:
+(define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
+(define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
+
+;; EasyPG
+(require 'epa-file)
+(epa-file-enable)
+
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
