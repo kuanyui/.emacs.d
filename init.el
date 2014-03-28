@@ -384,8 +384,13 @@
 (require 'org-install)
 (require 'org)
 (require 'ox)
-(require 'ob)
+(require 'ox-md)
+(require 'ox-html5slide)
 (setq org-directory "~/org")
+
+(setq org-display-table t)
+(setq org-display-inline-images t)
+(setq org-image-actual-width t) ;; 可以設定成一個數字
 
 ;;解决org-mode下中文不自动换行的问题
 (add-hook 'org-mode-hook
@@ -449,7 +454,8 @@
 (setq org-file-apps '((auto-mode . emacs)
                       ("\\.mm\\'" . default)
                       ("\\.x?html?\\'" . "xdg-open %s")
-                      ("\\.pdf\\'" . "kde-open %s")))
+                      ("\\.pdf\\'" . "kde-open %s")
+                      ("\\.jpg\\'" . "kde-open %s")))
 ;; Syntax Highlight in outputed files
 (setq org-src-fontify-natively t)
 
@@ -645,7 +651,7 @@ blockquote p a {
 
 </style>")
 
-;;(add-function :override org-html-checkbox 
+;;(add-function :override org-html-checkbox
 ;;(defun org-html-checkbox (checkbox)
 ;;  "Format CHECKBOX into HTML."
 ;;  (case checkbox (on "<code>[X]</code>")
@@ -766,7 +772,7 @@ unwanted space when exporting org-mode to html."
          "** TODO %?\n  %i")
         ("r" "Reading" entry (file+headline (concat org-directory "/todo.org") "Reading")
          "** %? %i :Reading:")
-        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org")
+        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.gpg")
                                           "* %?\n %i"))))
 
 ;; capture jump to link
@@ -846,6 +852,7 @@ unwanted space when exporting org-mode to html."
       '(("article"
          "
 \\documentclass[12pt,a4paper]{article}
+\\usepackage[margin=2cm]{geometry}
 \\usepackage{fontspec}
 \\setromanfont{cwTeXMing}
 
@@ -881,7 +888,35 @@ unwanted space when exporting org-mode to html."
          ("\\subsection{%s}" . "\\subsection*{%s}")
          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
          ("\\paragraph{%s}" . "\\paragraph*{%s}")
-         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+
+        ("beamer"
+         "
+\\documentclass[presentation]{beamer}
+\\usepackage{fontspec}
+\\setromanfont{wqyHeiMicro}
+
+\\setmonofont[Scale=0.9]{Courier} % 等寬字型 [FIXME] Courier 中文會爛掉！
+\\font\\cwSong=''cwTeXFangSong'' at 10pt
+%\\font\\cwHei=''cwTeXHeiBold'' at 10p %不知為何會爆掉
+\\font\\cwYen=''cwTeXYen'' at 10pt
+\\font\\cwKai=''cwTeXKai'' at 10pt
+\\font\\cwMing=''cwTeXMing'' at 10pt
+\\font\\wqyHei=''文泉驛正黑'' at 10pt
+\\font\\wqyHeiMono=''文泉驛等寬正黑'' at 10pt
+\\font\\wqyHeiMicro=''文泉驛微米黑'' at 10pt
+\\XeTeXlinebreaklocale ``zh''
+\\XeTeXlinebreakskip = 0pt plus 1pt
+\\linespread{1.36}
+
+"
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+        ))
+
 
 ;; [FIXME]
 ;; 原本是不要讓org插入hypersetup（因為org-mode這部份設計成沒辦法自訂，或許可以去report一下？）
