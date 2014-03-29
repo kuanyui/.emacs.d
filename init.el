@@ -282,6 +282,30 @@
 ;; 煩死了直接拿org-mode來用就好了。我幹麼自找麻煩啊真白痴。
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
 
+;; 插入檔名
+(defun insert-file-name (filename &optional args)
+  "Insert name of file FILENAME into buffer after point.
+
+  Prefixed with \\[universal-argument], expand the file name to
+  its fully canocalized path.  See `expand-file-name'.
+
+  Prefixed with \\[negative-argument], use relative path to file
+  name from current directory, `default-directory'.  See
+  `file-relative-name'.
+
+  The default with no prefix is to insert the file name exactly as
+  it appears in the minibuffer prompt."
+  ;; Based on insert-file in Emacs -- ashawley 20080926
+  (interactive "*fInsert file name: \nP")
+  (cond ((eq '- args)
+         (insert (file-relative-name filename)))
+        ((not (null args))
+         (insert (expand-file-name filename)))
+        (t
+         (insert filename))))
+(global-set-key (kbd "C-c i f") 'insert-file-name)
+
+;; 測試 universal-argument prefix的值用。
 (defun display-prefix (arg)
   "Display the value of the raw prefix arg."
   (interactive "P")
