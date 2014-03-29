@@ -158,8 +158,7 @@
 
 ;;把捲軸移到右側
 (customize-set-variable 'scroll-bar-mode 'right)
-
-(hungry-delete-mode t)
+(global-hungry-delete-mode t)
 ;;======================================================
 ;; IBuffer
 ;;======================================================
