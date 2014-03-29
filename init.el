@@ -252,9 +252,9 @@
 
 ;; auto update ibuffer
 (add-hook 'ibuffer-mode-hook
-		  '(lambda ()
-			 (ibuffer-auto-mode 1)
-			 (ibuffer-switch-to-saved-filter-groups "default")))
+          '(lambda ()
+             (ibuffer-auto-mode 1)
+             (ibuffer-switch-to-saved-filter-groups "default")))
 
 ;; Do not show empty group
 (setq ibuffer-show-empty-filter-groups nil)
@@ -276,7 +276,7 @@
     (insert (format-time-string "[%Y-%m-%d %a %H:%M]" (current-time))))
    ((equal current-prefix-arg 1)     ; C-u 1
     (insert (format-time-string "%Y/%m/%d（%a）" (current-time))))
-))
+   ))
 (global-set-key (kbd "C-c d") 'my-insert-date)
 
 ;; 煩死了直接拿org-mode來用就好了。我幹麼自找麻煩啊真白痴。
@@ -332,7 +332,7 @@
 
 ;; aspell
 (setq ispell-program-name "aspell"
-	  ispell-extra-args '("--sug-mode=ultra"))
+      ispell-extra-args '("--sug-mode=ultra"))
 (setq ispell-dictionary "american")
 
 
@@ -397,7 +397,7 @@
 
 ;;解决org-mode下中文不自动换行的问题
 (add-hook 'org-mode-hook
-		  (lambda () (setq truncate-lines nil)))
+          (lambda () (setq truncate-lines nil)))
 
 ;;org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
 (setq org-log-done 'time)
@@ -426,7 +426,7 @@
   "Insert image in org-mode"
   (interactive)
   (let* ((insert-default-directory nil))
-	(insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
+    (insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
 (define-key org-mode-map (kbd "C-c i i") 'org-insert-image)
 
 
@@ -916,7 +916,7 @@ unwanted space when exporting org-mode to html."
          ("\\subsection{%s}" . "\\subsection*{%s}")
          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
          ("\\paragraph{%s}" . "\\paragraph*{%s}")
-        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
         ))
 
 
@@ -1176,22 +1176,22 @@ unwanted space when exporting org-mode to html."
 (defun kid-star-dict ()
   (interactive)
   (let ((begin (point-min))
-		(end (point-max)))
+        (end (point-max)))
     (if mark-active
-		(setq begin (region-beginning)
-			  end (region-end))
-	  (save-excursion
-		(backward-word)
-		(mark-word)
-		(setq begin (region-beginning)
-			  end (region-end))))
+        (setq begin (region-beginning)
+              end (region-end))
+      (save-excursion
+        (backward-word)
+        (mark-word)
+        (setq begin (region-beginning)
+              end (region-end))))
     ;; 有时候 stardict 会很慢，所以在回显区显示一点东西
     ;; 以免觉得 Emacs 在干什么其他奇怪的事情。
     (message "searching for %s ..." (buffer-substring begin end))
     (popup-tip
      (shell-command-to-string
       (concat "sdcv -n "
-			  (buffer-substring begin end))))))
+              (buffer-substring begin end))))))
 
 
 ;; Stardict in Emacs
@@ -1232,13 +1232,13 @@ unwanted space when exporting org-mode to html."
 (defun cp ()
   (interactive)
   (if (region-active-p)
-	  (progn
+      (progn
         (shell-command-on-region (region-beginning) (region-end) "xsel -i")
-		(message "Yanked region to clipboard!")
-		(deactivate-mark))
-	(message "No region active; can't yank to clipboard!")))
+        (message "Yanked region to clipboard!")
+        (deactivate-mark))
+    (message "No region active; can't yank to clipboard!")))
 
-;; xclip-mode
+;;xclip-mode
 (load "~/.emacs.d/lisps/xclip-1.0.el")
 (define-minor-mode xclip-mode
   "Minor mode to use the `xclip' program to copy&paste."
@@ -1246,7 +1246,7 @@ unwanted space when exporting org-mode to html."
   (if xclip-mode
       (turn-on-xclip)
     (turn-off-xclip)))
-(xclip-mode t)
+(xclip-mode 1)
 
 ;;======================================================
 ;; misc 雜項
@@ -1254,11 +1254,11 @@ unwanted space when exporting org-mode to html."
 
 ;; 統計中英日文字數
 (defvar wc-regexp-chinese-char-and-punc
-      (rx (category chinese)))
+  (rx (category chinese)))
 (defvar wc-regexp-chinese-punc
-     "[。，！？；：「」『』（）、【】《》〈〉—]")
+  "[。，！？；：「」『』（）、【】《》〈〉—]")
 (defvar wc-regexp-english-word
-      "[a-zA-Z0-9-]+")
+  "[a-zA-Z0-9-]+")
 (defun wc ()
   "「較精確地」統計中/日/英文字數。
 - 平假名與片假名亦包含在「中日文字數」內，每個平/片假名都算單獨一個字（但片假
@@ -1294,8 +1294,8 @@ unwanted space when exporting org-mode to html."
 英文字數（不含標點）：%s
 =======================
 中英文合計（不含標點）：%s"
-            chinese-char chinese-char-and-punc english-word
-            (+ chinese-char english-word)))))
+             chinese-char chinese-char-and-punc english-word
+             (+ chinese-char english-word)))))
 
 
 ;;emacs內建書籤存檔
@@ -1303,7 +1303,7 @@ unwanted space when exporting org-mode to html."
 
 ;;靠杯，連這都要自己設定會不會太蠢了?
 (setq snake-score-file
-	  "~/.emacs.d/snake-scores")
+      "~/.emacs.d/snake-scores")
 
 ;; helm-mode(前anything.el)
 ;;(add-to-list 'load-path "~/.emacs.d/lisps/helm")
@@ -1356,9 +1356,15 @@ unwanted space when exporting org-mode to html."
 ;; Theme
 ;;======================================================
 
+(add-to-list 'load-path "~/.emacs.d/under-construction/powerline/")
+(require 'powerline)
+;; (setq powerline-default-separator 'arrow)
+
+
+
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
-(require 'powerline)
+
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
 (moe-light)
@@ -1423,7 +1429,7 @@ unwanted space when exporting org-mode to html."
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
 (add-hook 'css-mode-hook
           (lambda ()
-;;            (add-to-list 'ac-sources 'ac-source-company-css)
+            ;;            (add-to-list 'ac-sources 'ac-source-company-css)
             (define-key css-mode-map (kbd "<RET>") 'newline-and-indent)))
 
 (setq ac-use-menu-map t)
@@ -1485,8 +1491,8 @@ unwanted space when exporting org-mode to html."
     (message "Opening %s done" file)))
 
 (add-hook 'dired-mode-hook
-		  (lambda ()
-			(define-key dired-mode-map (kbd "M-RET") 'dired-open-file)))
+          (lambda ()
+            (define-key dired-mode-map (kbd "M-RET") 'dired-open-file)))
 
 ;; Use single dired buffer.
 (require 'dired-single)
@@ -1503,15 +1509,15 @@ unwanted space when exporting org-mode to html."
   (define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
   (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
   (define-key dired-mode-map "^"
-	(function
-	 (lambda nil (interactive) (dired-single-buffer ".."))))
+    (function
+     (lambda nil (interactive) (dired-single-buffer ".."))))
   (define-key dired-mode-map "q"
-	(function
-	 (lambda nil (interactive) (dired-single-buffer "..")))))
+    (function
+     (lambda nil (interactive) (dired-single-buffer "..")))))
 ;; if dired's already loaded, then the keymap will be bound
 (if (boundp 'dired-mode-map)
-	;; we're good to go; just add our bindings
-	(my-dired-init)
+    ;; we're good to go; just add our bindings
+    (my-dired-init)
   ;; it's not loaded yet, so add our bindings to the load-hook
   (add-hook 'dired-load-hook 'my-dired-init))
 
@@ -1534,9 +1540,9 @@ unwanted space when exporting org-mode to html."
 (defun dired-directory-sort ()
   "Dired sort hoOBok to list directories first."
   (save-excursion
-	(let (buffer-read-only)             ; 原來解除read-only是這樣寫的OAO...
-	  (forward-line 2) ;; beyond dir. header
-	  (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max))))
+    (let (buffer-read-only)             ; 原來解除read-only是這樣寫的OAO...
+      (forward-line 2) ;; beyond dir. header
+      (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max))))
   (and (featurep 'xemacs)
        (fboundp 'dired-insert-set-properties)
        (dired-insert-set-properties (point-min) (point-max)))
@@ -1562,25 +1568,24 @@ unwanted space when exporting org-mode to html."
   (require 'cl)
   (let* (PATTERN FILE full-path-FILE n)
     (setq PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\)$")
-    (setq FILE (dired-get-filename nil t))
+    (setq FILE (dired-get-filename nil t)) ;[FIXME] full path directly
     (setq n 0)
     (if (file-directory-p FILE)	;if it's a dir.
-		(progn
-		  (setq full-path-FILE (cl-loop for i in (directory-files FILE nil PATTERN)
-										collect (concat FILE "/" i)))
-		  (message "Opening %s files..." (list-length full-path-FILE))
-		  (cl-loop for i in full-path-FILE
-				   do (call-process "smplayer" nil 0 nil "-add-to-playlist" i)
-				   (sit-for 0.1))	;Or playlist will be not in order.
-		  (dired-next-line 1)
-		  )
+        (progn
+          (setq full-path-FILE (directory-files FILE t PATTERN))
+          (message "Opening %s files..." (list-length full-path-FILE))
+          (cl-loop for i in full-path-FILE
+                   do (call-process "smplayer" nil 0 nil "-add-to-playlist" i)
+                   (sit-for 0.1))	;Or playlist will be not in order.
+          (dired-next-line 1)
+          )
       (if (string-match PATTERN FILE)	;if it's a file
-		  (progn
-			(call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
-			(dired-next-line 1))
-		(progn
-		  (message "This is not a supported audio or video file.")
-		  (dired-next-line 1))))))
+          (progn
+            (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
+            (dired-next-line 1))
+        (progn
+          (message "This is not a supported audio or video file.")
+          (dired-next-line 1))))))
 
 (define-key dired-mode-map (kbd "M-a") 'dired-add-to-smplayer-playlist)
 (define-key dired-mode-map (kbd "<f2>") 'wdired-change-to-wdired-mode)
@@ -1608,7 +1613,7 @@ With one prefix argument, the tarball is gziped."
 (require 'magit)
 (global-set-key (kbd "C-x g i t s") 'magit-status)
 (global-set-key (kbd "C-x g i t l") 'magit-log)
-(define-key magit-mode-map (kbd "C-x p") 'magit-pull)
+(define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
 ;;======================================================
 ;; Templates
@@ -1738,9 +1743,9 @@ With one prefix argument, the tarball is gziped."
 
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(
-						  ("'[-a-zA-Z_][-a-zA-Z0-9_/]*" 0 'font-lock-constant-face)
-						  ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
-						  ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
+                          ("'[-a-zA-Z_][-a-zA-Z0-9_/]*" 0 'font-lock-constant-face)
+                          ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
+                          ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
 
 (defun lookup-elisp-function-doc ()
   "Look up the elisp function under the cursor."
@@ -1844,14 +1849,14 @@ which fetch older tweets on reverse-mode."
 ;;           '(lambda ()
 ;;              (set (make-local-variable 'pangu-spacing-real-insert-separtor) nil)))
 (add-hook 'markdown-mode-hook
-		  '(lambda ()
-			 (pangu-spacing-mode 1)
-			 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+          '(lambda ()
+             (pangu-spacing-mode 1)
+             (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
 
 (add-hook 'org-mode-hook
-		  '(lambda ()
-			 (pangu-spacing-mode 1)
-			 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+          '(lambda ()
+             (pangu-spacing-mode 1)
+             (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
 
 ;;======================================================
 ;; Tree-mode 樹狀顯示檔案清單
@@ -1875,7 +1880,7 @@ which fetch older tweets on reverse-mode."
 ;;======================================================
 ;;Term下不要使用當行高亮，避免使用如MOC(music on console)等程式時出現的無意義當行高亮。
 (add-hook 'term-mode-hook
-		  (lambda ()
+          (lambda ()
             (setq global-hl-line-mode nil)
             (setq global-linum-mode nil)))
 
@@ -1955,20 +1960,20 @@ which fetch older tweets on reverse-mode."
             (insert-file-contents (format "%s%s" default-directory "_config.yml"))
             (setq BUFFER-STRING (buffer-string)))
           (if (and (string-match "title: " BUFFER-STRING)
-             (string-match "url: " BUFFER-STRING)
-             (string-match "new_post_name: " BUFFER-STRING))
+                   (string-match "url: " BUFFER-STRING)
+                   (string-match "new_post_name: " BUFFER-STRING))
               (progn
                 (setq OUTPUT (shell-command-to-string
                               (concat "hexo new '"
                                       (read-from-minibuffer
                                        "Title of the new article: ") "'")))
-          (string-match "/.*\\.md$" OUTPUT)
-          (find-file (match-string 0 OUTPUT)))))
+                (string-match "/.*\\.md$" OUTPUT)
+                (find-file (match-string 0 OUTPUT)))))
       (progn
         (find-file default-directory)
         (if (not (equal default-directory "/"))
-          (progn (dired-single-buffer "..")
-                 (hexo-new))
+            (progn (dired-single-buffer "..")
+                   (hexo-new))
           (progn
             (kill-buffer)
             (message "Not in a hexo or its child directory.")))))))
@@ -2121,11 +2126,11 @@ date: %Y-%m-%d %H:%M:%S
  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
  python-shell-completion-setup-code
-   "from IPython.core.completerlib import module_completion"
+ "from IPython.core.completerlib import module_completion"
  python-shell-completion-module-string-code
-   "';'.join(module_completion('''%s'''))\n"
+ "';'.join(module_completion('''%s'''))\n"
  python-shell-completion-string-code
-   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+ "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
 
 ;;======================================================
