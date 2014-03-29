@@ -1552,7 +1552,28 @@ unwanted space when exporting org-mode to html."
 ;;hide didden file
 (require 'dired-x)
 (setq dired-omit-files "^\\...+$")
-(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+
+;; Dired Omit 加強
+(defvar v-dired-omit t
+  "If dired-omit-mode enabled by default. Don't setq me.")
+(defun dired-omit-switch ()
+  "This function is a small enhancement for `dired-omit-mode', which will
+\"remember\" omit state across Dired buffers."
+  (interactive)
+  (if (eq v-dired-omit t)
+      (setq v-dired-omit nil)
+    (setq v-dired-omit t))
+  (dired-omit-caller)
+  (revert-buffer))
+
+(defun dired-omit-caller ()
+  (if v-dired-omit
+      (setq dired-omit-mode t)
+    (setq dired-omit-mode nil)))
+
+(define-key dired-mode-map (kbd "C-x M-o") 'dired-omit-switch)
+(add-hook 'dired-mode-hook 'dired-omit-caller)
+
 
 ;;human-readable file size
 (setq dired-listing-switches "-alh")
