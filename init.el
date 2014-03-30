@@ -229,6 +229,7 @@ delete backward until the parent directory."
 
 ;;把捲軸移到右側
 (customize-set-variable 'scroll-bar-mode 'right)
+(require 'hungry-delete)
 (global-hungry-delete-mode t)
 ;;======================================================
 ;; IBuffer
@@ -1061,6 +1062,45 @@ unwanted space when exporting org-mode to html."
 (setq tex-compile-commands '(("xelatex %r")))
 (setq tex-command "xelatex")
 
+(setq-default TeX-engine 'xelatex)
+(setq TeX-command-list
+      '(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
+         (plain-tex-mode ams-tex-mode texinfo-mode)
+         :help "Run plain TeX")
+        ("LaTeX" "%`%l%(mode)%' %t" TeX-run-TeX nil
+         (latex-mode doctex-mode)
+         :help "Run LaTeX")
+        ("Makeinfo" "makeinfo %t" TeX-run-compile nil
+         (texinfo-mode)
+         :help "Run Makeinfo with Info output")
+        ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
+         (texinfo-mode)
+         :help "Run Makeinfo with HTML output")
+        ("AmSTeX" "%(PDF)amstex %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
+         (ams-tex-mode)
+         :help "Run AMSTeX")
+        ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
+         (context-mode)
+         :help "Run ConTeXt once")
+        ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
+         (context-mode)
+         :help "Run ConTeXt until completion")
+        ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+        ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
+        ("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+        ("Print" "%p" TeX-run-command t t :help "Print the file")
+        ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
+        ("File" "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
+        ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
+        ("Check" "lacheck %s" TeX-run-compile nil
+         (latex-mode)
+         :help "Check LaTeX file for correctness")
+        ("Spell" "(TeX-ispell-document \"\")" TeX-run-function nil t :help "Spell-check the document")
+        ("Clean" "TeX-clean" TeX-run-function nil t :help "Delete generated intermediate files")
+        ("Clean All" "(TeX-clean t)" TeX-run-function nil t :help "Delete generated intermediate and output files")
+        ("Other" "" TeX-run-command t t :help "Run an arbitrary command")))
+
+
 ;;======================================================
 ;; Abbrevs
 ;;======================================================
@@ -1225,6 +1265,27 @@ unwanted space when exporting org-mode to html."
   (goto-char (point-min))
   (insert "layout: false\n---\n\n")
   (save-buffer))
+
+;; 使用 Ctrl-x r j <char> 就可以進行快速跳轉至檔案，其中 <char> 為以下所設。
+(require 'cl)
+(dolist
+    (r `(
+         (?e (file . "~/.emacs.d/init.el"))
+         (?t (file . "~/org/TODO.org"))
+         (?w (file . "~/org/Weintek.org"))
+         (?n (file . "~/org/note.org"))
+         (?b (file . "~/coldnew.github.io/blog-src/blog.org"))
+         ))
+  (set-register (car r) (cadr r)))
+
+(global-set-key (kbd "<f8>") 'ack-and-a-half)
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+(setq helm-ack-grep-executable "ack")
+(setq helm-grep-default-command "ack -Hn --smart-case --nogroup --nocolour %e %p %f")
+(setq helm-grep-default-recurse-command "ack -H --smart-case --nogroup --nocolour %e %p %f")
 
 
 (global-set-key (kbd "<f9>") 'open-note)
@@ -2399,10 +2460,10 @@ Return value is float."
 
 ;; Swoop
 (require 'swoop)
-(global-set-key (kbd "C-z")   'swoop)
-(global-set-key (kbd "C-x C-z") 'swoop-multi)
-(global-set-key (kbd "M-z")   'swoop-pcre-regexp)
-(global-set-key (kbd "C-x z") 'swoop-back-to-last-position)
+(global-set-key (kbd "C-z")   'helm-swoop)
+(global-set-key (kbd "C-x C-z") 'helm-multi-swoop)
+(global-set-key (kbd "M-z")   'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c C-z") 'helm-multi-swoop-all)
 (global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
 
 ;; Visual Regexp
