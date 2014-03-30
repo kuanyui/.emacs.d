@@ -1657,25 +1657,35 @@ unwanted space when exporting org-mode to html."
 ;; [FIXME] Emacs 24.4 will build-in `dired-hide-details-mode'.
 (require 'dired-details)
 (dired-details-install)
-(defun my-dired-init ()
-  "Bunch of stuff to run for dired, either immediately or when it's
-   loaded."
-  ;; <add other stuff here>
-  (define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
-  (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
-  (define-key dired-mode-map "^"
-    (function
-     (lambda nil (interactive) (dired-single-buffer ".."))))
-  (define-key dired-mode-map "q"
-    (function
-     (lambda nil (interactive) (dired-single-buffer "..")))))
-;; if dired's already loaded, then the keymap will be bound
-(if (boundp 'dired-mode-map)
-    ;; we're good to go; just add our bindings
-    (my-dired-init)
-  ;; it's not loaded yet, so add our bindings to the load-hook
-  (add-hook 'dired-load-hook 'my-dired-init))
 
+;; 回到上層目錄後，自動把cursor移動到前一個目錄處
+(defun my-dired-backward ()
+  "Go back to the parent directory (..), and the cursor will be moved to where
+the previous directory."
+  (interactive)
+  (let* ((DIR (buffer-name)))
+    (if (equal DIR "*Find*")
+        (quit-window t)
+      (progn (dired-single-buffer "..")
+             (re-search-forward DIR nil :no-error)
+             (revert-buffer)))))
+
+(define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
+(define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
+(define-key dired-mode-map "^" 'my-dired-backward)
+(define-key dired-mode-map "q" 'my-dired-backward)
+(define-key dired-mode-map "f" 'dired-find-name-in-current-directory)
+
+(defun dired-find-name-in-current-directory ()
+  (interactive)
+  (find-name-dired default-directory
+                   (format "*%s*" (read-from-minibuffer "Pattern: ")))
+  (set-buffer-multibyte t))
+;;(setq find-ls-option '("-print" . ""))
+(setq find-name-arg "-iname")
+
+;; 修正*Find*裡的中文亂碼問題
+(setq find-ls-option '("-print0 | xargs -0 ls -ald" . ""))
 ;; 這玩意我根本從沒用過，不確定是什麼。
 ;; (global-set-key [(f5)] 'dired-single-magic-buffer)
 ;; (global-set-key [(meta f5)] 'dired-single-toggle-buffer-name)
