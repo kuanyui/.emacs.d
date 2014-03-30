@@ -136,10 +136,81 @@
 ;;C-x u 進入 undo-tree-visualizer-mode，t顯示時間戳。
 (require 'undo-tree)
 (global-undo-tree-mode)
-(global-set-key (kbd"C-M-_") 'undo-tree-redo)
+(global-set-key (kbd "C-M-_") 'undo-tree-redo)
 
-;;行號
-(global-linum-mode t)
+;; Enhanced minibuffer & find-file! 加強minibuffer和find-file！
+;; 我一直無法忍受helm和ido-mode的find-file設計，但又覺得他們有部份功能
+;; 實在很方便，例如能夠按DEL直接刪回上個目錄的路徑，或者整個路徑重新輸
+;; 入等。這裡做了幾個符合自己需要的功能：
+
+;;   1. 如果minibuffer中是個目錄的樣式，按M-[DEL]就可以往前刪到parent dir
+;;   2. 按一次C-a只是一般的beginning-of-line，但按第二次C-a的話：
+;;       (a) 如果是個路徑，會把~/或/以後的東西刪掉。
+;;       (b) 如果不是路徑，則整行刪掉。
+;;   3. 以上行為都不會把刪過的東西存到 kill-ring，所以可以放心用力刪，
+;;      而不用擔心會影響到目前的 kill-ring~
+
+(defun minibuffer-beginning-of-line ()
+  "Pressing C-a once, this's just a normal `beginning-of-line'.
+When pressing second time, and the string in minibuffer looks like a file path,
+it will *delete* whole minibuffer except for ~/ or / in the beginning of
+minibuffer."
+  (interactive)
+  (defvar minibuffer-point-beginning-of-line nil)
+  (if (eq minibuffer-point-beginning-of-line (point)) ;是否已經在 beginning-of-line
+      (if (or (equal "~/" (substring-no-properties (buffer-string) (1- (point)) (+ 1 (point))))
+              (equal "/" (substring-no-properties (buffer-string) (1- (point)) (point))))
+          (progn
+            (re-search-forward "/" nil :no-error)
+            (delete-region (point) (point-max)))
+        (delete-region (point) (point-max))) ;整個string看起來不是路徑就全部刪掉。
+    (progn (move-beginning-of-line 1) ;不在 beginning-of-line的話
+           (setq minibuffer-point-beginning-of-line (point)))))
+
+(defun minibuffer-backward-delete-word (arg)
+  "*Delete* word backward instead of kill it in minibuffer.
+Besides, when the string in minibuffer looks like a file path, it will
+delete backward until the parent directory."
+  (interactive "p")
+  (if (and (eq (point) (point-max)) ;如果在行尾，且整串看起來是個檔案路徑
+           (string-match "~*/\\([^/\n]+/\\)+$" (buffer-string)))
+      (progn (re-search-backward "/." nil :no-error)
+             (delete-region (1+ (point)) (point-max))
+             (end-of-line))
+    ;; 下面這個只是一般的backward delete word而已
+    (delete-region (point) (progn (backward-word arg) (point)))))
+
+(define-key minibuffer-local-completion-map (kbd "C-a") 'minibuffer-beginning-of-line)
+(define-key minibuffer-local-completion-map (kbd "M-DEL") 'minibuffer-backward-delete-word)
+
+
+;; 行號
+;; 設定例外：
+;; 1. 某些mode開linum-mode會錯亂，例如term。遇到這類mode就不開啟linum。
+;; 2. 當Org檔案太大太長太多標題時，行數會使Emacs變得非常遲緩，所以這裡設定成在開檔案時，
+;; 如果為org檔案且行數 >1000 就不開linum-mode。
+
+(global-linum-mode 1)
+
+(setq inhibit-linum-mode-alist
+      '(eshell-mode
+        shell-mode
+        term-mode
+        erc-mode
+        compilation-mode
+        woman-mode
+        w3m-mode
+        magit-mode
+        ))
+
+(defadvice linum-on (around inhibit-for-modes activate)
+  "Stop turing linum-mode if it is in the inhibit-linum-mode-alist."
+  (unless (or (member major-mode inhibit-linum-mode-alist)
+              (and (eq major-mode 'org-mode)
+                   (> (count-lines (point-min) (point-max)) 1000)))
+    ad-do-it))
+
+
 ;; 已經有行號就不用modeline裡的行號
 (setq line-number-mode nil)
 (column-number-mode)
