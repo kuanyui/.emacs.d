@@ -415,6 +415,14 @@ delete backward until the parent directory."
 ;;完全隱藏歡迎畫面
 (setq inhibit-splash-screen t)
 
+(setq initial-scratch-message
+";; The real productivity problem people have is procrastination. It’s
+;; something of a dirty little secret, but everyone procrastinates —
+;; severely. It’s not just you. But that doesn’t mean you shouldn’t try to
+;; stop it.  What is procrastination? To the outside observer, it looks like
+;; you’re just doing something “fun” (like playing a game or reading the
+;; news) instead of doing your actual work.
+;;                              - Aaron Swartz, HOWTO: Be more productive")
 ;;自動啟動flyspell-mode拼字檢查
 ;;(setq-default flyspell-mode t)
 ;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
@@ -485,6 +493,8 @@ delete backward until the parent directory."
 (require 'ox-md)
 (require 'ox-html5slide)
 (setq org-directory "~/org")
+(define-key global-map "\C-cl" 'org-store-link)
+(setq org-log-done t)
 
 (setq org-display-table t)
 (setq org-display-inline-images t)
@@ -772,10 +782,29 @@ unwanted space when exporting org-mode to html."
 
     (ad-set-arg 1 fixed-contents)))
 
+;; Export UTF-8 checkboxes
+;; This snippet turns - [X] into ☑ and - [ ] into ☐.
+(defun sacha/org-html-checkbox (checkbox)
+  "Format CHECKBOX into HTML."
+  (case checkbox
+    (on "<span class=\"check\">&#x2611;</span>") ; checkbox (checked)
+    (off "<span class=\"checkbox\">&#x2610;</span>")
+    (trans "<code>[-]</code>")
+    (t "")))
+(defadvice org-html-checkbox (around sacha activate)
+  (setq ad-return-value (sacha/org-html-checkbox (ad-get-arg 0))))
+
+;; To follow links with RET, rather than a 2 key combo:
+(setq org-return-follows-link t)
+
 ;; 指定agenda檔案位置清單
-(setq org-agenda-files (list (concat org-directory "/todo.org")))
+(setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
 
+
+;;;;;;;;;;;;AGENDA~~~~~~ =w="
+;;Including all org files from a directory into the agenda
+;;(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
 ;; 啊啊啊啊Agenda自訂
 ;; shortcut可以一個字母以上
 (setq org-agenda-custom-commands
@@ -864,11 +893,11 @@ unwanted space when exporting org-mode to html."
 (define-key global-map "\C-cc" 'org-capture)
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline (concat org-directory "/todo.org") "Tasks")
+      '(("t" "Todo" entry (file+headline (concat org-directory "/agenda/Todo.org") "Tasks")
          "** TODO %?\n  %i")
-        ("b" "Buy" entry (file+headline (concat org-directory "/todo.org") "Buy")
+        ("b" "Buy" entry (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
          "** TODO %?\n  %i")
-        ("r" "Reading" entry (file+headline (concat org-directory "/todo.org") "Reading")
+        ("r" "Reading" entry (file+headline (concat org-directory "/agenda/Todo.org") "Reading")
          "** %? %i :Reading:")
         ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.gpg")
                                           "* %?\n %i"))))
@@ -1271,10 +1300,6 @@ unwanted space when exporting org-mode to html."
 (dolist
     (r `(
          (?e (file . "~/.emacs.d/init.el"))
-         (?t (file . "~/org/TODO.org"))
-         (?w (file . "~/org/Weintek.org"))
-         (?n (file . "~/org/note.org"))
-         (?b (file . "~/coldnew.github.io/blog-src/blog.org"))
          ))
   (set-register (car r) (cadr r)))
 
@@ -1301,7 +1326,7 @@ unwanted space when exporting org-mode to html."
 (global-set-key (kbd "<f10>") 'open-todo)
 (defun open-todo ()
   "Open todo list."
-  (interactive)(find-file (concat org-directory "/todo.org")))
+  (interactive)(find-file (concat org-directory "/agenda/Todo.org")))
 
 (global-set-key (kbd "C-x <f10>") 'open-nihongo-note)
 (defun open-nihongo-note ()
@@ -2509,6 +2534,9 @@ Return value is float."
     ("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
+ '(org-agenda-files
+   (quote
+    ("~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
  '(transient-mark-mode 1))
