@@ -1788,7 +1788,6 @@ the previous directory."
                 (setq s_FILE_LIST (concat s_FILE_LIST "'" x "' ")))
             (setq n (1+ n)))
           (message "Opening %s files..." n)
-          (message s_FILE_LIST)
           (call-process-shell-command "smplayer -add-to-playlist" nil nil nil (format "%s &" s_FILE_LIST)))
       (if (string-match PATTERN FILE)	;if it's a file
           (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
