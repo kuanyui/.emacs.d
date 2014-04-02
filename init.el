@@ -1777,26 +1777,23 @@ the previous directory."
   "Add a multimedia file or all multimedia files under a directory into SMPlayer's playlist via Dired."
   (interactive)
   (require 'cl)
-  (let* (PATTERN FILE full-path-FILE n)
-    (setq PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\)$")
-    (setq FILE (dired-get-filename nil t)) ;[FIXME] full path directly
-    (setq n 0)
+  (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\)$")
+         (FILE (dired-get-filename nil t)))
     (if (file-directory-p FILE)	;if it's a dir.
-        (progn
-          (setq full-path-FILE (directory-files FILE t PATTERN))
-          (message "Opening %s files..." (list-length full-path-FILE))
-          (cl-loop for i in full-path-FILE
-                   do (call-process "smplayer" nil 0 nil "-add-to-playlist" i)
-                   (sit-for 0.1))	;Or playlist will be not in order.
-          (dired-next-line 1)
-          )
+        (let* ((FILE_LIST (directory-files FILE t PATTERN))
+               (n 0)
+               s_FILE_LIST)
+          (dolist (x FILE_LIST)
+            (if (not (or (equal x ".") (equal x "..")))
+                (setq s_FILE_LIST (concat s_FILE_LIST "'" x "' ")))
+            (setq n (1+ n)))
+          (message "Opening %s files..." n)
+          (message s_FILE_LIST)
+          (call-process-shell-command "smplayer -add-to-playlist" nil nil nil (format "%s &" s_FILE_LIST)))
       (if (string-match PATTERN FILE)	;if it's a file
-          (progn
-            (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
-            (dired-next-line 1))
-        (progn
-          (message "This is not a supported audio or video file.")
-          (dired-next-line 1))))))
+          (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
+        (message "This is not a supported audio or video file."))))
+  (dired-next-line 1))
 
 (define-key dired-mode-map (kbd "M-a") 'dired-add-to-smplayer-playlist)
 (define-key dired-mode-map (kbd "<f2>") 'wdired-change-to-wdired-mode)
