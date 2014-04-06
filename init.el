@@ -492,6 +492,7 @@ delete backward until the parent directory."
 (require 'ox)
 (require 'ox-md)
 (require 'ox-html5slide)
+(require 'ox-odt)
 (setq org-directory "~/org")
 (define-key global-map "\C-cl" 'org-store-link)
 (setq org-log-done t)
@@ -500,7 +501,7 @@ delete backward until the parent directory."
 (setq org-display-inline-images t)
 (setq org-image-actual-width t) ;; 可以設定成一個數字
 
-;;解决org-mode下中文不自动换行的问题
+;;解決org-mode下中文不自動換行的問題
 (add-hook 'org-mode-hook
           (lambda () (setq truncate-lines nil)))
 
@@ -586,7 +587,7 @@ body {
 
 #content {
     margin: 0px auto;
-    width: 800px;
+    width: 1200px;
     text-align:left;
     background-color: rgba(255, 255, 255, 1);
     border-radius: 7px 7px 0 0;
@@ -601,7 +602,7 @@ body {
     color: #ffffff !important;
     background-color: #555555 !important;
     margin: -1.2em auto 0;
-    width: 780px;
+    width: 1180px;
     background-color: #ffffff;
     border-radius: 0 0 7px 7px;
     padding: 30px 10px 10px 10px;
@@ -636,6 +637,11 @@ body {
     border-left: none;
     margin-left: 0;
     padding-left: 0;
+}
+
+img {
+    max-width:100%;
+    max-height:100%;
 }
 a {
     color: #005f87;
@@ -897,9 +903,9 @@ unwanted space when exporting org-mode to html."
          "** TODO %?\n  %i")
         ("b" "Buy" entry (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
          "** TODO %?\n  %i")
-        ("r" "Reading" entry (file+headline (concat org-directory "/agenda/Todo.org") "Reading")
+        ("r" "Reading" entry (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
          "** %? %i :Reading:")
-        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.gpg")
+        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org")
                                           "* %?\n %i"))))
 
 ;; capture jump to link
@@ -1096,7 +1102,7 @@ unwanted space when exporting org-mode to html."
       '(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
          (plain-tex-mode ams-tex-mode texinfo-mode)
          :help "Run plain TeX")
-        ("LaTeX" "%`%l%(mode)%' %t" TeX-run-TeX nil
+        ("LaTeX" "xelatex -interaction nonstopmode %t" TeX-run-TeX nil
          (latex-mode doctex-mode)
          :help "Run LaTeX")
         ("Makeinfo" "makeinfo %t" TeX-run-compile nil
@@ -1336,7 +1342,7 @@ unwanted space when exporting org-mode to html."
 (global-set-key (kbd "C-x <f11>") 'open-diary)
 (defun open-diary ()
   "Open diary."
-  (interactive)(find-file (concat org-directory "/diary/diary.gpg")))
+  (interactive)(find-file (concat org-directory "/diary/diary.org")))
 
 (global-set-key (kbd "<f11>") 'open-material-notes)
 (defun open-material-notes ()
@@ -1643,7 +1649,7 @@ unwanted space when exporting org-mode to html."
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
+;;            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
             (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-word-mode)
             (define-key org-mode-map (kbd "C-c C-e") 'org-export-dispatch)
             ))
@@ -1887,24 +1893,33 @@ With one prefix argument, the tarball is gziped."
 (global-set-key (kbd "C-x ,") 'toggle-show-trailing-whitespace)
 
 ;;(require 'org-html5presentation)
+(add-hook 'cperl-mode-hook (lambda () (perl-completion-mode t)))
+(defalias 'perl-mode 'cperl-mode)
 
 ;;======================================================
 ;; SLIME
 ;;======================================================
+(require 'slime-autoloads)
 (require 'slime)
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'slime-repl-mode))
-(add-hook 'cperl-mode-hook (lambda () (perl-completion-mode t)))
-(defalias 'perl-mode 'cperl-mode)
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
-(setq inferior-lisp-program "clisp")
+(setq inferior-lisp-program "/usr/bin/clisp")
+(setq slime-lisp-implementations
+      '((cmucl ("cmucl" "-quiet"))
+        (sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
 (setq slime-net-coding-system 'utf-8-unix)
+(setq slime-contribs '(slime-fancy))
 (slime-setup)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(eval-after-load 'slime
+  `(define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup))
 ;;(defun keyboard-quit-custom ()
 ;;  (interactive)
 ;;  (lazy-highlight-cleanup)(keyboard-quit))
@@ -2494,8 +2509,8 @@ Return value is float."
 (global-set-key (kbd "C-z")   'helm-swoop)
 (global-set-key (kbd "C-x C-z") 'helm-multi-swoop)
 (global-set-key (kbd "M-z")   'helm-swoop-back-to-last-point)
-(global-set-key (kbd "C-c C-z") 'helm-multi-swoop-all)
-(global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
+(global-set-key (kbd "C-x z") 'helm-multi-swoop-all)
+;; (global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
 
 ;; Visual Regexp
 (require 'visual-regexp-steroids)
@@ -2508,8 +2523,8 @@ Return value is float."
 (define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
 
 ;; EasyPG
-(require 'epa-file)
-(epa-file-enable)
+;; (require 'epa-file)
+;; (epa-file-enable)
 
 
 ;;======================================================
