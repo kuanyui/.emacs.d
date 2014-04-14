@@ -1357,9 +1357,8 @@ unwanted space when exporting org-mode to html."
   (interactive)(find-file "~/Dropbox/Blog"))
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
-;; StarDict for Emacs
-;; author: pluskid
-;; 调用 stardict 的命令行接口来查辞典，如果选中了 region 就查询 region 的内容，否则就查询当前光标所在的词
+;; StarDict
+;; please install sdcv on your system first
 (global-set-key (kbd "C-c d s") 'stardict-lookup)
 (defun stardict-lookup ()
   (interactive)
@@ -1378,7 +1377,14 @@ unwanted space when exporting org-mode to html."
         (prin1 (shell-command-to-string
                 (concat "sdcv -n "
                         (buffer-substring begin end)))))
-    (switch-to-buffer-other-window "*Stardict*")))
+    (switch-to-buffer-other-window "*Stardict*")
+    (let (buffer-read-only)
+      (delete-region (- (point-max) 2) (point-max))
+      (delete-region 1 2)
+      (font-lock-fontify-buffer))))
+
+(font-lock-add-keywords 'help-mode '(("^-->.*\n" . 'moedict-bopomofo)
+                                     ("<<.+>>" . 'bold)))
 
 ;; Stardict in Emacs
 ;; (require 'sdcv-mode)
