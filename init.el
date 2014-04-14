@@ -348,7 +348,7 @@ delete backward until the parent directory."
    ((equal current-prefix-arg 1)     ; C-u 1
     (insert (format-time-string "%Y/%m/%d（%a）" (current-time))))
    ))
-(global-set-key (kbd "C-c d") 'my-insert-date)
+(global-set-key (kbd "C-c C-x d") 'my-insert-date)
 
 ;; 煩死了直接拿org-mode來用就好了。我幹麼自找麻煩啊真白痴。
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
@@ -1196,7 +1196,9 @@ unwanted space when exporting org-mode to html."
 (require 'popup-kill-ring)
 (global-set-key "\M-y" 'popup-kill-ring)
 
+;;======================================================
 ;;Twittering-mode:用Emacs上Twitter
+;;======================================================
 (add-to-list 'load-path "~/.emacs.d/lisps/twittering-mode/")
 (require 'twittering-mode)
 (setq twittering-use-master-password t) ;;This requires GnuPG. And also, either EasyPG or alpaca.el (0.13) is necessary.
@@ -1269,7 +1271,7 @@ unwanted space when exporting org-mode to html."
 
 (setq twittering-filter-tweets '("http://4sq.com/.*" "http://adf.ly/.*" "I liked a @YouTube video" "我喜歡一部 .*@YouTube 影片" "爆卦" "中時" "郭董" "nikeplus" "采潔" ))
 
-
+(defalias 'short-url 'twittering-tinyurl-replace-at-point)
 ;;高亮特定使用者，但搞不出來先擺著。
 ;;(defface twittering-star-username-face
 ;;  `((t (:underline t :foreground "a40000" :background "#ffaf87"))) "" :group 'faces)
@@ -1358,8 +1360,8 @@ unwanted space when exporting org-mode to html."
 ;; StarDict for Emacs
 ;; author: pluskid
 ;; 调用 stardict 的命令行接口来查辞典，如果选中了 region 就查询 region 的内容，否则就查询当前光标所在的词
-(global-set-key (kbd "C-c k") 'kid-star-dict)
-(defun kid-star-dict ()
+(global-set-key (kbd "C-c d s") 'stardict-lookup)
+(defun stardict-lookup ()
   (interactive)
   (let ((begin (point-min))
         (end (point-max)))
@@ -1371,14 +1373,12 @@ unwanted space when exporting org-mode to html."
         (mark-word)
         (setq begin (region-beginning)
               end (region-end))))
-    ;; 有时候 stardict 会很慢，所以在回显区显示一点东西
-    ;; 以免觉得 Emacs 在干什么其他奇怪的事情。
     (message "searching for %s ..." (buffer-substring begin end))
-    (popup-tip
-     (shell-command-to-string
-      (concat "sdcv -n "
-              (buffer-substring begin end))))))
-
+    (with-output-to-temp-buffer "*Stardict*"
+        (prin1 (shell-command-to-string
+                (concat "sdcv -n "
+                        (buffer-substring begin end)))))
+    (switch-to-buffer-other-window "*Stardict*")))
 
 ;; Stardict in Emacs
 ;; (require 'sdcv-mode)
@@ -1563,6 +1563,7 @@ unwanted space when exporting org-mode to html."
 ;;======================================================
 (add-to-list 'load-path "~/.emacs.d/git/moedict/")
 (require 'moedict)
+(global-set-key (kbd "C-c d m") 'moedict-lookup)
 
 ;;======================================================
 ;; zlc
@@ -2526,6 +2527,7 @@ Return value is float."
 ;; (require 'epa-file)
 ;; (epa-file-enable)
 
+(require 'wikipedia-mode)
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動

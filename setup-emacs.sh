@@ -15,6 +15,8 @@ run_installer() {
     echo "manually again (or more times)."
 }
 
+cd ~/.emacs.d/
+
 while true; do
     read -p "Do you really want to install kuanyui's Emacs config?" yn
     case $yn in
