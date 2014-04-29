@@ -22,3 +22,8 @@ org-clock-save.el
 /ramen.ogg
 /misc
 /private
+
+/.python-environments/
+/places
+/org-clock-save_flymake.el
+/.directory

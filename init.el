@@ -416,11 +416,11 @@ delete backward until the parent directory."
 (setq inhibit-splash-screen t)
 
 (setq initial-scratch-message
-";; The real productivity problem people have is procrastination. It’s
-;; something of a dirty little secret, but everyone procrastinates —
-;; severely. It’s not just you. But that doesn’t mean you shouldn’t try to
+";; The real productivity problem people have is procrastination. It's
+;; something of a dirty little secret, but everyone procrastinates -
+;; severely. It's not just you. But that doesn't mean you shouldn't try to
 ;; stop it.  What is procrastination? To the outside observer, it looks like
-;; you’re just doing something “fun” (like playing a game or reading the
+;; you're just doing something \"fun\" (like playing a game or reading the
 ;; news) instead of doing your actual work.
 ;;                              - Aaron Swartz, HOWTO: Be more productive")
 ;;自動啟動flyspell-mode拼字檢查
@@ -499,8 +499,8 @@ delete backward until the parent directory."
 
 (setq org-display-table t)
 (setq org-display-inline-images t)
-(setq org-image-actual-width t) ;; 可以設定成一個數字
-
+;;讓org中顯示圖片能夠先用imagemagick自動縮放
+(setq org-image-actual-width '(300)) ;; 可以設定成一個數字
 ;;解決org-mode下中文不自動換行的問題
 (add-hook 'org-mode-hook
           (lambda () (setq truncate-lines nil)))
@@ -1383,10 +1383,11 @@ unwanted space when exporting org-mode to html."
       (delete-region 1 2)
       (font-lock-fontify-buffer))))
 
-(font-lock-add-keywords 'help-mode '(("^-->.*\n" . 'moedict-bopomofo)
-                                     ("<<.+>>" . 'bold)))
+(font-lock-add-keywords 'help-mode
+                        '(("^-->.*\n" . 'moedict-bopomofo)
+                          ("<<.+>>" . 'bold)
+                          ("\\(noun\\|verb\\|adjective\\|adverb\\|adj[ s\n]\\|adv [ s\n]\\)" . 'font-lock-constant-face)))
 
-;; Stardict in Emacs
 ;; (require 'sdcv-mode)
 ;; (global-set-key (kbd "C-c s") 'sdcv-search)
 
@@ -1790,7 +1791,7 @@ the previous directory."
   "Add a multimedia file or all multimedia files under a directory into SMPlayer's playlist via Dired."
   (interactive)
   (require 'cl)
-  (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\)$")
+  (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\|.webm\\)$")
          (FILE (dired-get-filename nil t)))
     (if (file-directory-p FILE)	;if it's a dir.
         (let* ((FILE_LIST (directory-files FILE t PATTERN))
@@ -2120,6 +2121,40 @@ which fetch older tweets on reverse-mode."
   (insert "rhino")
   (eshell-send-input ""))
 
+;;Javascript
+:; js2
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+(require 'js-comint)
+(setq inferior-js-program-command "rhino")
+
+(setq inferior-js-mode-hook
+      (lambda ()
+        ;; We like nice colors
+        (ansi-color-for-comint-mode-on)
+        ;; Deal with some prompt nonsense
+        (add-to-list 'comint-preoutput-filter-functions
+                     (lambda (output)
+                       (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
+                     (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
+
+(add-hook 'js2-mode-hook '(lambda ()
+                            (local-set-key "\C-x\C-e" 'js-send-last-sexp)
+                            (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
+                            (local-set-key "\C-cb" 'js-send-buffer)
+                            (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+                            (local-set-key "\C-cl" 'js-load-file-and-go)
+                            ))
+
+(autoload 'tern-mode "tern.el" nil t)
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+   '(progn
+      (require 'tern-auto-complete)
+      (tern-ac-setup)))
+
 ;; 如果當前user是root，prompt改成#
 (setq eshell-prompt-function
       '(lambda ()
@@ -2334,13 +2369,20 @@ date: %Y-%m-%d %H:%M:%S
 ;; Python
 ;;======================================================
 
-(require 'highlight-indentation)
-(add-hook 'python-mode-hook 'highlight-indentation)
-(add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
-(set-face-background 'highlight-indentation-face "#e3e3d3")
-(set-face-background 'highlight-indentation-current-column-face "#ffafff")
-(setq highlight-indentation-set-offset '2)
+;; (require 'highlight-indentation)
+;; (add-hook 'python-mode-hook 'highlight-indentation)
+;; (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
+;; (set-face-background 'highlight-indentation-face "#e3e3d3")
+;; (set-face-background 'highlight-indentation-current-column-face "#ffafff")
+;; (setq highlight-indentation-set-offset '2)
 
+;; (require 'guess-style)
+;; (autoload 'guess-style-set-variable "guess-style" nil t)
+;; (autoload 'guess-style-guess-variable "guess-style")
+;; (autoload 'guess-style-guess-all "guess-style" nil t)
+;; (add-hook 'python-mode-hook 'guess-style-guess-all)
+;; (global-guess-style-info-mode 1)
+(smart-tabs-insinuate 'c 'javascript 'python)
 ;; Info-look
 (require 'info-look)
 (info-lookup-add-help
@@ -2348,7 +2390,21 @@ date: %Y-%m-%d %H:%M:%S
  :regexp "[[:alnum:]_]+"
  :doc-spec
  '(("(python)Index" nil "")))
+(require 'python)
+(require 'python-info)
 
+;; Jedi: auto complete for Python
+(require 'jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:environment-root "jedi")  ; or any other name you like
+;; (setq jedi:environment-virtualenv
+;;       (append python-environment-virtualenv
+;;               '("--python" "/usr/bin/python3")))
+
+
+
+
+;; Python REPL (M-x run-python)
 (setq
  python-shell-interpreter "python3"
  python-shell-interpreter-args ""
@@ -2361,7 +2417,22 @@ date: %Y-%m-%d %H:%M:%S
  python-shell-completion-string-code
  "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
+(define-key python-mode-map (kbd "<f5>") 'python-compile-with-shell-command)
+(defun python-compile-with-shell-command ()
+  (interactive)
+  (save-buffer)(shell-command (format "python %s" (buffer-name))))
+(define-key python-mode-map (kbd "<f6>") 'python-compile-with-shell-command)
+(defun python3-compile-with-shell-command ()
+  (interactive)
+  (save-buffer)(shell-command (format "python3 %s" (buffer-name))))
 
+;; Smart-Operator
+(require 'smart-operator)
+(add-hook 'python-mode-hook 'smart-operator-mode)
+(add-hook 'inferior-python-mode-hook 'smart-operator-mode)
+
+;; setq tab-width to 4
+(add-hook 'python-mode-hook (lambda () (setq tab-width 4)))
 ;;======================================================
 ;; Color code convert (from Xah Lee's CSS Mode)
 ;;======================================================
@@ -2369,8 +2440,8 @@ date: %Y-%m-%d %H:%M:%S
 
 (require 'color)
 (defun color-code-rgb-to-hsl ()
-  "Convert color spec under cursor from “#rrggbb” to CSS HSL format.
-#ffefd5 → hsl(37,100%,91%)"
+  "Convert color spec under cursor from '#rrggbb' to CSS HSL format.
+'#ffefd5' => hsl(37,100%,91%)"
   (interactive)
   (let* (
          (bds (bounds-of-thing-at-point 'word))
@@ -2391,7 +2462,7 @@ date: %Y-%m-%d %H:%M:%S
 (defun color-code-hex-to-hsl (hexStr)
   "Convert hexStr color to CSS HSL format.
 Return a string.
- (color-code-hex-to-hsl \"#ffefd5\") ⇒ \"hsl(37,100%,91%)\""
+ (color-code-hex-to-hsl \"#ffefd5\") => \"hsl(37,100%,91%)\""
   (let* (
          (colorVec (color-code-convert-hex-to-vec hexStr))
          (xR (elt colorVec 0))
@@ -2406,11 +2477,11 @@ Return a string.
     ))
 
 (defun color-code-convert-hex-to-vec (hexcolor)
-  "Convert HEXCOLOR from “\"rrggbb\"” string to a elisp vector [r g b], where the values are from 0 to 1.
+  "Convert HEXCOLOR from \"rrggbb\" string to a elisp vector [r g b], where the values are from 0 to 1.
 Example:
- (color-code-convert-hex-to-vec \"00ffcc\") ⇒ [0.0 1.0 0.8]
+ (color-code-convert-hex-to-vec \"00ffcc\") => [0.0 1.0 0.8]
 
-Note: The input string must NOT start with “#”. If so, the return value is nil."
+Note: The input string must NOT start with \"#\". If so, the return value is nil."
   (vector
    (color-code-normalize-number-scale
     (string-to-number (substring hexcolor 0 2) 16) 255)
@@ -2534,7 +2605,17 @@ Return value is float."
 ;; (epa-file-enable)
 
 (require 'wikipedia-mode)
+(add-to-list 'auto-mode-alist '("\\.wiki\\'" . wikipedia-mode))
 
+(require 'text-translator)
+(require 'text-translator-load)
+(global-set-key "\C-x\M-t" 'text-translator)
+(global-set-key "\C-x\M-T" 'text-translator-translate-last-string)
+(setq text-translator-auto-selection-func 'text-translator-translate-by-auto-selection-entw)
+(global-set-key "\C-xt" 'text-translator-translate-by-auto-selection)
+
+(setq google-translate-default-source-language "en"
+      google-translate-default-target-language "zh")
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================

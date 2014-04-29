@@ -6,6 +6,9 @@
 
 (setq dotfiles-packages-list
       '(ac-js2
+        jedi
+        smart-tabs-mode
+        smart-operator
         ac-slime
         ace-jump-mode
         ack-and-a-half
