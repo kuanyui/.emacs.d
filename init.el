@@ -885,6 +885,7 @@ unwanted space when exporting org-mode to html."
 (setq org-agenda-dim-blocked-tasks nil)
 ;; Compact the block agenda view
 (setq org-agenda-compact-blocks nil);; nil為加上分隔線，t為去掉
+
 ;; (setq org-stuck-projects
 ;;       '("TODO=\"PROJECT\""
 ;;         ("ACTION" "WAITING")
@@ -916,6 +917,11 @@ unwanted space when exporting org-mode to html."
 		  (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
 												   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
           (stuck "") ;; review stuck projects as designated by org-stuck-projects
+		  (todo ""
+				((org-agenda-overriding-header "All other TODOs")
+				 (org-agenda-todo-ignore-scheduled t)
+				 (org-agenda-todo-ignore-deadlines t)
+				 (org-agenda-todo-ignore-with-date t)))
           )) ;; review waiting items
         ;; ...other commands here
 
@@ -959,6 +965,13 @@ unwanted space when exporting org-mode to html."
         ;; other commands go here
         ))
 
+(setq org-refile-targets '(("Todo.org" :maxlevel . 1)
+						   ("School.org" :maxlevel . 1)
+						   ("Learning.org" :maxlevel . 1)
+						   ("Project.org" :maxlevel . 2)
+						   ("Reading.org" :maxlevel . 1)))
+
+
 ;;To save the clock history across Emacs sessions, use
 
 (setq org-clock-persist 'history)
@@ -981,15 +994,14 @@ unwanted space when exporting org-mode to html."
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
-         "** TODO %?\n  %i")
+         "** TODO %? %^G\n  %i")
 		("s" "School" entry (file+headline (concat org-directory "/agenda/School.org") "School")
          "** TODO %?\n  %i")
         ("b" "Buy" entry (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
          "** TODO %?\n  %i")
         ("r" "Reading" entry (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
          "** %? %i :Reading:")
-        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org")
-                                          "* %?\n %i"))))
+        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org") "* %? %^g\n %i"))))
 
 ;; capture jump to link
 (define-key global-map "\C-cx"
