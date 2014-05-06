@@ -865,12 +865,32 @@ unwanted space when exporting org-mode to html."
 (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
 
+(setq org-log-into-drawer t)
+(setq org-log-reschedule 'note)
+(setq org-log-redeadline t)
+(setq org-log-done 'time)
+(setq org-todo-keywords
+      '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "APPT(a!)" "|" "DONE(d!)")
+        (type "PROJECT(p!)" "|" "DONE(d!)")
+        (type "|" "CANCELLED(x@)" "DEFERRED(f@)")))
 
 ;;;;;;;;;;;;AGENDA~~~~~~ =w="
 ;;Including all org files from a directory into the agenda
 ;;(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
 ;; 啊啊啊啊Agenda自訂
 ;; shortcut可以一個字母以上
+;; Example:  http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
+
+;; Do not dim blocked tasks
+(setq org-agenda-dim-blocked-tasks nil)
+;; Compact the block agenda view
+(setq org-agenda-compact-blocks nil);; nil為加上分隔線，t為去掉
+;; (setq org-stuck-projects
+;;       '("TODO=\"PROJECT\""
+;;         ("ACTION" "WAITING")
+;;         nil
+;;         nil))
+
 (setq org-agenda-custom-commands
       '(
         ("w" todo "STARTED") ;; (1) (3) (4)
@@ -885,15 +905,18 @@ unwanted space when exporting org-mode to html."
 
         ("P" "Projects"
          ((tags "Project")))
+        (" " "Agenda"
+         ((todo "STARTED"
+				((org-agenda-overriding-header "What you should doing right now!")
+				 (org-tags-match-list-sublevels nil)))
+		  (todo "WAITING"
+				((org-agenda-overriding-header "Things waiting on the perenially disorganised masses")
+				 (org-tags-match-list-sublevels nil)))
 
-        ("W" "Weekly Review"
-         ((agenda "" ((org-agenda-ndays 7)
-                      (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
-          ;; type "l" in the agenda to review logged items
+		  (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
+												   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
           (stuck "") ;; review stuck projects as designated by org-stuck-projects
-          (todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-          (todo "MAYBE") ;; review someday/maybe items
-          (todo "WAITING"))) ;; review waiting items
+          )) ;; review waiting items
         ;; ...other commands here
 
         ("d" "Upcoming deadlines" agenda ""
@@ -946,7 +969,7 @@ unwanted space when exporting org-mode to html."
 (global-set-key (kbd "C-c C-x C-x") 'org-clock-in-last)
 (global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
 (global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
-
+(add-to-list 'recentf-exclude ".+org-clock-save\\.el$")
                                         ;Now that OrgMode and RememberMode are included in Emacs (as of Emacs 23), activation is as simple as:
 ;;(org-remember-insinuate)
 ;;This excellent feature inspired Capture in OrgMode and that is now (Aug2010) recommended for new users, see http://orgmode.org/manual/Capture.html#Capture
@@ -957,7 +980,9 @@ unwanted space when exporting org-mode to html."
 (define-key global-map "\C-cc" 'org-capture)
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline (concat org-directory "/agenda/Todo.org") "Tasks")
+      '(("t" "Todo" entry (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
+         "** TODO %?\n  %i")
+		("s" "School" entry (file+headline (concat org-directory "/agenda/School.org") "School")
          "** TODO %?\n  %i")
         ("b" "Buy" entry (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
          "** TODO %?\n  %i")
@@ -1389,10 +1414,10 @@ unwanted space when exporting org-mode to html."
   "open-computer-notes"
   (interactive)(find-file (concat org-directory "/computer_notes.org")))
 
-(global-set-key (kbd "<f10>") 'open-todo)
-(defun open-todo ()
-  "Open todo list."
-  (interactive)(find-file (concat org-directory "/agenda/Todo.org")))
+(global-set-key (kbd "<f10>") 'open-agenda-directory)
+(defun open-agenda-directory ()
+  "Open the directory of Org agenda files."
+  (interactive)(find-file (concat org-directory "/agenda")))
 
 (global-set-key (kbd "C-x <f10>") 'open-nihongo-note)
 (defun open-nihongo-note ()
@@ -1890,8 +1915,8 @@ With one prefix argument, the tarball is gziped."
 ;;======================================================
 
 (require 'magit)
-(global-set-key (kbd "C-x g i t s") 'magit-status)
-(global-set-key (kbd "C-x g i t l") 'magit-log)
+(global-set-key (kbd "C-x g s") 'magit-status)
+(global-set-key (kbd "C-x g l") 'magit-log)
 (define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
 ;;======================================================
@@ -2030,10 +2055,9 @@ With one prefix argument, the tarball is gziped."
 
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(
-                          ("'[-a-zA-Z_][-a-zA-Z0-9_/]*" 0 'font-lock-constant-face)
+                          ("'[-a-zA-Z_][-a-zA-Z0-9_:/]*" 0 'font-lock-constant-face)
                           ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
                           ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
-
 (defun lookup-elisp-function-doc ()
   "Look up the elisp function under the cursor."
   (interactive)
@@ -2638,6 +2662,23 @@ Return value is float."
 (setq google-translate-default-source-language "en"
       google-translate-default-target-language "zh")
 ;;======================================================
+;; Calendar Framework
+;;======================================================
+(require 'calfw)
+(require 'calfw-org)
+(require 'calfw-cal)
+(global-set-key (kbd "C-c A") 'cfw:open-org-calendar)
+;; 吃太飽的話可以自己去定calendar-holidays
+;; Month
+(setq calendar-month-name-array
+  ["January" "February" "March"     "April"   "May"      "June"
+   "July"    "August"   "September" "October" "November" "December"])
+;; Week days
+(setq calendar-day-name-array
+      ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"])
+;; First day of the week
+(setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
 ;;
@@ -2657,7 +2698,7 @@ Return value is float."
  '(mark-even-if-inactive t)
  '(org-agenda-files
    (quote
-	("~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
+	("~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
  '(tab-width 4)
