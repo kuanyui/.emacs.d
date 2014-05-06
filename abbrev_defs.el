@@ -77,6 +77,7 @@
     ("abdown" "↓" nil 0)
     ("abheart" "♥" nil 0)
     ("ableft" "←" nil 0)
+    ("aboc" "℃" nil 0)
     ("abowo" "ˊ・ω・ˋ" nil 0)
     ("abpz" "—" nil 2)
     ("abright" "→" nil 2)
@@ -92,6 +93,10 @@
 (define-abbrev-table 'ibuffer-mode-abbrev-table '())
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-js-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-python-mode-abbrev-table '())
 
 (define-abbrev-table 'internal-ange-ftp-mode-abbrev-table '())
 
@@ -161,7 +166,7 @@
 
 (define-abbrev-table 'org-mode-abbrev-table
   '(
-    ("aboc" "\textdegree C" nil 0)
+    ("abdegree" "	extdegree" nil 0)
    ))
 
 (define-abbrev-table 'outline-mode-abbrev-table '())
@@ -177,6 +182,12 @@
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
 (define-abbrev-table 'prog-mode-abbrev-table '())
+
+(define-abbrev-table 'python-mode-abbrev-table '())
+
+(define-abbrev-table 'python-mode-skeleton-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'reb-lisp-mode-abbrev-table '())
 
@@ -236,6 +247,8 @@
 
 (define-abbrev-table 'text-mode-abbrev-table '())
 
+(define-abbrev-table 'text-translator-mode-abbrev-table '())
+
 (define-abbrev-table 'tree-mode-abbrev-table '())
 
 (define-abbrev-table 'twittering-edit-mode-abbrev-table '())
@@ -247,4 +260,6 @@
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'web-mode-abbrev-table '())
+
+(define-abbrev-table 'wikipedia-mode-abbrev-table '())
 

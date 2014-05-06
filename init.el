@@ -1,3 +1,4 @@
+
 ;;kuanyui's ~/.emacs
 
 (setq user-mail-address "azazabc123@gmail.com")
@@ -22,6 +23,7 @@
 ;;======================================================
 
 ;;GUI Emacs調整字體大小
+;;(when (window-system)
 ;;(defun sacha/increase-font-size ()
 ;;  (interactive)
 ;;  (set-face-attribute 'default
@@ -50,85 +52,87 @@
 ;;                            charset
 ;;                            (font-spec :family "文泉驛等寬微米黑"))))))
 ;;
-;; (set-default-font "-unknown-DejaVu Sans Mono-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1 full name: DejaVu Sans Mono:pixelsize=12:foundry=unknown:weight=normal:slant=normal:width=normal:spacing=100:scalable=true")
-
 ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
 ;;         (set-fontset-font (frame-parameter nil 'font) charset
 ;;                           (font-spec :family "文泉驛等寬微米黑" :spacing 100 :size nil)))
-
 ;; (if (window-system)
 ;;     (progn
 ;;       (set-face-attribute 'default nil :height 90)
 ;;       (apply-font-setting)))
 ;; (global-set-key (kbd "C-+") 'sacha/increase-font-size)
-;; (global-set-key (kbd "C--") 'sacha/decrease-font-size)
-;;
-;; ;; 特殊字型設定
-(when (window-system)
- (defvar emacs-english-font "DejaVu Sans Mono"
-   "The font name of English.")
+;;(global-set-key (kbd "C--") 'sacha/decrease-font-size)
+;;)
 
- (defvar emacs-cjk-font "文泉驛等寬微米黑"
-   "The font name for CJK.")
-
- (defvar emacs-font-size-pair '(15 . 18)
-   "Default font size pair for (english . chinese)")
-
- (defvar emacs-font-size-pair-list
-   '(( 5 .  6) (10 . 12)
-     (13 . 16) (15 . 18) (17 . 20)
-     (19 . 22) (20 . 24) (21 . 26)
-     (24 . 28) (26 . 32) (28 . 34)
-     (30 . 36) (34 . 40) (36 . 44))
-   "This list is used to store matching (englis . chinese) font-size.")
-
- (defun font-exist-p (fontname)
-   "Test if this font is exist or not."
-   (if (or (not fontname) (string= fontname ""))
-       nil
-     (if (not (x-list-fonts fontname)) nil t)))
-
- (defun set-font (english chinese size-pair)
-   "Setup emacs English and Chinese font on x window-system."
-
-   (if (font-exist-p english)
-       (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
-
-   (if (font-exist-p chinese)
-       (dolist (charset '(kana han symbol cjk-misc bopomofo))
-         (set-fontset-font (frame-parameter nil 'font) charset
-                           (font-spec :family chinese :size (cdr size-pair))))))
-
- ;; Setup font size based on emacs-font-size-pair
- (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair)
-
- (defun emacs-step-font-size (step)
-   "Increase/Decrease emacs's font size."
-   (let ((scale-steps emacs-font-size-pair-list))
-     (if (< step 0) (setq scale-steps (reverse scale-steps)))
-     (setq emacs-font-size-pair
-           (or (cadr (member emacs-font-size-pair scale-steps))
-               emacs-font-size-pair))
-     (when emacs-font-size-pair
-       (message "emacs font size set to %.1f" (car emacs-font-size-pair))
-       (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair))))
-
- (defun increase-emacs-font-size ()
-   "Decrease emacs's font-size acording emacs-font-size-pair-list."
-   (interactive) (emacs-step-font-size 1))
-
- (defun decrease-emacs-font-size ()
-   "Increase emacs's font-size acording emacs-font-size-pair-list."
-   (interactive) (emacs-step-font-size -1))
-
- (global-set-key (kbd "C-=") 'increase-emacs-font-size)
- (global-set-key (kbd "C--") 'decrease-emacs-font-size)
-)
+;; ============================================
+;; Coldnew's Font Size Conf for Org-Table
+;; ============================================
+ ;; 特殊字型設定
+ (when (window-system)
+  (defvar emacs-english-font "DejaVu Sans Mono"
+    "The font name of English.")
+ 
+  (defvar emacs-cjk-font "文泉驛等寬微米黑"
+    "The font name for CJK.")
+ 
+  (defvar emacs-font-size-pair '(15 . 18)
+    "Default font size pair for (english . chinese)")
+ 
+  (defvar emacs-font-size-pair-list
+    '(( 5 .  6) (10 . 12)
+      (13 . 16) (15 . 18) (17 . 20)
+      (19 . 22) (20 . 24) (21 . 26)
+      (24 . 28) (26 . 32) (28 . 34)
+      (30 . 36) (34 . 40) (36 . 44))
+    "This list is used to store matching (englis . chinese) font-size.")
+ 
+  (defun font-exist-p (fontname)
+    "Test if this font is exist or not."
+    (if (or (not fontname) (string= fontname ""))
+        nil
+      (if (not (x-list-fonts fontname)) nil t)))
+ 
+  (defun set-font (english chinese size-pair)
+    "Setup emacs English and Chinese font on x window-system."
+ 
+    (if (font-exist-p english)
+        (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
+ 
+    (if (font-exist-p chinese)
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-fontset-font (frame-parameter nil 'font) charset
+                            (font-spec :family chinese :size (cdr size-pair))))))
+;; Setup font size based on emacs-font-size-pair
+  (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair)
+ 
+  (defun emacs-step-font-size (step)
+    "Increase/Decrease emacs's font size."
+    (let ((scale-steps emacs-font-size-pair-list))
+      (if (< step 0) (setq scale-steps (reverse scale-steps)))
+      (setq emacs-font-size-pair
+            (or (cadr (member emacs-font-size-pair scale-steps))
+                emacs-font-size-pair))
+      (when emacs-font-size-pair
+        (message "emacs font size set to %.1f" (car emacs-font-size-pair))
+        (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair))))
+ 
+  (defun increase-emacs-font-size ()
+    "Decrease emacs's font-size acording emacs-font-size-pair-list."
+    (interactive) (emacs-step-font-size 1))
+ 
+  (defun decrease-emacs-font-size ()
+    "Increase emacs's font-size acording emacs-font-size-pair-list."
+    (interactive) (emacs-step-font-size -1))
+ 
+  (global-set-key (kbd "C-=") 'increase-emacs-font-size)
+  (global-set-key (kbd "C--") 'decrease-emacs-font-size)
+ )
 ;;======================================================
 ;; 基本設定
 ;;======================================================
-(setq tab-width 8)
-(setq indent-tabs-mode nil)             ;不使用tab縮排
+(set-default 'tab-width 4)
+(setq default-tab-width 2)
+
+(setq indent-tabs-mode t)             ;不使用tab縮排
 ;;(setq line-spacing 4) ;;行距....要這幹麻啊orz
 (setq require-final-newline t)
 ;;超變態的undo-tree-mode
@@ -231,6 +235,43 @@ delete backward until the parent directory."
 (customize-set-variable 'scroll-bar-mode 'right)
 (require 'hungry-delete)
 (global-hungry-delete-mode t)
+(global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
+
+;; 幹掉沒啥屁用只會按錯的<menu>
+(global-unset-key (kbd "<menu>"))
+
+;; 讓(previous-buffer)和(next-buffer)自動跳過沒啥用的buffer例如*Message*。
+;; *Help*和*scratch*是例外。
+
+;;(defun buffer-all-special-p ()
+;;  "If all buffers are \"special buffers\"(buffer whose name
+;; is '^\*.+\*$'. e.g. *scratch* ), return non-nil.
+;;If there is any normal buffer, return nil."
+;;  (not
+;;   (some #'identity
+;;         ;;if all nil: all buffer are "^*.+*$"
+;;         (mapcar (lambda (x) (string-match "^\\*.+\\*$" x))
+;;                 (mapcar #'buffer-name (buffer-list))))))
+;;
+;;(defadvice next-buffer (after auto-skip-next-buffer activate)
+;;  "讓`next-buffer'自動跳過沒啥用的buffer，例如*Message*。
+;;*Help*和*scratch*是例外。"
+;;  ;; [FIXME] 當所有buffer全是*NAME*時，可能造成無限迴圈。
+;;  (when (not (buffer-all-special-p)) ;any buffer is NOT special buffers.
+;;    (if (not (string-match "^\\*\\(?:Help\\|scratch\\)\\*$"
+;;                           (buffer-name)))
+;;        (when (string-match "^\\*.+\\*$" (buffer-name))
+;;          (next-buffer)))))
+;;
+;;(defadvice previous-buffer (after auto-skip-previous-buffer activate)
+;;  "讓`previous-buffer'自動跳過沒啥用的buffer，例如*Message*。
+;;*Help*和*scratch*是例外。"
+;;  ;; [FIXME] 當所有buffer全是*NAME*時，可能造成無限迴圈。
+;;  (when (not (buffer-all-special-p)) ;any buffer is NOT special buffers.
+;;    (if (not (string-match "^\\*\\(?:Help\\|scratch\\)\\*$"
+;;                           (buffer-name)))
+;;        (when (string-match "^\\*.+\\*$" (buffer-name))
+;;          (next-buffer)))))
 ;;======================================================
 ;; IBuffer
 ;;======================================================
@@ -247,6 +288,7 @@ delete backward until the parent directory."
   (kill-buffer "*Ibuffer*"))
 
 ;; Let's group buffers with ibuffer!!!
+
 (setq ibuffer-saved-filter-groups
       (quote (("default"
                ("Dired" (mode . dired-mode))
@@ -261,6 +303,9 @@ delete backward until the parent directory."
 					   (mode . web-mode)
 					   (mode . javascript-mode)
 					   (name . "\\.yml$")))
+               ("Agenda Files"
+                (filename . "agenda/.+.org$"))
+
                ("Org" (or
                        (mode . org-mode)
                        (name . "^\\*Calendar\\*$")))
@@ -272,7 +317,14 @@ delete backward until the parent directory."
                ("Lisp" (or
                         (mode . emacs-lisp-mode)
                         (mode . lisp-mode)))
-
+               ("Shell Script" (or (mode . shell-script-mode)
+                                   (mode . shell-mode)
+                                   (mode . sh-mode)
+                                   (mode . ruby-mode)))
+               ("Perl"  (or (mode . cperl-mode)
+                            (mode . perl-mode)))
+               ("Python" (or (mode . python-mode)
+                             (mode . ipython-mode)))
 			   ("Twitter" (mode . twittering-mode))
                ("Magit" (or (name . "*magit*")
                             (mode . magit-mode)))
@@ -286,14 +338,6 @@ delete backward until the parent directory."
                            (mode . help-mode)
                            (name . "\\*Help\\*$")
                            (name . "\\*info\\*$")))
-               ("Shell Script" (or (mode . shell-script-mode)
-                                   (mode . shell-mode)
-                                   (mode . sh-mode)
-                                   (mode . ruby-mode)))
-               ("Perl"  (or (mode . cperl-mode)
-                            (mode . perl-mode)))
-               ("Python" (or (mode . python-mode)
-                             (mode . ipython-mode)))
                ("Terminal" (or (mode . eshell-mode)
                                (mode . term-mode)
                                (mode . inferior-python-mode)
@@ -301,6 +345,7 @@ delete backward until the parent directory."
                                (mode . comint-mode)
                                (name . "\\*scheme\\*$")))
                ))))
+
 
 ;; Use human readable Size column instead of original one
 (define-ibuffer-column size-h
@@ -329,6 +374,19 @@ delete backward until the parent directory."
 
 ;; Do not show empty group
 (setq ibuffer-show-empty-filter-groups nil)
+
+;; recycle move cursor
+(defun ibuffer-previous-line ()
+  (interactive) (previous-line)
+  (if (<= (line-number-at-pos) 2)
+      (goto-line (- (count-lines (point-min) (point-max)) 2))))
+(defun ibuffer-next-line ()
+  (interactive) (next-line)
+  (if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
+      (goto-line 3)))
+(define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
+(define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
+
 
 ;;讓Isearch不會再主動清除搜尋的高亮顯示
 (setq lazy-highlight-cleanup nil)
@@ -1919,8 +1977,7 @@ With one prefix argument, the tarball is gziped."
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
 (setq inferior-lisp-program "/usr/bin/clisp")
 (setq slime-lisp-implementations
-      '((cmucl ("cmucl" "-quiet"))
-        (sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
+      '((sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
 (setq slime-net-coding-system 'utf-8-unix)
 (setq slime-contribs '(slime-fancy))
 (slime-setup)
@@ -2537,42 +2594,6 @@ Return value is float."
         gnus-thread-sort-by-date))
 
 
-;;======================================================
-;; Flymake
-;;======================================================
-(require 'flymake)
-
-(defun flymake-elisp-init ()
-  (unless (string-match "^ " (buffer-name))
-    (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                         'flymake-create-temp-inplace))
-           (local-file  (file-relative-name
-                         temp-file
-                         (file-name-directory buffer-file-name))))
-      (list
-       (expand-file-name invocation-name invocation-directory)
-       (list
-        "-Q" "--batch" "--eval"
-        (prin1-to-string
-         (quote
-          (dolist (file command-line-args-left)
-            (with-temp-buffer
-              (insert-file-contents file)
-              (condition-case data
-                  (scan-sexps (point-min) (point-max))
-                (scan-error
-                 (goto-char(nth 2 data))
-                 (princ (format "%s:%s: error: Unmatched bracket or quote\n"
-                                file (line-number-at-pos)))))))
-          )
-         )
-        local-file)))))
-(push '("\\.el$" flymake-elisp-init) flymake-allowed-file-name-masks)
-(add-hook 'emacs-lisp-mode-hook
-          ;; workaround for (eq buffer-file-name nil)
-          (function (lambda () (if buffer-file-name (flymake-mode)))))
-
-
 ;; vlf
 (add-hook 'find-file-hook (lambda ()
                             (when (> (buffer-size) (* 1024 1024))
@@ -2631,14 +2652,15 @@ Return value is float."
    ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
  '(custom-safe-themes
    (quote
-    ("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+	("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
  '(org-agenda-files
    (quote
-    ("~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
+	("~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
+ '(tab-width 4)
  '(transient-mark-mode 1))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
