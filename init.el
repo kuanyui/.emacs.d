@@ -233,6 +233,7 @@ delete backward until the parent directory."
 
 ;;把捲軸移到右側
 (customize-set-variable 'scroll-bar-mode 'right)
+
 (require 'hungry-delete)
 (global-hungry-delete-mode t)
 (global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
@@ -542,9 +543,6 @@ delete backward until the parent directory."
 ;;======================================================
 ;; Org-mode
 ;;======================================================
-;; 不要安裝最新版org-mode，export 一堆問題
-;; (add-to-list 'load-path "~/.emacs.d/lisps/org-mode/lisp/")
-;; (add-to-list 'load-path "~/.emacs.d/lisps/org-8.2.3c/lisp/")
 (require 'org-install)
 (require 'org)
 (require 'ox)
@@ -572,27 +570,6 @@ delete backward until the parent directory."
   (insert " ** ")
   (backward-char 2))
 (define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
-
-(defun org-insert-blockquote ()
-  "Insert *bold* at cursor point."
-  (interactive)
-  (move-end-of-line 1)(newline 2)(insert "#+BEGIN_QUOTE")(newline 2)(insert "#+END_QUOTE")(previous-line 1))
-(define-key org-mode-map (kbd "C-c i q") 'org-insert-blockquote)
-
-(defun org-insert-center-block ()
-  "Insert *bold* at cursor point."
-  (interactive)
-  (move-end-of-line 1)(newline 2)(insert "#+BEGIN_CENTER")(newline 2)(insert "#+END_CENTER")(previous-line 1))
-(define-key org-mode-map (kbd "C-c i c") 'org-insert-center-block)
-
-
-(defun org-insert-image ()
-  "Insert image in org-mode"
-  (interactive)
-  (let* ((insert-default-directory nil))
-    (insert-string (concat "[[file:" (read-file-name "Enter the image file ") "]]"))))
-(define-key org-mode-map (kbd "C-c i i") 'org-insert-image)
-
 
 ;;(setq org-export-default-language "zh"
 ;;      org-export-html-extension "html"
@@ -885,12 +862,32 @@ unwanted space when exporting org-mode to html."
 (setq org-agenda-dim-blocked-tasks nil)
 ;; Compact the block agenda view
 (setq org-agenda-compact-blocks nil);; nil為加上分隔線，t為去掉
+;; 用describe-char來查你想要的seperator char code
+(setq org-agenda-block-separator 45)
 
 ;; (setq org-stuck-projects
 ;;       '("TODO=\"PROJECT\""
 ;;         ("ACTION" "WAITING")
 ;;         nil
 ;;         nil))
+
+;; Function to skip tag
+;; From http://stackoverflow.com/questions/10074016/org-mode-filter-on-tag-in-agenda-view
+(defun ky/org-agenda-skip-tag (tag &optional others)
+  "Skip all entries that correspond to TAG.
+
+If OTHERS is true, skip all entries that do not correspond to TAG."
+  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
+        (current-headline (or (and (org-at-heading-p)
+                                   (point))
+                              (save-excursion (org-back-to-heading)))))
+    (if others
+        (if (not (member tag (org-get-tags-at current-headline)))
+            next-headline
+          nil)
+      (if (member tag (org-get-tags-at current-headline))
+          next-headline
+        nil))))
 
 (setq org-agenda-custom-commands
       '(
@@ -916,12 +913,16 @@ unwanted space when exporting org-mode to html."
 
 		  (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
 												   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
-          (stuck "") ;; review stuck projects as designated by org-stuck-projects
+;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
 		  (todo ""
 				((org-agenda-overriding-header "All other TODOs")
 				 (org-agenda-todo-ignore-scheduled t)
 				 (org-agenda-todo-ignore-deadlines t)
-				 (org-agenda-todo-ignore-with-date t)))
+				 (org-agenda-todo-ignore-with-date t)
+                 (org-agenda-todo-ignore-timestamp t)
+				 (org-agenda-skip-function '(ky/org-agenda-skip-tag "Project"))
+				 ))
+          (tags-todo "Project" ((org-agenda-overriding-header "Projects' TODOs")))
           )) ;; review waiting items
         ;; ...other commands here
 
@@ -969,6 +970,7 @@ unwanted space when exporting org-mode to html."
 						   ("School.org" :maxlevel . 1)
 						   ("Learning.org" :maxlevel . 1)
 						   ("Project.org" :maxlevel . 2)
+                           ("Event.org" :maxlevel . 1)
 						   ("Reading.org" :maxlevel . 1)))
 
 
@@ -989,19 +991,36 @@ unwanted space when exporting org-mode to html."
 
 ;;Org-Capture
 (setq org-default-notes-file (concat org-directory "/notes.org"))
-
 (define-key global-map "\C-cc" 'org-capture)
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
+      '(("t" "Todo" entry
+         (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
          "** TODO %? %^G\n  %i")
-		("s" "School" entry (file+headline (concat org-directory "/agenda/School.org") "School")
+		("s" "School" entry
+         (file+headline (concat org-directory "/agenda/School.org") "School")
          "** TODO %?\n  %i")
-        ("b" "Buy" entry (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
+        ("b" "Buy" entry
+         (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
          "** TODO %?\n  %i")
-        ("r" "Reading" entry (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
+        ("r" "Reading" entry
+         (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
          "** %? %i :Reading:")
-        ("d" "Diary" entry (file+datetree (concat org-directory "/diary/diary.org") "* %? %^g\n %i"))))
+        ("d" "Diary" entry
+         (file+datetree (concat org-directory "/diary/diary.org"))
+		 "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+        ("e" "Event" entry
+         (file+headline (concat org-directory "/agenda/Event.org") "Event")
+         "** %? %^g\n%^{Event's date&time? }T\n  %i")))
+
+;; I set my capture for diary like this:
+;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+;;but it create duplicated "datetree" every time call this capture http://paste.opensuse.org/21805084 Any body know what's happened?
+
+(setq cfw:org-capture-template
+      '("c" "calfw2org" entry
+        (file nil)
+        "** %?\n %(cfw:org-capture-day)"))
 
 ;; capture jump to link
 (define-key global-map "\C-cx"
@@ -1099,6 +1118,8 @@ unwanted space when exporting org-mode to html."
 \\XeTeXlinebreaklocale ``zh''
 \\XeTeXlinebreakskip = 0pt plus 1pt
 \\linespread{1.36}
+
+\\usepackage{multicol}
 
 % [FIXME] ox-latex 的設計不良導致hypersetup必須在這裡插入
 \\usepackage{hyperref}
@@ -1655,9 +1676,9 @@ unwanted space when exporting org-mode to html."
 
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
-(moe-light)
+(moe-dark)
+;;(moe-theme-random-color)
 
-;;(enable-theme 'moe-dark)
 
 
 ;;======================================================
@@ -1964,7 +1985,7 @@ With one prefix argument, the tarball is gziped."
 (require 'rainbow-mode)
 (global-set-key (kbd "C-x r a") 'rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
-
+(setq rainbow-ansi-colors nil)
 
 ;; CSS and Rainbow modes
 (defun all-css-modes() (css-mode) (rainbow-mode))
@@ -2456,7 +2477,8 @@ date: %Y-%m-%d %H:%M:%S
             (load-file x)))
         '("~/.emacs.d/private/school.el"
           "~/.emacs.d/private/twittering-filter-users.el"
-          "~/.emacs.d/private/flickr.el"))
+          "~/.emacs.d/private/flickr.el"
+		  "~/.emacs.d/private/family-birthday.el"))
 
 ;;======================================================
 ;; Python
@@ -2493,7 +2515,6 @@ date: %Y-%m-%d %H:%M:%S
 ;; (setq jedi:environment-virtualenv
 ;;       (append python-environment-virtualenv
 ;;               '("--python" "/usr/bin/python3")))
-
 
 
 
@@ -2601,7 +2622,20 @@ Return value is float."
 ;; gnus
 ;;======================================================
 ;;
-
+(require 'bbdb)
+(bbdb-initialize 'gnus 'message)
+(setq bbdb-north-american-phone-numbers-p nil)
+(bbdb-insinuate-message)
+(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+(setq bbdb-file (concat org-directory "/bbdb"))
+(setq bbdb-send-mail-style 'gnus)
+(setq bbdb-complete-name-full-completion t)
+(setq bbdb-completion-type 'primary-or-name)
+(setq bbdb-complete-name-allow-cycling t)
+(setq bbdb-offer-save 1
+	  bbdb-use-pop-up t
+	  bbdb-electric-p t
+	  bbdb-popup-target-lines 1)
 
 (setq gnus-select-method
       '(nnimap "gmail"
@@ -2705,12 +2739,12 @@ Return value is float."
    ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
  '(custom-safe-themes
    (quote
-	("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+    ("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
  '(org-agenda-files
    (quote
-	("~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
+    ("~/org/agenda/Event.org" "~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
  '(tab-width 4)
