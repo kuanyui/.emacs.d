@@ -293,10 +293,10 @@ delete backward until the parent directory."
 (setq ibuffer-saved-filter-groups
       (quote (("default"
                ("Dired" (mode . dired-mode))
-               ("Note" (or
+               ("Markdown" (or
 						(name . "^diary$")
-						(mode . markdown-mode)
-						(mode . rst-mode)))
+						(mode . markdown-mode)))
+               ("ReStructText" (mode . rst-mode))
 			   ("Web Development" (or
 					   (mode . css-mode)
 					   (mode . html-mode)
@@ -2310,10 +2310,16 @@ which fetch older tweets on reverse-mode."
 
 ;;插入blog的動態行間註解(需搭配CSS)
 ;; [FIXME] 請想個更好的function名...這個太容易忘記了
-(defun html-insert-inline-note ()
-  (interactive)
-  (insert "<span class=\"note\"><span class=\"content\"></span></span>")
-  (backward-char 36))
+(defun html-insert-inline-note (begin end)
+  (interactive "r")
+  (let* ((title (if (region-active-p)
+                    (buffer-substring-no-properties begin end)
+                  (read-from-minibuffer "標題: ")))
+         (content (read-from-minibuffer "內容: ")))
+    (when (region-active-p)
+      (delete-region begin end)
+      (goto-char begin))
+    (insert (format "<span class=\"note\">%s<span class=\"content\">%s</span></span>" title content))))
 (define-key markdown-mode-map (kbd "C-c i n") 'html-insert-inline-note)
 
 ;; 在hexo根目錄下執行，會呼叫`hexo new`新增文章，並自動打開。
@@ -2663,6 +2669,21 @@ Return value is float."
       '(gnus-thread-sort-by-number
         gnus-thread-sort-by-date))
 
+;; 避免使用者在神智不清的情況下幹出無法挽回的蠢事
+(setq message-confirm-send t)
+(defun message-test-mind-before-send ()
+  (interactive)
+  (let* ((a (random 50))
+         (b (random 15))
+         (ans (+ a b))
+         (input (string-to-int (read-from-minibuffer (format "%s + %s = " a b)))))
+    (if (eq input ans)
+        (message-send-and-exit)
+      (progn (message "Wrong answer, please try again")
+             (sleep-for 2)
+             (message-test-mind-before-send)
+             ))))
+(define-key message-mode-map (kbd "C-c C-c") 'message-test-mind-before-send)
 
 ;; vlf
 (add-hook 'find-file-hook (lambda ()
