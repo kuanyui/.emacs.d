@@ -1,4 +1,3 @@
-
 ;;kuanyui's ~/.emacs
 
 (setq user-mail-address "azazabc123@gmail.com")
@@ -66,44 +65,44 @@
 ;; ============================================
 ;; Coldnew's Font Size Conf for Org-Table
 ;; ============================================
- ;; 特殊字型設定
- (when (window-system)
+;; 特殊字型設定
+(when (window-system)
   (defvar emacs-english-font "DejaVu Sans Mono"
     "The font name of English.")
- 
+  
   (defvar emacs-cjk-font "文泉驛等寬微米黑"
     "The font name for CJK.")
- 
-  (defvar emacs-font-size-pair '(15 . 18)
+  
+  (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
- 
+  
   (defvar emacs-font-size-pair-list
-    '(( 5 .  6) (10 . 12)
+    '(( 5 .  6) (10 . 12) (12 . 14)
       (13 . 16) (15 . 18) (17 . 20)
       (19 . 22) (20 . 24) (21 . 26)
       (24 . 28) (26 . 32) (28 . 34)
       (30 . 36) (34 . 40) (36 . 44))
     "This list is used to store matching (englis . chinese) font-size.")
- 
+  
   (defun font-exist-p (fontname)
     "Test if this font is exist or not."
     (if (or (not fontname) (string= fontname ""))
         nil
       (if (not (x-list-fonts fontname)) nil t)))
- 
+  
   (defun set-font (english chinese size-pair)
     "Setup emacs English and Chinese font on x window-system."
- 
+    
     (if (font-exist-p english)
         (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
- 
+    
     (if (font-exist-p chinese)
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
           (set-fontset-font (frame-parameter nil 'font) charset
                             (font-spec :family chinese :size (cdr size-pair))))))
-;; Setup font size based on emacs-font-size-pair
+  ;; Setup font size based on emacs-font-size-pair
   (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair)
- 
+  
   (defun emacs-step-font-size (step)
     "Increase/Decrease emacs's font size."
     (let ((scale-steps emacs-font-size-pair-list))
@@ -114,18 +113,18 @@
       (when emacs-font-size-pair
         (message "emacs font size set to %.1f" (car emacs-font-size-pair))
         (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair))))
- 
+  
   (defun increase-emacs-font-size ()
     "Decrease emacs's font-size acording emacs-font-size-pair-list."
     (interactive) (emacs-step-font-size 1))
- 
+  
   (defun decrease-emacs-font-size ()
     "Increase emacs's font-size acording emacs-font-size-pair-list."
     (interactive) (emacs-step-font-size -1))
- 
+  
   (global-set-key (kbd "C-=") 'increase-emacs-font-size)
   (global-set-key (kbd "C--") 'decrease-emacs-font-size)
- )
+  )
 ;;======================================================
 ;; 基本設定
 ;;======================================================
@@ -141,6 +140,15 @@
 (require 'undo-tree)
 (global-undo-tree-mode)
 (global-set-key (kbd "C-M-_") 'undo-tree-redo)
+
+;; 讓手遠離方向鍵
+(global-set-key (kbd "M-I") 'previous-line)
+(global-set-key (kbd "M-J") 'left-char)
+(global-set-key (kbd "M-K") 'next-line)
+(global-set-key (kbd "M-L") 'right-char)
+(global-set-key (kbd "M-P") 'next-buffer)
+(global-set-key (kbd "M-N") 'previous-buffer)
+
 
 ;; Enhanced minibuffer & find-file! 加強minibuffer和find-file！
 ;; 我一直無法忍受helm和ido-mode的find-file設計，但又覺得他們有部份功能
@@ -236,7 +244,7 @@ delete backward until the parent directory."
 
 (require 'hungry-delete)
 (global-hungry-delete-mode t)
-(global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
+;; (global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
 
 ;; 幹掉沒啥屁用只會按錯的<menu>
 (global-unset-key (kbd "<menu>"))
@@ -294,16 +302,20 @@ delete backward until the parent directory."
       (quote (("default"
                ("Dired" (mode . dired-mode))
                ("Markdown" (or
-						(name . "^diary$")
-						(mode . markdown-mode)))
+                            (name . "^diary$")
+                            (mode . markdown-mode)))
                ("ReStructText" (mode . rst-mode))
+               ("JS" (or
+                      (mode . javascript-mode)
+                      (mode . js2-mode)
+                      (mode . json-mode)
+                      (mode . nodejs-repl-mode)))
 			   ("Web Development" (or
-					   (mode . css-mode)
-					   (mode . html-mode)
-					   (mode . stylus-mode)
-					   (mode . web-mode)
-					   (mode . javascript-mode)
-					   (name . "\\.yml$")))
+                                   (mode . css-mode)
+                                   (mode . html-mode)
+                                   (mode . stylus-mode)
+                                   (mode . web-mode)
+                                   (name . "\\.yml$")))
                ("Agenda Files"
                 (filename . "agenda/.+.org$"))
 
@@ -475,7 +487,7 @@ delete backward until the parent directory."
 (setq inhibit-splash-screen t)
 
 (setq initial-scratch-message
-";; The real productivity problem people have is procrastination. It's
+      ";; The real productivity problem people have is procrastination. It's
 ;; something of a dirty little secret, but everyone procrastinates -
 ;; severely. It's not just you. But that doesn't mean you shouldn't try to
 ;; stop it.  What is procrastination? To the outside observer, it looks like
@@ -798,6 +810,13 @@ blockquote p a {
 }
 .tag { float:right; color:red; }
 
+h2.footnotes {
+    margin-left: 0;
+}
+#text-footnotes {
+    margin-left: 30px;
+}
+
 </style>")
 
 ;;(add-function :override org-html-checkbox
@@ -913,7 +932,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 		  (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
 												   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
-;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
+          ;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
 		  (todo ""
 				((org-agenda-overriding-header "All other TODOs")
 				 (org-agenda-todo-ignore-scheduled t)
@@ -1072,27 +1091,6 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 (define-key org-mode-map (kbd "C-c C-x t") 'org-clock-sum-today-by-tags)
 
-(define-skeleton org-export-skeleton
-  "Inserts my org export skeleton into current buffer.
-    This only makes sense for empty buffers."
-  "Title: "
-  "#+TITLE:     " str | " *** Title *** " " " \n
-  "#+AUTHOR:    "(getenv "USER")" " \n
-  "#+EMAIL:     user-mail-address" \n
-  "#+DATE:      "(insert (format-time-string "%Y/%m/%d（%a）%H:%M" )) \n
-  "#+DESCRIPTION:" \n
-  "#+KEYWORDS:" \n
-  "#+LANGUAGE:  zh" \n
-  "#+OPTIONS:   H:3 num:nil toc:nil \\n:t @:t ::t |:t ^:t -:t f:t *:t <:t" \n
-  "#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc email:t" \n
-  "#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js" \n
-  "#+EXPORT_SELECT_TAGS: export" \n
-  "#+EXPORT_EXCLUDE_TAGS: noexport" \n
-  "#+LINK_UP:   " \n
-  "#+LINK_HOME: " \n
-  "#+XSLT:" \n
-  )
-(global-set-key (kbd "C-c i t") 'org-export-skeleton)
 
 (setq org-latex-classes
       '(("article"
@@ -1205,6 +1203,9 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (setq org-src-fontify-natively t)
 
 (require 'ox-html5slide)
+
+(add-to-list 'load-path "~/.emacs.d/lisps/org-ioslide/")
+(require 'ox-ioslide)
 
 ;;======================================================
 ;; LaTeX
@@ -1343,7 +1344,17 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (define-key twittering-mode-map (kbd "M-w") 'twittering-push-tweet-onto-kill-ring)
 (define-key twittering-mode-map (kbd "C-w") 'twittering-push-uri-onto-kill-ring)
 (define-key twittering-mode-map (kbd "D") 'twittering-direct-messages-timeline)
+(define-key twittering-mode-map (kbd "S") 'twittering-sent-direct-messages-timeline)
+(define-key twittering-mode-map (kbd "q") 'twittering-bury-main-timeline-buffer)
 
+(defun twittering-bury-main-timeline-buffer ()
+  "If in main timeline buffer (:home), bury-buffer.
+If not, kill-buffer instead. "
+  (interactive)
+  (if (and (equal (buffer-name) ":home")
+           (eq major-mode 'twittering-mode))
+      (bury-buffer)
+    (kill-buffer)))
 ;;讓twittering-status-buffer支援換行
 (setq twittering-status-format
       "%i %s,%p %@:
@@ -1490,9 +1501,9 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
               end (region-end))))
     (message "searching for %s ..." (buffer-substring begin end))
     (with-output-to-temp-buffer "*Stardict*"
-        (prin1 (shell-command-to-string
-                (concat "sdcv -n "
-                        (buffer-substring begin end)))))
+      (prin1 (shell-command-to-string
+              (concat "sdcv -n "
+                      (buffer-substring begin end)))))
     (switch-to-buffer-other-window "*Stardict*")
     (let (buffer-read-only)
       (delete-region (- (point-max) 2) (point-max))
@@ -1665,19 +1676,17 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;; Theme
 ;;======================================================
 
-(add-to-list 'load-path "~/.emacs.d/under-construction/powerline/")
+(add-to-list 'load-path "~/.emacs.d/lisps/powerline/")
 (require 'powerline)
-;; (setq powerline-default-separator 'arrow)
-
-
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
 (add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
 
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
-(moe-dark)
+(moe-light)
 ;;(moe-theme-random-color)
+(powerline-moe-theme)
 
 
 
@@ -1762,6 +1771,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
 (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
+(define-key mc/mark-more-like-this-extended-keymap (kbd "DEL") 'backward-delete-char-untabify)
+
 
 ;; set-mark, multiple-cursors & cua-mode
 ;; (cua-mode t)
@@ -1773,7 +1784,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 (add-hook 'org-mode-hook
           (lambda ()
-;;            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
+            ;;            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
             (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-word-mode)
             (define-key org-mode-map (kbd "C-c C-e") 'org-export-dispatch)
             ))
@@ -1953,17 +1964,58 @@ With one prefix argument, the tarball is gziped."
 (define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
 ;;======================================================
-;; Templates
+;; `auto-insert' Templates
 ;;======================================================
+(require 'autoinsert)
+(setq auto-insert-query nil)
+(setq auto-insert-directory "~/.emacs.d/templates/")
+(auto-insert-mode t)
 
-;; 開新檔案名為 .gitignore 時，自動插入template
-(add-hook 'find-file-hooks 'insert-gitignore-template)
-(defun insert-gitignore-template ()
+;; Python
+(define-auto-insert
+  '("\\.py\\'" . "Python")
+  '(nil
+    "# coding=utf8\n"
+    "# -*- coding: utf8 -*-\n"
+    "# vim: set fileencoding=utf8 :\n"
+    "import sys, os, math\n"
+    "# import numpy as np\n"
+    "# import scipy as sp\n"
+    "# import ROOT\n"
+    "# import pyfits as pf\n"
+    ))
+
+;; Org
+(define-auto-insert
+  '("\\.org\\'" . "Org")
+  '("Title: "
+    "#+TITLE: " str "\n"
+    "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
+    "#+AUTHOR: " user-full-name "\n"
+    "#+EMAIL: " user-mail-address "\n"
+    "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \\n:nil ^:t arch:headline\n"
+    "#+OPTIONS: author:t c:nil creator:comment d:(not \"LOGBOOK\") date:t\n"
+    "#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t\n"
+    "#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t\n"
+    "#+CREATOR: " (format "Emacs %s (Org mode %s)"
+                          emacs-version (org-version nil nil)) "\n"
+    "#+DESCRIPTION:\n"
+    "#+EXCLUDE_TAGS: noexport\n"
+    "#+KEYWORDS:\n"
+    "#+LANGUAGE: en\n"
+    "#+SELECT_TAGS: export\n"
+    ))
+
+;; gitignore
+(defun touch-gitignore ()
   (interactive)
-  (when (and
-         (string-match "^\\.gitignore$" (buffer-file-name))
-         (eq 1 (point-max)))
-    (insert-file "~/.emacs.d/templates/gitignore")))
+  (let* ((file (concat
+                (read-directory-name "Place ignore file to: " nil nil) ".gitignore")))
+    (if (file-exists-p file)
+        (message ".gitignore file has been exist, abort.")
+      (progn
+        (copy-file (concat auto-insert-directory "template.gitignore") file)
+        (message "Done.")))))
 
 ;;======================================================
 ;; Rainbow-delimiters 括號上色
@@ -2091,30 +2143,6 @@ With one prefix argument, the tarball is gziped."
                           ("'[-a-zA-Z_][-a-zA-Z0-9_:/]*" 0 'font-lock-constant-face)
                           ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
                           ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
-(defun lookup-elisp-function-doc ()
-  "Look up the elisp function under the cursor."
-  (interactive)
-  (let (begin end)
-    (save-excursion
-      (re-search-backward "(")
-      (right-char)
-      (setq begin (point))
-      (re-search-forward "[A-z-/]+")
-      (setq end (point)))
-    (describe-function (intern (buffer-substring-no-properties begin end)))))
-
-(defun lookup-elisp-variable-doc ()
-  "Look up the variable under the cursor."
-  (interactive)
-  (let (begin end)
-    (save-excursion
-      (re-search-backward "[^A-z-_/]")
-      (right-char)
-      (setq begin (point))
-      (re-search-forward "[^A-z-_/]")
-      (left-char 1)
-      (setq end (point)))
-    (describe-variable (intern (buffer-substring-no-properties begin end)))))
 
 (define-key emacs-lisp-mode-map (kbd "C-h 1") 'lookup-elisp-function-doc)
 (define-key emacs-lisp-mode-map (kbd "C-h 2") 'lookup-elisp-variable-doc)
@@ -2209,6 +2237,7 @@ which fetch older tweets on reverse-mode."
 (require 'tree-mode)
 (require 'windata)
 (require 'dirtree)
+(define-key dirtree-mode-map (kbd "TAB") 'tree-mode-toggle-expand)
 (set-face-foreground 'widget-button "orange")
 
 ;;======================================================
@@ -2269,6 +2298,11 @@ which fetch older tweets on reverse-mode."
       (require 'tern-auto-complete)
       (tern-ac-setup)))
 
+;; (define-key js2-mode-map (kbd "<f5>") 'call-nodejs-command)
+(defun call-nodejs-command ()
+  (interactive)
+  (save-buffer)(shell-command (format "node %s" (buffer-name))))
+
 ;; 如果當前user是root，prompt改成#
 (setq eshell-prompt-function
       '(lambda ()
@@ -2303,125 +2337,6 @@ which fetch older tweets on reverse-mode."
 (line-number-mode 1)
 ;; Show column-number in the mode line
 ;;(column-number-mode t)
-
-;;======================================================
-;; Hexo相關
-;;======================================================
-
-;;插入blog的動態行間註解(需搭配CSS)
-;; [FIXME] 請想個更好的function名...這個太容易忘記了
-(defun html-insert-inline-note (begin end)
-  (interactive "r")
-  (let* ((title (if (region-active-p)
-                    (buffer-substring-no-properties begin end)
-                  (read-from-minibuffer "標題: ")))
-         (content (read-from-minibuffer "內容: ")))
-    (when (region-active-p)
-      (delete-region begin end)
-      (goto-char begin))
-    (insert (format "<span class=\"note\">%s<span class=\"content\">%s</span></span>" title content))))
-(define-key markdown-mode-map (kbd "C-c i n") 'html-insert-inline-note)
-
-;; 在hexo根目錄下執行，會呼叫`hexo new`新增文章，並自動打開。
-;; (defun hexo-new ()
-;;   (interactive)
-;;   (let (OUTPUT current-dir)
-;;     (setq current-dir )
-;;     (setq OUTPUT (shell-command-to-string
-;;      (concat "hexo new '" (read-from-minibuffer "Title of the new article: ") "'")))
-;;   (string-match "/.*\\.md$" OUTPUT)
-;;   (find-file (match-string 0 OUTPUT))))
-
-;; 如果在一個 hexo repository 下，執行 hexo new
-(require 'dired-single) ; 如果已經 require 過就不需要再加這行。
-(defun hexo-new ()
-  "Call `hexo new` if under a hexo's child directory."
-  (interactive)
-  (let (BUFFER-STRING OUTPUT)
-    (if (file-exists-p (format "%s%s" default-directory "_config.yml")) ;用這個
-        (progn
-          (with-temp-buffer
-            (insert-file-contents (format "%s%s" default-directory "_config.yml"))
-            (setq BUFFER-STRING (buffer-string)))
-          (if (and (string-match "title: " BUFFER-STRING)
-                   (string-match "url: " BUFFER-STRING)
-                   (string-match "new_post_name: " BUFFER-STRING))
-              (progn
-                (setq OUTPUT (shell-command-to-string
-                              (concat "hexo new '"
-                                      (read-from-minibuffer
-                                       "Title of the new article: ") "'")))
-                (string-match "/.*\\.md$" OUTPUT)
-                (find-file (match-string 0 OUTPUT)))))
-      (progn
-        (find-file default-directory)
-        (if (not (equal default-directory "/"))
-            (progn (dired-single-buffer "..")
-                   (hexo-new))
-          (progn
-            (kill-buffer)
-            (message "Not in a hexo or its child directory.")))))))
-
-;; 根據文章內容來 touch -t 文章以方便按照時間排序。
-(defun hexo-touch-files-in-dir-by-time ()
-  "`touch' markdown article files according their \"date: \" to
-make it easy to sort file according date in Dired.
-Please run this under _post/ or _draft/ within Dired buffer."
-  (interactive)
-  (let (current-file-name file-list)
-    (setq file-list (directory-files (dired-current-directory)))
-    (progn
-      (mapcar
-       (lambda (current-file-name)
-         (if (and (not (string-match "#.+#$" current-file-name))
-                  (not (string-match ".+~$" current-file-name))
-                  (not (string-match "^\.\.?$" current-file-name))
-                  (string-match ".+\.md$" current-file-name))
-             (let (touch-cmd head)
-               (setq head
-                     (shell-command-to-string
-                      (format "head -n 5 '%s'" current-file-name)))
-               (save-match-data
-                 (string-match "^date: \\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\) \\([0-9]+\\):\\([0-9]+\\):\\([0-9]+\\)$" head)
-                 (setq touch-cmd
-                       (format "touch -t %s%s%s%s%s.%s %s"
-                               (match-string 1 head)
-                               (match-string 2 head)
-                               (match-string 3 head)
-                               (match-string 4 head)
-                               (match-string 5 head)
-                               (match-string 6 head)
-                               current-file-name
-                               )))
-               (shell-command touch-cmd))
-           ))
-       file-list))) ;; 這個file-list為lambda的arg
-  (revert-buffer)
-  (message "Done."))
-
-
-;; 將當前檔案在 _post 與 _drafts 兩者之間切換（mv）。
-(defun hexo-move-article ()
-  "Move current file between _post and _draft"
-  (interactive)
-  (let* ((cur-file (buffer-name))
-         (cur-dir default-directory)
-         (cur-path (buffer-file-name)))
-    (save-buffer)
-    (save-match-data
-      (if (string-match "\\(.+/\\)_posts/$" cur-dir)
-          (let* ((new-file-name (format "%s%s%s" (match-string 1 cur-dir) "_drafts/" cur-file)))
-            (kill-buffer)
-            (rename-file cur-path new-file-name)
-            (find-file new-file-name)
-            (message "Now in \"_drafts\""))
-        (if (string-match "\\(.+/\\)_drafts/$" cur-dir)
-            (let* ((new-file-name (format "%s%s%s" (match-string 1 cur-dir) "_posts/" cur-file)))
-              (kill-buffer)
-              (rename-file cur-path new-file-name)
-              (find-file new-file-name)
-              (message "Now in \"_posts\""))
-          (message "Current file doesn't in _posts or _drafts directory."))))))
 
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
@@ -2503,6 +2418,7 @@ date: %Y-%m-%d %H:%M:%S
 ;; (autoload 'guess-style-guess-all "guess-style" nil t)
 ;; (add-hook 'python-mode-hook 'guess-style-guess-all)
 ;; (global-guess-style-info-mode 1)
+
 (smart-tabs-insinuate 'c 'javascript 'python)
 ;; Info-look
 (require 'info-look)

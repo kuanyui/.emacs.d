@@ -79,7 +79,7 @@
     ("ableft" "←" nil 0)
     ("aboc" "℃" nil 0)
     ("abowo" "ˊ・ω・ˋ" nil 0)
-    ("abpz" "—" nil 2)
+    ("abpz" "－" nil 2)
     ("abright" "→" nil 2)
     ("abup" "↑" nil 0)
    ))
