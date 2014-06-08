@@ -149,11 +149,25 @@
 (global-set-key (kbd "M-P") 'next-buffer)
 (global-set-key (kbd "M-N") 'previous-buffer)
 
+;; Improved C-a
+(defun smart-beginning-of-line ()
+  "If current line indented, go to indented position, or go to
+  beginning-of-line. Press second time, go to beginning-of-line
+  whatever. "
+  (interactive)
+  (let ((indent-pos (progn
+                      (save-excursion
+                        (back-to-indentation)
+                        (point)))))
+    (if (eq (point) indent-pos)
+        (beginning-of-line)
+      (back-to-indentation))))
+(global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
-;; Enhanced minibuffer & find-file! 加強minibuffer和find-file！
-;; 我一直無法忍受helm和ido-mode的find-file設計，但又覺得他們有部份功能
-;; 實在很方便，例如能夠按DEL直接刪回上個目錄的路徑，或者整個路徑重新輸
-;; 入等。這裡做了幾個符合自己需要的功能：
+;; Enhanced minibuffer & find-file! 加強minibuffer和find-file！我一直
+;; 無法忍受helm和ido-mode的find-file設計，但又覺得他們有部份功能實在很
+;; 方便，例如能夠按DEL直接刪回上個目錄的路徑，或者整個路徑重新輸入等。
+;; 這裡做了幾個符合自己需要的功能：
 
 ;;   1. 如果minibuffer中是個目錄的樣式，按M-[DEL]就可以往前刪到parent dir
 ;;   2. 按一次C-a只是一般的beginning-of-line，但按第二次C-a的話：
