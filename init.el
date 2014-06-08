@@ -154,7 +154,47 @@
 (global-set-key (kbd "C-x C-p") 'previous-buffer)
 (global-set-key (kbd "C-x C-n") 'next-buffer)
 
+
+;;基本編輯加強
+(defun move-current-line-up ()
+  (interactive)
+  (when (> (line-number-at-pos) 1)
+    (let ((cur-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+          (cur-col (current-column)))
+      (delete-region (point-at-bol) (point-at-eol))
+      (delete-char -1)
+      (beginning-of-line)
+      (insert cur-line "\n")
+      (forward-line -1)
+      (goto-char (+ cur-col (point-at-bol))))))
+(global-set-key (kbd "M-<up>") 'move-current-line-up)
+(global-set-key (kbd "ESC <up>") 'move-current-line-up)
+(define-key org-mode-map (kbd "M-<up>") 'org-metaup)
+(define-key org-mode-map (kbd "ESC <up>") 'org-metaup)
+
+(defun move-current-line-down ()
+  (interactive)
+  (when (not (eq (line-number-at-pos)
+                 (count-lines (point-min) (point-max))))
+    (let ((cur-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+          (cur-col (current-column)))
+      (delete-region (point-at-bol) (point-at-eol))
+      (delete-char 1)
+      (forward-line 1)
+      (insert cur-line "\n")
+      (forward-line -1)
+      (goto-char (+ cur-col (point-at-bol))))))
+(global-set-key (kbd "M-<down>") 'move-current-line-down)
+(global-set-key (kbd "ESC <down>") 'move-current-line-down)
+(define-key org-mode-map (kbd "M-<down>") 'org-metadown)
+(define-key org-mode-map (kbd "ESC <down>") 'org-metadown)
+
+;; Known bug when bottom of buffer lacks of a newline.  But I don't
+;; want to deal with it because as you save-buffer, Emacs add a new
+;; line in the bottom of buffer.
+
 ;; Improved C-a
+;; [FIXME] 要不要再加上按三次變成插入新行啊=w=
 (defun smart-beginning-of-line ()
   "If current line indented, go to indented position, or go to
   beginning-of-line. Press second time, go to beginning-of-line
@@ -511,7 +551,7 @@ delete backward until the parent directory."
 ;; stop it.  What is procrastination? To the outside observer, it looks like
 ;; you're just doing something \"fun\" (like playing a game or reading the
 ;; news) instead of doing your actual work.
-;;                              - Aaron Swartz, HOWTO: Be more productive")
+;;                              - Aaron Swartz, HOWTO: Be more productive\n")
 ;;自動啟動flyspell-mode拼字檢查
 ;;(setq-default flyspell-mode t)
 ;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
