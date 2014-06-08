@@ -151,6 +151,8 @@
 ;; God-mode
 (require 'god-mode)
 (global-set-key (kbd "ESC `")     'god-mode-all)
+(global-set-key (kbd "C-x C-p") 'previous-buffer)
+(global-set-key (kbd "C-x C-n") 'next-buffer)
 
 ;; Improved C-a
 (defun smart-beginning-of-line ()
