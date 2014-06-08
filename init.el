@@ -148,6 +148,9 @@
 (global-set-key (kbd "M-L") 'right-char)
 (global-set-key (kbd "M-P") 'next-buffer)
 (global-set-key (kbd "M-N") 'previous-buffer)
+;; God-mode
+(require 'god-mode)
+(global-set-key (kbd "ESC `")     'god-mode-all)
 
 ;; Improved C-a
 (defun smart-beginning-of-line ()
@@ -178,9 +181,9 @@
 
 (defun minibuffer-beginning-of-line ()
   "Pressing C-a once, this's just a normal `beginning-of-line'.
-When pressing second time, and the string in minibuffer looks like a file path,
-it will *delete* whole minibuffer except for ~/ or / in the beginning of
-minibuffer."
+When pressing second time, and the string in minibuffer looks
+like a file path, it will *delete* whole minibuffer except for ~/
+or / in the beginning of minibuffer."
   (interactive)
   (defvar minibuffer-point-beginning-of-line nil)
   (if (eq minibuffer-point-beginning-of-line (point)) ;是否已經在 beginning-of-line
@@ -330,12 +333,10 @@ delete backward until the parent directory."
                                    (mode . stylus-mode)
                                    (mode . web-mode)
                                    (name . "\\.yml$")))
-               ("Agenda Files"
-                (filename . "agenda/.+.org$"))
-
-               ("Org" (or
-                       (mode . org-mode)
-                       (name . "^\\*Calendar\\*$")))
+               ("Python" (or (mode . qml-mode)
+                             (mode . python-mode)
+                             (mode . ipython-mode)
+                             (mode . inferior-python-mode)))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
 			   ("IRC" (or
@@ -350,8 +351,6 @@ delete backward until the parent directory."
                                    (mode . ruby-mode)))
                ("Perl"  (or (mode . cperl-mode)
                             (mode . perl-mode)))
-               ("Python" (or (mode . python-mode)
-                             (mode . ipython-mode)))
 			   ("Twitter" (mode . twittering-mode))
                ("Magit" (or (name . "*magit*")
                             (mode . magit-mode)))
@@ -367,10 +366,13 @@ delete backward until the parent directory."
                            (name . "\\*info\\*$")))
                ("Terminal" (or (mode . eshell-mode)
                                (mode . term-mode)
-                               (mode . inferior-python-mode)
                                (mode . eshell-mode)
                                (mode . comint-mode)
                                (name . "\\*scheme\\*$")))
+               ("Agenda Files" (filename . "agenda/.+.org$"))
+               ("Org" (or
+                       (mode . org-mode)
+                       (name . "^\\*Calendar\\*$")))
                ))))
 
 
@@ -1989,14 +1991,8 @@ With one prefix argument, the tarball is gziped."
 (define-auto-insert
   '("\\.py\\'" . "Python")
   '(nil
-    "# coding=utf8\n"
-    "# -*- coding: utf8 -*-\n"
-    "# vim: set fileencoding=utf8 :\n"
+    "# -*- coding: utf-8 -*-\n"
     "import sys, os, math\n"
-    "# import numpy as np\n"
-    "# import scipy as sp\n"
-    "# import ROOT\n"
-    "# import pyfits as pf\n"
     ))
 
 ;; Org
@@ -2418,7 +2414,17 @@ date: %Y-%m-%d %H:%M:%S
 ;;======================================================
 ;; Python
 ;;======================================================
-
+(require 'qml-mode)
+(add-to-list 'auto-mode-alist '("\\.qml\\'" . qml-mode))
+(add-hook 'qml-mode-hook '(lambda ()
+                            (local-set-key (kbd "<f5>") 'qml-call-qmlviewer)))
+(defun qml-call-qmlviewer ()
+  (interactive)
+  (save-buffer)
+  (let* ((file (replace-regexp-in-string "\\.qml$" ".py" (buffer-name))))
+    (if (file-exists-p (concat default-directory file))
+        (shell-command (format "python %s" file))
+      (shell-command (format "qmlviewer %s" (buffer-name))))))
 ;; (require 'highlight-indentation)
 ;; (add-hook 'python-mode-hook 'highlight-indentation)
 ;; (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
@@ -2456,7 +2462,7 @@ date: %Y-%m-%d %H:%M:%S
 
 ;; Python REPL (M-x run-python)
 (setq
- python-shell-interpreter "python3"
+ python-shell-interpreter "ipython"
  python-shell-interpreter-args ""
  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
@@ -2478,8 +2484,14 @@ date: %Y-%m-%d %H:%M:%S
 
 ;; Smart-Operator
 (require 'smart-operator)
-(add-hook 'python-mode-hook 'smart-operator-mode)
+;(add-hook 'python-mode-hook 'smart-operator-mode)
+(add-hook 'qml-mode-hook 'smart-operator-mode)
 (add-hook 'inferior-python-mode-hook 'smart-operator-mode)
+(setq smart-operator-list '("=" "<" ">" "%" "+" "-" "*" "/" "&" "|" "!" ":" "?" ","))
+
+(define-key smart-operator-mode-map "." nil)
+
+
 
 ;; setq tab-width to 4
 (add-hook 'python-mode-hook (lambda () (setq tab-width 4)))
@@ -2626,10 +2638,9 @@ Return value is float."
 
 ;; Swoop
 (require 'swoop)
-(global-set-key (kbd "C-z")   'helm-swoop)
+(global-set-key (kbd "C-z")     'helm-swoop)
 (global-set-key (kbd "C-x C-z") 'helm-multi-swoop)
-(global-set-key (kbd "M-z")   'helm-swoop-back-to-last-point)
-(global-set-key (kbd "C-x z") 'helm-multi-swoop-all)
+(global-set-key (kbd "C-x z")   'helm-multi-swoop-all)
 ;; (global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
 
 ;; Visual Regexp
