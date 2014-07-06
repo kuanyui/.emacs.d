@@ -1407,6 +1407,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;;  (set-face-foreground 'twittering-username-face "SkyBlue3"))
 ;;(add-hook 'twittering-mode-hook 'twittering-mode-hook-func)
 
+
+(define-key twittering-mode-map (kbd "r") 'twittering-toggle-or-retrieve-replied-statuses)
 (define-key twittering-mode-map (kbd "R") 'twittering-replies-timeline)
 (define-key twittering-mode-map (kbd "U") 'twittering-user-timeline)
 (define-key twittering-mode-map (kbd "W") 'twittering-update-status-interactive)
