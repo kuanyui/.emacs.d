@@ -158,6 +158,13 @@
 (global-undo-tree-mode)
 (global-set-key (kbd "C-M-_") 'undo-tree-redo)
 
+;;recents最近開啟的檔案，C-x C-r
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 35)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+;;(run-with-timer 0 (* 10 60) 'recentf-save-list)
+
 ;; 讓手遠離方向鍵
 (global-set-key (kbd "M-I") 'previous-line)
 (global-set-key (kbd "M-J") 'left-char)
@@ -166,119 +173,21 @@
 (global-set-key (kbd "M-P") 'next-buffer)
 (global-set-key (kbd "M-N") 'previous-buffer)
 ;; God-mode
-(require 'god-mode)
-(global-set-key (kbd "ESC `")     'god-mode-all)
-(global-set-key (kbd "C-x C-p") 'previous-buffer)
-(global-set-key (kbd "C-x C-n") 'next-buffer)
-
-
-;;基本編輯加強
-(defun move-current-line-up ()
-  (interactive)
-  (when (> (line-number-at-pos) 1)
-    (let ((cur-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
-          (cur-col (current-column)))
-      (delete-region (point-at-bol) (point-at-eol))
-      (delete-char -1)
-      (beginning-of-line)
-      (insert cur-line "\n")
-      (forward-line -1)
-      (goto-char (+ cur-col (point-at-bol))))))
-(global-set-key (kbd "M-<up>") 'move-current-line-up)
-(global-set-key (kbd "ESC <up>") 'move-current-line-up)
-(define-key org-mode-map (kbd "M-<up>") 'org-metaup)
-(define-key org-mode-map (kbd "ESC <up>") 'org-metaup)
-
-(defun move-current-line-down ()
-  (interactive)
-  (when (not (eq (line-number-at-pos)
-                 (count-lines (point-min) (point-max))))
-    (let ((cur-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
-          (cur-col (current-column)))
-      (delete-region (point-at-bol) (point-at-eol))
-      (delete-char 1)
-      (forward-line 1)
-      (insert cur-line "\n")
-      (forward-line -1)
-      (goto-char (+ cur-col (point-at-bol))))))
-(global-set-key (kbd "M-<down>") 'move-current-line-down)
-(global-set-key (kbd "ESC <down>") 'move-current-line-down)
-(define-key org-mode-map (kbd "M-<down>") 'org-metadown)
-(define-key org-mode-map (kbd "ESC <down>") 'org-metadown)
-
-;; Known bug when bottom of buffer lacks of a newline.  But I don't
-;; want to deal with it because as you save-buffer, Emacs add a new
-;; line in the bottom of buffer.
-
-;; Improved C-a
-;; [FIXME] 要不要再加上按三次變成插入新行啊=w=
-(defun smart-beginning-of-line ()
-  "If current line indented, go to indented position, or go to
-  beginning-of-line. Press second time, go to beginning-of-line
-  whatever. "
-  (interactive)
-  (let ((indent-pos (progn
-                      (save-excursion
-                        (back-to-indentation)
-                        (point)))))
-    (if (eq (point) indent-pos)
-        (beginning-of-line)
-      (back-to-indentation))))
-(global-set-key (kbd "C-a") 'smart-beginning-of-line)
-
-;; Enhanced minibuffer & find-file! 加強minibuffer和find-file！我一直
-;; 無法忍受helm和ido-mode的find-file設計，但又覺得他們有部份功能實在很
-;; 方便，例如能夠按DEL直接刪回上個目錄的路徑，或者整個路徑重新輸入等。
-;; 這裡做了幾個符合自己需要的功能：
-
-;;   1. 如果minibuffer中是個目錄的樣式，按M-[DEL]就可以往前刪到parent dir
-;;   2. 按一次C-a只是一般的beginning-of-line，但按第二次C-a的話：
-;;       (a) 如果是個路徑，會把~/或/以後的東西刪掉。
-;;       (b) 如果不是路徑，則整行刪掉。
-;;   3. 以上行為都不會把刪過的東西存到 kill-ring，所以可以放心用力刪，
-;;      而不用擔心會影響到目前的 kill-ring~
-
-(defun minibuffer-beginning-of-line ()
-  "Pressing C-a once, this's just a normal `beginning-of-line'.
-When pressing second time, and the string in minibuffer looks
-like a file path, it will *delete* whole minibuffer except for ~/
-or / in the beginning of minibuffer."
-  (interactive)
-  (defvar minibuffer-point-beginning-of-line nil)
-  (if (eq minibuffer-point-beginning-of-line (point)) ;是否已經在 beginning-of-line
-      (if (or (equal "~/" (substring-no-properties (buffer-string) (1- (point)) (+ 1 (point))))
-              (equal "/" (substring-no-properties (buffer-string) (1- (point)) (point))))
-          (progn
-            (re-search-forward "/" nil :no-error)
-            (delete-region (point) (point-max)))
-        (delete-region (point) (point-max))) ;整個string看起來不是路徑就全部刪掉。
-    (progn (move-beginning-of-line 1) ;不在 beginning-of-line的話
-           (setq minibuffer-point-beginning-of-line (point)))))
-
-(defun minibuffer-backward-delete-word (arg)
-  "*Delete* word backward instead of kill it in minibuffer.
-Besides, when the string in minibuffer looks like a file path, it will
-delete backward until the parent directory."
-  (interactive "p")
-  (if (and (eq (point) (point-max)) ;如果在行尾，且整串看起來是個檔案路徑
-           (string-match "~*/\\([^/\n]+/\\)+$" (buffer-string)))
-      (progn (re-search-backward "/." nil :no-error)
-             (delete-region (1+ (point)) (point-max))
-             (end-of-line))
-    ;; 下面這個只是一般的backward delete word而已
-    (delete-region (point) (progn (backward-word arg) (point)))))
-
-(define-key minibuffer-local-completion-map (kbd "C-a") 'minibuffer-beginning-of-line)
-(define-key minibuffer-local-completion-map (kbd "M-DEL") 'minibuffer-backward-delete-word)
-
+;; (require 'god-mode)
+;; (global-set-key (kbd "ESC `")     'god-mode-all)
+;; (global-set-key (kbd "C-x C-p") 'previous-buffer)
+;; (global-set-key (kbd "C-x C-n") 'next-buffer)
 
 ;; 行號
 ;; 設定例外：
 ;; 1. 某些mode開linum-mode會錯亂，例如term。遇到這類mode就不開啟linum。
 ;; 2. 當Org檔案太大太長太多標題時，行數會使Emacs變得非常遲緩，所以這裡設定成在開檔案時，
 ;; 如果為org檔案且行數 >1000 就不開linum-mode。
+(setq linum-right-space nil)
+(setq linum-left-space nil)
+(setq linum-format 'dynamic)
+(global-linum-mode t)
 
-(global-linum-mode 1)
 
 (setq inhibit-linum-mode-alist
       '(eshell-mode
@@ -299,9 +208,11 @@ delete backward until the parent directory."
     ad-do-it))
 
 
-;; 已經有行號就不用modeline裡的行號
+;; 已經有行號就不用mode-line裡的行號
 (setq line-number-mode nil)
 (column-number-mode)
+;; Indicate buffer size in mode-line
+(setq size-indication-mode t)
 
 ;; Highlight line number
 (require 'hlinum)
@@ -320,6 +231,7 @@ delete backward until the parent directory."
 
 (require 'hungry-delete)
 (global-hungry-delete-mode t)
+(global-set-key (kbd "C-x <deletechar>") 'global-hungry-delete-mode)
 ;; (global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
 
 ;; 幹掉沒啥屁用只會按錯的<menu>
@@ -396,6 +308,7 @@ delete backward until the parent directory."
                              (mode . python-mode)
                              (mode . ipython-mode)
                              (mode . inferior-python-mode)))
+               ("Ruby" (or (mode . ruby-mode)))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
 			   ("IRC" (or
@@ -406,8 +319,7 @@ delete backward until the parent directory."
                         (mode . lisp-mode)))
                ("Shell Script" (or (mode . shell-script-mode)
                                    (mode . shell-mode)
-                                   (mode . sh-mode)
-                                   (mode . ruby-mode)))
+                                   (mode . sh-mode)))
                ("Perl"  (or (mode . cperl-mode)
                             (mode . perl-mode)))
 			   ("Twitter" (mode . twittering-mode))
@@ -543,12 +455,7 @@ delete backward until the parent directory."
 ;;讓Emacs可以直接打開/顯示圖片。
 (setq auto-image-file-mode t)
 
-;;recents最近開啟的檔案，C-x C-r
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 35)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-;;(run-with-timer 0 (* 10 60) 'recentf-save-list)
+
 
 ;;同名檔案不混淆（同名檔案同時開啟時，會在buffer加上目錄名稱）
 (require 'uniquify)
@@ -716,6 +623,11 @@ body {
     box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
     padding-bottom: 30px;
 }
+
+#content > p {
+    padding-left: 60px;
+}
+
 
 #postamble {
     position: relative;
@@ -1339,6 +1251,36 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;; (if (file-exists-p abbrev-file-name)
 ;;     (quietly-read-abbrev-file))
 
+;; 哈哈哈輕鬆新增abbrev
+(defun abbrev-add-global (begin end)
+  "Select the string you like, then press C-x a g to add an
+abbrev for it."
+  (interactive "r")
+  (if (and begin end mark-active)
+      (let* ((expansion (buffer-substring-no-properties begin end))
+             (abbreviation (read-from-minibuffer (format "[Global] Abbrev of \"%s\": " expansion))))
+        (if (yes-or-no-p (format "%s => %s, Continue? " abbreviation expansion))
+            (progn
+              (define-abbrev global-abbrev-table abbreviation expansion)
+              (write-abbrev-file)
+              (message "The abbrev saved."))
+          (message "Interrupted by user.")))
+    (message "Please select the string you want to have an abbrev first.")))
+(global-set-key (kbd "C-x a g") 'abbrev-add-global)
+
+(defun abbrev-add-local (begin end)
+  (interactive "r")
+  (if (and begin end mark-active)
+      (let* ((expansion (buffer-substring-no-properties begin end))
+             (abbreviation (read-from-minibuffer (format "[Local] Abbrev of \"%s\": " expansion))))
+        (if (yes-or-no-p (format "%s => %s, Continue? " abbreviation expansion))
+            (progn
+              (define-mode-abbrev abbreviation expansion)
+              (write-abbrev-file))
+          (message "Interrupted by user.")))
+    (message "Please select the string you want to have an abbrev first.")))
+(global-set-key (kbd "C-x a l") 'abbrev-add-local)
+
 ;;======================================================
 ;; shell-script-mode
 ;;======================================================
@@ -1428,7 +1370,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
   "If in main timeline buffer (:home), bury-buffer.
 If not, kill-buffer instead. "
   (interactive)
-  (if (and (equal (buffer-name) ":home")
+  (if (and (or (equal (buffer-name) ":home")
+               (equal (buffer-name) ":direct_messages"))
            (eq major-mode 'twittering-mode))
       (bury-buffer)
     (kill-buffer)))
@@ -1649,52 +1592,6 @@ If not, kill-buffer instead. "
 ;; misc 雜項
 ;;======================================================
 
-;; 統計中英日文字數
-(defvar wc-regexp-chinese-char-and-punc
-  (rx (category chinese)))
-(defvar wc-regexp-chinese-punc
-  "[。，！？；：「」『』（）、【】《》〈〉—]")
-(defvar wc-regexp-english-word
-  "[a-zA-Z0-9-]+")
-(defun wc ()
-  "「較精確地」統計中/日/英文字數。
-- 平假名與片假名亦包含在「中日文字數」內，每個平/片假名都算單獨一個字（但片假
-  名不含連音「ー」）。
-- 英文只計算「單字數」，不含標點。
-- 韓文不包含在內。
-
-※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
-。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
-中間的點也被 Emacs 算為一個字而不是標點符號。"
-  (interactive)
-  (let ((chinese-char-and-punc 0)
-        (chinese-punc 0)
-        (english-word 0)
-        (chinese-char 0))
-    (save-excursion
-      ;; 中文（含標點、片假名）
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
-        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
-      ;; 中文標點符號
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
-        (setq chinese-punc (1+ chinese-punc)))
-      ;; 英文字數（不含標點）
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-english-word nil :no-error)
-        (setq english-word (1+ english-word))))
-    (setq chinese-char (- chinese-char-and-punc chinese-punc))
-    (message
-     (format "中日文字數（不含標點）：%s
-中日文字數（包含標點）：%s
-英文字數（不含標點）：%s
-=======================
-中英文合計（不含標點）：%s"
-             chinese-char chinese-char-and-punc english-word
-             (+ chinese-char english-word)))))
-
-
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
 
@@ -1728,26 +1625,8 @@ If not, kill-buffer instead. "
 ;;switch frames in a visual way (C-x o)
 (require 'switch-window)
 
-;;一個簡單的minor-mode，用來調整frame大小
-;;(define-minor-mode resize-frame
-;;  "A simple minor mode to resize-frame.
-;;C-c C-c to apply."
-;;  ;; The initial value.
-;;  :init-value nil
-;;  ;; The indicator for the mode line.
-;;  :lighter " ResizeFrame"
-;;  ;; The minor mode bindings.
-;;  :keymap
-;;  `(([up] . enlarge-window)
-;;    ([down] . shrink-window)
-;;    ([right] . enlarge-window-horizontally)
-;;    ([left] . shrink-window-horizontally)
-;;    ("\C-c\C-c" . (lambda ()
-;;                         (interactive)
-;;                         (setq resize-frame nil)
-;;                         (message "Done."))))
-;;  :global t)
-;;(global-set-key (kbd "C-x <f5>") 'resize-frame)
+;; resize frame easily
+(require 'resize-frame)
 
 ;;======================================================
 ;; Theme
@@ -1762,8 +1641,9 @@ If not, kill-buffer instead. "
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
 (moe-light)
+
 ;;(moe-theme-random-color)
-(powerline-moe-theme)
+;;(powerline-moe-theme)
 
 
 
@@ -1827,7 +1707,7 @@ If not, kill-buffer instead. "
           (lambda ()
             ;;            (add-to-list 'ac-sources 'ac-source-company-css)
             (define-key css-mode-map (kbd "<RET>") 'newline-and-indent)))
-
+(define-key prog-mode-map (kbd "<RET>") 'newline-and-indent)
 (setq ac-use-menu-map t)
 ;; 讓C-s可以在auto-complete選單裡使用。
 (define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch)
@@ -1878,28 +1758,32 @@ If not, kill-buffer instead. "
 ;;======================================================
 
 (require 'dired+)
-
+(setq dired-dwim-target t)
 ;; M-RET to call `kde-open` to open file.
-(defun dired-open-file ()
+(defun dired-open-file-with-external-program ()
   "Open file with external program in dired"
   (interactive)
   (let* ((file (dired-get-filename nil t)))
     (message "Opening %s..." file)
     (call-process "kde-open" nil 0 nil file)
     (message "Opening %s done" file)))
+(define-key dired-mode-map (kbd "M-RET") 'dired-open-file-with-external-program)
 
-(add-hook 'dired-mode-hook
-          (lambda ()
-            (define-key dired-mode-map (kbd "M-RET") 'dired-open-file)))
+(defun open-current-directory-with-external-program ()
+  "Open current directory with external program."
+  (interactive)
+  (call-process "kde-open" nil 0 nil (file-truename default-directory)))
+(define-key dired-mode-map (kbd "C-x C-j") 'open-current-directory-with-external-program)
 
-;; Use single dired buffer.
-(require 'dired-single)
-(define-key dired-mode-map (kbd "C-x RET") 'dired-find-file)
 
 ;; dired hide/show detail infomation
 ;; [FIXME] Emacs 24.4 will build-in `dired-hide-details-mode'.
-(require 'dired-details)
-(dired-details-install)
+;; (require 'dired-details)
+;; (dired-details-install)
+
+;; 'always means no asking; 'top means ask once
+(setq dired-recursive-copies 'top)
+;; (setq dired-recursive-deletes 'top)
 
 ;; 回到上層目錄後，自動把cursor移動到前一個目錄處
 (defun my-dired-backward ()
@@ -1909,16 +1793,22 @@ the previous directory."
   (let* ((DIR (buffer-name)))
     (if (equal DIR "*Find*")
         (quit-window t)
-      (progn (dired-single-buffer "..")
+      (progn (find-alternate-file "..")
              (re-search-forward DIR nil :no-error)
              (revert-buffer)))))
 
-(define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
-(define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
-(define-key dired-mode-map "^" 'my-dired-backward)
-(define-key dired-mode-map "q" 'my-dired-backward)
-(define-key dired-mode-map "f" 'dired-find-name-in-current-directory)
+;; 按Enter開檔案時Dired時不會一直開新的Dired buffer（按Enter時只用同一個Dired開檔案）
+(defun dired-my-find-alternate-file ()
+  (interactive)
+  (if (file-regular-p (dired-get-filename))
+      (dired-find-file)
+    (dired-find-alternate-file)))
+(define-key dired-mode-map (kbd "RET") 'dired-my-find-alternate-file) ; 按Enter開檔案
+(put 'dired-find-alternate-file 'disabled nil) ; 避免Dired問你一些囉唆的問題
+(define-key dired-mode-map (kbd "q") 'my-dired-backward)  ; 按q回到上層目錄
 
+;; 搜尋目前目錄
+(define-key dired-mode-map "f" 'dired-find-name-in-current-directory)
 (defun dired-find-name-in-current-directory ()
   (interactive)
   (find-name-dired default-directory
@@ -1929,9 +1819,6 @@ the previous directory."
 
 ;; 修正*Find*裡的中文亂碼問題
 (setq find-ls-option '("-print0 | xargs -0 ls -ald" . ""))
-;; 這玩意我根本從沒用過，不確定是什麼。
-;; (global-set-key [(f5)] 'dired-single-magic-buffer)
-;; (global-set-key [(meta f5)] 'dired-single-toggle-buffer-name)
 
 ;;hide didden file
 (require 'dired-x)
@@ -1949,12 +1836,10 @@ the previous directory."
     (setq v-dired-omit t))
   (dired-omit-caller)
   (revert-buffer))
-
 (defun dired-omit-caller ()
   (if v-dired-omit
       (setq dired-omit-mode t)
     (setq dired-omit-mode nil)))
-
 (define-key dired-mode-map (kbd "C-x M-o") 'dired-omit-switch)
 (add-hook 'dired-mode-hook 'dired-omit-caller)
 
@@ -1962,12 +1847,10 @@ the previous directory."
 ;;human-readable file size
 (setq dired-listing-switches "-alh")
 
-;;sort file
-(require 'dired-sort)
 
 ;;sort directories first
 (defun dired-directory-sort ()
-  "Dired sort hoOBok to list directories first."
+  "Dired sort hook to list directories first."
   (save-excursion
     (let (buffer-read-only)             ; 原來解除read-only是這樣寫的OAO...
       (forward-line 2) ;; beyond dir. header
@@ -1979,6 +1862,53 @@ the previous directory."
 
 (add-hook 'dired-after-readin-hook 'dired-directory-sort)
 
+;; Sort files!
+;; 按 s 排序檔案，會先問你要根據什麼屬性排序，而且紀錄下排序狀態，不會
+;; 跨 buffer 就不見了。
+(defun dired-sort-size ()
+  "Dired sort by size."
+  (interactive) (dired-sort-other (concat dired-listing-switches "S")))
+(defun dired-sort-extension ()
+  "Dired sort by extension."
+  (interactive) (dired-sort-other (concat dired-listing-switches "X")))
+(defun dired-sort-ctime ()
+  "Dired sort by create time."
+  (interactive) (dired-sort-other (concat dired-listing-switches "ct")))
+(defun dired-sort-utime ()
+  "Dired sort by access time."
+  (interactive) (dired-sort-other (concat dired-listing-switches "ut")))
+(defun dired-sort-time ()
+  "Dired sort by time."
+  (interactive) (dired-sort-other (concat dired-listing-switches "t")))
+(defun dired-sort-name ()
+  "Dired sort by name."
+  (interactive) (dired-sort-other (concat dired-listing-switches "")))
+
+(defvar v-dired-sort 'name)
+(defun dired-sort-and-remember ()
+  ""
+  (interactive)
+  (setq v-dired-sort
+        (intern
+         (completing-read "Sort by: " '(name size extension ctime utime time) nil t
+                          (cond ((eq v-dired-sort 'name) "time")
+                                ((eq v-dired-sort 'time) "name")
+                                ((eq v-dired-sort 'size) "name")
+                                (t nil)))))
+  (dired-sort-auto-apply))
+(defun dired-sort-auto-apply ()
+  (cond ((eq v-dired-sort 'name) (dired-sort-name))
+        ((eq v-dired-sort 'size) (dired-sort-size))
+        ((eq v-dired-sort 'extenstion) (dired-sort-extenstion))
+        ((eq v-dired-sort 'ctime) (dired-sort-ctime))
+        ((eq v-dired-sort 'utime) (dired-sort-utime))
+        ((eq v-dired-sort 'time) (dired-sort-time))))
+(add-hook 'dired-mode-hook 'dired-sort-auto-apply)
+(define-key dired-mode-map "s" 'dired-sort-and-remember)
+
+
+;; Filename filter
+;; (Just like C-i in KDE Dolphin)
 (defun dired-show-only (regexp)
   (interactive "sFiles to show (regexp): ")
   (dired-mark-files-regexp regexp)
@@ -1989,7 +1919,7 @@ the previous directory."
 (defun dired-open-mounted-media-dir ()
   (interactive)
   (find-file "/var/run/media/"))
-(define-key dired-mode-map (kbd "C-c m") 'dired-open-mounted-media-dir)
+(define-key dired-mode-map (kbd "C-c m m") 'dired-open-mounted-media-dir)
 
 (defun dired-add-to-smplayer-playlist ()
   "Add a multimedia file or all multimedia files under a directory into SMPlayer's playlist via Dired."
@@ -2011,8 +1941,8 @@ the previous directory."
           (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
         (message "This is not a supported audio or video file."))))
   (dired-next-line 1))
-
 (define-key dired-mode-map (kbd "M-a") 'dired-add-to-smplayer-playlist)
+
 (define-key dired-mode-map (kbd "<f2>") 'wdired-change-to-wdired-mode)
 
 
@@ -2059,8 +1989,8 @@ With one prefix argument, the tarball is gziped."
 ;; Org
 (define-auto-insert
   '("\\.org\\'" . "Org")
-  '("Title: "
-    "#+TITLE: " str "\n"
+  '(nil
+    "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-name))) "\n"
     "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
     "#+AUTHOR: " user-full-name "\n"
     "#+EMAIL: " user-mail-address "\n"
@@ -2128,16 +2058,13 @@ With one prefix argument, the tarball is gziped."
 (define-key web-mode-map (kbd "RET") 'newline-and-indent)
 
 ;;(setq-default show-trailing-whitespace nil)
-(defun toggle-show-trailing-whitespace ()
+(defun toggle-and-delete-trailing-whitespace ()
   "Toggle show-trailing-whitespace between t and nil"
   (interactive)
-  (cond ((equal current-prefix-arg nil)
-         (setq show-trailing-whitespace (not show-trailing-whitespace)))
-        ((equal current-prefix-arg '(4))
-         (progn
-           (if (yes-or-no-p "Deleting all useless whitespace, continue? ")
-               (delete-trailing-whitespace))))))
-(global-set-key (kbd "C-x ,") 'toggle-show-trailing-whitespace)
+  (setq show-trailing-whitespace t)
+  (yes-or-no-p "Deleting all useless whitespace, continue? ")
+  (delete-trailing-whitespace))
+(global-set-key (kbd "C-x ,") 'toggle-and-delete-trailing-whitespace)
 
 ;;(require 'org-html5presentation)
 (add-hook 'cperl-mode-hook (lambda () (perl-completion-mode t)))
@@ -2208,7 +2135,6 @@ With one prefix argument, the tarball is gziped."
 ;;        (t (:bold t :italic t)))
 ;;    "Font Lock mode face used for function calls."
 ;;    :group 'font-lock-highlighting-faces))
-
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(
                           ("'[-a-zA-Z_][-a-zA-Z0-9_:/]*" 0 'font-lock-constant-face)
@@ -2254,30 +2180,6 @@ With one `C-u' prefix, insert output following an arrow"
 
 ;; 跳到行號
 (global-set-key (kbd "C-x SPC") 'goto-line)
-
-(defun twittering-scroll-up()
-  "Scroll up if possible; otherwise invoke `twittering-goto-next-status',
-which fetch older tweets on non reverse-mode."
-  (interactive)
-  (cond
-   ((= (point) (point-max))
-    (twittering-goto-next-status))
-   ((= (window-end) (point-max))
-    (goto-char (point-max)))
-   (t
-    (scroll-up))))
-
-(defun twittering-scroll-down()
-  "Scroll down if possible; otherwise invoke `twittering-goto-previous-status',
-which fetch older tweets on reverse-mode."
-  (interactive)
-  (cond
-   ((= (point) (point-min))
-    (twittering-goto-previous-status))
-   ((= (window-start) (point-min))
-    (goto-char (point-min)))
-   (t
-    (scroll-down))))
 
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 
@@ -2456,9 +2358,13 @@ date: %Y-%m-%d %H:%M:%S
 ;;======================================================
 ;; 寫作加強
 ;;======================================================
-;; 在 Markdown-mode中插入URL或Flickr圖片等。
+;; Details: https://github.com/kuanyui/writing-utils.el
 (add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
-(load-file "~/.emacs.d/git/writing-utils/writing-utils.el")
+(require 'writing-utils)
+(require 'page-title)
+(require 'hexo)
+(require 'flickr)
+(require 'markdown-and-html)
 
 ;;======================================================
 ;; 私人的東西
@@ -2478,7 +2384,9 @@ date: %Y-%m-%d %H:%M:%S
 (require 'qml-mode)
 (add-to-list 'auto-mode-alist '("\\.qml\\'" . qml-mode))
 (add-hook 'qml-mode-hook '(lambda ()
-                            (local-set-key (kbd "<f5>") 'qml-call-qmlviewer)))
+                            (local-set-key (kbd "<f5>") 'qml-call-qmlviewer)
+                            (setq rainbow-mode t)
+                            (setq rainbow-delimiters-mode t)))
 (defun qml-call-qmlviewer ()
   (interactive)
   (save-buffer)
@@ -2500,6 +2408,12 @@ date: %Y-%m-%d %H:%M:%S
 ;; (add-hook 'python-mode-hook 'guess-style-guess-all)
 ;; (global-guess-style-info-mode 1)
 
+(org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (emacs-lisp . t)))
+(setq org-babel-python-command "python3")
+
 (smart-tabs-insinuate 'c 'javascript 'python)
 ;; Info-look
 (require 'info-look)
@@ -2512,14 +2426,20 @@ date: %Y-%m-%d %H:%M:%S
 (require 'python-info)
 
 ;; Jedi: auto complete for Python
+;; (setenv "PYTHONPATH" "/usr/lib64/python3.3/site-packages") ;啥鬼
+
 (require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
 ;; (setq jedi:environment-root "jedi")  ; or any other name you like
 ;; (setq jedi:environment-virtualenv
 ;;       (append python-environment-virtualenv
 ;;               '("--python" "/usr/bin/python3")))
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
-
+;;(require 'popwin)
+;; (custom-set-variables
+;;  '(display-buffer-function 'popwin:display-buffer))
+;; (push '("*jedi:doc*") popwin:special-display-config)
 
 ;; Python REPL (M-x run-python)
 (setq
@@ -2534,14 +2454,16 @@ date: %Y-%m-%d %H:%M:%S
  python-shell-completion-string-code
  "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
-(define-key python-mode-map (kbd "<f5>") 'python-compile-with-shell-command)
-(defun python-compile-with-shell-command ()
+(define-key python-mode-map (kbd "<f5>") 'python2-compile-with-shell-command)
+(defun python2-compile-with-shell-command ()
   (interactive)
-  (save-buffer)(shell-command (format "python %s" (buffer-name))))
-(define-key python-mode-map (kbd "<f6>") 'python-compile-with-shell-command)
+  (save-buffer)(shell-command (format "python2 %s" (buffer-name))))
+(define-key python-mode-map (kbd "<f6>") 'python3-compile-with-shell-command)
 (defun python3-compile-with-shell-command ()
   (interactive)
   (save-buffer)(shell-command (format "python3 %s" (buffer-name))))
+
+;;(define-key python-mode-map (kbd ",") 'smart-operator-,)
 
 ;; Smart-Operator
 (require 'smart-operator)
@@ -2622,8 +2544,8 @@ The arguments can be int or float.
 Return value is float."
   (/ (float myVal) (float rangeMax)))
 
-(global-set-key (kbd "C-c m l") (lambda () (interactive) (moe-light)))
-(global-set-key (kbd "C-c m d") (lambda () (interactive) (moe-dark)))
+(global-set-key (kbd "C-c m l") 'moe-light)
+(global-set-key (kbd "C-c m d") 'moe-dark)
 
 
 
@@ -2699,9 +2621,12 @@ Return value is float."
 
 ;; Swoop
 (require 'swoop)
-(global-set-key (kbd "C-z")     'helm-swoop)
-(global-set-key (kbd "C-x C-z") 'helm-multi-swoop)
-(global-set-key (kbd "C-x z")   'helm-multi-swoop-all)
+;; Change the keybinds to whatever you like :)
+(global-set-key (kbd "M-i") 'helm-swoop)
+(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+(global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+
 ;; (global-set-key (kbd "C-c 6")   'swoop-migemo) ;; Option for Japanese match
 
 ;; Visual Regexp
@@ -2747,12 +2672,27 @@ Return value is float."
       ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"])
 ;; First day of the week
 (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+
+
+(defun org-qt4-add-doc-link ()
+  (interactive)
+  (let* ((begin (progn (right-char 1) (backward-word 1) (point)))
+         (end (progn (forward-word 1) (point)))
+         (Q (buffer-substring-no-properties begin end)))
+    (if (string-match "^Q[A-z0-9]+" Q)
+        (progn
+          (delete-region begin end)
+          (insert
+           (format "[[http://qt-project.org/doc/qt-4.8/%s.html][%s]]"
+                   (downcase Q) Q)))
+      (message "This seems not to belong to Qt namespace"))))
+(define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
+
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
 ;;
-
-
+(global-set-key (kbd "C-z") 'set-mark-command)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -2762,7 +2702,7 @@ Return value is float."
    ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
  '(custom-safe-themes
    (quote
-    ("dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+    ("ea3f08f94c7732c63ffc601f5fcd2632d1b99f9195bf3b55f4710a37fd985d04" "dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(mark-even-if-inactive t)
  '(org-agenda-files
@@ -2778,3 +2718,5 @@ Return value is float."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(put 'dired-find-alternate-file 'disabled nil)
