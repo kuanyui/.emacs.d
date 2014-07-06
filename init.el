@@ -17,7 +17,24 @@
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
 
-;;======================================================
+;; (let ((mozc-path "/usr/share/emacs/site-lisp/mozc.el"))
+;;    (when (file-exists-p mozc-path)
+;;      (load-file mozc-path)
+;;      (setq default-input-method "japanese-mozc")
+;;      ;; ac-mozc
+;;      (load-file "~/.emacs.d/lisps/ac-mozc/ac-mozc.el")
+;;      (define-key ac-mode-map (kbd "C-c C-\\") 'ac-complete-mozc)
+;; 
+;;      (require 'org)
+;;      (add-to-list 'ac-modes 'org-mode)
+;; 
+;;      (defun my-ac-mozc-setup ()
+;;        (setq ac-sources
+;;              '(ac-source-mozc ac-source-ascii-words-in-same-mode-buffers))
+;;        (set (make-local-variable 'ac-auto-show-menu) 0.2))
+;;      (add-hook 'org-mode-hook 'my-ac-mozc-setup)))
+
+;;-==================================================
 ;; GUI Emacs
 ;;======================================================
 
@@ -69,13 +86,13 @@
 (when (window-system)
   (defvar emacs-english-font "DejaVu Sans Mono"
     "The font name of English.")
-  
+
   (defvar emacs-cjk-font "文泉驛等寬微米黑"
     "The font name for CJK.")
-  
+
   (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
-  
+
   (defvar emacs-font-size-pair-list
     '(( 5 .  6) (10 . 12) (12 . 14)
       (13 . 16) (15 . 18) (17 . 20)
@@ -83,26 +100,26 @@
       (24 . 28) (26 . 32) (28 . 34)
       (30 . 36) (34 . 40) (36 . 44))
     "This list is used to store matching (englis . chinese) font-size.")
-  
+
   (defun font-exist-p (fontname)
     "Test if this font is exist or not."
     (if (or (not fontname) (string= fontname ""))
         nil
       (if (not (x-list-fonts fontname)) nil t)))
-  
+
   (defun set-font (english chinese size-pair)
     "Setup emacs English and Chinese font on x window-system."
-    
+
     (if (font-exist-p english)
         (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
-    
+
     (if (font-exist-p chinese)
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
           (set-fontset-font (frame-parameter nil 'font) charset
                             (font-spec :family chinese :size (cdr size-pair))))))
   ;; Setup font size based on emacs-font-size-pair
   (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair)
-  
+
   (defun emacs-step-font-size (step)
     "Increase/Decrease emacs's font size."
     (let ((scale-steps emacs-font-size-pair-list))
@@ -113,15 +130,15 @@
       (when emacs-font-size-pair
         (message "emacs font size set to %.1f" (car emacs-font-size-pair))
         (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair))))
-  
+
   (defun increase-emacs-font-size ()
     "Decrease emacs's font-size acording emacs-font-size-pair-list."
     (interactive) (emacs-step-font-size 1))
-  
+
   (defun decrease-emacs-font-size ()
     "Increase emacs's font-size acording emacs-font-size-pair-list."
     (interactive) (emacs-step-font-size -1))
-  
+
   (global-set-key (kbd "C-=") 'increase-emacs-font-size)
   (global-set-key (kbd "C--") 'decrease-emacs-font-size)
   )
