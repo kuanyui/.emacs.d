@@ -9,6 +9,8 @@
   '(
    ))
 
+(define-abbrev-table 'bbdb-mode-abbrev-table '())
+
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
 (define-abbrev-table 'bookmark-bmenu-mode-abbrev-table '())
@@ -74,12 +76,15 @@
     ("abcry" "・ﾟ・｡･ﾟ･(つД｀)" nil 0)
     ("abcry1" "(´；д；｀)" nil 0)
     ("abcryn" "(;´༎ຶД༎ຶ`)" nil 0)
+    ("abdandin" "ˊ_>ˋ" nil 0)
     ("abdown" "↓" nil 0)
     ("abheart" "♥" nil 0)
     ("ableft" "←" nil 0)
     ("aboc" "℃" nil 0)
-    ("abowo" "ˊ・ω・ˋ" nil 0)
+    ("abowo" "ˊ・ω・ˋ" nil 4)
+    ("abpara" "【】" nil 1)
     ("abpz" "－" nil 2)
+    ("abrelax" "ˊvˋ" nil 0)
     ("abright" "→" nil 2)
     ("abup" "↑" nil 0)
    ))
@@ -93,6 +98,10 @@
 (define-abbrev-table 'ibuffer-mode-abbrev-table '())
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
+
+(define-abbrev-table 'image-dired-display-image-mode-abbrev-table '())
+
+(define-abbrev-table 'image-dired-thumbnail-mode-abbrev-table '())
 
 (define-abbrev-table 'inferior-js-mode-abbrev-table '())
 
@@ -192,6 +201,10 @@
 (define-abbrev-table 'reb-lisp-mode-abbrev-table '())
 
 (define-abbrev-table 'reb-mode-abbrev-table '())
+
+(define-abbrev-table 'rst-mode-abbrev-table '())
+
+(define-abbrev-table 'rst-toc-mode-abbrev-table '())
 
 (define-abbrev-table 'ruby-mode-abbrev-table '())
 
