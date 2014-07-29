@@ -304,8 +304,8 @@
                                    (mode . stylus-mode)
                                    (mode . web-mode)
                                    (name . "\\.yml$")))
-               ("Python" (or (mode . qml-mode)
-                             (mode . python-mode)
+               ("QML" (mode . qml-mode))
+               ("Python" (or (mode . python-mode)
                              (mode . ipython-mode)
                              (mode . inferior-python-mode)))
                ("Ruby" (or (mode . ruby-mode)))
@@ -316,6 +316,8 @@
 					   (mode . rcirc-mode)))
                ("Lisp" (or
                         (mode . emacs-lisp-mode)
+                        (mode . slime-mode)
+                        (name . "^\\*scratch\\*$")
                         (mode . lisp-mode)))
                ("Shell Script" (or (mode . shell-script-mode)
                                    (mode . shell-mode)
@@ -326,7 +328,6 @@
                ("Magit" (or (name . "*magit*")
                             (mode . magit-mode)))
                ("Emacs" (or
-                         (name . "^\\*scratch\\*$")
                          (name . "^\\*Messages\\*$")
 						 (name . "^\\*Compile-Log\\*$")))
                ("Help" (or (mode . woman-mode)
