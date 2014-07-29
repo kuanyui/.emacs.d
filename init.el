@@ -2604,20 +2604,7 @@ Return value is float."
 ;; gnus
 ;;======================================================
 ;;
-(require 'bbdb)
-(bbdb-initialize 'gnus 'message)
-(setq bbdb-north-american-phone-numbers-p nil)
-(bbdb-insinuate-message)
-(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-(setq bbdb-file (concat org-directory "/bbdb"))
-(setq bbdb-send-mail-style 'gnus)
-(setq bbdb-complete-name-full-completion t)
-(setq bbdb-completion-type 'primary-or-name)
-(setq bbdb-complete-name-allow-cycling t)
-(setq bbdb-offer-save 1
-	  bbdb-use-pop-up t
-	  bbdb-electric-p t
-	  bbdb-popup-target-lines 1)
+
 
 (setq gnus-select-method
       '(nnimap "gmail"
