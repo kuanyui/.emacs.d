@@ -1,5 +1,5 @@
 # ˊ・ω・ˋ Emacs~~
-This is an init file for non-programmer.
+This is an init file for non-programmer. Without any warranty surely because this is just for my personal usage. =w=+
 
 ## Installation
 

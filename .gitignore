@@ -27,3 +27,7 @@ org-clock-save.el
 /places
 /org-clock-save_flymake.el
 /.directory
+/image-dired/
+/lisps/emacs-calfw/
+/lisps/org-ioslide/
+/lisps/powerline/
