@@ -1618,6 +1618,12 @@ If not, kill-buffer instead. "
 ;;======================================================
 ;; misc 雜項
 ;;======================================================
+;; Fuck the Speeching Censorship
+(add-to-list 'load-path "~/Dropbox/config/Emacs/.emacs.d/under-construction/fsc/")
+(load-file "~/Dropbox/config/Emacs/.emacs.d/under-construction/fsc/fsc.el")
+
+(require 'fsc)
+(global-set-key (kbd "C-c f") 'fsc)
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
