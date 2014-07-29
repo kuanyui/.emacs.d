@@ -1190,6 +1190,18 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (require 'ob-latex)
 (setq org-src-fontify-natively t)
 
+;; Automatically generate LaTeX preview picture.
+(define-key org-mode-map (kbd "$") (lambda ()
+                                     (interactive)
+                                     (insert "$")
+                                     (save-excursion
+                                       (left-char 1)
+                                       (if (org-inside-LaTeX-fragment-p)
+                                           (progn
+                                             (right-char 2)
+                                             (org-preview-latex-fragment))))))
+
+
 (require 'ox-html5slide)
 
 (add-to-list 'load-path "~/.emacs.d/lisps/org-ioslide/")
