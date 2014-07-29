@@ -2427,7 +2427,7 @@ date: %Y-%m-%d %H:%M:%S
   (save-buffer)
   (let* ((file (replace-regexp-in-string "\\.qml$" ".py" (buffer-name))))
     (if (file-exists-p (concat default-directory file))
-        (shell-command (format "python %s" file))
+        (shell-command (format "python3 %s" file))
       (shell-command (format "qmlviewer %s" (buffer-name))))))
 ;; (require 'highlight-indentation)
 ;; (add-hook 'python-mode-hook 'highlight-indentation)
@@ -2493,11 +2493,11 @@ date: %Y-%m-%d %H:%M:%S
  python-shell-completion-string-code
  "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
-(define-key python-mode-map (kbd "<f5>") 'python2-compile-with-shell-command)
+(define-key python-mode-map (kbd "<f6>") 'python2-compile-with-shell-command)
 (defun python2-compile-with-shell-command ()
   (interactive)
   (save-buffer)(shell-command (format "python2 %s" (buffer-name))))
-(define-key python-mode-map (kbd "<f6>") 'python3-compile-with-shell-command)
+(define-key python-mode-map (kbd "<f5>") 'python3-compile-with-shell-command)
 (defun python3-compile-with-shell-command ()
   (interactive)
   (save-buffer)(shell-command (format "python3 %s" (buffer-name))))
