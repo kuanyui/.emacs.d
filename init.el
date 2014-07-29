@@ -148,7 +148,7 @@
 (set-default 'tab-width 4)
 (setq default-tab-width 2)
 
-(setq indent-tabs-mode t)             ;不使用tab縮排
+(setq indent-tabs-mode nil)             ;不使用tab縮排
 ;;(setq line-spacing 4) ;;行距....要這幹麻啊orz
 (setq require-final-newline t)
 ;;超變態的undo-tree-mode
@@ -170,8 +170,8 @@
 (global-set-key (kbd "M-J") 'left-char)
 (global-set-key (kbd "M-K") 'next-line)
 (global-set-key (kbd "M-L") 'right-char)
-(global-set-key (kbd "M-P") 'next-buffer)
-(global-set-key (kbd "M-N") 'previous-buffer)
+(global-set-key (kbd "M-N") 'next-buffer)
+(global-set-key (kbd "M-P") 'previous-buffer)
 ;; God-mode
 ;; (require 'god-mode)
 ;; (global-set-key (kbd "ESC `")     'god-mode-all)
@@ -1343,6 +1343,8 @@ abbrev for it."
 (require 'popup-kill-ring)
 (global-set-key "\M-y" 'popup-kill-ring)
 
+(global-set-key (kbd "C-x M-y") 'browse-kill-ring)
+
 ;;======================================================
 ;;Twittering-mode:用Emacs上Twitter
 ;;======================================================
@@ -1384,7 +1386,9 @@ abbrev for it."
 If not, kill-buffer instead. "
   (interactive)
   (if (and (or (equal (buffer-name) ":home")
-               (equal (buffer-name) ":direct_messages"))
+               (equal (buffer-name) ":direct_messages")
+               (equal (buffer-name) ":direct_messages_sent")
+               (equal (buffer-name) ":replies"))
            (eq major-mode 'twittering-mode))
       (bury-buffer)
     (kill-buffer)))
@@ -1656,7 +1660,7 @@ If not, kill-buffer instead. "
 (global-set-key (kbd "C-x 3") 'sw-right)
 
 ;;switch frames in a visual way (C-x o)
-(require 'switch-window)
+;; (require 'switch-window)
 
 ;; resize frame easily
 (require 'resize-frame)
@@ -2700,6 +2704,10 @@ Return value is float."
 
 (setq google-translate-default-source-language "en"
       google-translate-default-target-language "zh")
+
+;; (require 'cedet)
+;; (require 'cedet-global)
+
 ;;======================================================
 ;; Calendar Framework
 ;;======================================================
