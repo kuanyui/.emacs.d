@@ -2408,12 +2408,20 @@ date: %Y-%m-%d %H:%M:%S
 ;;======================================================
 ;; Python
 ;;======================================================
+(require 'highlight-symbol)
+(define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+(define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
+(define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
+(define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+(add-hook 'prog-mode-hook 'highlight-symbol-mode)
+
 (require 'qml-mode)
 (add-to-list 'auto-mode-alist '("\\.qml\\'" . qml-mode))
 (add-hook 'qml-mode-hook '(lambda ()
                             (local-set-key (kbd "<f5>") 'qml-call-qmlviewer)
                             (setq rainbow-mode t)
-                            (setq rainbow-delimiters-mode t)))
+                            (rainbow-delimiters-mode t)
+                            (highlight-symbol-mode)))
 (defun qml-call-qmlviewer ()
   (interactive)
   (save-buffer)
