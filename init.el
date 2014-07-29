@@ -2526,7 +2526,9 @@ date: %Y-%m-%d %H:%M:%S
 
 
 ;; setq tab-width to 4
-(add-hook 'python-mode-hook (lambda () (setq tab-width 4)))
+(add-hook 'python-mode-hook (lambda ()
+                              (setq tab-width 4)
+                              (rainbow-delimiters-mode-enable)))
 ;;======================================================
 ;; Color code convert (from Xah Lee's CSS Mode)
 ;;======================================================
