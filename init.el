@@ -2716,7 +2716,18 @@ Return value is float."
 (require 'calfw)
 (require 'calfw-org)
 (require 'calfw-cal)
-(global-set-key (kbd "C-c A") 'cfw:open-org-calendar)
+(global-set-key (kbd "C-c A") 'my-cfw:open-org-calendar)
+
+;; 解決開啟cfw後，原buffer中的cursor會自己莫名其妙亂跳走的怪問題。
+(defun my-cfw:open-org-calendar ()
+  (interactive)
+  (let ((currentBuf (current-buffer))
+        (currentPos (point)))
+    (cfw:open-org-calendar)
+    (switch-to-buffer currentBuf)
+    (goto-char currentPos))
+  (switch-to-buffer "*cfw-calendar*"))
+
 ;; 吃太飽的話可以自己去定calendar-holidays
 ;; Month
 (setq calendar-month-name-array
