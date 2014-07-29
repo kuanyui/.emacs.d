@@ -2460,6 +2460,10 @@ date: %Y-%m-%d %H:%M:%S
 (require 'python)
 (require 'python-info)
 
+
+(define-key python-mode-map (kbd "M-RET")
+  (lambda () (interactive) (newline) (comment-dwim nil)))
+
 ;; Jedi: auto complete for Python
 ;; (setenv "PYTHONPATH" "/usr/lib64/python3.3/site-packages") ;啥鬼
 
