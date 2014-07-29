@@ -1448,6 +1448,20 @@ If not, kill-buffer instead. "
 
 ;;(assq 'text (twittering-find-status (twittering-get-id-at)))
 
+(add-hook 'twittering-new-tweets-hook 'twittering-my-notification)
+(defun twittering-my-notification ()
+  (if (string=
+       (twittering-timeline-spec-to-string
+        twittering-new-tweets-spec)
+       ":replies")
+      (let ((n twittering-new-tweets-count))
+        (start-process "twittering-notify" nil "notify-send"
+                       "-i" "~/.emacs.d/icon.png"
+                       "New tweets"
+                       (format "You have %d new tweet%s"
+                               n (if (> n 1) "s" ""))))))
+
+
 (load-file "~/.emacs.d/git/twittering-myfav/twittering-myfav.el")
 (require 'twittering-myfav)
 (setq twittering-myfav-file-name "twittering_myfav") ; The org and html file's name.
