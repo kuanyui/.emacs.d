@@ -6,9 +6,6 @@
 
 (setq dotfiles-packages-list
       '(ac-js2
-        jedi
-        smart-tabs-mode
-        smart-operator
         ac-slime
         ace-jump-mode
         ack-and-a-half
@@ -19,18 +16,23 @@
         auto-complete-nxml
         auto-complete-pcmp
         auto-indent-mode
+        babel
+        calfw
         column-enforce-mode
         company
         concurrent
         ctable
+        dash
         deferred
         dired+
-        dired-details
-        dired-single
+        direx
         discover
         eimp
+        elisp-slime-nav
         enh-ruby-mode
         epc
+        evil
+        evil-god-state
         expand-region
         flymake-css
         flymake-easy
@@ -43,7 +45,7 @@
         git-gutter
         git-gutter-fringe
         git-rebase-mode
-        god-mode
+        google-translate
         goto-chg
         haml-mode
         helm
@@ -58,6 +60,7 @@
         hungry-delete
         ibuffer-vc
         jedi
+        jedi-direx
         js-comint
         js2-mode
         json-mode
@@ -73,9 +76,11 @@
         magit-push-remote
         makey
         markdown-mode
+        mediawiki
         minimap
         mmm-mode
         multiple-cursors
+        nodejs-repl
         org
         org-ac
         ox-html5slide
@@ -85,18 +90,25 @@
         pcsv
         popup
         py-import-check
+        python-environment
         python-info
+        qml-mode
         rainbow-delimiters
         rainbow-mode
         shell-command
         simple-httpd
         skewer-mode
         slime
+        slime-company
+        smart-operator
+        smart-tabs-mode
         splitter
         stylus-mode
         switch-window
         swoop
         sws-mode
+        tern
+        tern-auto-complete
         twittering-mode
         undo-tree
         visual-regexp
@@ -109,8 +121,8 @@
         yaml-mode
         yasnippet
         yaxception
-        zlc
-        ))
+        window-numbering
+        zlc))
 
 (defun dotfiles-auto-install-packages ()
   (package-refresh-contents)
