@@ -2120,7 +2120,7 @@ With one prefix argument, the tarball is gziped."
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 ;; Optionally, specify the lisp program you are using. Default is "lisp"
-(setq inferior-lisp-program "/usr/bin/clisp")
+(setq inferior-lisp-program "/usr/bin/sbcl")
 (setq slime-lisp-implementations
       '((sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
 (setq slime-net-coding-system 'utf-8-unix)
