@@ -145,11 +145,8 @@
 ;;======================================================
 ;; 基本設定
 ;;======================================================
-(set-default 'tab-width 4)
-(setq default-tab-width 2)
 
-(setq indent-tabs-mode nil)             ;不使用tab縮排
-;;(setq line-spacing 4) ;;行距....要這幹麻啊orz
+;; (setq indent-tabs-mode nil)             ;不使用tab縮排
 (setq require-final-newline t)
 ;;超變態的undo-tree-mode
 ;;(提醒：redo會變成C-?)
@@ -502,13 +499,9 @@
 ;;超大kill-ring. 防止不小心删掉重要的東西。
 (setq kill-ring-max 200)
 
-;;设置tab为4个空格的宽度
-(setq default-tab-width 4)
-
 ;;Tab改為插入空格
 ;;abs look fine on a terminal or with ordinary printing, but they produce badly indented output when you use TeX or Texinfo since TeX ignores tabs.
-(setq standard-indent 4)
-(setq-default indent-tabs-mode nil)
+;; (setq standard-indent 4)
 
 ;;每次修改文件自動更新Time-stamp
 ;;将time-stamp加入write-file-hooks，就能在每次保存文件时自动更新time-stamp
@@ -1610,13 +1603,7 @@ If not, kill-buffer instead. "
     (message "No region active; can't yank to clipboard!")))
 
 ;;xclip-mode
-(load "~/.emacs.d/lisps/xclip-1.0.el")
-(define-minor-mode xclip-mode
-  "Minor mode to use the `xclip' program to copy&paste."
-  :global t
-  (if xclip-mode
-      (turn-on-xclip)
-    (turn-off-xclip)))
+;; (load "~/.emacs.d/lisps/xclip-1.0.el")
 (xclip-mode 1)
 
 ;;======================================================
@@ -2446,12 +2433,6 @@ date: %Y-%m-%d %H:%M:%S
 ;; (set-face-background 'highlight-indentation-current-column-face "#ffafff")
 ;; (setq highlight-indentation-set-offset '2)
 
-;; (require 'guess-style)
-;; (autoload 'guess-style-set-variable "guess-style" nil t)
-;; (autoload 'guess-style-guess-variable "guess-style")
-;; (autoload 'guess-style-guess-all "guess-style" nil t)
-;; (add-hook 'python-mode-hook 'guess-style-guess-all)
-;; (global-guess-style-info-mode 1)
 
 (org-babel-do-load-languages
    'org-babel-load-languages
@@ -2527,7 +2508,9 @@ date: %Y-%m-%d %H:%M:%S
 
 ;; setq tab-width to 4
 (add-hook 'python-mode-hook (lambda ()
-                              (setq tab-width 4)
+;;                               (setq tab-width 4)
+;;                               (setq python-indent-offset 4)
+;;                               (setq indent-tabs-mode nil)
                               (rainbow-delimiters-mode-enable)))
 ;;======================================================
 ;; Color code convert (from Xah Lee's CSS Mode)
@@ -2763,7 +2746,6 @@ Return value is float."
     ("~/org/agenda/Event.org" "~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
- '(tab-width 4)
  '(transient-mark-mode 1))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
