@@ -1,3 +1,4 @@
+
 ;;kuanyui's ~/.emacs
 
 (setq user-mail-address "azazabc123@gmail.com")
@@ -16,7 +17,15 @@
 
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
+(require 'window-numbering)
+(window-numbering-mode t)
 
+(require 'whitespace)
+;; (global-whitespace-mode)
+;; (whitespace-mode)
+
+                       
+        
 ;; (let ((mozc-path "/usr/share/emacs/site-lisp/mozc.el"))
 ;;    (when (file-exists-p mozc-path)
 ;;      (load-file mozc-path)
@@ -55,7 +64,7 @@
 ;;                      nil
 ;;                      :height
 ;;                      (floor (* 0.9
-;;								(face-attribute 'default :height))))
+;;                                (face-attribute 'default :height))))
 ;;  (apply-font-setting))
 ;;
 ;;;;　GUI版本下的中文字體問題
@@ -167,6 +176,12 @@
 (global-set-key (kbd "M-L") 'right-char)
 (global-set-key (kbd "M-N") 'next-buffer)
 (global-set-key (kbd "M-P") 'previous-buffer)
+
+(global-set-key (kbd "M-S") 'windmove-up)
+(global-set-key (kbd "M-X") 'windmove-down)
+(global-set-key (kbd "M-C") 'windmove-right)
+(global-set-key (kbd "M-Z") 'windmove-left)
+
 ;; God-mode
 ;; (require 'god-mode)
 ;; (global-set-key (kbd "ESC `")     'god-mode-all)
@@ -293,7 +308,7 @@
                       (mode . js2-mode)
                       (mode . json-mode)
                       (mode . nodejs-repl-mode)))
-			   ("Web Development" (or
+               ("Web Development" (or
                                    (mode . css-mode)
                                    (mode . html-mode)
                                    (mode . stylus-mode)
@@ -306,9 +321,9 @@
                ("Ruby" (or (mode . ruby-mode)))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
-			   ("IRC" (or
-					   (mode . erc-mode)
-					   (mode . rcirc-mode)))
+               ("IRC" (or
+                       (mode . erc-mode)
+                       (mode . rcirc-mode)))
                ("Lisp" (or
                         (mode . emacs-lisp-mode)
                         (mode . slime-mode)
@@ -319,12 +334,12 @@
                                    (mode . sh-mode)))
                ("Perl"  (or (mode . cperl-mode)
                             (mode . perl-mode)))
-			   ("Twitter" (mode . twittering-mode))
+               ("Twitter" (mode . twittering-mode))
                ("Magit" (or (name . "*magit*")
                             (mode . magit-mode)))
                ("Emacs" (or
                          (name . "^\\*Messages\\*$")
-						 (name . "^\\*Compile-Log\\*$")))
+                         (name . "^\\*Compile-Log\\*$")))
                ("Help" (or (mode . woman-mode)
                            (mode . man-mode)
                            (mode . info-mode)
@@ -802,9 +817,9 @@ h2.footnotes {
 ;;(defun org-html-checkbox (checkbox)
 ;;  "Format CHECKBOX into HTML."
 ;;  (case checkbox (on "<code>[X]</code>")
-;;	(off "<code>[&#xa0;]</code>")
-;;	(trans "<code>[-]</code>")
-;;	(t "")))
+;;    (off "<code>[&#xa0;]</code>")
+;;    (trans "<code>[-]</code>")
+;;    (t "")))
 
 
 ;;org輸出html時中文不要有奇怪的空白。（by coldnew the God）
@@ -903,23 +918,23 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
          ((tags "Project")))
         (" " "Agenda"
          ((todo "STARTED"
-				((org-agenda-overriding-header "What you should doing right now!")
-				 (org-tags-match-list-sublevels nil)))
-		  (todo "WAITING"
-				((org-agenda-overriding-header "Things waiting on the perenially disorganised masses")
-				 (org-tags-match-list-sublevels nil)))
+                ((org-agenda-overriding-header "What you should doing right now!")
+                 (org-tags-match-list-sublevels nil)))
+          (todo "WAITING"
+                ((org-agenda-overriding-header "Things waiting on the perenially disorganised masses")
+                 (org-tags-match-list-sublevels nil)))
 
-		  (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
-												   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
+          (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
+                                                   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
           ;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
-		  (todo ""
-				((org-agenda-overriding-header "All other TODOs")
-				 (org-agenda-todo-ignore-scheduled t)
-				 (org-agenda-todo-ignore-deadlines t)
-				 (org-agenda-todo-ignore-with-date t)
+          (todo ""
+                ((org-agenda-overriding-header "All other TODOs")
+                 (org-agenda-todo-ignore-scheduled t)
+                 (org-agenda-todo-ignore-deadlines t)
+                 (org-agenda-todo-ignore-with-date t)
                  (org-agenda-todo-ignore-timestamp t)
-				 (org-agenda-skip-function '(ky/org-agenda-skip-tag "Project"))
-				 ))
+                 (org-agenda-skip-function '(ky/org-agenda-skip-tag "Project"))
+                 ))
           (tags-todo "Project" ((org-agenda-overriding-header "Projects' TODOs")))
           )) ;; review waiting items
         ;; ...other commands here
@@ -965,11 +980,11 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
         ))
 
 (setq org-refile-targets '(("Todo.org" :maxlevel . 1)
-						   ("School.org" :maxlevel . 1)
-						   ("Learning.org" :maxlevel . 1)
-						   ("Project.org" :maxlevel . 2)
+                           ("School.org" :maxlevel . 1)
+                           ("Learning.org" :maxlevel . 1)
+                           ("Project.org" :maxlevel . 2)
                            ("Event.org" :maxlevel . 1)
-						   ("Reading.org" :maxlevel . 1)))
+                           ("Reading.org" :maxlevel . 1)))
 
 
 ;;To save the clock history across Emacs sessions, use
@@ -995,7 +1010,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
       '(("t" "Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
          "** TODO %? %^G\n  %i")
-		("s" "School" entry
+        ("s" "School" entry
          (file+headline (concat org-directory "/agenda/School.org") "School")
          "** TODO %?\n  %i")
         ("b" "Buy" entry
@@ -1006,7 +1021,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
          "** %? %i :Reading:")
         ("d" "Diary" entry
          (file+datetree (concat org-directory "/diary/diary.org"))
-		 "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+         "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
         ("e" "Event" entry
          (file+headline (concat org-directory "/agenda/Event.org") "Event")
          "** %? %^g\n%^{Event's date&time? }T\n  %i")))
@@ -1481,7 +1496,7 @@ If not, kill-buffer instead. "
   (set-register (car r) (cadr r)))
 
 (global-set-key (kbd "<f8>") 'ack-and-a-half)
-(defalias 'ack 'ack-and-a-half)
+;; (defalias 'ack 'ack-and-a-half)
 (defalias 'ack-same 'ack-and-a-half-same)
 (defalias 'ack-find-file 'ack-and-a-half-find-file)
 (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
@@ -1601,8 +1616,14 @@ If not, kill-buffer instead. "
     (message "No region active; can't yank to clipboard!")))
 
 ;;xclip-mode
-;; (load "~/.emacs.d/lisps/xclip-1.0.el")
-(xclip-mode 1)
+(load "~/.emacs.d/lisps/xclip-1.0.el")
+(define-minor-mode xclip-mode
+  "Minor mode to use the `xclip' program to copy&paste."
+  :global t
+  (if xclip-mode
+      (turn-on-xclip)
+    (turn-off-xclip)))
+
 
 ;;======================================================
 ;; misc 雜項
@@ -1949,7 +1970,7 @@ the previous directory."
   (require 'cl)
   (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\|.webm\\)$")
          (FILE (dired-get-filename nil t)))
-    (if (file-directory-p FILE)	;if it's a dir.
+    (if (file-directory-p FILE)    ;if it's a dir.
         (let* ((FILE_LIST (directory-files FILE t PATTERN))
                (n 0)
                s_FILE_LIST)
@@ -1959,7 +1980,7 @@ the previous directory."
             (setq n (1+ n)))
           (message "Opening %s files..." n)
           (call-process-shell-command "smplayer -add-to-playlist" nil nil nil (format "%s &" s_FILE_LIST)))
-      (if (string-match PATTERN FILE)	;if it's a file
+      (if (string-match PATTERN FILE)    ;if it's a file
           (call-process "smplayer" nil 0 nil "-add-to-playlist" FILE)
         (message "This is not a supported audio or video file."))))
   (dired-next-line 1))
@@ -2193,6 +2214,10 @@ With one `C-u' prefix, insert output following an arrow"
 ;;discover-mode
 (global-discover-mode 1)
 
+(guide-key-mode)
+(setq guide-key/guide-key-sequence '("C-x" "C-c"))
+(setq guide-key/recursive-key-sequence-flag t)
+
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
 (setq confirm-kill-emacs 'yes-or-no-p)
 
@@ -2398,7 +2423,7 @@ date: %Y-%m-%d %H:%M:%S
         '("~/.emacs.d/private/school.el"
           "~/.emacs.d/private/twittering-filter-users.el"
           "~/.emacs.d/private/flickr.el"
-		  "~/.emacs.d/private/family-birthday.el"))
+          "~/.emacs.d/private/family-birthday.el"))
 
 ;;======================================================
 ;; Python
@@ -2424,21 +2449,42 @@ date: %Y-%m-%d %H:%M:%S
     (if (file-exists-p (concat default-directory file))
         (shell-command (format "python3 %s" file))
       (shell-command (format "qmlviewer %s" (buffer-name))))))
-;; (require 'highlight-indentation)
-;; (add-hook 'python-mode-hook 'highlight-indentation)
+
+(require 'highlight-indentation)
+;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
 ;; (set-face-background 'highlight-indentation-face "#e3e3d3")
 ;; (set-face-background 'highlight-indentation-current-column-face "#ffafff")
 ;; (setq highlight-indentation-set-offset '2)
 
+(defun python-replace-tab-to-space ()
+  (interactive)
+  (if (yes-or-no-p "Replace all tab in this file?")
+      (save-excursion
+	(goto-char (point-min))
+	(replace-string "	" "    ")
+	(message "Done."))
+    (message "Aborted by user.")))
 
-(org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)
-     (emacs-lisp . t)))
+
+(defun my-toggle-fold ()
+  "Toggle fold all lines larger than indentation on current line"
+  (interactive)
+  (let ((col 1))
+    (save-excursion
+      (back-to-indentation)
+      (setq col (+ 1 (current-column)))
+      (set-selective-display
+       (if selective-display nil (or col 1))))))
+(global-set-key (kbd "C-x n f") 'my-toggle-fold)
+;;(require 'indent-hint)
+
+;(org-babel-do-load-languages
+;   'org-babel-load-languages
+;   '((python . t)
+;     (emacs-lisp . t)))
 (setq org-babel-python-command "python3")
 
-(smart-tabs-insinuate 'c 'javascript 'python)
 ;; Info-look
 (require 'info-look)
 (info-lookup-add-help
@@ -2508,8 +2554,15 @@ date: %Y-%m-%d %H:%M:%S
 (add-hook 'python-mode-hook (lambda ()
 ;;                               (setq tab-width 4)
 ;;                               (setq python-indent-offset 4)
-;;                               (setq indent-tabs-mode nil)
                               (rainbow-delimiters-mode-enable)))
+
+
+
+;;======================================================
+;; Whitespace
+;;======================================================
+(require 'whitespace)
+
 ;;======================================================
 ;; Color code convert (from Xah Lee's CSS Mode)
 ;;======================================================
@@ -2589,9 +2642,9 @@ Return value is float."
 
 (setq gnus-select-method
       '(nnimap "gmail"
-	       (nnimap-address "imap.gmail.com")
-	       (nnimap-server-port 993)
-	       (nnimap-stream ssl)))
+           (nnimap-address "imap.gmail.com")
+           (nnimap-server-port 993)
+           (nnimap-stream ssl)))
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
@@ -2642,7 +2695,7 @@ Return value is float."
 (require 'swoop)
 ;; Change the keybinds to whatever you like :)
 (global-set-key (kbd "M-i") 'helm-swoop)
-(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+;;(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
 (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
 (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
 
@@ -2722,6 +2775,9 @@ Return value is float."
       (message "This seems not to belong to Qt namespace"))))
 (define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
 
+(setq helm-dash-common-docsets '("Python 3" "Qt"))
+(global-set-key (kbd "C-c d d") 'helm-dash)
+
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
@@ -2732,19 +2788,19 @@ Return value is float."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
  '(custom-safe-themes
    (quote
-    ("ea3f08f94c7732c63ffc601f5fcd2632d1b99f9195bf3b55f4710a37fd985d04" "dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+    ("3f3410aaa7417bddb85bc29cadb34ccdcf579b2f4126d42d4bf07ef270d2fbba" "7ed6913f96c43796aa524e9ae506b0a3a50bfca061eed73b66766d14adfa86d1" "ea3f08f94c7732c63ffc601f5fcd2632d1b99f9195bf3b55f4710a37fd985d04" "dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
+ '(guide-key-mode nil)
  '(mark-even-if-inactive t)
  '(org-agenda-files
    (quote
     ("~/org/agenda/Event.org" "~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
  '(resize-frame t)
  '(scroll-bar-mode (quote right))
- '(transient-mark-mode 1))
+ '(transient-mark-mode 1)
+ '(xclip-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
