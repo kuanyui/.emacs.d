@@ -1,4 +1,3 @@
-
 ;;kuanyui's ~/.emacs
 
 (setq user-mail-address "azazabc123@gmail.com")
@@ -24,8 +23,8 @@
 ;; (global-whitespace-mode)
 ;; (whitespace-mode)
 
-                       
-        
+
+
 ;; (let ((mozc-path "/usr/share/emacs/site-lisp/mozc.el"))
 ;;    (when (file-exists-p mozc-path)
 ;;      (load-file mozc-path)
@@ -33,10 +32,10 @@
 ;;      ;; ac-mozc
 ;;      (load-file "~/.emacs.d/lisps/ac-mozc/ac-mozc.el")
 ;;      (define-key ac-mode-map (kbd "C-c C-\\") 'ac-complete-mozc)
-;; 
+;;
 ;;      (require 'org)
 ;;      (add-to-list 'ac-modes 'org-mode)
-;; 
+;;
 ;;      (defun my-ac-mozc-setup ()
 ;;        (setq ac-sources
 ;;              '(ac-source-mozc ac-source-ascii-words-in-same-mode-buffers))
@@ -2214,10 +2213,6 @@ With one `C-u' prefix, insert output following an arrow"
 ;;discover-mode
 (global-discover-mode 1)
 
-(guide-key-mode)
-(setq guide-key/guide-key-sequence '("C-x" "C-c"))
-(setq guide-key/recursive-key-sequence-flag t)
-
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
 (setq confirm-kill-emacs 'yes-or-no-p)
 
@@ -2285,7 +2280,7 @@ With one `C-u' prefix, insert output following an arrow"
   (eshell-send-input ""))
 
 ;;Javascript
-:; js2
+;; js2
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
