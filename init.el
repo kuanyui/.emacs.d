@@ -16,10 +16,8 @@
 
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
-(require 'window-numbering)
-(window-numbering-mode t)
 
-(require 'whitespace)
+;;(require 'whitespace)
 ;; (global-whitespace-mode)
 ;; (whitespace-mode)
 
