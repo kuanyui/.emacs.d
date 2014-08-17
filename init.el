@@ -2422,6 +2422,12 @@ date: %Y-%m-%d %H:%M:%S
 ;;======================================================
 ;; Python
 ;;======================================================
+(require 'goto-chg)
+
+(global-set-key (kbd "M-(") 'goto-last-change)
+(global-set-key (kbd "M-)") 'goto-last-change-reverse)
+
+
 (require 'highlight-symbol)
 (define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
 (define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)

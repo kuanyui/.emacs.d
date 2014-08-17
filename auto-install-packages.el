@@ -32,6 +32,7 @@
 	git-commit-mode
 	git-rebase-mode
 	google-translate
+	goto-chg
 	haml-mode
 	helm
 	helm-ack
