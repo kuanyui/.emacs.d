@@ -6,6 +6,7 @@
 ;;掃描~/.emacs.d目錄
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
+
 ;;Emacs24開始內建的package.el相關設定
 (require 'package)
 (package-initialize)
@@ -1723,15 +1724,14 @@ If not, kill-buffer instead. "
 ;;======================================================
 ;; Auto-complete
 ;;======================================================
-;;(add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
+(add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
 (require 'auto-complete-config)
 (add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict") ;;我原本只有放user這個
 ;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict") ; 原本沒有
 (ac-config-default)
 
-
-
 (global-auto-complete-mode 1)
+
 
 (define-key ac-mode-map (kbd "C-c h") 'ac-last-quick-help)
 (define-key ac-mode-map (kbd "C-c H") 'ac-last-help)
@@ -1743,6 +1743,7 @@ If not, kill-buffer instead. "
 ;;         (add-to-list 'ac-sources 'ac-source-company-elisp)))
 
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
+
 (add-hook 'css-mode-hook
           (lambda ()
             ;;            (add-to-list 'ac-sources 'ac-source-company-css)
@@ -2426,6 +2427,7 @@ date: %Y-%m-%d %H:%M:%S
 (define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 
 (require 'qml-mode)
@@ -2443,7 +2445,7 @@ date: %Y-%m-%d %H:%M:%S
         (shell-command (format "python3 %s" file))
       (shell-command (format "qmlviewer %s" (buffer-name))))))
 
-(require 'highlight-indentation)
+;; (require 'highlight-indentation)
 ;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; (add-hook 'python-mode-hook 'highlight-indentation-current-column-mode)
 ;; (set-face-background 'highlight-indentation-face "#e3e3d3")
@@ -2539,7 +2541,6 @@ date: %Y-%m-%d %H:%M:%S
 (add-hook 'inferior-python-mode-hook 'smart-operator-mode)
 (setq smart-operator-list '("=" "<" ">" "%" "+" "-" "*" "/" "&" "|" "!" ":" "?" ","))
 
-(define-key smart-operator-mode-map "." nil)
 
 
 
@@ -2770,6 +2771,19 @@ Return value is float."
 
 (setq helm-dash-common-docsets '("Python 3" "Qt"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
+
+;;======================================================
+;; Yasnippet
+;;======================================================
+
+;;自分用のスニペットフォルダと，拾ってきたスニペットフォルダの2つを作っておきます．
+;;(一つにまとめてもいいけど)
+(require 'yasnippet)
+(yas-global-mode 1)
+(global-set-key (kbd "C-c s n") 'yas-new-snippet)
+(global-set-key (kbd "C-c s i") 'yas-insert-snippet)
+(global-set-key (kbd "C-c s v") 'yas-visit-snippet-file)
+
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
