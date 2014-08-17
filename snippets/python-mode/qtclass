@@ -1,0 +1,11 @@
+# type: command
+# key: qtclass
+# name: qtclass
+# expand-env: ((yas/indent-line (quote auto)))
+# --
+
+class ${1:ClassName}($2):
+    def __init__(self, parent=None):
+        super($1, self).__init__(parent)
+        $0
+
