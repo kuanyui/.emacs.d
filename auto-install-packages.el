@@ -36,6 +36,7 @@
 	haml-mode
 	helm
 	helm-ack
+	helm-dash
 	helm-swoop
 	highlight-symbol
 	hlinum
