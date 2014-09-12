@@ -2809,6 +2809,13 @@ Return value is float."
 
 (define-key prog-mode-map (kbd "C-c f") 'toggle-selective-display)
 
+(add-hook 'markdown-mode-hook
+	  (lambda ()
+	    (yas-minor-mode -1)		;Disable Yasnippet in markdown-mode
+	    (define-key markdown-mode-map (kbd "TAB") 'markdown-cycle) ;Tab to fold title
+	    (markdown-cycle t) ;Auto fold all title after startuping markdown-mode.
+	    ))
+
 ;;======================================================
 ;; Haskell
 ;;======================================================
