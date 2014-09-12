@@ -313,6 +313,11 @@
                                    (mode . web-mode)
                                    (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
+	       ("Haskell" (or (mode . haskell-mode)
+			      (mode . interactive-haskell-mode)
+			      (mode . inferior-haskell-mode)
+			      (name . "HS-Error")
+			      (name . "*haskell-process-log*")))
                ("Python" (or (mode . python-mode)
                              (mode . ipython-mode)
                              (mode . inferior-python-mode)))
@@ -2518,7 +2523,7 @@ date: %Y-%m-%d %H:%M:%S
 
 ;; Python REPL (M-x run-python)
 (setq
- python-shell-interpreter "ipython"
+ python-shell-interpreter "python3"
  python-shell-interpreter-args ""
  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
@@ -2790,7 +2795,40 @@ Return value is float."
 (global-set-key (kbd "C-c s i") 'yas-insert-snippet)
 (global-set-key (kbd "C-c s v") 'yas-visit-snippet-file)
 
+(setq auto-revert-interval 1)
 
+(require 'smartparens)
+
+(defun toggle-selective-display (column)
+  (interactive "P")
+  (set-selective-display
+   (or column
+       (unless selective-display
+	 (1+ (current-column))))))
+
+
+(define-key prog-mode-map (kbd "C-c f") 'toggle-selective-display)
+
+;;======================================================
+;; Haskell
+;;======================================================
+(require 'haskell-mode)
+;;Indentation
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+
+;; activates keybindings associated with interactive mode
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+;; This enables some handy and benign features.
+(setq haskell-process-suggest-remove-import-lines t)
+(setq haskell-process-auto-import-loaded-modules t)
+(setq haskell-process-log t)
+
+;; ghci, cabal-repl, cabal-dev, cabal-ghci
+(setq haskell-process-type 'ghci)
+
+(setq haskell-interactive-prompt "lambda> ")
+
+(define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-bring)
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
