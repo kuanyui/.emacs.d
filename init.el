@@ -1602,7 +1602,9 @@ If not, kill-buffer instead. "
 (global-set-key (kbd "C-c <C-up>") 'backward-up-list)
 (global-set-key (kbd "C-c <C-down>") 'down-list)
 
-(define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer) ;;這樣測試.emacs方便多了...
+(defun eval-buffer-and-message () (interactive) (eval-buffer) (message "Eval done!"))
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer-and-message) ;;這樣測試.emacs方便多了...
 
 ;;Linux下與其他Applications的剪貼簿
 (setq x-select-enable-clipboard t)
@@ -2359,47 +2361,7 @@ With one `C-u' prefix, insert output following an arrow"
 
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
-(defun hexo-opml-to-markdown ()
-  (interactive)
-  (let (output-markdown opml-copy-to trans input-file)
-    (setq output-markdown "~/Dropbox/Blog/kuanyui.github.io/source/blogrolls/index.md"
-          opml-copy-to "~/Dropbox/Blog/kuanyui.github.io/source/blogrolls/" ;記得是填目錄，而且最後要加斜線。
-          input-file (read-file-name "OPML file's location: "))
-    (if (not (string-match "\\(\.opml\\|\.xml\\)$" input-file))
-        (progn "It's not an OPML file."
-               (opml-to-markdown))
-      (progn
-        (copy-file input-file (format "%sfeed-from-rss-reader.xml" opml-copy-to) 'overwrite)
-        (copy-file input-file output-markdown 'overwrite)
-        (find-file output-markdown)
-        (goto-char (point-min))
-        (re-search-forward "<\\?xml\\(?:.\\|\n\\)*<outline title=\"Subscriptions\">" nil :no-error)
-        (replace-match "")
-        (while (re-search-forward "<outline title=\"\\(.+\\)\">" nil :no-error)
-          (replace-match (format "###%s###" (match-string 1))))
-        (goto-char (point-min))
-        (while (re-search-forward "<outline title=\"\n?*\\(.+?\\)\n?*\" htmlUrl=\"\\(.+?\\)\".*/>" nil :no-error)
-          (replace-match (format "- [%s](%s)" (match-string 1) (match-string 2))))
-        (goto-char (point-min))
-        (while (re-search-forward "</outline>" nil :no-error)
-          (replace-match ""))
-        (goto-char (point-min))
-        (while (re-search-forward "</body></opml>" nil :no-error)
-          (replace-match ""))
-        (goto-char (point-min))
-        (while (re-search-forward "^ +" nil :no-error)
-          (replace-match ""))
-        (goto-char (point-min))
-        (insert (concat
-                 (format-time-string "title: Subscribed Feeds
-date: %Y-%m-%d %H:%M:%S
----\n" (current-time))
-                 (format-time-string "<blockquote class=\"pullquote\">我有每天讀RSS reader的習慣，這個頁面就是我所訂閱的完整RSS feeds列表。嗯...或許可以把這個頁面視為blog聯播？<br>
-部份飼料的分類標準不明不白為正常現象，敬請安心食用。<br>
-原始的OPML檔可以在<a href=\"feed-from-rss-reader.xml\">這裡</a>取得。<br>
-<span style='font-style:italic;color:#999;font-size:0.8em;'>此頁面於%Y/%m/%d  %H:%M:%S產生</span></blockquote>" (current-time))
-                 ))
-        (save-buffer)))))
+(require 'livedoor-opml-to-markdown)
 
 ;;======================================================
 ;; 寫作加強
