@@ -2360,9 +2360,6 @@ With one `C-u' prefix, insert output following an arrow"
 ;;(column-number-mode t)
 
 
-;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
-(require 'livedoor-opml-to-markdown)
-
 ;;======================================================
 ;; 寫作加強
 ;;======================================================
@@ -2373,6 +2370,9 @@ With one `C-u' prefix, insert output following an arrow"
 (require 'hexo)
 (require 'flickr)
 (require 'markdown-and-html)
+
+;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
+(require 'livedoor-opml-to-markdown)
 
 ;;======================================================
 ;; 私人的東西
@@ -2536,7 +2536,7 @@ With one `C-u' prefix, insert output following an arrow"
 ;; (I rename the functions because they are easier to memorize...)
 
 (require 'color)
-(defun color-code-rgb-to-hsl ()
+(defun color-code-hex-to-hsl ()
   "Convert color spec under cursor from '#rrggbb' to CSS HSL format.
 '#ffefd5' => hsl(37,100%,91%)"
   (interactive)
@@ -2550,18 +2550,18 @@ With one `C-u' prefix, insert output following an arrow"
         (progn
           (delete-region p1 p2 )
           (if (looking-back "#") (delete-char -1))
-          (insert (color-code-hex-to-hsl currentWord )))
+          (insert (color-code--hex-to-hsl currentWord )))
       (progn
         (error "The current word 「%s」 is not of the form #rrggbb." currentWord)
         )
       )))
 
-(defun color-code-hex-to-hsl (hexStr)
+(defun color-code--hex-to-hsl (hexStr)
   "Convert hexStr color to CSS HSL format.
 Return a string.
- (color-code-hex-to-hsl \"#ffefd5\") => \"hsl(37,100%,91%)\""
+ (color-code--hex-to-hsl \"#ffefd5\") => \"hsl(37,100%,91%)\""
   (let* (
-         (colorVec (color-code-convert-hex-to-vec hexStr))
+         (colorVec (color-code--convert-hex-to-vec hexStr))
          (xR (elt colorVec 0))
          (xG (elt colorVec 1))
          (xB (elt colorVec 2))
@@ -2573,10 +2573,10 @@ Return a string.
     (format "hsl(%d,%d%%,%d%%)" (* xH 360) (* xS 100) (* xL 100) )
     ))
 
-(defun color-code-convert-hex-to-vec (hexcolor)
+(defun color-code--convert-hex-to-vec (hexcolor)
   "Convert HEXCOLOR from \"rrggbb\" string to a elisp vector [r g b], where the values are from 0 to 1.
 Example:
- (color-code-convert-hex-to-vec \"00ffcc\") => [0.0 1.0 0.8]
+ (color-code--convert-hex-to-vec \"00ffcc\") => [0.0 1.0 0.8]
 
 Note: The input string must NOT start with \"#\". If so, the return value is nil."
   (vector
@@ -2595,6 +2595,24 @@ myVal's original range is [0, rangeMax].
 The arguments can be int or float.
 Return value is float."
   (/ (float myVal) (float rangeMax)))
+
+(defun color-code-hex-to-rgb ()
+  (interactive)
+  (let* (
+         (bds (bounds-of-thing-at-point 'word))
+         (p1 (car bds))
+         (p2 (cdr bds))
+         (string (buffer-substring-no-properties p1 p2)))
+
+    (if (string-match "[a-fA-F0-9]\\{6\\}" string)
+	(progn
+	  (delete-region p1 p2 )
+	  (if (looking-back "#") (delete-char -1))
+	  (insert
+	   (format "rgb(%s, %s, %s)"
+		   (string-to-number (substring string 0 2) 16)
+		   (string-to-number (substring string 2 4) 16)
+		   (string-to-number (substring string 4 6) 16)))))))
 
 (global-set-key (kbd "C-c m l") 'moe-light)
 (global-set-key (kbd "C-c m d") 'moe-dark)
