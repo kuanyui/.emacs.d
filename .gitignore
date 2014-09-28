@@ -6,7 +6,7 @@
 *.elc
 .org-id-locations
 /auto-save-list
-
+thumbs/
 /eshell
 /git
 /tramp
