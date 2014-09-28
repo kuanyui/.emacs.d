@@ -3,9 +3,10 @@
 .#*
 .DS_Store
 .mc-lists.el
+*.elc
 .org-id-locations
 /auto-save-list
-/elpa
+
 /eshell
 /git
 /tramp
