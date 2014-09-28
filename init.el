@@ -1602,7 +1602,11 @@ If not, kill-buffer instead. "
 (global-set-key (kbd "C-c <C-up>") 'backward-up-list)
 (global-set-key (kbd "C-c <C-down>") 'down-list)
 
-(defun eval-buffer-and-message () (interactive) (eval-buffer) (message "Eval done!"))
+(defun eval-buffer-and-message ()
+  (interactive)
+  (eval-buffer)
+  (byte-compile-file buffer-file-name)
+  (message "Eval done!"))
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer-and-message) ;;這樣測試.emacs方便多了...
 
@@ -2139,8 +2143,12 @@ With one prefix argument, the tarball is gziped."
 (slime-setup)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(eval-after-load 'slime
-  `(define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup))
+;(eval-after-load 'slime
+;  `(define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)
+;  `(define-key slime-mode-map (kbd "C-M-_") 'undo-tree-redo))
+(add-hook 'lisp-mode-hook
+	  (lambda ()
+	    (define-key lisp-mode-map (kbd "M-_") 'undo-tree-redo)))
 ;;(defun keyboard-quit-custom ()
 ;;  (interactive)
 ;;  (lazy-highlight-cleanup)(keyboard-quit))
@@ -2504,6 +2512,13 @@ With one `C-u' prefix, insert output following an arrow"
 (defun python3-compile-with-shell-command ()
   (interactive)
   (save-buffer)(shell-command (format "python3 %s" (buffer-name))))
+
+
+(require 'sh-script)
+(define-key sh-mode-map (kbd "<f5>") 'run-current-sh)
+(defun run-current-sh ()
+  (interactive)
+  (save-buffer)(shell-command (format "bash %s" (buffer-name))))
 
 ;;(define-key python-mode-map (kbd ",") 'smart-operator-,)
 
