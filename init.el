@@ -1605,7 +1605,6 @@ If not, kill-buffer instead. "
 (defun eval-buffer-and-message ()
   (interactive)
   (eval-buffer)
-  (byte-compile-file buffer-file-name)
   (message "Eval done!"))
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer-and-message) ;;這樣測試.emacs方便多了...
