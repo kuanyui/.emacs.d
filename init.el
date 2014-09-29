@@ -2792,7 +2792,6 @@ Return value is float."
 
 (setq auto-revert-interval 1)
 
-(require 'smartparens)
 
 (defun toggle-selective-display (column)
   (interactive "P")
@@ -2831,6 +2830,20 @@ Return value is float."
 (setq haskell-interactive-prompt "lambda> ")
 
 (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-bring)
+
+
+;;======================================================
+;; Ruby
+;;======================================================
+(require 'smartparens)
+
+(add-hook 'ruby-mode-hook 'my-ruby-hook)
+
+(defun my-ruby-hook ()
+  (require 'inf-ruby)
+  (require 'smartparens-ruby)
+  (show-smartparens-mode))
+
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
