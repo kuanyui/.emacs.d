@@ -321,7 +321,11 @@
                ("Python" (or (mode . python-mode)
                              (mode . ipython-mode)
                              (mode . inferior-python-mode)))
-               ("Ruby" (or (mode . ruby-mode)))
+               ("Ruby" (or
+			(mode . ruby-mode)
+			(mode . enh-ruby-mode)
+			(mode . inf-ruby-mode)
+			   ))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
                ("IRC" (or
@@ -2839,9 +2843,19 @@ Return value is float."
 (add-hook 'ruby-mode-hook 'my-ruby-hook)
 
 (defun my-ruby-hook ()
+  (enh-ruby-mode)
   (require 'inf-ruby)
   (require 'smartparens-ruby)
-  (show-smartparens-mode))
+  (show-smartparens-mode)
+  (defun run-current-ruby ()
+    (interactive)
+    (save-buffer)(shell-command (format "ruby %s" (buffer-name))))
+  (require 'ruby-mode)
+  (define-key ruby-mode-map (kbd "<f5>") 'run-current-ruby)
+  (define-key enh-ruby-mode-map (kbd "<f5>") 'run-current-ruby)
+  )
+
+
 
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
@@ -2874,3 +2888,4 @@ Return value is float."
  )
 
 (put 'dired-find-alternate-file 'disabled nil)
+ 
