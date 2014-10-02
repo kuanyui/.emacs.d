@@ -3,6 +3,14 @@
 (setq user-mail-address "azazabc123@gmail.com")
 (setq user-full-name "kuanyui")
 
+
+(defmacro buffer-real-name ()
+  "This macro will return the real filename of current
+buffer (without parent directory) Because `uniquify' could cause
+`buffer-name' returning you an unwanted value.
+e.g. ruby main.rb => ruby main.rb:directory_name"
+  `(file-name-nondirectory buffer-file-name))
+
 ;;掃描~/.emacs.d目錄
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
@@ -1845,7 +1853,7 @@ If not, kill-buffer instead. "
   "Go back to the parent directory (..), and the cursor will be moved to where
 the previous directory."
   (interactive)
-  (let* ((DIR (buffer-name)))
+  (let* ((DIR (buffer-real-name)))
     (if (equal DIR "*Find*")
         (quit-window t)
       (progn (find-alternate-file "..")
@@ -2045,7 +2053,7 @@ With one prefix argument, the tarball is gziped."
 (define-auto-insert
   '("\\.org\\'" . "Org")
   '(nil
-    "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-name))) "\n"
+    "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-real-name))) "\n"
     "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
     "#+AUTHOR: " user-full-name "\n"
     "#+EMAIL: " user-mail-address "\n"
@@ -2333,7 +2341,7 @@ With one `C-u' prefix, insert output following an arrow"
 ;; (define-key js2-mode-map (kbd "<f5>") 'call-nodejs-command)
 (defun call-nodejs-command ()
   (interactive)
-  (save-buffer)(shell-command (format "node %s" (buffer-name))))
+  (save-buffer)(shell-command (format "node %s" (buffer-real-name))))
 
 ;; 如果當前user是root，prompt改成#
 (setq eshell-prompt-function
@@ -2424,10 +2432,10 @@ With one `C-u' prefix, insert output following an arrow"
 (defun qml-call-qmlviewer ()
   (interactive)
   (save-buffer)
-  (let* ((file (replace-regexp-in-string "\\.qml$" ".py" (buffer-name))))
+  (let* ((file (replace-regexp-in-string "\\.qml$" ".py" (buffer-real-name))))
     (if (file-exists-p (concat default-directory file))
         (shell-command (format "python3 %s" file))
-      (shell-command (format "qmlviewer %s" (buffer-name))))))
+      (shell-command (format "qmlviewer %s" (buffer-real-name))))))
 
 ;; (require 'highlight-indentation)
 ;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
@@ -2510,18 +2518,18 @@ With one `C-u' prefix, insert output following an arrow"
 (define-key python-mode-map (kbd "<f6>") 'python2-compile-with-shell-command)
 (defun python2-compile-with-shell-command ()
   (interactive)
-  (save-buffer)(shell-command (format "python2 %s" (buffer-name))))
+  (save-buffer)(shell-command (format "python2 %s" (buffer-real-name))))
 (define-key python-mode-map (kbd "<f5>") 'python3-compile-with-shell-command)
 (defun python3-compile-with-shell-command ()
   (interactive)
-  (save-buffer)(shell-command (format "python3 %s" (buffer-name))))
+  (save-buffer)(shell-command (format "python3 %s" (buffer-real-name))))
 
 
 (require 'sh-script)
 (define-key sh-mode-map (kbd "<f5>") 'run-current-sh)
 (defun run-current-sh ()
   (interactive)
-  (save-buffer)(shell-command (format "bash %s" (buffer-name))))
+  (save-buffer)(shell-command (format "bash %s" (buffer-real-name))))
 
 ;;(define-key python-mode-map (kbd ",") 'smart-operator-,)
 
@@ -2847,14 +2855,37 @@ Return value is float."
   (require 'inf-ruby)
   (require 'smartparens-ruby)
   (show-smartparens-mode)
-  (defun run-current-ruby ()
+  (defun ruby-run-current-file ()
     (interactive)
-    (save-buffer)(shell-command (format "ruby %s" (buffer-name))))
+    (save-buffer)
+    (shell-command (format "chmod +x %s" (buffer-real-name)))
+    (shell-command (format "ruby %s" (buffer-real-name))))
   (require 'ruby-mode)
-  (define-key ruby-mode-map (kbd "<f5>") 'run-current-ruby)
-  (define-key enh-ruby-mode-map (kbd "<f5>") 'run-current-ruby)
+  (define-key ruby-mode-map (kbd "<f5>") 'ruby-run-current-file)
+  (define-key enh-ruby-mode-map (kbd "<f5>") 'ruby-run-current-file)
   )
 
+;;======================================================
+;; C
+;;======================================================
+(add-hook 'c-mode-hook
+ 	  (lambda ()
+	    (c-set-style "linux")
+	    (defun c-compile-current-file ()
+	      (interactive)
+	      (save-buffer)
+	      (shell-command (format "gcc -Wall %s -o %s"
+				     (buffer-real-name)
+				     (file-name-base))))
+	    (define-key c-mode-map (kbd "<f5>") 'c-compile-current-file)
+ 	    ;(add-to-list 'ac-sources 'ac-source-c-headers)
+ 	    ;(add-to-list 'ac-sources 'ac-source-c-header-symbols t)
+	    ))
+
+
+(require 'auto-complete-c-headers)
+(add-to-list 'ac-sources 'ac-source-c-headers)
+(require 'auto-complete-clang)
 
 
 ;;======================================================
