@@ -234,6 +234,11 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (require 'hlinum)
 (hlinum-activate)
 
+;; 自動斷開camelCase
+(add-hook 'prog-mode (lambda () (subword-mode 1)))
+
+;; 很三八的把Lisp程式碼中的lambda顯示成λ
+(global-prettify-symbols-mode 1)
 
 ;;當前行高亮顯示
 ;; (global-hl-line-mode 1)
