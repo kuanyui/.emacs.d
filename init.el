@@ -1856,7 +1856,7 @@ If not, kill-buffer instead. "
   "Go back to the parent directory (..), and the cursor will be moved to where
 the previous directory."
   (interactive)
-  (let* ((DIR (buffer-real-name)))
+  (let* ((DIR (buffer-name)))
     (if (equal DIR "*Find*")
         (quit-window t)
       (progn (find-alternate-file "..")
@@ -2907,7 +2907,7 @@ Return value is float."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("3f3410aaa7417bddb85bc29cadb34ccdcf579b2f4126d42d4bf07ef270d2fbba" "7ed6913f96c43796aa524e9ae506b0a3a50bfca061eed73b66766d14adfa86d1" "ea3f08f94c7732c63ffc601f5fcd2632d1b99f9195bf3b55f4710a37fd985d04" "dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
+    ("7fde61efa16011b294db1448de9e0ae45d602ae949a640164bce6fece4420e90" "3f3410aaa7417bddb85bc29cadb34ccdcf579b2f4126d42d4bf07ef270d2fbba" "7ed6913f96c43796aa524e9ae506b0a3a50bfca061eed73b66766d14adfa86d1" "ea3f08f94c7732c63ffc601f5fcd2632d1b99f9195bf3b55f4710a37fd985d04" "dbfa6f95b6e56fb7b1592f610583e87ebb16d3e172416a107f0aceef1351aad0" "9ba004f6d3e497c9f38859ae263b0ddd3ec0ac620678bc291b4cb1a8bca61c14" "6aae982648e974445ec8d221cdbaaebd3ff96c3039685be9207ca8ac6fc4173f" default)))
  '(delete-selection-mode nil)
  '(guide-key-mode nil)
  '(mark-even-if-inactive t)
