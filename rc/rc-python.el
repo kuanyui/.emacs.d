@@ -2,6 +2,7 @@
 ;;======================================================
 ;; Python
 ;;======================================================
+(require 'python)
 
 (setq org-babel-python-command "python3")
 
@@ -36,7 +37,6 @@
  :regexp "[[:alnum:]_]+"
  :doc-spec
  '(("(python)Index" nil "")))
-(require 'python)
 (require 'python-info)
 
 ;; M-RET 自動註解換行（評估看看是否M-q就夠用了）
