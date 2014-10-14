@@ -425,23 +425,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq lazy-highlight-cleanup nil)
 
 ;;======================================================
-;; 插入時間
+;; 插入時間/檔名
 ;;======================================================
-
-;;我最愛的插入日期，格式為習慣的YYYY/mm/dd（星期），使用方法為C-c d
-(defun my-insert-date ()
-  (interactive)
-  (cond
-   ((equal current-prefix-arg nil)     ; universal-argument not called
-    (insert (format-time-string "[%Y-%m-%d %a]" (current-time))))
-   ((equal current-prefix-arg '(4))    ; C-u
-    (insert (format-time-string "[%Y-%m-%d %a %H:%M]" (current-time))))
-   ((equal current-prefix-arg 1)     ; C-u 1
-    (insert (format-time-string "%Y/%m/%d（%a）" (current-time))))
-   ))
-(global-set-key (kbd "C-c C-x d") 'my-insert-date)
-
-;; 煩死了直接拿org-mode來用就好了。我幹麼自找麻煩啊真白痴。
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
 
 ;; 插入檔名
@@ -1656,8 +1641,8 @@ If not, kill-buffer instead. "
 ;; misc 雜項
 ;;======================================================
 ;; Fuck the Speeching Censorship
-(add-to-list 'load-path "~/Dropbox/config/Emacs/.emacs.d/under-construction/fsc/")
-(load-file "~/Dropbox/config/Emacs/.emacs.d/under-construction/fsc/fsc.el")
+(add-to-list 'load-path "~/.emacs.d/under-construction/fsc/")
+(load-file "~/.emacs.d/under-construction/fsc/fsc.el")
 
 (require 'fsc)
 (global-set-key (kbd "C-c f") 'fsc)
@@ -1741,14 +1726,6 @@ If not, kill-buffer instead. "
 ;;
 ;;  ;;; reset selection
 ;;  (define-key map (kbd "C-c") 'zlc-reset))
-
-;; 其實以下六行我好像根本沒在按，已經習慣按M-p跟M-n了
-(define-key minibuffer-local-must-match-map "\C-p" 'previous-history-element)
-(define-key minibuffer-local-must-match-map "\C-n" 'next-history-element)
-(define-key minibuffer-local-completion-map "\C-p" 'previous-history-element)
-(define-key minibuffer-local-completion-map "\C-n" 'next-history-element)
-(define-key minibuffer-local-map "\C-p" 'previous-history-element)
-(define-key minibuffer-local-map "\C-n" 'next-history-element)
 
 
 ;;======================================================
@@ -2113,11 +2090,12 @@ With one prefix argument, the tarball is gziped."
 (defun my-xml-mode () (rainbow-mode) (xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . my-xml-mode))
 
+(require 'stylus-mode)
+
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
-(require 'stylus-mode)
 (require 'web-mode)
 
 ;;(setq-default show-trailing-whitespace nil)
@@ -2244,9 +2222,6 @@ With one `C-u' prefix, insert output following an arrow"
 ;; C-z 太常按錯了，直接關掉這binding
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
-
-;; 跳到行號
-(global-set-key (kbd "C-x SPC") 'goto-line)
 
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 
@@ -2376,7 +2351,7 @@ With one `C-u' prefix, insert output following an arrow"
 ;; Show line-number in the mode line
 (line-number-mode 1)
 ;; Show column-number in the mode line
-;;(column-number-mode t)
+(column-number-mode t)
 
 
 ;;======================================================
@@ -2482,7 +2457,7 @@ With one `C-u' prefix, insert output following an arrow"
 (require 'python)
 (require 'python-info)
 
-
+;; M-RET 自動註解換行（評估看看是否M-q就夠用了）
 (define-key python-mode-map (kbd "M-RET")
   (lambda () (interactive) (newline) (comment-dwim nil)))
 
@@ -2544,10 +2519,7 @@ With one `C-u' prefix, insert output following an arrow"
 
 
 ;; setq tab-width to 4
-(add-hook 'python-mode-hook (lambda ()
-;;                               (setq tab-width 4)
-;;                               (setq python-indent-offset 4)
-                              (rainbow-delimiters-mode-enable)))
+(add-hook 'python-mode-hook (lambda () (rainbow-delimiters-mode-enable)))
 
 
 
@@ -2743,7 +2715,7 @@ Return value is float."
 ;; (require 'cedet-global)
 
 ;;======================================================
-;; Calendar Framework
+;; calfw - Calendar Framework
 ;;======================================================
 (require 'calfw)
 (require 'calfw-org)
