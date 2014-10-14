@@ -51,15 +51,23 @@
 
 (define-abbrev-table 'edit-abbrevs-mode-abbrev-table '())
 
+(define-abbrev-table 'elisp-byte-code-mode-abbrev-table '())
+
 (define-abbrev-table 'emacs-lisp-byte-code-mode-abbrev-table '())
 
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'enh-ruby-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'epa-info-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-key-list-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-key-mode-abbrev-table '())
+
+(define-abbrev-table 'fsc-spook-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
@@ -72,6 +80,7 @@
 (define-abbrev-table 'global-abbrev-table
   '(
     ("abangry" "(╯°□°）╯︵ ┻━┻" nil 0)
+    ("abbadgirl" "∩ __∩ y" nil 0)
     ("abbook" "《》" nil 0)
     ("abcry" "・ﾟ・｡･ﾟ･(つД｀)" nil 0)
     ("abcry1" "(´；д；｀)" nil 0)
@@ -90,6 +99,8 @@
    ))
 
 (define-abbrev-table 'grep-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-mode-abbrev-table '())
 
 (define-abbrev-table 'help-mode-abbrev-table '())
 
@@ -118,6 +129,8 @@
 (define-abbrev-table 'latex-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'literate-haskell-mode-abbrev-table '())
 
 (define-abbrev-table 'log-edit-mode-abbrev-table '())
 
