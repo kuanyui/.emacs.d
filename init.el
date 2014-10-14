@@ -1774,11 +1774,6 @@ If not, kill-buffer instead. "
 
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
 
-(add-hook 'css-mode-hook
-          (lambda ()
-            ;;            (add-to-list 'ac-sources 'ac-source-company-css)
-            (define-key css-mode-map (kbd "<RET>") 'newline-and-indent)))
-(define-key prog-mode-map (kbd "<RET>") 'newline-and-indent)
 (setq ac-use-menu-map t)
 ;; 讓C-s可以在auto-complete選單裡使用。
 (define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch)
@@ -2122,11 +2117,8 @@ With one prefix argument, the tarball is gziped."
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
-;; 去你的C-j
 (require 'stylus-mode)
 (require 'web-mode)
-(define-key stylus-mode-map (kbd "RET") 'newline-and-indent)
-(define-key web-mode-map (kbd "RET") 'newline-and-indent)
 
 ;;(setq-default show-trailing-whitespace nil)
 (defun toggle-and-delete-trailing-whitespace ()
