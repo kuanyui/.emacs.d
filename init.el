@@ -21,7 +21,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 ;;執行Shell外部程式的搜尋路徑(意同$PATH)
-(setenv "PATH" (concat (getenv "PATH") ":"(getenv "HOME")"/.scripts/"))
+(setenv "PATH" (concat (getenv "PATH") ":"
+		       (getenv "HOME") "/.cabal/bin/" ":"
+		       (getenv "HOME")"/.scripts/"))
 
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
@@ -1709,6 +1711,7 @@ If not, kill-buffer instead. "
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
 (moe-light)
+(moe-theme-set-color 'cyan)
 
 ;;(moe-theme-random-color)
 ;;(powerline-moe-theme)
