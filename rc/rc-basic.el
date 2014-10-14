@@ -500,6 +500,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; (require 'sdcv-mode)
 ;; (global-set-key (kbd "C-c s") 'sdcv-search)
 
+;; 沒屁用的C-z 改成mark
+(global-set-key (kbd "C-z") 'set-mark-command)
+
 ;;======================================================
 ;; Tmux 相關設定
 ;;======================================================

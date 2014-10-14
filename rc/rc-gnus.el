@@ -45,7 +45,10 @@
              (sleep-for 2)
              (message-test-mind-before-send)
              ))))
-(define-key message-mode-map (kbd "C-c C-c") 'message-test-mind-before-send)
+(add-hook 'message-mode-hook
+	  (lambda ()
+	    (define-key message-mode-map (kbd "C-c C-c") 'message-test-mind-before-send)
+	    ))
 
 
 (provide 'rc-gnus)
