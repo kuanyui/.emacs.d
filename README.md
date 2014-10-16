@@ -9,7 +9,15 @@ This is an init file for a non-programmer. Without any warranty surely because t
 cd ~ && git clone https://github.com/kuanyui/.emacs.d && cd .emacs.d && ./setup-emacs.sh
 ```
 
-### Upgrading Packages (Optional)
+## Byte Compile Packages in `elpa/` (Optional)
+
+Compile `.el` into `.elc` may shorten startup time.
+
+```shell
+emacs --load ./byte-compile-packages-in-elpa.el
+```
+
+## Upgrading Packages (Optional)
 
 >Notice: This action is not necessary. It's possible cause some compatibility problems or install a latest but broken package.
 
