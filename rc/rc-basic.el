@@ -336,7 +336,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq inhibit-splash-screen t)
 
 (setq initial-scratch-message
-      ";; The real productivity problem people have is procrastination. It's
+      ";;　少抱怨，多做事。
+
+;; The real productivity problem people have is procrastination. It's
 ;; something of a dirty little secret, but everyone procrastinates -
 ;; severely. It's not just you. But that doesn't mean you shouldn't try to
 ;; stop it.  What is procrastination? To the outside observer, it looks like

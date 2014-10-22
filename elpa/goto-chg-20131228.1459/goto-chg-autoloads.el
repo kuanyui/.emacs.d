@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "goto-chg" "goto-chg.el" (21488 60555 145301
-;;;;;;  714000))
+;;;### (autoloads nil "goto-chg" "goto-chg.el" (21575 37852 490738
+;;;;;;  297000))
 ;;; Generated autoloads from goto-chg.el
 
 (autoload 'goto-last-change "goto-chg" "\

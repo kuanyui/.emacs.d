@@ -43,7 +43,8 @@
 ;;(moe-theme-random-color)
 ;;(powerline-moe-theme)
 
-
+(global-set-key (kbd "C-c m d") 'moe-dark)
+(global-set-key (kbd "C-c m l") 'moe-light)
 
 ;;======================================================
 ;; moedict.el 萌典
