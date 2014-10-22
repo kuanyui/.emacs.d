@@ -56,10 +56,6 @@
 ;; ace-jump
 (global-set-key (kbd "C-c SPC") 'ace-jump-word-mode)
 
-;; goto-chg
-(global-set-key (kbd "C-x j") 'goto-last-change)
-(global-set-key (kbd "C-x C-j") 'goto-last-change-reverse)
-
 ;;======================================================
 ;; Abbrevs
 ;;======================================================

@@ -59,6 +59,7 @@ the previous directory."
 
 ;; 搜尋目前目錄
 (define-key dired-mode-map "f" 'dired-find-name-in-current-directory)
+(define-key dired-mode-map "F" 'dired-find-name-in-current-directory)
 (defun dired-find-name-in-current-directory ()
   (interactive)
   (find-name-dired default-directory
