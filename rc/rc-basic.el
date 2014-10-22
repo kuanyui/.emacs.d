@@ -164,6 +164,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;======================================================
 ;; 基本設定
 ;;======================================================
+;; C-x C-f 不區分大小寫
+(setq read-file-name-completion-ignore-case t)
+
 (setq require-final-newline t)
 ;;超變態的undo-tree-mode
 ;;(提醒：redo會變成C-?)
