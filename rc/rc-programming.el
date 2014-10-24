@@ -29,6 +29,7 @@
 (define-key ac-complete-mode-map (kbd "M-p") 'ac-quick-help-scroll-up)
 (define-key ac-complete-mode-map (kbd "M-n") 'ac-quick-help-scroll-down)
 
+(defalias 'ac 'auto-complete-mode)
 ;;======================================================
 ;; Highlight-symbol
 ;;======================================================
