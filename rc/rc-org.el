@@ -27,6 +27,8 @@
 (define-key global-map "\C-cl" 'org-store-link)
 (setq org-log-done t)
 
+(global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
+
 (setq org-display-table t)
 (setq org-display-inline-images t)
 ;;讓org中顯示圖片能夠先用imagemagick自動縮放
