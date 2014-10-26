@@ -1,5 +1,10 @@
 ;;; rc-programming.el ---                                   -*- lexical-binding: t; -*-
 
+;; Highlight \n, %s...etc
+(add-hook 'prog-mode-hook
+	  '(lambda ()
+	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)))
+
 ;;======================================================
 ;; Auto-complete
 ;;======================================================
