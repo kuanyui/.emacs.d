@@ -184,6 +184,12 @@
 (setq helm-dash-common-docsets '("Python 3" "Qt"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
 
+;;======================================================
+;; Aggressive-ident-mode
+;;======================================================
+;; http://endlessparentheses.com/aggressive-indent-just-got-better-.html
+;; (global-aggressive-indent-mode)
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
 (provide 'rc-programming)
 ;;; rc-programming.el ends here
