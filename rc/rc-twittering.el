@@ -136,6 +136,9 @@ If not, kill-buffer instead. "
   (insert "layout: false\n---\n\n")
   (save-buffer))
 
+(define-key twittering-edit-mode-map (kbd "<f4>") 'ispell-word)
+(define-key twittering-edit-mode-map (kbd "C-x <f4>") 'twittering-edit-replace-at-point)
+
 
 (provide 'rc-twittering)
 ;;; rc-twittering.el ends here
