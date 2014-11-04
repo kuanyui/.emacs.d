@@ -115,6 +115,21 @@
 
 (require 'web-mode)
 
+;; Django & Web-mode
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'ac-modes 'web-mode)
+(add-hook 'web-mode-hook
+          '(lambda ()
+             (defun web-mode-buffer-refresh ()
+               (interactive)
+               (web-mode-scan-buffer)
+               )
+             ))
+(setq web-mode-engines-alist
+      '(
+        ("django" . "\\.html\\'")
+        ))
+
 
 ;;(setq-default show-trailing-whitespace nil)
 (defun toggle-and-delete-trailing-whitespace ()
