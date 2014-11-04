@@ -3,7 +3,8 @@
 ;; Highlight \n, %s...etc
 (add-hook 'prog-mode-hook
 	  '(lambda ()
-	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)))
+	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
+	     (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
 
 ;;======================================================
 ;; Auto-complete
@@ -115,16 +116,17 @@
 
 (require 'web-mode)
 
+(defun web-mode-element-close-and-indent ()
+  (interactive)
+  (web-mode-element-close)
+  (indent-for-tab-command))
+
+(define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
+
+
 ;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 (add-to-list 'ac-modes 'web-mode)
-(add-hook 'web-mode-hook
-          '(lambda ()
-             (defun web-mode-buffer-refresh ()
-               (interactive)
-               (web-mode-scan-buffer)
-               )
-             ))
 (setq web-mode-engines-alist
       '(
         ("django" . "\\.html\\'")
