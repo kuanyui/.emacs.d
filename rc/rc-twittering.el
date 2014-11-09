@@ -35,6 +35,8 @@
 (define-key twittering-mode-map (kbd "D") 'twittering-direct-messages-timeline)
 (define-key twittering-mode-map (kbd "S") 'twittering-sent-direct-messages-timeline)
 (define-key twittering-mode-map (kbd "q") 'twittering-bury-main-timeline-buffer)
+(define-key twittering-mode-map (kbd "[") 'twittering-switch-to-previous-timeline)
+(define-key twittering-mode-map (kbd "]") 'twittering-switch-to-next-timeline)
 
 (defun twittering-bury-main-timeline-buffer ()
   "If in main timeline buffer (:home), bury-buffer.
@@ -88,14 +90,29 @@ If not, kill-buffer instead. "
 
 (add-hook 'twittering-new-tweets-hook 'twittering-filters-apply)
 
-(setq twittering-filter-tweets '("http://4sq.com/.*" "http://adf.ly/.*" "I liked a @YouTube video" "我喜歡一部 .*@YouTube 影片" "爆卦" "中時" "郭董" "nikeplus" "采潔" ))
+(setq twittering-filter-tweets
+      '(
+	"http://4sq.com/.*"
+	"http://adf.ly/.*"
+	"I liked a @YouTube video"
+	"我喜歡一部 .*@YouTube 影片"
+	"中時"
+	"郭董"
+	"nikeplus"
+	"采潔"
+	"連勝文"
+	"神豬"
+	"連D"
+	"蔡正元"
+	"星球與廣大的銀河系！"
+	))
 
 (defalias 'short-url 'twittering-tinyurl-replace-at-point)
 ;;高亮特定使用者，但搞不出來先擺著。
 ;;(defface twittering-star-username-face
 ;;  `((t (:underline t :foreground "a40000" :background "#ffaf87"))) "" :group 'faces)
-;;
 ;;(font-lock-add-keywords 'twittering-mode
+;;
 ;;                        '(("jserv" 0 'twittering-star-username-face)))
 ;;
 ;;(defface twittering-keyword-face
