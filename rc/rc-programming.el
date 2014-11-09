@@ -114,6 +114,9 @@
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
+
+
+
 (require 'web-mode)
 
 (defun web-mode-element-close-and-indent ()
@@ -123,6 +126,11 @@
 
 (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
 
+
+;; Auto-Complete support
+(setq web-mode-ac-sources-alist
+      '(("css" . (ac-source-css-property))
+	("html" . (ac-source-words-in-buffer ac-source-abbrev))))
 
 ;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
