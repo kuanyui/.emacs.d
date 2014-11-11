@@ -126,16 +126,34 @@ If not, kill-buffer instead. "
 
 (add-hook 'twittering-new-tweets-hook 'twittering-my-notification)
 (defun twittering-my-notification ()
-  (if (string=
-       (twittering-timeline-spec-to-string
-        twittering-new-tweets-spec)
-       ":replies")
-      (let ((n twittering-new-tweets-count))
-        (start-process "twittering-notify" nil "notify-send"
-                       "-i" "~/.emacs.d/icon.png"
-                       "New tweets"
-                       (format "You have %d new tweet%s"
-                               n (if (> n 1) "s" ""))))))
+  (let ((timeline-name (twittering-timeline-spec-to-string twittering-new-tweets-spec)))
+    (if (member timeline-name '(":replies" ":direct_messages"))
+	(let ((n twittering-new-tweets-count)
+	      ;;statuses are raw data of new tweets
+	      (statuses twittering-new-tweets-statuses))
+	  ;; When we initialize a timeline, it fetch 20 new tweets by default.
+	  ;; But we don't need this kind of notification. So:
+	  (if (not (eq 20 (length statuses)))
+	      (start-process "twittering-notify" nil "notify-send"
+			     "-i" (expand-file-name "~/.emacs.d/icon.png")
+			     "New tweets"
+			     (format (cond ((string= timeline-name ":replies")
+					    "%d New Reply%s:\n%s")
+					   ((string= timeline-name ":direct_messages")
+					    "%d New DM%s:\n%s"))
+				     n
+				     (if (> n 1) "s" "")
+				     (twittering--format-statuses statuses))))))))
+
+(defun twittering--format-statuses (statuses)
+  "Format statuses for `twittering-my-notification'."
+  (mapconcat
+   (lambda (s) (format "%s: %s"
+		   (cdr (assq 'user-screen-name s))
+		   (replace-regexp-in-string "\n" "" (cdr (assq 'text s)))
+		   ))
+   statuses
+   "\n"))
 
 
 (load-file "~/.emacs.d/git/twittering-myfav/twittering-myfav.el")
