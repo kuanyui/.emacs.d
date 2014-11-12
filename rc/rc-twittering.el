@@ -3,7 +3,7 @@
 ;;======================================================
 ;;Twittering-mode:用Emacs上Twitter
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/lisps/twittering-mode/")
+(add-to-list 'load-path "~/.emacs.d/git/twittering-mode/")
 (require 'twittering-mode)
 (setq twittering-use-master-password t) ;;This requires GnuPG. And also, either EasyPG or alpaca.el (0.13) is necessary.
 (twittering-enable-unread-status-notifier) ;;顯示未讀訊息數
@@ -51,8 +51,8 @@ If not, kill-buffer instead. "
     (kill-buffer)))
 ;;讓twittering-status-buffer支援換行
 (setq twittering-status-format
-      "%i %s,%p %@:
-%FOLD[  ]{%T // from %f%L%r%R}
+      "%i %s,%FACE[font-lock-preprocessor-face]{%p} %FACE[font-lock-comment-face]{%@}:
+%FOLD[  ]{%T %FACE[font-lock-comment-face]{// from %f%L%r%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
  ")
 
 (setq twittering-retweet-format
@@ -138,11 +138,10 @@ If not, kill-buffer instead. "
 			     "-i" (expand-file-name "~/.emacs.d/icon.png")
 			     "New tweets"
 			     (format (cond ((string= timeline-name ":replies")
-					    "%d New Reply%s:\n%s")
+					    "%d New Reply:\n%s")
 					   ((string= timeline-name ":direct_messages")
-					    "%d New DM%s:\n%s"))
+					    "%d New DM:\n%s"))
 				     n
-				     (if (> n 1) "s" "")
 				     (twittering--format-statuses statuses))))))))
 
 (defun twittering--format-statuses (statuses)
