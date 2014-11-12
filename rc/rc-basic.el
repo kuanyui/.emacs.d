@@ -218,15 +218,16 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 
 (setq inhibit-linum-mode-alist
-      '(eshell-mode
-        shell-mode
-        term-mode
-        erc-mode
-        compilation-mode
-        woman-mode
-        w3m-mode
-        magit-mode
-        ))
+      `(eshell-mode
+	shell-mode
+	term-mode
+	erc-mode
+	compilation-mode
+	woman-mode
+	w3m-mode
+	magit-mode
+	,(if (not (window-system)) 'twittering-mode)
+	))
 
 (defadvice linum-on (around inhibit-for-modes activate)
   "Stop turing linum-mode if it is in the inhibit-linum-mode-alist."
@@ -235,10 +236,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                    (> (count-lines (point-min) (point-max)) 1000)))
     ad-do-it))
 
-
-;; 已經有行號就不用mode-line裡的行號
-(setq line-number-mode nil)
-(column-number-mode)
 ;; Indicate buffer size in mode-line
 (setq size-indication-mode t)
 
@@ -597,6 +594,22 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (global-unset-key (kbd "C-x C-z"))
 
 
+;;======================================================
+;; Emacs 自動備份 Auto backup
+;;======================================================
+
+;; Emacs會自動給你編輯的檔案備份（以~為結尾，例如編輯test，會產生test~）
+;; 然而這樣常常會把目錄弄得很亂，所以以下設定可以讓這些備份檔統統塞
+;; 進~/.saves中，保持屁屁和工作目錄的乾爽。
+
+(setq
+ backup-by-copying t      ; don't clobber symlinks
+ backup-directory-alist
+ '(("." . "~/.saves"))    ; don't litter my fs tree
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t)       ; use versioned backups
 
 (provide 'rc-basic)
 ;;; basic.el ends here
