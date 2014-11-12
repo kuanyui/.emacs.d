@@ -30,7 +30,7 @@
 
 ;; 'always means no asking; 'top means ask once
 (setq dired-recursive-copies 'top)
-;; (setq dired-recursive-deletes 'top)
+(setq dired-recursive-deletes 'top)
 
 ;; 回到上層目錄後，自動把cursor移動到前一個目錄處
 (defun my-dired-backward ()
