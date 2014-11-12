@@ -52,7 +52,8 @@ If not, kill-buffer instead. "
 ;;讓twittering-status-buffer支援換行
 (setq twittering-status-format
       "%i %s,%FACE[font-lock-preprocessor-face]{%p} %FACE[font-lock-comment-face]{%@}:
-%FOLD[  ]{%T %FACE[font-lock-comment-face]{// from %f%L%r%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
+%FOLD[  ]{%T
+%FACE[font-lock-comment-face]{from %f%L%r%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
  ")
 
 (setq twittering-retweet-format
