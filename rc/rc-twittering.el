@@ -38,6 +38,9 @@
 (define-key twittering-mode-map (kbd "[") 'twittering-switch-to-previous-timeline)
 (define-key twittering-mode-map (kbd "]") 'twittering-switch-to-next-timeline)
 
+(define-key twittering-edit-mode-map (kbd "<f4>") 'ispell-word)
+(define-key twittering-edit-mode-map (kbd "C-x <f4>") 'twittering-edit-replace-at-point)
+
 (defun twittering-bury-main-timeline-buffer ()
   "If in main timeline buffer (:home), bury-buffer.
 If not, kill-buffer instead. "
@@ -49,27 +52,27 @@ If not, kill-buffer instead. "
            (eq major-mode 'twittering-mode))
       (bury-buffer)
     (kill-buffer)))
-;;讓twittering-status-buffer支援換行
+
+
 (setq twittering-status-format
-      "%i %s,%FACE[font-lock-preprocessor-face]{%p} %FACE[font-lock-comment-face]{%@}:
+      "%i %s,%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
 %FOLD[  ]{%T
-%FACE[font-lock-comment-face]{from %f%L%r%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
+%FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
  ")
 
 (setq twittering-retweet-format
       '(nil _ " RT: %t (via @%s)")
       )
 
-;; [FIXME] twittering-update-status沒有hook可用，看看要不要自己定義一個發推用function，可以把發出的推也一起加入diary.org的結尾。
-
-;;類似pentadactyl按[f]後輸入數字開啟連結
 (autoload 'twittering-numbering "twittering-numbering" nil t)
 (add-hook 'twittering-mode-hook 'twittering-numbering)
 
-
 (add-hook 'twittering-mode-hook 'auto-fill-mode)
 
-;;;; Filtering for Tweets
+;; ====================================================
+;; Filtering for Tweets
+;; ====================================================
+
 (defvar twittering-filter-users '()
   "*List of strings containing usernames (without '@' prefix) whose tweets should not be displayed in timeline.")
 (defvar twittering-filter-tweets '()
@@ -101,6 +104,7 @@ If not, kill-buffer instead. "
 	"郭董"
 	"nikeplus"
 	"采潔"
+	"羅淑蕾"
 	"連勝文"
 	"神豬"
 	"連D"
@@ -109,21 +113,16 @@ If not, kill-buffer instead. "
 	))
 
 (defalias 'short-url 'twittering-tinyurl-replace-at-point)
-;;高亮特定使用者，但搞不出來先擺著。
-;;(defface twittering-star-username-face
-;;  `((t (:underline t :foreground "a40000" :background "#ffaf87"))) "" :group 'faces)
-;;(font-lock-add-keywords 'twittering-mode
-;;
-;;                        '(("jserv" 0 'twittering-star-username-face)))
-;;
-;;(defface twittering-keyword-face
-;;  `((t (:underline t :foreground "a40000"))) "" :group 'faces)
-;;
-;;(font-lock-add-keywords 'twittering-mode
-;;                        '(("keyword" 0 'twittering-keyword-face)))
 
+(defface twittering-keyword-face
+  `((t (:underline t :foreground "#a40000"))) "" :group 'faces)
 
-;;(assq 'text (twittering-find-status (twittering-get-id-at)))
+(font-lock-add-keywords 'twittering-mode
+			'(("keyword" 0 'twittering-keyword-face)))
+
+;; ====================================================
+;; Popup notification by calling `notify-send' (reply & DM)
+;; ====================================================
 
 (add-hook 'twittering-new-tweets-hook 'twittering-my-notification)
 (defun twittering-my-notification ()
@@ -143,9 +142,9 @@ If not, kill-buffer instead. "
 					   ((string= timeline-name ":direct_messages")
 					    "%d New DM:\n%s"))
 				     n
-				     (twittering--format-statuses statuses))))))))
+				     (twittering-my-notification-format-statuses statuses))))))))
 
-(defun twittering--format-statuses (statuses)
+(defun twittering-my-notification-format-statuses (statuses)
   "Format statuses for `twittering-my-notification'."
   (mapconcat
    (lambda (s) (format "%s: %s"
@@ -155,24 +154,63 @@ If not, kill-buffer instead. "
    statuses
    "\n"))
 
+;; ====================================================
+;; Press "o" to open the page of current tweet.
+;; ====================================================
+(defun twittering-if-valid-status-uri (uri)
+  (if (stringp uri)
+      (string-match "http://twitter.com/.+/status/[0-9]+" uri)
+    nil))
 
-(load-file "~/.emacs.d/git/twittering-myfav/twittering-myfav.el")
-(require 'twittering-myfav)
-(setq twittering-myfav-file-name "twittering_myfav") ; The org and html file's name.
-(setq twittering-myfav-file-path "~/Dropbox/Blog/kuanyui.github.io/source/") ; remember "/" in the end
-(setq twittering-myfav-your-username "azazabc123") ; without "@"
-(define-key twittering-mode-map (kbd "A") 'twittering-myfav-add-to-file)
-
-(defun twittering-myfav-export-to-hexo ()
+(defun twittering-open-tweet-page ()
   (interactive)
-  (twittering-myfav-export-to-html)
-  (write-file "~/Dropbox/Blog/kuanyui.github.io/source/twittering_myfav.html" nil)
-  (goto-char (point-min))
-  (insert "layout: false\n---\n\n")
-  (save-buffer))
+  (let ((uri "")
+	pos)
+    (save-excursion
+      (goto-char (twittering-get-current-status-head))
+      (while (not (twittering-if-valid-status-uri uri))
+	(right-char 3)
+	(setq uri (get-text-property (point) 'uri)))
+      (browse-url uri)
+      )))
+(define-key twittering-mode-map (kbd "o") 'twittering-open-tweet-page)
 
-(define-key twittering-edit-mode-map (kbd "<f4>") 'ispell-word)
-(define-key twittering-edit-mode-map (kbd "C-x <f4>") 'twittering-edit-replace-at-point)
+;; ====================================================
+;; Auto insert all mentioned users in tweet when reply.
+;; ====================================================
+(require 's)
+(defun twittering-my-enter ()
+  (interactive)
+  (let ((ori-buffer (current-buffer))
+	user-list)
+    (funcall #'twittering-enter)
+    (when (eq major-mode 'twittering-edit-mode) ;check if entered edit mode
+      (with-current-buffer ori-buffer
+	(setq user-list (s-match-strings-all "@[A-Za-z0-9_]+"
+					     (get-text-property (point) 'text))))
+      (insert (mapconcat #'car user-list " "))
+      )))
+
+
+;; ====================================================
+;; craps
+;; ====================================================
+
+;; (load-file "~/.emacs.d/git/twittering-myfav/twittering-myfav.el")
+;; (require 'twittering-myfav)
+;; (setq twittering-myfav-file-name "twittering_myfav") ; The org and html file's name.
+;; (setq twittering-myfav-file-path "~/Dropbox/Blog/kuanyui.github.io/source/") ; remember "/" in the end
+;; (setq twittering-myfav-your-username "azazabc123") ; without "@"
+;; (define-key twittering-mode-map (kbd "A") 'twittering-myfav-add-to-file)
+;;
+;; (defun twittering-myfav-export-to-hexo ()
+;;   (interactive)
+;;   (twittering-myfav-export-to-html)
+;;   (write-file "~/Dropbox/Blog/kuanyui.github.io/source/twittering_myfav.html" nil)
+;;   (goto-char (point-min))
+;;   (insert "layout: false\n---\n\n")
+;;   (save-buffer))
+
 
 
 (provide 'rc-twittering)
