@@ -48,7 +48,7 @@
 ;;    :group 'font-lock-highlighting-faces))
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(
-                          ("'[-a-zA-Z_][-a-zA-Z0-9_:/]*" 0 'font-lock-constant-face)
+                          ("#?'[-a-zA-Z_][-a-zA-Z0-9_:/+]*" 0 'font-lock-constant-face)
                           ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
                           ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
 
