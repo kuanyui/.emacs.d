@@ -55,7 +55,7 @@ If not, kill-buffer instead. "
 
 
 (setq twittering-status-format
-      "%i %s,%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
+      "%i %s %FACE[font-lock-comment-face]{(%S)},%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
 %FOLD[  ]{%T
 %FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
  ")
@@ -164,8 +164,7 @@ If not, kill-buffer instead. "
 
 (defun twittering-open-tweet-page ()
   (interactive)
-  (let ((uri "")
-	pos)
+  (let (uri pos)
     (save-excursion
       (goto-char (twittering-get-current-status-head))
       (while (not (twittering-if-valid-status-uri uri))
@@ -178,6 +177,8 @@ If not, kill-buffer instead. "
 ;; ====================================================
 ;; Auto insert all mentioned users in tweet when reply.
 ;; ====================================================
+
+;; Notice: library s.el is required. It's available on MELPA.
 (require 's)
 (defun twittering-my-enter ()
   (interactive)
