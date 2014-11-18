@@ -37,6 +37,20 @@
 
 (define-abbrev-table 'completion-list-mode-abbrev-table '())
 
+(define-abbrev-table 'conf-colon-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-javaprop-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-ppd-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-space-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-unix-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-windows-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-xdefaults-mode-abbrev-table '())
+
 (define-abbrev-table 'context-mode-abbrev-table '())
 
 (define-abbrev-table 'css-mode-abbrev-table '())
@@ -63,9 +77,7 @@
 
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
 
-(define-abbrev-table 'enh-ruby-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'enh-ruby-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-info-mode-abbrev-table '())
 
@@ -95,6 +107,7 @@
     ("abdown" "↓" nil 0)
     ("abheart" "♥" nil 0)
     ("abkita" "ｷﾀ――(ﾟ∀ﾟ)――!!" nil 0)
+    ("ablazy" "_(:3_| 4)_" nil 0)
     ("ableft" "←" nil 0)
     ("aboc" "℃" nil 0)
     ("abowo" "ˊ・ω・ˋ" nil 4)
