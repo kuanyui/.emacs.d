@@ -164,14 +164,9 @@ If not, kill-buffer instead. "
 
 (defun twittering-open-tweet-page ()
   (interactive)
-  (let (uri pos)
-    (save-excursion
-      (goto-char (twittering-get-current-status-head))
-      (while (not (twittering-if-valid-status-uri uri))
-	(right-char 3)
-	(setq uri (get-text-property (point) 'uri)))
-      (browse-url uri)
-      )))
+  (browse-url (twittering-get-status-url
+	       (get-text-property (point) 'user-name)
+	       (get-text-property (point) 'id))))
 (define-key twittering-mode-map (kbd "o") 'twittering-open-tweet-page)
 
 ;; ====================================================
