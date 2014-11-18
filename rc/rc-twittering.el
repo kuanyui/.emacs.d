@@ -157,16 +157,12 @@ If not, kill-buffer instead. "
 ;; ====================================================
 ;; Press "o" to open the page of current tweet.
 ;; ====================================================
-(defun twittering-if-valid-status-uri (uri)
-  (if (stringp uri)
-      (string-match "http://twitter.com/.+/status/[0-9]+" uri)
-    nil))
-
 (defun twittering-open-tweet-page ()
   (interactive)
   (browse-url (twittering-get-status-url
 	       (get-text-property (point) 'user-name)
 	       (get-text-property (point) 'id))))
+
 (define-key twittering-mode-map (kbd "o") 'twittering-open-tweet-page)
 
 ;; ====================================================
