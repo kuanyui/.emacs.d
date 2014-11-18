@@ -52,7 +52,7 @@
 ;;======================================================
 
 ;; 自動斷開camelCase
-(add-hook 'prog-mode (lambda () (subword-mode 1)))
+(add-hook 'prog-mode-hook (lambda () (subword-mode 1)))
 
 ;;======================================================
 ;; Code folding
@@ -124,13 +124,24 @@
   (web-mode-element-close)
   (indent-for-tab-command))
 
-(define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
+ (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
 
+(setq web-mode-auto-close-style 1)
+(setq web-mode-tag-auto-close-style 1)
 
 ;; Auto-Complete support
-(setq web-mode-ac-sources-alist
-      '(("css" . (ac-source-css-property))
-	("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+ (setq web-mode-ac-sources-alist
+       '(("css" . (ac-source-css-property))
+	 ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
+ (setq web-mode-extra-snippets '(
+				 ("django" . (
+					      ("a" . ("{% " . " %}"))
+					      ("%" . ("{% " . " %}"))
+					      )
+				  ))
+       )
+
 
 ;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
@@ -138,6 +149,7 @@
 (setq web-mode-engines-alist
       '(
         ("django" . "\\.html\\'")
+        ("django" . "\\.ejs\\'")
         ))
 
 
@@ -215,6 +227,13 @@
 ;; http://endlessparentheses.com/aggressive-indent-just-got-better-.html
 ;; (global-aggressive-indent-mode)
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
+;;======================================================
+;; imenu (Emacs built-in)
+;;======================================================
+(define-key prog-mode-map (kbd "C-c j") 'imenu)
+
+
 
 (provide 'rc-programming)
 ;;; rc-programming.el ends here
