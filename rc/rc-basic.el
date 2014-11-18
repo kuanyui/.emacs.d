@@ -327,8 +327,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;同名檔案不混淆（同名檔案同時開啟時，會在buffer加上目錄名稱）
 (require 'uniquify)
 (setq
- uniquify-buffer-name-style 'post-forward
- uniquify-separator ":")
+ uniquify-buffer-name-style 'forward
+ uniquify-separator "/")
 
 ;;換掉歡迎畫面的難看GNU Logo
 ;;(setq  fancy-splash-image "~/.emacs.d/icon.png")
