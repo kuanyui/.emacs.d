@@ -168,9 +168,8 @@ If not, kill-buffer instead. "
 ;; ====================================================
 ;; Auto insert all mentioned users in tweet when reply.
 ;; ====================================================
+(setq twittering-username "azazabc123")
 
-;; Notice: library s.el is required. It's available on MELPA.
-(require 's)
 (defun twittering-my-enter ()
   (interactive)
   (let ((ori-buffer (current-buffer))
@@ -178,12 +177,17 @@ If not, kill-buffer instead. "
     (funcall #'twittering-enter)
     (when (eq major-mode 'twittering-edit-mode) ;check if entered edit mode
       (with-current-buffer ori-buffer
-	(setq user-list (s-match-strings-all "@[A-Za-z0-9_]+"
-					     (get-text-property (point) 'text))))
-      (insert (mapconcat #'car user-list " "))
+	(setq user-list
+	      (mapcar (lambda (mention) (cdr (assq 'screen-name mention)))
+		      (cdr (assq 'mentions (assq 'entity
+						 (twittering-find-status
+						  (get-text-property (point) 'id))))))))
+      (insert (mapconcat (lambda (x) (concat "@" x))
+			 (remove-if (lambda (x) (string= x twittering-username)) user-list)
+			 " "))
       )))
 
-
+(define-key twittering-mode-map (kbd "RET") 'twittering-my-enter)
 ;; ====================================================
 ;; craps
 ;; ====================================================
