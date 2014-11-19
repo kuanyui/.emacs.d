@@ -172,19 +172,22 @@ If not, kill-buffer instead. "
 
 (defun twittering-my-enter ()
   (interactive)
-  (let ((ori-buffer (current-buffer))
-	user-list)
+  (let* ((status (twittering-find-status (get-text-property (point) 'id)))
+	 (retweet (cdr (assq 'retweeting-user-screen-name status)))
+	 (mentions (cdr (assq 'mentions (assq 'entity status))))
+	 user-list)
     (funcall #'twittering-enter)
     (when (eq major-mode 'twittering-edit-mode) ;check if entered edit mode
-      (with-current-buffer ori-buffer
-	(setq user-list
-	      (mapcar (lambda (mention) (cdr (assq 'screen-name mention)))
-		      (cdr (assq 'mentions (assq 'entity
-						 (twittering-find-status
-						  (get-text-property (point) 'id))))))))
-      (insert (mapconcat (lambda (x) (concat "@" x))
-			 (remove-if (lambda (x) (string= x twittering-username)) user-list)
-			 " "))
+      (setq user-list
+	    (mapcar (lambda (mention) (cdr (assq 'screen-name mention)))
+		    mentions))
+      (insert (concat
+	       (mapconcat (lambda (x) (concat "@" x))
+			  (remove-if (lambda (x) (string= x twittering-username)) user-list)
+			  " ")
+	       (if retweet
+		   (concat "@" retweet)
+		 nil)))
       )))
 
 (define-key twittering-mode-map (kbd "RET") 'twittering-my-enter)
