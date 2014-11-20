@@ -88,7 +88,8 @@ is considered to be a project root."
 
 (setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
-(add-hook 'python-mode-hook 'jedi-setup-venv)
+
+;; (add-hook 'python-mode-hook 'jedi-setup-venv) ;會讓C-c C-c send-to-buffer時爆掉
 (add-hook 'python-mode-hook 'jedi:setup)
 
 (provide 'rc-python)

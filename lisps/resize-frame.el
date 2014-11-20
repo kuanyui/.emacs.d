@@ -49,7 +49,5 @@ C-c C-c to apply."
   (setq resize-frame nil)
   (message "Done."))
 
-(global-set-key (kbd "ESC `") 'resize-frame)
-
 (provide 'resize-frame)
 ;;; resize-frame.el ends here

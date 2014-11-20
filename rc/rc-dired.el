@@ -5,6 +5,9 @@
 ;;======================================================
 
 (require 'dired+)
+(require 'dired-aux)
+(require 'dired-async)
+
 (setq dired-dwim-target t)
 ;; M-RET to call `kde-open` to open file.
 (defun dired-open-file-with-external-program ()
