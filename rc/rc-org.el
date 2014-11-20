@@ -1,19 +1,4 @@
 ;;; rc-org.el ---                                    -*- lexical-binding: t; -*-
-
-(defun org-qt4-add-doc-link ()
-  (interactive)
-  (let* ((begin (progn (right-char 1) (backward-word 1) (point)))
-         (end (progn (forward-word 1) (point)))
-         (Q (buffer-substring-no-properties begin end)))
-    (if (string-match "^Q[A-z0-9]+" Q)
-        (progn
-          (delete-region begin end)
-          (insert
-           (format "[[http://qt-project.org/doc/qt-4.8/%s.html][%s]]"
-                   (downcase Q) Q)))
-      (message "This seems not to belong to Qt namespace"))))
-(define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
-
 ;;======================================================
 ;; Org-mode
 ;;======================================================
@@ -297,7 +282,8 @@ h2.footnotes {
 ;;    (t "")))
 
 
-;;org輸出html時中文不要有奇怪的空白。（by coldnew the God）
+;; org輸出html時中文不要有奇怪的空白。（by coldnew the God）
+;; Avoid unnecessary/wrong spaces when export to HTML.
 (defadvice org-html-paragraph (before org-html-paragraph-advice
                                       (paragraph contents info) activate)
   "Join consecutive Chinese lines into a single long line without
@@ -484,7 +470,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (setq org-capture-templates
       '(("t" "Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
-         "** TODO %? %^G\n  %i")
+         "** TODO% ? %^G\n  %i")
         ("s" "School" entry
          (file+headline (concat org-directory "/agenda/School.org") "School")
          "** TODO %?\n  %i")
@@ -494,9 +480,12 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
         ("r" "Reading" entry
          (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
          "** %? %i :Reading:")
-        ("d" "Diary" entry
+        ("D" "Diary + Timer" entry
          (file+datetree (concat org-directory "/diary/diary.org"))
          "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+	("d" "Diary" entry
+         (file+datetree (concat org-directory "/diary/diary.org"))
+         "* %? %U")
         ("e" "Event" entry
          (file+headline (concat org-directory "/agenda/Event.org") "Event")
          "** %? %^g\n%^{Event's date&time? }T\n  %i")))
@@ -763,6 +752,21 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;; First day of the week
 (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
 
+
+
+(defun org-qt4-add-doc-link ()
+  (interactive)
+  (let* ((begin (progn (right-char 1) (backward-word 1) (point)))
+         (end (progn (forward-word 1) (point)))
+         (Q (buffer-substring-no-properties begin end)))
+    (if (string-match "^Q[A-z0-9]+" Q)
+        (progn
+          (delete-region begin end)
+          (insert
+           (format "[[http://qt-project.org/doc/qt-4.8/%s.html][%s]]"
+                   (downcase Q) Q)))
+      (message "This seems not to belong to Qt namespace"))))
+(define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
 
 
 (provide 'rc-org)

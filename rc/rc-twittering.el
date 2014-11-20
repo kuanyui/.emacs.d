@@ -53,12 +53,18 @@ If not, kill-buffer instead. "
       (bury-buffer)
     (kill-buffer)))
 
-
 (setq twittering-status-format
       "%i %s %FACE[font-lock-comment-face]{(%S)},%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
 %FOLD[  ]{%T
 %FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
  ")
+
+;; (setq twittering-status-format
+;; "%i %s %FACE[font-lock-comment-face]{(%S)},%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
+;; %FOLD[  ]{%T
+;; %FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R}}
+;;  ")
+
 
 (setq twittering-retweet-format
       '(nil _ " RT: %t (via @%s)")
@@ -74,9 +80,12 @@ If not, kill-buffer instead. "
 ;; ====================================================
 
 (defvar twittering-filter-users '()
-  "*List of strings containing usernames (without '@' prefix) whose tweets should not be displayed in timeline.")
+  "*List of strings containing usernames (without '@' prefix)
+  whose tweets should not be displayed in timeline.")
 (defvar twittering-filter-tweets '()
-  "*List of strings containing phrases which will prevent a tweet containing one of those phrases from being displayed in timeline.")
+  "*List of strings containing phrases which will prevent a tweet
+  containing one of those phrases from being displayed in
+  timeline.")
 
 (defun twittering-filters-apply ()
   (setq non-matching-statuses '())
