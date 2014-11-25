@@ -34,6 +34,10 @@
 ;;  (lazy-highlight-cleanup)(keyboard-quit))
 ;;(global-set-key (kbd "C-g") 'keyboard-quit-custom)
 
+(define-key lisp-mode-map (kbd "ESC <f12>")'highlight-symbol-next)
+(define-key lisp-mode-map (kbd "ESC <f11>")'highlight-symbol-prev)
+(add-hook 'lisp-mode-hook 'highlight-symbol-mode)
+
 ;;======================================================
 ;; Emacs Lisp 相關加強
 ;;======================================================

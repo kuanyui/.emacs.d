@@ -113,10 +113,11 @@ abbrev for it."
              (pangu-spacing-mode 1)
              (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
 
-(add-hook 'org-mode-hook
-          '(lambda ()
-             (pangu-spacing-mode 1)
-             (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+(remove-hook 'org-mode-hook
+	     '(lambda ()
+		(pangu-spacing-mode 1)
+		;;(set (make-local-variable 'pangu-spacing-real-insert-separtor) t)
+		))
 
 ;;======================================================
 ;; vlf - deal with Very Large File

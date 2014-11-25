@@ -2,6 +2,8 @@
 ;;======================================================
 ;; Org-mode
 ;;======================================================
+;;(delete "/usr/local/share/emacs/24.4/lisp/org" load-path)
+;;(add-to-list 'load-path "~/.emacs.d/git/org-mode/lisp")
 (require 'org-install)
 (require 'org)
 (require 'ox)
