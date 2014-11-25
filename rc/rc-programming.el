@@ -1,10 +1,11 @@
 ;;; rc-programming.el ---                                   -*- lexical-binding: t; -*-
 
 ;; Highlight \n, %s...etc
-(add-hook 'prog-mode-hook
-	  '(lambda ()
-	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
-	     (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
+;; This will cause highlight-symbol corrupt!
+;; (add-hook 'prog-mode-hook
+;; 	  '(lambda ()
+;; 	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
+;; 	     (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
 
 ;;======================================================
 ;; Auto-complete
@@ -124,8 +125,9 @@
   (web-mode-element-close)
   (indent-for-tab-command))
 
- (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
+(define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
 
+(setq web-mode-enable-auto-closing t)
 (setq web-mode-auto-close-style 1)
 (setq web-mode-tag-auto-close-style 1)
 
@@ -227,6 +229,7 @@
 ;; http://endlessparentheses.com/aggressive-indent-just-got-better-.html
 ;; (global-aggressive-indent-mode)
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'lisp-mode-hook #'aggressive-indent-mode)
 
 ;;======================================================
 ;; imenu (Emacs built-in)
