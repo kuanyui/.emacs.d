@@ -611,5 +611,65 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
  kept-old-versions 2
  version-control t)       ; use versioned backups
 
+;;======================================================
+;; Shorten indicators in Mode-line
+;;======================================================
+(setq mode-line-format
+      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
+	(vc-mode vc-mode)
+	mode-line-modes mode-line-misc-info mode-line-end-spaces))
+(setq projectile-mode-line nil)
+(setq undo-tree-mode-lighter nil)
+(setq magit-auto-revert-mode-lighter nil)
+
+(setq mode-line-cleaner-alist
+      `((auto-complete-mode . "")
+	(yas-minor-mode . "")
+	(eldoc-mode . "")
+	(abbrev-mode . "")
+	(rainbow-mode . "")
+	(highlight-symbol-mode . "")
+	(aggressive-indent-mode . " >")
+	(subword-mode . "")
+	;; Major modes
+	(hi-lock-mode . "")
+	(python-mode . "Py")
+	(emacs-lisp-mode . "ELisp")
+	(nxhtml-mode . "nx"))
+      )
+
+
+(defun clean-mode-line ()
+  (interactive)
+  (loop for cleaner in mode-line-cleaner-alist
+        do (let* ((mode (car cleaner))
+		  (mode-str (cdr cleaner))
+		  (old-mode-str (cdr (assq mode minor-mode-alist))))
+             (when old-mode-str
+	       (setcar old-mode-str mode-str))
+	     ;; major mode
+             (when (eq mode major-mode)
+               (setq mode-name mode-str)))))
+
+
+(add-hook 'after-change-major-mode-hook 'clean-mode-line)
+
+;;; alias the new `flymake-report-status-slim' to
+;;; `flymake-report-status'
+;; (defalias 'flymake-report-status 'flymake-report-status-slim)
+;; (defun flymake-report-status-slim (e-w &optional status)
+;;   "Show \"slim\" flymake status in mode line."
+;;   (when e-w
+;;     (setq flymake-mode-line-e-w e-w))
+;;   (when status
+;;     (setq flymake-mode-line-status status))
+;;   (let* ((mode-line " Φ"))
+;;     (when (> (length flymake-mode-line-e-w) 0)
+;;       (setq mode-line (concat mode-line ":" flymake-mode-line-e-w)))
+;;     (setq mode-line (concat mode-line flymake-mode-line-status))
+;;     (setq flymake-mode-line mode-line)
+;;     (force-mode-line-update)))
+;;
+
 (provide 'rc-basic)
 ;;; basic.el ends here
