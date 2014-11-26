@@ -614,6 +614,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
+(require 'rich-minority)
+(rich-minority-mode 1)
+
 (setq mode-line-format
       '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
 	(vc-mode vc-mode)
