@@ -117,6 +117,9 @@
 
 
 
+;;======================================================
+;; Web-mode
+;;======================================================
 
 (require 'web-mode)
 
@@ -257,6 +260,10 @@
 (setq ido-enable-flex-matching t)
 
 (projectile-global-mode t)
+
+;;Helm integration with Projectile
+(require 'helm-projectile)
+(helm-projectile-on)
 
 (provide 'rc-programming)
 ;;; rc-programming.el ends here
