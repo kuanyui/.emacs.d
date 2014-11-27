@@ -8,7 +8,7 @@
 (setq twittering-use-master-password t) ;;This requires GnuPG. And also, either EasyPG or alpaca.el (0.13) is necessary.
 (twittering-enable-unread-status-notifier) ;;顯示未讀訊息數
 ;;(setq-default twittering-icon-mode t) ;;預設顯示頭像
-
+(global-set-key [(f8)] 'twit)
 ;;開啟自己的favorite timeline
 (defun my-twittering-favorites-timeline ()
   (interactive)
