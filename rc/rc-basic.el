@@ -422,7 +422,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
          ))
   (set-register (car r) (cadr r)))
 
-(global-set-key (kbd "<f8>") 'ack-and-a-half)
 ;; (defalias 'ack 'ack-and-a-half)
 (defalias 'ack-same 'ack-and-a-half-same)
 (defalias 'ack-find-file 'ack-and-a-half-find-file)
@@ -461,8 +460,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (defun open-material-notes ()
   "Open material notes."
   (interactive)(find-file (concat org-directory "/materials.org")))
-
-(global-set-key [(f12)] 'twit)
 
 (defun open-blog-dir ()
   (interactive)(find-file "~/Dropbox/Blog"))
@@ -614,65 +611,56 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
+
+
 (require 'rich-minority)
 (rich-minority-mode 1)
+(setf rm-blacklist "")
 
-(setq mode-line-format
-      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
-	(vc-mode vc-mode)
-	mode-line-modes mode-line-misc-info mode-line-end-spaces))
-(setq projectile-mode-line nil)
-(setq undo-tree-mode-lighter nil)
-(setq magit-auto-revert-mode-lighter nil)
 
-(setq mode-line-cleaner-alist
-      `((auto-complete-mode . "")
-	(yas-minor-mode . "")
-	(eldoc-mode . "")
-	(abbrev-mode . "")
-	(rainbow-mode . "")
-	(highlight-symbol-mode . "")
-	(aggressive-indent-mode . " >")
-	(subword-mode . "")
-	;; Major modes
-	(hi-lock-mode . "")
-	(python-mode . "Py")
-	(emacs-lisp-mode . "ELisp")
-	(nxhtml-mode . "nx"))
+(setq-default mode-line-format
+	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
+		(vc-mode vc-mode) " "
+		mode-line-modes mode-line-misc-info mode-line-end-spaces))
+
+(setq mode-line-position
+      `((1 ,(propertize
+	     " %p"
+	     'local-map mode-line-column-line-number-mode-map
+	     'mouse-face 'mode-line-highlight
+	     ;; XXX needs better description
+	     'help-echo "Size indication mode\n\
+mouse-1: Display Line and Column Mode Menu"))
+	(size-indication-mode
+	 (2 ,(propertize
+	      "/%I"
+	      'local-map mode-line-column-line-number-mode-map
+	      'mouse-face 'mode-line-highlight
+	      ;; XXX needs better description
+	      'help-echo "Size indication mode\n\
+mouse-1: Display Line and Column Mode Menu")))
+	(line-number-mode
+	 ((column-number-mode
+	   (1 ,(propertize
+		"(%l,%c)"
+		'local-map mode-line-column-line-number-mode-map
+		'mouse-face 'mode-line-highlight
+		'help-echo "Line number and Column number\n\
+mouse-1: Display Line and Column Mode Menu"))
+	   (1 ,(propertize
+		"L%l"
+		'local-map mode-line-column-line-number-mode-map
+		'mouse-face 'mode-line-highlight
+		'help-echo "Line Number\n\
+mouse-1: Display Line and Column Mode Menu"))))
+	 ((column-number-mode
+	   (1 ,(propertize
+		"C%c"
+		'local-map mode-line-column-line-number-mode-map
+		'mouse-face 'mode-line-highlight
+		'help-echo "Column number\n\
+mouse-1: Display Line and Column Mode Menu"))))))
       )
-
-
-(defun clean-mode-line ()
-  (interactive)
-  (loop for cleaner in mode-line-cleaner-alist
-        do (let* ((mode (car cleaner))
-		  (mode-str (cdr cleaner))
-		  (old-mode-str (cdr (assq mode minor-mode-alist))))
-             (when old-mode-str
-	       (setcar old-mode-str mode-str))
-	     ;; major mode
-             (when (eq mode major-mode)
-               (setq mode-name mode-str)))))
-
-
-(add-hook 'after-change-major-mode-hook 'clean-mode-line)
-
-;;; alias the new `flymake-report-status-slim' to
-;;; `flymake-report-status'
-;; (defalias 'flymake-report-status 'flymake-report-status-slim)
-;; (defun flymake-report-status-slim (e-w &optional status)
-;;   "Show \"slim\" flymake status in mode line."
-;;   (when e-w
-;;     (setq flymake-mode-line-e-w e-w))
-;;   (when status
-;;     (setq flymake-mode-line-status status))
-;;   (let* ((mode-line " Φ"))
-;;     (when (> (length flymake-mode-line-e-w) 0)
-;;       (setq mode-line (concat mode-line ":" flymake-mode-line-e-w)))
-;;     (setq mode-line (concat mode-line flymake-mode-line-status))
-;;     (setq flymake-mode-line mode-line)
-;;     (force-mode-line-update)))
-;;
 
 (provide 'rc-basic)
 ;;; basic.el ends here
