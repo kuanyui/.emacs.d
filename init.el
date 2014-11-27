@@ -54,7 +54,10 @@
  '(mark-even-if-inactive t)
  '(org-agenda-files
    (quote
-    ("~/org/agenda/Event.org" "~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Todo.org")))
+    ("~/org/agenda/Todo.org" "~/org/agenda/School.org" "~/org/agenda/Reading.org" "~/org/agenda/Project.org" "~/org/agenda/Learning.org" "~/org/agenda/Habit.org" "~/org/agenda/Event.org")))
+ '(org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(resize-frame nil)
  '(scroll-bar-mode (quote right))
  '(transient-mark-mode 1)

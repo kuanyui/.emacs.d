@@ -6,6 +6,7 @@
 ;;(add-to-list 'load-path "~/.emacs.d/git/org-mode/lisp")
 (require 'org-install)
 (require 'org)
+(require 'org-habit)
 (require 'ox)
 (require 'ox-md)
 (require 'ox-html5slide)
@@ -317,6 +318,7 @@ unwanted space when exporting org-mode to html."
 ;; 指定agenda檔案位置清單
 (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
+(global-set-key (kbd "<f11>") 'org-agenda)
 
 (setq org-log-into-drawer t)
 (setq org-log-reschedule 'note)
@@ -327,12 +329,16 @@ unwanted space when exporting org-mode to html."
         (type "PROJECT(p!)" "|" "DONE(d!)")
         (type "|" "CANCELLED(x@)" "DEFERRED(f@)")))
 
+
+
 ;;;;;;;;;;;;AGENDA~~~~~~ =w="
 ;;Including all org files from a directory into the agenda
 ;;(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
 ;; 啊啊啊啊Agenda自訂
 ;; shortcut可以一個字母以上
 ;; Example:  http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
+
+
 
 ;; Do not dim blocked tasks
 (setq org-agenda-dim-blocked-tasks nil)
@@ -469,28 +475,33 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 (define-key global-map "\C-cc" 'org-capture)
 
+;; [Agenda]
+(global-set-key (kbd "<f12>") (lambda () (interactive) (org-agenda nil " ")))
+;; [Capture]
+(global-set-key (kbd "<f11>") (lambda () (interactive) (org-capture)))
+;; [Capture] Diary+Timer
+(global-set-key (kbd "ESC <f11>") (lambda () (interactive) (org-capture nil "D")))
+
+
 (setq org-capture-templates
       '(("t" "Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
-         "** TODO% ? %^G\n  %i")
-        ("s" "School" entry
-         (file+headline (concat org-directory "/agenda/School.org") "School")
-         "** TODO %?\n  %i")
-        ("b" "Buy" entry
-         (file+headline (concat org-directory "/agenda/Todo.org") "Buy")
-         "** TODO %?\n  %i")
-        ("r" "Reading" entry
-         (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
-         "** %? %i :Reading:")
-        ("D" "Diary + Timer" entry
-         (file+datetree (concat org-directory "/diary/diary.org"))
-         "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+         "** TODO %? %^G\n  Created: %U \n  %i")
+	("s" "School" entry
+	 (file+headline (concat org-directory "/agenda/School.org") "School")
+	 "** TODO %?\n  Created: %U \n  %i")
+	("r" "Reading" entry
+	 (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
+	 "** %? %i :Reading:\n  Created: %U")
+	("D" "Diary + Timer" entry
+	 (file+datetree (concat org-directory "/diary/diary.org"))
+	 "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
 	("d" "Diary" entry
-         (file+datetree (concat org-directory "/diary/diary.org"))
-         "* %? %U")
-        ("e" "Event" entry
-         (file+headline (concat org-directory "/agenda/Event.org") "Event")
-         "** %? %^g\n%^{Event's date&time? }T\n  %i")))
+	 (file+datetree (concat org-directory "/diary/diary.org"))
+	 "* %? \n  Created: %U \n")
+	("e" "Event" entry
+	 (file+headline (concat org-directory "/agenda/Event.org") "Event")
+	 "** %? %^g\n%^{Event's date&time? }T\n  %i")))
 
 ;; I set my capture for diary like this:
 ;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
@@ -732,7 +743,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (require 'calfw-org)
 (require 'calfw-cal)
 (global-set-key (kbd "C-c A") 'my-cfw:open-org-calendar)
-
+(define-key org-agenda-mode-map (kbd "A") 'my-cfw:open-org-calendar)
 ;; 解決開啟cfw後，原buffer中的cursor會自己莫名其妙亂跳走的怪問題。
 (defun my-cfw:open-org-calendar ()
   (interactive)
