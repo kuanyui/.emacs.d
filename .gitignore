@@ -32,3 +32,4 @@ org-clock-save.el
 /lisps/emacs-calfw/
 /lisps/org-ioslide/
 /lisps/powerline/
+/elpa/*.txt
