@@ -17,6 +17,9 @@
 
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
 
+;; In tmux/tty, M-S-RET will be inpretered to this shit.
+(define-key org-mode-map (kbd "ESC <kp-enter>") 'org-insert-todo-heading)
+
 (setq org-display-table t)
 (setq org-display-inline-images t)
 ;;讓org中顯示圖片能夠先用imagemagick自動縮放
