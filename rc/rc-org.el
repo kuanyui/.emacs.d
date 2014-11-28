@@ -11,6 +11,9 @@
 (require 'ox-md)
 (require 'ox-html5slide)
 (require 'ox-odt)
+
+(require 'org-checklist)
+
 (setq org-directory "~/org")
 (define-key global-map "\C-cl" 'org-store-link)
 (setq org-log-done t)
