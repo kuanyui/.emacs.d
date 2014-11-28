@@ -196,7 +196,8 @@ If not, kill-buffer instead. "
 			  " ")
 	       (if retweet
 		   (concat "@" retweet)
-		 nil)))
+		 nil)
+	       " "))
       )))
 
 (define-key twittering-mode-map (kbd "RET") 'twittering-my-enter)
