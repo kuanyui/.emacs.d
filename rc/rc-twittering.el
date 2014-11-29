@@ -191,13 +191,13 @@ If not, kill-buffer instead. "
 	    (mapcar (lambda (mention) (cdr (assq 'screen-name mention)))
 		    mentions))
       (insert (concat
-	       (mapconcat (lambda (x) (concat "@" x))
+	       (mapconcat (lambda (x) (concat "@" x " "))
 			  (remove-if (lambda (x) (string= x twittering-username)) user-list)
-			  " ")
+			  "")
 	       (if retweet
-		   (concat "@" retweet)
+		   (concat "@" retweet " ")
 		 nil)
-	       " "))
+	       ))
       )))
 
 (define-key twittering-mode-map (kbd "RET") 'twittering-my-enter)
