@@ -763,6 +763,16 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
     (goto-char currentPos))
   (switch-to-buffer "*cfw-calendar*"))
 
+(defun my-cfw:define-key-calendar ()
+  (define-key cfw:calendar-mode-map "g" 'cfw:refresh-calendar-buffer)
+  (define-key cfw:calendar-mode-map "G" 'cfw:navi-goto-date-command))
+(add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-calendar)
+
+(defun my-cfw:define-key-details ()
+  (define-key cfw:details-mode-map "g" 'cfw:refresh-calendar-buffer)
+  (define-key cfw:details-mode-map "G" 'cfw:navi-goto-date-command))
+(add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-details)
+
 ;; 吃太飽的話可以自己去定calendar-holidays
 ;; Month
 (setq calendar-month-name-array
