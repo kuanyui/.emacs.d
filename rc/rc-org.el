@@ -490,7 +490,10 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 
 (setq org-capture-templates
-      '(("t" "Todo" entry
+      '(("T" "Scheduled Todo" entry
+         (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
+         "** TODO %? %^G\n SCHEDULED: %^{ Sheduled: }T Created: %U \n  %i")
+	("t" "Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
          "** TODO %? %^G\n  Created: %U \n  %i")
 	("s" "School" entry
@@ -507,7 +510,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 	 "* %? \n  Created: %U \n")
 	("e" "Event" entry
 	 (file+headline (concat org-directory "/agenda/Event.org") "Event")
-	 "** %? %^g\n%^{Event's date&time? }T\n  %i")))
+	 "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i")))
 
 ;; I set my capture for diary like this:
 ;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
