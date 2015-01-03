@@ -11,7 +11,6 @@
 (require 'ox-md)
 (require 'ox-html5slide)
 (require 'ox-odt)
-
 (require 'org-checklist)
 
 (setq org-directory "~/org")
@@ -41,26 +40,18 @@
   (backward-char 2))
 (define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
 
-;;(setq org-export-default-language "zh"
-;;      org-export-html-extension "html"
-;;      org-export-with-timestamps nil
-;;      org-export-with-section-numbers t
-;;      org-export-with-tags 'not-in-toc
-;;      org-export-skip-text-before-1st-heading nil
-;;      org-export-with-sub-superscripts '{}
-;;      org-export-with-LaTeX-fragments t
-;;      org-export-with-archived-trees nil
-;;      org-export-highlight-first-table-line t
-;;      org-export-latex-listings-w-names nil
-;;      org-html-head-include-default-style nil
-;;      org-html-head ""
-;;      org-export-htmlize-output-type 'css
-;;      org-startup-folded nil
-;;      org-export-allow-BIND t
-;;      org-publish-list-skipped-files t
-;;      org-publish-use-timestamps-flag t
-;;      org-export-babel-evaluate nil
-;;      org-confirm-babel-evaluate nil)
+;; active Babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((gnuplot . t)))
+;; add additional languages with '((language . t)))
+
+;; Never ask when evaluate code blocks
+;;http://orgmode.org/manual/Code-evaluation-security.html
+(setq org-confirm-babel-evaluate nil)
+
+
+(define-key org-mode-map "\M-\C-g" 'org-plot/gnuplot)
 
 ;;輸出上下標？
 ;;(setq org-export-with-sub-superscripts nil)
@@ -69,6 +60,7 @@
                       ("\\.mm\\'" . default)
                       ("\\.x?html?\\'" . "xdg-open %s")
                       ("\\.pdf\\'" . "kde-open %s")
+                      ("\\.png\\'" . "kde-open %s")
                       ("\\.jpg\\'" . "kde-open %s")))
 ;; Syntax Highlight in outputed files
 (setq org-src-fontify-natively t)
@@ -575,7 +567,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (setq org-latex-classes
       '(("article"
          "
-\\documentclass[12pt,a4paper]{article}
+\\documentclass[11pt,a4paper]{article}
 \\usepackage[margin=2cm]{geometry}
 \\usepackage{fontspec}
 \\setromanfont{cwTeXMing}
@@ -596,6 +588,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 \\XeTeXlinebreaklocale ``zh''
 \\XeTeXlinebreakskip = 0pt plus 1pt
 \\linespread{1.36}
+
+\\setcounter{tocdepth}{5}
 
 \\usepackage{multicol}
 
@@ -641,6 +635,14 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
          ("\\paragraph{%s}" . "\\paragraph*{%s}")
          ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+	("book"
+	 "\\documentclass[10pt]{memoir}"
+	 ("\\chapter{%s}" . "\\chapter*{%s}")
+	 ("\\section{%s}" . "\\section*{%s}")
+	 ("\\subsection{%s}" . "\\subsection*{%s}")
+	 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
         ))
 
 
