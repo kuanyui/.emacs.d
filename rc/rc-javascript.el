@@ -14,7 +14,7 @@
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
 (require 'js-comint)
-(setq inferior-js-program-command "rhino")
+(setq inferior-js-program-command "js")
 
 (setq inferior-js-mode-hook
       (lambda ()
@@ -26,13 +26,17 @@
                        (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
                      (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
 
-(add-hook 'js2-mode-hook '(lambda ()
-                            (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-                            (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-                            (local-set-key "\C-cb" 'js-send-buffer)
-                            (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-                            (local-set-key "\C-cl" 'js-load-file-and-go)
-                            ))
+(add-hook 'js2-mode-hook 'js-comint-my-conf)
+
+(defun js-comint-my-conf ()
+  (local-set-key "\C-x\C-e" 'js-send-last-sexp)
+  (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
+  (local-set-key "\C-cb" 'js-send-buffer)
+  (local-set-key (kbd "<f5>") 'js-send-buffer)
+  (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
+  (local-set-key "\C-cl" 'js-load-file-and-go)
+
+  )
 
 (autoload 'tern-mode "tern.el" nil t)
 (add-hook 'js-mode-hook (lambda () (tern-mode t)))
