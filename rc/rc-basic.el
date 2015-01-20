@@ -609,6 +609,19 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
  version-control t)       ; use versioned backups
 
 ;;======================================================
+;; History - 書籤快速跳轉
+;;======================================================
+
+(add-to-list 'load-path "~/.emacs.d/lisps/history/")
+(require 'history)
+(global-set-key (kbd "M-{") 'history-prev-history)
+(global-set-key (kbd "M-}") 'history-next-history)
+(global-set-key (kbd "M-A") 'history-add-history)
+(global-set-key (kbd "M-Q") 'history-kill-histories)
+(global-set-key (kbd "M-W") 'history-goto-history)
+
+
+;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
 
@@ -661,6 +674,9 @@ mouse-1: Display Line and Column Mode Menu"))))
 		'help-echo "Column number\n\
 mouse-1: Display Line and Column Mode Menu"))))))
       )
+
+(global-set-key [f6] 'point-to-register)
+(global-set-key [f7] 'jump-to-register)
 
 (provide 'rc-basic)
 ;;; basic.el ends here
