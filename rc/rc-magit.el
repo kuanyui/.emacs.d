@@ -9,7 +9,7 @@
 (global-set-key (kbd "C-x g l") 'magit-log)
 (define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
-
+(require 'git-timemachine)
 
 (provide 'rc-magit)
 ;;; rc-magit.el ends here

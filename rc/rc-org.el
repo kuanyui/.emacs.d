@@ -40,6 +40,7 @@
   (backward-char 2))
 (define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
 
+
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -636,7 +637,42 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
          ("\\paragraph{%s}" . "\\paragraph*{%s}")
          ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 	("book"
-	 "\\documentclass[10pt]{memoir}"
+	 "\\documentclass[11pt,a4paper]{article}
+\\usepackage[margin=2cm]{geometry}
+\\usepackage{fontspec}
+\\setromanfont{cwTeXMing}
+
+\\usepackage{etoolbox}  % Quote部份的字型設定
+\\newfontfamily\\quotefont{cwTeXFangSong}
+\\AtBeginEnvironment{quote}{\\quotefont\\small}
+
+\\setmonofont[Scale=0.9]{Courier} % 等寬字型 [FIXME] Courier 中文會爛掉！
+\\font\\cwSong=''cwTeXFangSong'' at 10pt
+%\\font\\cwHei=''cwTeXHeiBold'' at 10p %不知為何會爆掉
+\\font\\cwYen=''cwTeXYen'' at 10pt
+\\font\\cwKai=''cwTeXKai'' at 10pt
+\\font\\cwMing=''cwTeXMing'' at 10pt
+\\font\\wqyHei=''文泉驛正黑'' at 10pt
+\\font\\wqyHeiMono=''文泉驛等寬正黑'' at 10pt
+\\font\\wqyHeiMicro=''文泉驛微米黑'' at 10pt
+\\XeTeXlinebreaklocale ``zh''
+\\XeTeXlinebreakskip = 0pt plus 1pt
+\\linespread{1.36}
+
+\\setcounter{tocdepth}{5}
+
+\\usepackage{multicol}
+
+% [FIXME] ox-latex 的設計不良導致hypersetup必須在這裡插入
+\\usepackage{hyperref}
+\\hypersetup{
+  colorlinks=true, %把紅框框移掉改用字體顏色不同來顯示連結
+  linkcolor=[rgb]{0,0.37,0.53},
+  citecolor=[rgb]{0,0.47,0.68},
+  filecolor=[rgb]{0,0.37,0.53},
+  urlcolor=[rgb]{0,0.37,0.53},
+  pagebackref=true,
+  linktoc=all,}"
 	 ("\\chapter{%s}" . "\\chapter*{%s}")
 	 ("\\section{%s}" . "\\section*{%s}")
 	 ("\\subsection{%s}" . "\\subsection*{%s}")

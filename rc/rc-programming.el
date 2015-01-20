@@ -48,6 +48,7 @@
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 
+
 ;;======================================================
 ;; CamelCase
 ;;======================================================
