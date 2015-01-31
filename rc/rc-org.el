@@ -3,13 +3,13 @@
 ;; Org-mode
 ;;======================================================
 ;;(delete "/usr/local/share/emacs/24.4/lisp/org" load-path)
-;;(add-to-list 'load-path "~/.emacs.d/git/org-mode/lisp")
+(add-to-list 'load-path "~/.emacs.d/git/org-ioslide")
 (require 'org-install)
 (require 'org)
 (require 'org-habit)
 (require 'ox)
 (require 'ox-md)
-(require 'ox-html5slide)
+(require 'ox-ioslide)
 (require 'ox-odt)
 (require 'org-checklist)
 
