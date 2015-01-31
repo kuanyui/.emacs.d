@@ -84,21 +84,19 @@ Return value is float."
 		   (string-to-number (substring string 2 4) 16)
 		   (string-to-number (substring string 4 6) 16)))))))
 
-(autoload 'scss-mode "scss-mode")
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-(add-hook 'scss-mode-hook 'highlight-symbol-mode)
+;; (autoload 'scss-mode "scss-mode")
+;; (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 
-(define-key scss-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key scss-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key scss-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key scss-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-
-(add-hook 'css-mode-hook 'highlight-symbol-mode)
-(define-key css-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key css-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key css-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key css-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-
+(mapc
+ (lambda (name)
+   (require (intern (concat name "-mode")))
+   (add-hook (intern (concat name "mode-hook")) 'highlight-symbol-mode)
+   (define-key (symbol-value (intern (concat name "-mode-map"))) (kbd "C-c M-n") 'highlight-symbol-at-point)
+   (define-key (symbol-value (intern (concat name "-mode-map"))) (kbd "M-n")'highlight-symbol-next)
+   (define-key (symbol-value (intern (concat name "-mode-map"))) (kbd "M-p")'highlight-symbol-prev)
+   (define-key (symbol-value (intern (concat name "-mode-map"))) (kbd "C-c M-p") 'highlight-symbol-query-replace)
+   )
+ '("css" "stylus"))
 
 (provide 'rc-css)
 ;;; rc-css.el ends here
