@@ -266,5 +266,12 @@
 (require 'helm-projectile)
 (helm-projectile-on)
 
+;;======================================================
+;; Tree
+;;======================================================
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+
 (provide 'rc-programming)
 ;;; rc-programming.el ends here
