@@ -134,7 +134,7 @@
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-auto-close-style 1)
 (setq web-mode-tag-auto-close-style 1)
-
+(web-mode-toggle-current-element-highlight)
 ;; Auto-Complete support
  (setq web-mode-ac-sources-alist
        '(("css" . (ac-source-css-property))
@@ -274,4 +274,6 @@
 
 
 (provide 'rc-programming)
+
+
 ;;; rc-programming.el ends here
