@@ -22,6 +22,7 @@
 (defun python2-compile-with-shell-command ()
   (interactive)
   (save-buffer)(shell-command (format "python2 %s" (buffer-real-name))))
+
 (define-key python-mode-map (kbd "<f5>") 'python3-compile-with-shell-command)
 (defun python3-compile-with-shell-command ()
   (interactive)
@@ -58,6 +59,11 @@
 
 ;; Virtuale Environment with Jedi
 
+(require 'virtualenvwrapper)
+(venv-initialize-interactive-shells) ;; if you want interactive shell support
+(venv-initialize-eshell) ;; if you want eshell support
+(setq venv-location '("~/Django/Moni/venv/"))
+
 (defun project-directory (buffer-name)
   "Returns the root directory of the project that contains the
 given buffer. Any directory with a .git or .jedi file/directory
@@ -83,6 +89,7 @@ is considered to be a project root."
 
 (defun jedi-setup-venv ()
   "Activates the virtualenv of the current buffer."
+  (interactive)
   (let ((project-name (project-name buffer-file-name)))
     (when project-name (venv-workon project-name))))
 

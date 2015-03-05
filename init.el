@@ -185,7 +185,8 @@
  '(resize-frame nil)
  '(safe-local-variable-values
    (quote
-    ((pangu-spacing-real-insert-separtor . t)
+    ((org-html-link-org-files-as-html)
+     (pangu-spacing-real-insert-separtor . t)
      (pangu-spacing-mode . t))))
  '(scroll-bar-mode (quote right))
  '(transient-mark-mode 1)

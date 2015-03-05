@@ -135,6 +135,7 @@
 (setq web-mode-auto-close-style 1)
 (setq web-mode-tag-auto-close-style 1)
 (web-mode-toggle-current-element-highlight)
+(setq web-mode-enable-current-column-highlight t)
 ;; Auto-Complete support
  (setq web-mode-ac-sources-alist
        '(("css" . (ac-source-css-property))
@@ -164,10 +165,11 @@
   "Toggle show-trailing-whitespace between t and nil"
   (interactive)
   (setq show-trailing-whitespace t)
-  (yes-or-no-p "Deleting all useless whitespace, continue? ")
-  (delete-trailing-whitespace))
+  (delete-trailing-whitespace)
+  (message "All unused whitespaces are removed."))
 (global-set-key (kbd "C-x ,") 'toggle-and-delete-trailing-whitespace)
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;======================================================
 ;; mmm-mode
 ;;======================================================
@@ -224,7 +226,7 @@
 ;; Helm-dash - Looking up documents
 ;;======================================================
 
-(setq helm-dash-common-docsets '("Python 3" "Qt"))
+(setq helm-dash-common-docsets '("Python 3" "Qt" "Django"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
 
 ;;======================================================
