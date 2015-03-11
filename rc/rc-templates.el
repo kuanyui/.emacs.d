@@ -47,7 +47,6 @@
   '("\\.py\\'" . "Python")
   '(nil
     "# -*- coding: utf-8 -*-\n"
-    "import sys, os, math\n"
     ))
 
 ;; Org
