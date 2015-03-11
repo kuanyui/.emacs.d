@@ -37,14 +37,19 @@
 
 (require 'moe-theme)
 (setq moe-theme-highlight-buffer-id nil)
-(moe-light)
+(setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
+(setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+(setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+
 (moe-theme-set-color 'cyan)
+(moe-light)
 
 ;;(moe-theme-random-color)
 ;;(powerline-moe-theme)
 
 (global-set-key (kbd "C-c m d") 'moe-dark)
 (global-set-key (kbd "C-c m l") 'moe-light)
+
 
 ;;======================================================
 ;; moedict.el 萌典
