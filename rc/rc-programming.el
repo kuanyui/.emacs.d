@@ -156,7 +156,7 @@
 (setq web-mode-engines-alist
       '(
         ("django" . "\\.html\\'")
-        ("django" . "\\.ejs\\'")
+        ("erb" . "\\.ejs\\'")
         ))
 
 
@@ -169,7 +169,9 @@
   (message "All unused whitespaces are removed."))
 (global-set-key (kbd "C-x ,") 'toggle-and-delete-trailing-whitespace)
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook (lambda ()
+			      (delete-trailing-whitespace)
+			      (setq show-trailing-whitespace nil)))
 ;;======================================================
 ;; mmm-mode
 ;;======================================================
@@ -267,6 +269,7 @@
 ;;Helm integration with Projectile
 (require 'helm-projectile)
 (helm-projectile-on)
+
 
 ;;======================================================
 ;; Tree
