@@ -29,11 +29,12 @@
                       (mode . js2-mode)
                       (mode . json-mode)
                       (mode . nodejs-repl-mode)))
+               ("CSS" (or
+		       (mode . css-mode)
+		       (mode . stylus-mode)))
                ("Web Development" (or
-                                   (mode . css-mode)
                                    (mode . html-mode)
-                                   (mode . stylus-mode)
-                                   (mode . web-mode)
+				   (mode . web-mode)
                                    (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
 	       ("Haskell" (or (mode . haskell-mode)
@@ -48,7 +49,7 @@
 			(mode . ruby-mode)
 			(mode . enh-ruby-mode)
 			(mode . inf-ruby-mode)
-			   ))
+			))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
                ("IRC" (or
