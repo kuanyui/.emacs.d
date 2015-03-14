@@ -4,6 +4,7 @@
 ;; This tools is just for personal usage, so without any warranty.
 
 (require 'html-entities-convert)
+(require 'xml)
 
 (defun xml-getdata (data &rest args)
   (do ((i 0 (1+ i)))
@@ -14,22 +15,22 @@
 	   (setq data (elt data (elt args i)))))))
 
 (defun livedoor--convert-body (xml-file-path)
-  (let ((data (xml-parse-file xml-file-path))
-	(time (xml-getdata data 0 'head 'dateCreated 1))
-	(body (cdr (xml-getdata data 0 'body 'outline)))
-	(FIN "")
-	)
-      (loop for directory in body
-	when (not (eq 'string (type-of directory))) do
-	(setq FIN (concat FIN (format "\n###%s###\n" (xml-getdata directory 1 'title))))
-	(loop for item in directory do
-	      (if (and (eq 'cons (type-of item))
-		       (> (length item) 1))
-		  (setq FIN (concat FIN (format "- [%s](%s)\n"
-						(html-entities-convert
-						 (replace-regexp-in-string "\n" "" (xml-getdata (elt item 1) 'title)))
-						(xml-getdata (elt item 1) 'htmlUrl)
-						))))))
+  (let* ((data (xml-parse-file xml-file-path))
+	 (time (xml-getdata data 0 'head 'dateCreated 1))
+	 (body (cdr (xml-getdata data 0 'body 'outline)))
+	 (FIN "")
+	 )
+    (loop for directory in body
+	  when (not (eq 'string (type-of directory))) do
+	  (setq FIN (concat FIN (format "\n###%s###\n" (xml-getdata directory 1 'title))))
+	  (loop for item in directory do
+		(if (and (eq 'cons (type-of item))
+			 (> (length item) 1))
+		    (setq FIN (concat FIN (format "- [%s](%s)\n"
+						  (html-entities-convert
+						   (replace-regexp-in-string "\n" "" (xml-getdata (elt item 1) 'title)))
+						  (xml-getdata (elt item 1) 'htmlUrl)
+						  ))))))
     FIN))
 
 (defun livedoor-convert-opml-to-markdown ()
