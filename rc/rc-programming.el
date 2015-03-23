@@ -131,7 +131,10 @@
 
 (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
 
-(setq web-mode-enable-auto-closing t)
+;; If non-nil, when enter `</' , element will be closed automatically.
+;; Else, use `C-c/' to do the same jog.
+(setq web-mode-enable-auto-closing nil)
+
 (setq web-mode-auto-close-style 1)
 (setq web-mode-tag-auto-close-style 1)
 (web-mode-toggle-current-element-highlight)
