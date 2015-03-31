@@ -27,6 +27,10 @@
                      (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
 
 (add-hook 'js2-mode-hook 'js-comint-my-conf)
+(add-hook 'js2-mode-hook
+          (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
+(add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
+
 
 (defun js-comint-my-conf ()
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
