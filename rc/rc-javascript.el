@@ -20,11 +20,12 @@
       (lambda ()
         ;; We like nice colors
         (ansi-color-for-comint-mode-on)
+	(rainbow-delimiters-mode)
         ;; Deal with some prompt nonsense
         (add-to-list 'comint-preoutput-filter-functions
                      (lambda (output)
                        (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
-                     (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
+						 (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
 
 (add-hook 'js2-mode-hook 'js-comint-my-conf)
 (add-hook 'js2-mode-hook
@@ -54,6 +55,18 @@
   (interactive)
   (save-buffer)(shell-command (format "node %s" (buffer-real-name))))
 
+(defun js-buffer-to-multiline-string ()
+  (interactive)
+  (kill-new
+   (mapconcat
+    (lambda (line)
+      (concat "'" line "'"))
+    (remove-if (lambda (str) (eq (length str) 0))
+	       (split-string (buffer-string) "\n"))
+    " +\n")
+   )
+  (message "Copied!")
+  )
 
 (provide 'rc-javascript)
 ;;; rc-javascript.el ends here
