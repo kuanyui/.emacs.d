@@ -267,6 +267,8 @@
 (setq ido-use-faces nil)
 (setq ido-enable-flex-matching t)
 
+(setq projectile-globally-ignored-directories '("venv" "migrations"))
+
 (projectile-global-mode t)
 
 ;;Helm integration with Projectile
