@@ -113,11 +113,10 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
     "Default font size pair for (english . chinese)")
 
   (defvar emacs-font-size-pair-list
-    '(( 5 .  6) (10 . 12) (12 . 14)
-      (13 . 16) (15 . 18) (17 . 20)
-      (19 . 22) (20 . 24) (21 . 26)
-      (24 . 28) (26 . 32) (28 . 34)
-      (30 . 36) (34 . 40) (36 . 44))
+    '(( 5 .  6) (9 . 10) (10 . 12)(12 . 14)
+      (13 . 16) (15 . 18) (17 . 20) (19 . 22)
+      (20 . 24) (21 . 26) (24 . 28) (26 . 32)
+      (28 . 34) (30 . 36) (34 . 40) (36 . 44))
     "This list is used to store matching (englis . chinese) font-size.")
 
   (defun font-exist-p (fontname)
@@ -582,6 +581,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;;discover-mode
 (global-discover-mode 1)
+
 
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
 (setq confirm-kill-emacs 'yes-or-no-p)
