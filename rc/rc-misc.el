@@ -9,7 +9,7 @@
 (load-file "~/.emacs.d/under-construction/fsc/fsc.el")
 
 (require 'fsc)
-(global-set-key (kbd "C-c f") 'fsc)
+(global-set-key (kbd "C-c f s") 'fsc)
 
 ;;======================================================
 ;; writing-utils.el 寫作加強
@@ -58,6 +58,29 @@
 (require 'moedict)
 (global-set-key (kbd "C-c d m") 'moedict-lookup)
 
+
+;; ======================================================
+;; fm-bookmarks.el
+;; ======================================================
+(add-to-list 'load-path "~/.emacs.d/git/fm-bookmark/")
+(require 'fm-bookmark)
+
+;; Available options: kde4, gnome3, pcmanfm, custom
+;; Multiple file managers are acceptable.
+;; Notice that 'media currently is only available on Unix-like OS
+(setq fm-bookmark-enabled-file-managers '(kde4 gnome3 pcmanfm custom media))
+
+;; Add customized bookmarks
+(setq fm-bookmark-custom-bookmarks
+      '(("Root" . "/")
+	("Tmp" . "/tmp/")
+	))
+
+(setq fm-bookmark-enable-mounted-media t)
+
+(global-set-key (kbd "C-x `") #'fm-bookmark)
+;; Use ` to open in Dired-mode
+(define-key dired-mode-map (kbd "`") #'fm-bookmark)
 
 ;;======================================================
 ;; Wikipedia
