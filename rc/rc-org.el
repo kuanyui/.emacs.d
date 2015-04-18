@@ -41,6 +41,18 @@
 (define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
 
 
+;; Fix the nightmare when a table contains full-width characters.
+(defun org-my-tab ()
+  (interactive)
+  (org-cycle)
+  (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
+(defun org-my-shifttab ()
+  (interactive)
+  (org-shifttab)
+  (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
+(define-key org-mode-map (kbd "TAB") 'org-my-tab)
+(define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
+
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
