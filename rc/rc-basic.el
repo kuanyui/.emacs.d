@@ -21,6 +21,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 
 ;;執行Shell外部程式的搜尋路徑(意同$PATH)
 (setenv "PATH" (concat (getenv "PATH") ":"
