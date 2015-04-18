@@ -24,6 +24,11 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)	; js, php...
   )
+(setq-default web-mode-markup-indent-offset 2)
+(setq-default web-mode-css-indent-offset 2)
+(setq-default web-mode-code-indent-offset 2)	; js, php...
+
+
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
 (setq web-mode-auto-close-style 1)
@@ -39,8 +44,10 @@
 				("django" . (
 					     ("a" . "{% | %}")
 					     ("%" . "{% | %}")
+					     ("" . "{% | %}")
 					     )
-				 ))
+				 )
+				)
       )
 
 

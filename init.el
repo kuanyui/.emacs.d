@@ -4,6 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/rc")
 (require 'rc-basic)
 (require 'rc-programming)
+(require 'rc-web-development)
 (require 'rc-templates)
 (require 'rc-edit)
 (require 'rc-dired)
@@ -46,7 +47,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-
  '(delete-selection-mode nil)
  '(guide-key-mode nil)
  '(helm-mode nil)
@@ -65,6 +65,9 @@
      (pangu-spacing-mode . t))))
  '(scroll-bar-mode (quote right))
  '(transient-mark-mode 1)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-markup-indent-offset 2)
  '(xclip-mode t))
 
 (custom-set-faces
