@@ -50,8 +50,29 @@
   (interactive)
   (org-shifttab)
   (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
+(defun org-my-next-line ()
+  (interactive)
+  (if (and (org-at-table-p)
+           (not (eq (char-after (point)) 45)))
+      (org-ctrl-c-ctrl-c))
+  (next-line))
+(defun org-my-previous-line ()
+  (interactive)
+  (if (and (org-at-table-p)
+           (not (eq (char-after (point)) 45)))
+      (org-ctrl-c-ctrl-c))
+  (previous-line))
 (define-key org-mode-map (kbd "TAB") 'org-my-tab)
 (define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
+(define-key org-mode-map (kbd "<down>") 'org-my-next-line)
+(define-key org-mode-map (kbd "<up>") 'org-my-previous-line)
+
+;;(defun org-my-ctrl-c-ctrl-c ()
+;;  (interactive)
+;;  (let ((relative-pos 0))                   ;from left's closest pipe
+;;    (if (org-at-table-p)
+;;        (setq relative-pos ()))
+;;    (right-char relative-pos))
 
 ;; active Babel languages
 (org-babel-do-load-languages
