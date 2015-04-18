@@ -283,6 +283,15 @@
 (global-set-key [f8] 'neotree-toggle)
 
 
+;; ======================================================
+;; Emacs-Refactor
+;; ======================================================
+(require 'emr-js)
+(define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
+(add-hook 'prog-mode-hook 'emr-initialize)
+
+
+
 (provide 'rc-programming)
 
 
