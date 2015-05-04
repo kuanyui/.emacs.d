@@ -234,7 +234,15 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (unless (or (member major-mode inhibit-linum-mode-alist)
               (and (eq major-mode 'org-mode)
                    (> (count-lines (point-min) (point-max)) 1000)))
-    ad-do-it))
+    ad-do-it))                          ;WTF
+
+
+(defun my-find-alternate-file ()
+  "Don't remain file name in minibuffer"
+  (interactive)
+  (find-alternate-file (read-file-name "Find alternate file: ")))
+(global-set-key (kbd "C-x C-v") 'my-find-alternate-file)
+
 
 ;; Indicate buffer size in mode-line
 (setq size-indication-mode t)
@@ -336,15 +344,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq inhibit-splash-screen t)
 
 (setq initial-scratch-message
-      ";;　少抱怨，多做事。
-
-;; The real productivity problem people have is procrastination. It's
-;; something of a dirty little secret, but everyone procrastinates -
-;; severely. It's not just you. But that doesn't mean you shouldn't try to
-;; stop it.  What is procrastination? To the outside observer, it looks like
-;; you're just doing something \"fun\" (like playing a game or reading the
-;; news) instead of doing your actual work.
-;;                              - Aaron Swartz, HOWTO: Be more productive\n")
+      ";; If you have no shadows, you're not in the light
+;; -- Lady Gaga
+")
 ;;自動啟動flyspell-mode拼字檢查
 ;;(setq-default flyspell-mode t)
 ;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
