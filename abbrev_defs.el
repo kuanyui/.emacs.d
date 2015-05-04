@@ -5,6 +5,8 @@
 
 (define-abbrev-table 'Info-edit-mode-abbrev-table '())
 
+(define-abbrev-table 'LilyPond-mode-abbrev-table '())
+
 (define-abbrev-table 'ack-mode-abbrev-table '())
 
 (define-abbrev-table 'apropos-mode-abbrev-table '())
@@ -77,6 +79,8 @@
 
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
 
+(define-abbrev-table 'emr-buffer-report-mode-abbrev-table '())
+
 (define-abbrev-table 'enh-ruby-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-info-mode-abbrev-table '())
@@ -84,6 +88,8 @@
 (define-abbrev-table 'epa-key-list-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-key-mode-abbrev-table '())
+
+(define-abbrev-table 'fm-bookmark-mode-abbrev-table '())
 
 (define-abbrev-table 'fsc-spook-edit-mode-abbrev-table '())
 
@@ -106,6 +112,7 @@
     ("abdandin" "ˊ_>ˋ" nil 0)
     ("abdown" "↓" nil 0)
     ("abheart" "♥" nil 0)
+    ("abhomo" "┌（┌ ＾o＾）┐ﾎﾓｫ" nil 0)
     ("abkita" "ｷﾀ――(ﾟ∀ﾟ)――!!" nil 0)
     ("ablazy" "_(:3_| 4)_" nil 0)
     ("ableft" "←" nil 0)
@@ -128,6 +135,10 @@
 (define-abbrev-table 'haskell-mode-abbrev-table '())
 
 (define-abbrev-table 'haskell-presentation-mode-abbrev-table '())
+
+(define-abbrev-table 'helm-grep-mode-abbrev-table '())
+
+(define-abbrev-table 'helm-moccur-mode-abbrev-table '())
 
 (define-abbrev-table 'help-mode-abbrev-table '())
 
@@ -201,6 +212,8 @@
 
 (define-abbrev-table 'moedict-mode-abbrev-table '())
 
+(define-abbrev-table 'neotree-mode-abbrev-table '())
+
 (define-abbrev-table 'nxml-mode-abbrev-table '())
 
 (define-abbrev-table 'objc-mode-abbrev-table
@@ -242,7 +255,9 @@
 
 (define-abbrev-table 'reb-mode-abbrev-table '())
 
-(define-abbrev-table 'rst-mode-abbrev-table '())
+(define-abbrev-table 'rst-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'rst-toc-mode-abbrev-table '())
 
@@ -312,7 +327,11 @@
 
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
-(define-abbrev-table 'web-mode-abbrev-table '())
+(define-abbrev-table 'web-mode-abbrev-table
+  '(
+    ("br" "<br />
+" nil 6)
+   ))
 
 (define-abbrev-table 'wikipedia-mode-abbrev-table '())
 
