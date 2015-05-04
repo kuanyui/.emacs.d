@@ -61,6 +61,8 @@
 (define-key lisp-interaction-mode-map (kbd "C-h 1") 'lookup-elisp-function-doc)
 (define-key lisp-interaction-mode-map (kbd "C-h 2") 'lookup-elisp-variable-doc)
 
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+
 ;; Makes eval elisp sexp more convenient
 (defun eval-elisp-sexp ()
   "Eval Elisp code at the point, and remove current s-exp
