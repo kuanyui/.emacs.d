@@ -82,6 +82,17 @@
 ;; Use ` to open in Dired-mode
 (define-key dired-mode-map (kbd "`") #'fm-bookmark)
 
+;; ======================================================
+;; ta.el
+;; ======================================================
+(add-to-list 'load-path "~/.emacs.d/git/ta.el/")
+(require 'ta)
+
+(mapc (lambda (mode-hook) (add-hook mode-hook 'ta-mode))
+      '(org-mode-hook
+        markdown-mode-hook
+        rst-mode-hook
+        twittering-edit-mode-hook))
 ;;======================================================
 ;; Wikipedia
 ;;======================================================
