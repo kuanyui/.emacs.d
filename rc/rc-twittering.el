@@ -1,5 +1,7 @@
 ;;; rc-twittering.el ---                             -*- lexical-binding: t; -*-
 
+;; (setq twittering-default-show-replied-tweets 3)
+
 ;;======================================================
 ;;Twittering-mode:用Emacs上Twitter
 ;;======================================================
@@ -56,7 +58,7 @@ If not, kill-buffer instead. "
 (setq twittering-status-format
       "%i %s %FACE[font-lock-comment-face]{(%S)},%FACE[font-lock-string-face]{%p} %FACE[font-lock-comment-face]{%@}:
 %FOLD[  ]{%T
-%FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R} %FACE[font-lock-keyword-face]{%e} %FACE[font-lock-function-name-face]{%F}}
+%FACE[font-lock-comment-face]{from %f%L%r} %FACE[font-lock-preprocessor-face]{%R} %FACE[font-lock-keyword-face]{%FIELD-IF-NONZERO[↺%d]{retweet_count}} %FACE[font-lock-function-name-face]{%FIELD-IF-NONZERO[✶%d]{favorite_count}}}
  ")
 
 ;; (setq twittering-status-format
@@ -74,7 +76,8 @@ If not, kill-buffer instead. "
 (add-hook 'twittering-mode-hook 'twittering-numbering)
 
 (add-hook 'twittering-mode-hook 'auto-fill-mode)
-
+(define-key twittering-edit-mode-map (kbd "M-P") 'twittering-edit-previous-history)
+(define-key twittering-edit-mode-map (kbd "M-N") 'twittering-edit-next-history)
 ;; ====================================================
 ;; Filtering for Tweets
 ;; ====================================================
