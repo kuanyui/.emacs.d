@@ -21,6 +21,7 @@
 (require 'hexo)
 (require 'flickr)
 (require 'markdown-and-html)
+(require 'markdown-toc)
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (require 'livedoor-opml-to-markdown)
@@ -88,11 +89,20 @@
 (add-to-list 'load-path "~/.emacs.d/git/ta.el/")
 (require 'ta)
 
+(setq ta-homophony-list
+      '(("他" "她" "它" "牠" "祂")
+        ("你" "妳")
+        ("的" "得")
+        ("作" "做" "坐")
+        ("在" "再")
+        ("板" "版")))
+
 (mapc (lambda (mode-hook) (add-hook mode-hook 'ta-mode))
       '(org-mode-hook
         markdown-mode-hook
         rst-mode-hook
         twittering-edit-mode-hook))
+
 ;;======================================================
 ;; Wikipedia
 ;;======================================================
