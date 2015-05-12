@@ -47,7 +47,14 @@
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+(setq highlight-symbol-idle-delay 0)
 
+;; ======================================================
+;; imenu
+;; ======================================================
+;;(setq imenu-use-popup-menu t)
+
+(define-key prog-mode-map (kbd "C-x i") 'helm-imenu)
 
 ;;======================================================
 ;; CamelCase
@@ -175,6 +182,19 @@
 
 (setq helm-dash-common-docsets '("Python 3" "Qt" "Django"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
+
+(defmacro helm-dash-generate-doc-function(name-string)
+  (let ((name-symbol (replace-regexp-in-string "[_ ]" "-" (downcase name-string))))
+    `(defalias (quote ,(intern (concat "dash:" name-symbol)))
+       (function (lambda ()
+                   (interactive)
+                   (let ((helm-dash-common-docsets (quote (,name-string))))
+                     (helm-dash)))))))
+
+(helm-dash-generate-doc-function "Python 3")
+(helm-dash-generate-doc-function "Qt")
+(helm-dash-generate-doc-function "Django")
+(helm-dash-generate-doc-function "JQuery")
 
 ;;======================================================
 ;; Aggressive-ident-mode
