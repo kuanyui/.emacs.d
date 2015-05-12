@@ -45,11 +45,12 @@
 					     ("a" . "{% | %}")
 					     ("%" . "{% | %}")
 					     ("" . "{% | %}")
+					     ("c" . "{# | #}")
+					     ("#" . "{# | #}")
 					     )
 				 )
 				)
       )
-
 
 ;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
@@ -59,6 +60,10 @@
         ("django" . "\\.html\\'")
         ("erb" . "\\.ejs\\'")
         ))
+
+(require 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
+
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
