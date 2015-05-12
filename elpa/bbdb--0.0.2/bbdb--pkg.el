@@ -1,0 +1,1 @@
+(define-package "bbdb-" "0.0.2" "provide interface for more easily search/choice than BBDB." '((bbdb "20140123.1541") (log4e "0.2.0") (yaxception "0.1")) :url "https://github.com/aki2o/bbdb-" :keywords '("bbdb" "news" "mail"))
