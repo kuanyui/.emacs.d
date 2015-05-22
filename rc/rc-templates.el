@@ -9,7 +9,7 @@
 ;;自分用のスニペットフォルダと，拾ってきたスニペットフォルダの2つを作っておきます．
 ;;(一つにまとめてもいいけど)
 (require 'yasnippet)
-(yas-global-mode 1)
+;; (yas-global-mode 1)
 (global-set-key (kbd "C-c s n") 'yas-new-snippet)
 (global-set-key (kbd "C-c s i") 'yas-insert-snippet)
 (global-set-key (kbd "C-c s v") 'yas-visit-snippet-file)

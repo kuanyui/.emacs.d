@@ -21,6 +21,7 @@
 ;;  (set-face-foreground 'twittering-username-face "SkyBlue3"))
 ;;(add-hook 'twittering-mode-hook 'twittering-mode-hook-func)
 
+;;(setq twittering-timer-interval-for-redisplaying 1)
 
 (define-key twittering-mode-map (kbd "r") 'twittering-toggle-or-retrieve-replied-statuses)
 (define-key twittering-mode-map (kbd "R") 'twittering-replies-timeline)
