@@ -179,8 +179,9 @@
 ;;======================================================
 ;; Helm-dash - Looking up documents
 ;;======================================================
-
-(setq helm-dash-common-docsets '("Python 3" "Qt" "Django"))
+(require 'helm-dash)
+(setq helm-dash-use-curl-and-wget t)
+(setq helm-dash-common-docsets '("Python 3" "Qt" "Django" "jQuery"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
 
 (defmacro helm-dash-generate-doc-function(name-string)
@@ -194,7 +195,7 @@
 (helm-dash-generate-doc-function "Python 3")
 (helm-dash-generate-doc-function "Qt")
 (helm-dash-generate-doc-function "Django")
-(helm-dash-generate-doc-function "JQuery")
+(helm-dash-generate-doc-function "jQuery")
 
 ;;======================================================
 ;; Aggressive-ident-mode
@@ -252,7 +253,12 @@
 (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
 (add-hook 'prog-mode-hook 'emr-initialize)
 
-
+;; ======================================================
+;; wgrep
+;; ======================================================
+(setq wgrep-auto-save-buffer t)
+(setq wgrep-enable-key (kbd "C-x C-w"))
+(setq wgrep-change-readonly-file t)
 
 (provide 'rc-programming)
 
