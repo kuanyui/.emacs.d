@@ -89,19 +89,31 @@
 (add-to-list 'load-path "~/.emacs.d/git/ta.el/")
 (require 'ta)
 
+(setq ta-delay 0.1)
 (setq ta-homophony-list
       '(("他" "她" "它" "牠" "祂")
         ("你" "妳")
         ("的" "得")
+        ("訂" "定")
         ("作" "做" "坐")
         ("在" "再")
-        ("板" "版")))
+        ("板" "版")
+        ))
 
 (mapc (lambda (mode-hook) (add-hook mode-hook 'ta-mode))
       '(org-mode-hook
         markdown-mode-hook
         rst-mode-hook
         twittering-edit-mode-hook))
+
+;; Modify the character under cursor 
+;; 修改游標下的字
+(define-key ta-mode-map (kbd "M-p") 'ta-previous-homophony)
+(define-key ta-mode-map (kbd "M-n") 'ta-next-homophony)
+;; Move cursor left/right to possible character
+;; 把目前游標向左/右移動至可能的錯字
+(define-key ta-mode-map (kbd "M-i") 'ta-left)
+(define-key ta-mode-map (kbd "M-o") 'ta-right)
 
 ;;======================================================
 ;; Wikipedia
