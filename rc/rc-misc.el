@@ -43,6 +43,24 @@
 (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
 
 (moe-theme-set-color 'cyan)
+
+;; (setq moe-theme-builtin 'red
+;;       moe-theme-comment-delimiter 'grey
+;;       moe-theme-comment 'grey
+;;       moe-theme-constant 'purple
+;;       moe-theme-doc 'grey
+;;       moe-theme-function-name 'green
+;;       moe-theme-keyword 'magenta
+;;       moe-theme-preprocessor 'light-blue
+;;       moe-theme-negation-char 'yellow
+;;       moe-theme-regexp-grouping-backslash nil
+;;       moe-theme-regexp-grouping-construct nil
+;;       moe-theme-string 'yellow
+;;       moe-theme-type 'blue
+;;       moe-theme-variable-name 'orange
+;;       moe-theme-warning 'red)
+
+
 (moe-light)
 
 ;;(moe-theme-random-color)
@@ -63,25 +81,39 @@
 ;; ======================================================
 ;; fm-bookmarks.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/fm-bookmark/")
-(require 'fm-bookmark)
+(add-to-list 'load-path "~/.emacs.d/git/fm-bookmarks/")
+(require 'fm-bookmarks)
 
 ;; Available options: kde4, gnome3, pcmanfm, custom
 ;; Multiple file managers are acceptable.
 ;; Notice that 'media currently is only available on Unix-like OS
-(setq fm-bookmark-enabled-file-managers '(kde4 gnome3 pcmanfm custom media))
+(setq fm-bookmarks-enabled-file-managers '(kde4 gnome3 pcmanfm custom media))
 
 ;; Add customized bookmarks
-(setq fm-bookmark-custom-bookmarks
+(setq fm-bookmarks-custom-bookmarks
       '(("Root" . "/")
-	("Tmp" . "/tmp/")
-	))
+        ("Tmp" . "/tmp/")
+        ))
 
-(setq fm-bookmark-enable-mounted-media t)
+;; Hide item by name/path pattern
+(setq fm-bookmarks-hide-by-name-pattern '("Bluetooth" "Images"))
+(setq fm-bookmarks-hide-by-path-pattern '())
 
-(global-set-key (kbd "C-x `") #'fm-bookmark)
-;; Use ` to open in Dired-mode
-(define-key dired-mode-map (kbd "`") #'fm-bookmark)
+;; Don't show duplicated item. (Because the same path may be added by
+;; different FMs)
+(defvar fm-bookmarks-hide-duplicated t)
+
+;; "Mounted media" is an experimental function. If you don't want
+;; this, set this to nil.
+(setq fm-bookmarks-enable-mounted-media t)
+
+;; Use cache to avoid regenerating list every time.
+(setq fm-bookmarks-enable-cache t)
+
+;; Shortcut to open FM bookmark.
+(global-set-key (kbd "C-x `") #'fm-bookmarks)
+;; Use ` to open FM bookmark in Dired-mode
+(define-key dired-mode-map (kbd "`") #'fm-bookmarks)
 
 ;; ======================================================
 ;; ta.el

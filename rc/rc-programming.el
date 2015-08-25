@@ -49,6 +49,13 @@
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 0)
 
+(eval-after-load 'c++-mode
+  (lambda () (define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+    (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
+    (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
+    (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+    ))
+
 ;; ======================================================
 ;; imenu
 ;; ======================================================

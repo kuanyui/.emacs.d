@@ -5,7 +5,7 @@
 ;;======================================================
 
 (setq magit-last-seen-setup-instructions "1.4.0")
-
+(add-to-list 'load-path "~/.emacs.d/lisps/magit/lisp/")
 (require 'magit)
 
 (setq magit-auto-revert-mode t)
@@ -16,7 +16,7 @@
 
 (defun magit-log-all ()
   (interactive)
-  (magit-key-mode-popup-logging)
+  (magit-log-popup)
   (magit-key-mode-toggle-option (quote logging) "--all"))
 (define-key magit-mode-map (kbd "l") 'magit-log-all)
 

@@ -32,6 +32,7 @@
 (require 'rc-shell)
 (require 'rc-qml)
 (require 'rc-c)
+(require 'rc-sql)
 
 (require 'rc-junk)
 
@@ -47,6 +48,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
  '(delete-selection-mode nil)
  '(guide-key-mode nil)
  '(helm-mode nil)
