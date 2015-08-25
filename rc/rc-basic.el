@@ -226,6 +226,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 	woman-mode
 	w3m-mode
 	magit-mode
+	magit-status-mode
 	,(if (not (window-system)) 'twittering-mode)
 	))
 

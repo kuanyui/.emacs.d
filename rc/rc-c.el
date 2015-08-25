@@ -3,6 +3,8 @@
 ;;======================================================
 ;; C
 ;;======================================================
+(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+
 (add-hook 'c-mode-hook
  	  (lambda ()
 	    (require 'auto-complete-c-headers)

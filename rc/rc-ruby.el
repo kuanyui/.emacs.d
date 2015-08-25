@@ -20,6 +20,9 @@
     (shell-command (format "chmod +x %s" (buffer-real-name)))
     (shell-command (format "ruby %s" (buffer-real-name))))
   (require 'ruby-mode)
+  (setq ruby-indent-level 4)
+  (setq enh-ruby-indent-level 4)
+
   (define-key ruby-mode-map (kbd "<f5>") 'ruby-run-current-file)
   (define-key enh-ruby-mode-map (kbd "<f5>") 'ruby-run-current-file)
   )
