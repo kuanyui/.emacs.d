@@ -240,6 +240,8 @@
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
 
 (projectile-global-mode t)
+(setq projectile-indexing-method 'alien)
+
 
 ;;Helm integration with Projectile
 (require 'helm-projectile)

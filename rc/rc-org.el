@@ -32,6 +32,8 @@
 (add-hook 'org-mode-hook
           (lambda () (setq truncate-lines nil)))
 
+(setq org-hide-emphasis-markers t)
+
 ;;org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
 (setq org-log-done 'time)
 ;;(setq org-log-done 'note)
@@ -874,6 +876,14 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
                    (downcase Q) Q)))
       (message "This seems not to belong to Qt namespace"))))
 (define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
+
+
+
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '(
+                               (sh . t)
+                               (emacs-lisp . t)
+                               ))
 
 
 (provide 'rc-org)
