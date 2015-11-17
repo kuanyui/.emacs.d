@@ -26,10 +26,5 @@
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp")
 
-;; lilypond
-(require 'lilypond-mode)
-(add-to-list 'auto-mode-alist '("\\.ly$" . lilypond-mode))
-(require 'ob-lilypond)			;org-label for Lilypond
-
 (provide 'rc-site-lisp)
 ;;; rc-site-lisp.el ends here

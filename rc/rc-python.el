@@ -49,6 +49,7 @@
 ;;======================================================
 
 (require 'jedi)
+(autoload 'jedi:setup "jedi" nil t)
 ;; (setq jedi:environment-root "jedi")  ; or any other name you like
 ;; (setq jedi:environment-virtualenv
 ;;       (append python-environment-virtualenv
