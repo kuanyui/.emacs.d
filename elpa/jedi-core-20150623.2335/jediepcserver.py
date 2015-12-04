@@ -31,6 +31,7 @@ import re
 import itertools
 import logging
 import site
+import glob
 
 jedi = None  # I will load it later
 
@@ -51,7 +52,7 @@ def candidate_symbol(comp):
     Return a character representing completion type.
 
     :type comp: jedi.api.Completion
-    :arg  comp: A completion object returned by `jedi.Script.complete`.
+    :arg  comp: A completion object returned by `jedi.Script.completions`.
 
     """
     try:
@@ -76,9 +77,9 @@ _WHITESPACES_RE = re.compile(r'\s+')
 
 def complete(*args):
     reply = []
-    for comp in jedi_script(*args).complete():
+    for comp in jedi_script(*args).completions():
         reply.append(dict(
-            word=comp.word,
+            word=comp.name,
             doc=comp.doc,
             description=candidates_description(comp),
             symbol=candidate_symbol(comp),
@@ -87,7 +88,9 @@ def complete(*args):
 
 
 def get_in_function_call(*args):
-    call_def = jedi_script(*args).get_in_function_call()
+    sig = jedi_script(*args).call_signatures()
+    call_def = sig[0] if sig else None
+
     if call_def:
         return dict(
             # p.get_code(False) should do the job.  But jedi-vim use replace.
@@ -102,9 +105,9 @@ def get_in_function_call(*args):
 
 def _goto(method, *args):
     """
-    Helper function for `goto` and `related_names`.
+    Helper function for `goto_assignments` and `usages`.
 
-    :arg  method: `jedi.Script.goto` or `jedi.Script.related_names`
+    :arg  method: `jedi.Script.goto_assignments` or `jedi.Script.usages`
     :arg    args: Arguments to `jedi_script`
 
     """
@@ -114,7 +117,7 @@ def _goto(method, *args):
     definitions = method(jedi_script(*args))
     return [dict(
         column=d.column,
-        line_nr=d.line_nr,
+        line_nr=d.line,
         module_path=d.module_path if d.module_path != '__builtin__' else [],
         module_name=d.module_name,
         description=d.description,
@@ -122,19 +125,19 @@ def _goto(method, *args):
 
 
 def goto(*args):
-    return _goto(jedi.Script.goto, *args)
+    return _goto(jedi.Script.goto_assignments, *args)
 
 
 def related_names(*args):
-    return _goto(jedi.Script.related_names, *args)
+    return _goto(jedi.Script.usages, *args)
 
 
 def definition_to_dict(d):
     return dict(
-        doc=d.doc,
+        doc=d.docstring(),
         description=d.description,
         desc_with_module=d.desc_with_module,
-        line_nr=d.line_nr,
+        line_nr=d.line,
         column=d.column,
         module_path=d.module_path,
         name=getattr(d, 'name', []),
@@ -144,7 +147,7 @@ def definition_to_dict(d):
 
 
 def get_definition(*args):
-    definitions = jedi_script(*args).get_definition()
+    definitions = jedi_script(*args).goto_definitions()
     return list(map(definition_to_dict, definitions))
 
 
@@ -198,14 +201,21 @@ def get_jedi_version():
     ) for module in [sys, jedi, epc, sexpdata]]
 
 
+def path_expand_vars_and_user(p):
+    return os.path.expandvars(os.path.expanduser(p))
+
+
 def jedi_epc_server(address='localhost', port=0, port_file=sys.stdout,
                     sys_path=[], virtual_env=[],
                     debugger=None, log=None, log_level=None,
                     log_traceback=None):
-    add_virtualenv_path()
+    default_venv = os.getenv('VIRTUAL_ENV')
+    if default_venv:
+        add_virtualenv_path(default_venv)
+
     for p in virtual_env:
-        add_virtualenv_path(p)
-    sys_path = map(os.path.expandvars, map(os.path.expanduser, sys_path))
+        add_virtualenv_path(path_expand_vars_and_user(p))
+    sys_path = map(path_expand_vars_and_user, sys_path)
     sys.path = [''] + list(filter(None, itertools.chain(sys_path, sys.path)))
     # Workaround Jedi's module cache.  Use this workaround until Jedi
     # got an API to set module paths.
@@ -251,8 +261,6 @@ def jedi_epc_server(address='localhost', port=0, port_file=sys.stdout,
         server.logger.addHandler(handler)
         server.logger.setLevel(logging.DEBUG)
 
-    server.serve_forever()
-    server.logger.info('exit')
     return server
 
 
@@ -262,15 +270,13 @@ def import_jedi():
     import jedi.api
 
 
-def add_virtualenv_path(venv=os.getenv('VIRTUAL_ENV')):
+def add_virtualenv_path(venv):
     """Add virtualenv's site-packages to `sys.path`."""
-    if not venv:
-        return
     venv = os.path.abspath(venv)
-    path = os.path.join(
-        venv, 'lib', 'python%d.%d' % sys.version_info[:2], 'site-packages')
-    sys.path.insert(0, path)
-    site.addsitedir(path)
+    paths = glob.glob(os.path.join(
+        venv, 'lib', 'python*', 'site-packages'))
+    for path in paths:
+        site.addsitedir(path)
 
 
 def main(args=None):
@@ -307,7 +313,9 @@ def main(args=None):
         '--ipdb', dest='debugger', const='ipdb', action='store_const',
         help='start ipdb when error occurs.')
     ns = parser.parse_args(args)
-    jedi_epc_server(**vars(ns))
+    server = jedi_epc_server(**vars(ns))
+    server.serve_forever()
+    server.logger.info('exit')
 
 
 if __name__ == '__main__':

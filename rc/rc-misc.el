@@ -61,7 +61,7 @@
 ;;       moe-theme-warning 'red)
 
 
-(moe-light)
+(moe-dark)
 
 ;;(moe-theme-random-color)
 ;;(powerline-moe-theme)
@@ -87,7 +87,7 @@
 ;; Available options: kde4, gnome3, pcmanfm, custom
 ;; Multiple file managers are acceptable.
 ;; Notice that 'media currently is only available on Unix-like OS
-(setq fm-bookmarks-enabled-file-managers '(kde4 gnome3 pcmanfm custom media))
+(setq fm-bookmarks-enabled-file-managers '(kde5 custom media))
 
 ;; Add customized bookmarks
 (setq fm-bookmarks-custom-bookmarks
