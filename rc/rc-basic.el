@@ -195,12 +195,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (global-set-key (kbd "M-C") 'windmove-right)
 (global-set-key (kbd "M-Z") 'windmove-left)
 
-;; God-mode
-;; (require 'god-mode)
-;; (global-set-key (kbd "ESC `")     'god-mode-all)
-;; (global-set-key (kbd "C-x C-p") 'previous-buffer)
-;; (global-set-key (kbd "C-x C-n") 'next-buffer)
-
 ;; Show line-number in the mode line
 (line-number-mode 1)
 ;; Show column-number in the mode line

@@ -5,7 +5,7 @@
 ;;======================================================
 ;;Twittering-mode:用Emacs上Twitter
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/twittering-mode/")
+;;(add-to-list 'load-path "~/.emacs.d/git/twittering-mode/")
 (require 'twittering-mode)
 (setq twittering-use-master-password t) ;;This requires GnuPG. And also, either EasyPG or alpaca.el (0.13) is necessary.
 (twittering-enable-unread-status-notifier) ;;顯示未讀訊息數
