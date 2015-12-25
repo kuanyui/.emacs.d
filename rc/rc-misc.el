@@ -1,7 +1,8 @@
 ;;; rc-misc.el ---                                   -*- lexical-binding: t; -*-
 
 ;; misc 雜項
-
+(require 'resize-frame)
+(global-set-key (kbd "M-`") 'resize-frame)
 ;;======================================================
 ;; fsc.el Fuck the Speeching Censorship
 ;;======================================================
