@@ -45,8 +45,9 @@ the previous directory."
     (if (equal DIR "*Find*")
         (quit-window t)
       (progn (find-alternate-file "..")
-             (re-search-forward DIR nil :no-error)
+             (search-forward DIR nil :no-error)
              (revert-buffer)))))
+
 
 ;; 按Enter開檔案時Dired時不會一直開新的Dired buffer（按Enter時只用同一個Dired開檔案）
 (defun dired-my-find-alternate-file ()
