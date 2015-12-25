@@ -18,6 +18,7 @@
     (call-process "kde-open" nil 0 nil file)
     (message "Opening %s done" file)))
 (define-key dired-mode-map (kbd "M-RET") 'dired-open-file-with-external-program)
+(define-key dired-mode-map (kbd "C-M-j") 'dired-open-file-with-external-program)
 
 (defun open-current-directory-with-external-program ()
   "Open current directory with external program."
