@@ -107,8 +107,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (defvar emacs-english-font "DejaVu Sans Mono"
     "The font name of English.")
 
-  (defvar emacs-cjk-font "文泉驛等寬微米黑"
-    "The font name for CJK.")
+  (defvar emacs-cjk-font "文泉驛等寬微米黑" "The font name for CJK.")
+  (setq emacs-cjk-font "WenQuanYi Micro Hei Mono")
 
   (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
@@ -407,9 +407,10 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;(require 'popup)
 (require 'pos-tip)
 (require 'popup-kill-ring)
-(global-set-key "\M-y" 'popup-kill-ring)
 
-(global-set-key (kbd "C-x M-y") 'browse-kill-ring)
+;;(global-set-key "\M-y" 'popup-kill-ring)
+
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ;; 使用 Ctrl-x r j <char> 就可以進行快速跳轉至檔案，其中 <char> 為以下所設。
 (require 'cl)
