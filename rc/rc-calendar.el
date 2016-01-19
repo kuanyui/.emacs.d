@@ -23,11 +23,6 @@
 ;; 
 
 ;;; Code:
-(add-to-list 'load-path "~/.emacs.d/git/taiwan-calendar/")
-(require 'taiwan-calendar)
-(setq mark-holidays-in-calendar t)
-(setq taiwan-calendar-important-holidays taiwan-calendar-taiwan-holidays)
-(setq calendar-holidays taiwan-calendar-important-holidays)
 
 
 (provide 'rc-calendar)

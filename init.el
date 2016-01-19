@@ -33,6 +33,7 @@
 (require 'rc-qml)
 (require 'rc-c)
 (require 'rc-sql)
+(require 'rc-my)
 
 (require 'rc-junk)
 
