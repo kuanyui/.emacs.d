@@ -203,6 +203,7 @@
 (helm-dash-generate-doc-function "Qt")
 (helm-dash-generate-doc-function "Django")
 (helm-dash-generate-doc-function "jQuery")
+(helm-dash-generate-doc-function "JavaScript")
 
 ;;======================================================
 ;; Aggressive-ident-mode

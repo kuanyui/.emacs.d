@@ -7,6 +7,7 @@
   (insert "rhino")
   (eshell-send-input ""))
 
+
 ;;Javascript
 ;; js2
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -15,6 +16,10 @@
 
 (require 'js-comint)
 (setq inferior-js-program-command "js")
+
+(setq process-coding-system-alist
+      (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
+
 
 (setq inferior-js-mode-hook
       (lambda ()
