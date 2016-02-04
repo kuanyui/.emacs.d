@@ -27,6 +27,7 @@
 (require 'rc-ruby)
 (require 'rc-perl)
 (require 'rc-lisp)
+(require 'rc-scheme)
 (require 'rc-css)
 (require 'rc-javascript)
 (require 'rc-shell)
