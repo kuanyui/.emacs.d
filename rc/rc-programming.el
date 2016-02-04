@@ -103,7 +103,8 @@
 (require 'cl)
 (dolist (x '(emacs-lisp-mode-hook
              lisp-mode-hook
-             lisp-interaction-mode-hook))
+             lisp-interaction-mode-hook
+             ))
   (add-hook x
             (lambda ()
               (rainbow-delimiters-mode t)

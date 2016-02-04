@@ -60,6 +60,11 @@
                         (mode . slime-mode)
                         (name . "^\\*scratch\\*$")
                         (mode . lisp-mode)))
+               ("Scheme" (or
+                          (name . "Guile")
+                          (name . "geiser")
+                          (mode . scheme-mode)
+                          (mode . geiser-mode)))
                ("Shell Script" (or (mode . shell-script-mode)
                                    (mode . shell-mode)
                                    (mode . sh-mode)))
