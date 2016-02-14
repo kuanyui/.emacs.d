@@ -686,7 +686,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
 
 (define-key completion-list-mode-map (kbd "TAB") 'next-completion)
 (define-key completion-list-mode-map (kbd "<backtab>") 'previous-completion)
-(define-key minibuffer-local-map (kbd "C-x TAB") 'goto-completions-buffer)
+(define-key minibuffer-local-map (kbd "<backtab>") 'goto-completions-buffer)
 
 (defun goto-completions-buffer ()
   (interactive)
