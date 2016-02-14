@@ -677,5 +677,24 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (global-set-key [f6] 'point-to-register)
 (global-set-key [f7] 'jump-to-register)
 
+(define-key Info-mode-map "q" #'Info-up)
+(define-key Info-mode-map "Q" #'quit-window)
+
+;; ======================================================
+;; Completion enhancement
+;; ======================================================
+
+(define-key completion-list-mode-map (kbd "TAB") 'next-completion)
+(define-key completion-list-mode-map (kbd "<backtab>") 'previous-completion)
+(define-key minibuffer-local-map (kbd "C-x TAB") 'goto-completions-buffer)
+
+(defun goto-completions-buffer ()
+  (interactive)
+  (if (not (get-buffer-window "*Completions*"))
+      (minibuffer-complete))
+  (switch-to-buffer-other-window "*Completions*")
+  (next-completion 1))
+
+
 (provide 'rc-basic)
 ;;; basic.el ends here
