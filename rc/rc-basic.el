@@ -693,8 +693,10 @@ mouse-1: Display Line and Column Mode Menu"))))))
   (interactive)
   (let ((name "*Completions*"))
     (if (not (get-buffer-window name))  ;if *Completions* window is hidden
-        (progn (if (get-buffer name) (kill-buffer name))
+                                        ;(remained by previous complete action)
+        (progn (if (get-buffer name) (kill-buffer name)) ;kill *Completions* if it exists
                (with-current-buffer (window-buffer (minibuffer-window))
+                 (call-interactively 'minibuffer-complete) ; [FIXME] Why useless?!
                  (call-interactively 'minibuffer-complete) ; [FIXME] Why useless?!
                  (call-interactively 'minibuffer-complete))))
     (when (get-buffer-window name)
