@@ -680,5 +680,16 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (define-key Info-mode-map "q" #'Info-up)
 (define-key Info-mode-map "Q" #'quit-window)
 
+
+;; ======================================================
+;; Jump to *Help* window/buffer quickly
+;; ======================================================
+
+(global-set-key (kbd "C-h SPC") 'help-jump-to-help-window)
+(defun help-jump-to-help-window ()
+  (interactive)
+  (switch-to-buffer-other-window "*Help*"))
+
+
 (provide 'rc-basic)
 ;;; basic.el ends here
