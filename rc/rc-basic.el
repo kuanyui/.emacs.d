@@ -689,12 +689,17 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (define-key minibuffer-local-map (kbd "<backtab>") 'goto-completions-buffer)
 
 (defun goto-completions-buffer ()
+  "This should only be called interactively in minibuffer"
   (interactive)
-  (if (not (get-buffer-window "*Completions*"))
-      (minibuffer-complete))
-  (switch-to-buffer-other-window "*Completions*")
-  (next-completion 1))
-
+  (let ((name "*Completions*"))
+    (if (not (get-buffer-window name))  ;if *Completions* window is hidden
+        (progn (if (get-buffer name) (kill-buffer name))
+               (with-current-buffer (window-buffer (minibuffer-window))
+                 (call-interactively 'minibuffer-complete) ; [FIXME] Why useless?!
+                 (call-interactively 'minibuffer-complete))))
+    (when (get-buffer-window name)
+      (switch-to-buffer-other-window name)
+      (next-completion 1))))
 
 (provide 'rc-basic)
 ;;; basic.el ends here
