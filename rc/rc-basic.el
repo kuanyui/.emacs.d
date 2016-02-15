@@ -696,9 +696,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
                                         ;(remained by previous complete action)
         (progn (if (get-buffer name) (kill-buffer name)) ;kill *Completions* if it exists
                (with-current-buffer (window-buffer (minibuffer-window))
-                 (call-interactively 'minibuffer-complete) ; [FIXME] Why useless?!
-                 (call-interactively 'minibuffer-complete) ; [FIXME] Why useless?!
-                 (call-interactively 'minibuffer-complete))))
+                 (minibuffer-completion-help (minibuffer-prompt-end) (point-max)))))
     (when (get-buffer-window name)
       (switch-to-buffer-other-window name)
       (next-completion 1))))
