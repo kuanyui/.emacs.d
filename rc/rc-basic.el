@@ -680,26 +680,5 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (define-key Info-mode-map "q" #'Info-up)
 (define-key Info-mode-map "Q" #'quit-window)
 
-;; ======================================================
-;; Completion enhancement
-;; ======================================================
-
-(define-key completion-list-mode-map (kbd "TAB") 'next-completion)
-(define-key completion-list-mode-map (kbd "<backtab>") 'previous-completion)
-(define-key minibuffer-local-map (kbd "<backtab>") 'goto-completions-buffer)
-
-(defun goto-completions-buffer ()
-  "This should only be called interactively in minibuffer"
-  (interactive)
-  (let ((name "*Completions*"))
-    (if (not (get-buffer-window name))  ;if *Completions* window is hidden
-                                        ;(remained by previous complete action)
-        (progn (if (get-buffer name) (kill-buffer name)) ;kill *Completions* if it exists
-               (with-current-buffer (window-buffer (minibuffer-window))
-                 (minibuffer-completion-help (minibuffer-prompt-end) (point-max)))))
-    (when (get-buffer-window name)
-      (switch-to-buffer-other-window name)
-      (next-completion 1))))
-
 (provide 'rc-basic)
 ;;; basic.el ends here
