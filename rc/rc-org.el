@@ -549,9 +549,9 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;;but it create duplicated "datetree" every time call this capture http://paste.opensuse.org/21805084 Any body know what's happened?
 
 (setq cfw:org-capture-template
-      '("c" "calfw2org" entry
-        (file nil)
-        "** %?\n %(cfw:org-capture-day)"))
+      '("c" "calfw" entry
+        (file+headline (concat org-directory "/agenda/Event.org") "Event")
+        "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i"))
 
 ;; capture jump to link
 (define-key global-map "\C-cx"
