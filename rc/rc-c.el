@@ -7,10 +7,6 @@
 
 (add-hook 'c-mode-hook
  	  (lambda ()
-	    (require 'auto-complete-c-headers)
-	    (add-to-list 'ac-sources 'ac-source-c-headers)
-	    (require 'auto-complete-clang)
-
 	    (c-set-style "linux")
 	    (defun c-compile-current-file ()
 	      (interactive)
