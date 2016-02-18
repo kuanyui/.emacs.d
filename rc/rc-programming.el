@@ -13,10 +13,10 @@
 (add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
 (require 'auto-complete-config)
 (add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict") ;;我原本只有放user這個
-;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict") ; 原本沒有
+;; ;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict") ; 原本沒有
 (ac-config-default)
 
-(global-auto-complete-mode 1)
+;; ;;(global-auto-complete-mode -1)
 
 
 (define-key ac-mode-map (kbd "C-c h") 'ac-last-quick-help)
@@ -28,15 +28,15 @@
 ;;       (lambda ()
 ;;         (add-to-list 'ac-sources 'ac-source-company-elisp)))
 
-(add-hook 'css-mode-hook 'ac-css-mode-setup)
+;;(add-hook 'css-mode-hook 'ac-css-mode-setup)
 
 (setq ac-use-menu-map t)
-;; 讓C-s可以在auto-complete選單裡使用。
+;; ;; 讓C-s可以在auto-complete選單裡使用。
 (define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch)
 (define-key ac-complete-mode-map (kbd "M-p") 'ac-quick-help-scroll-up)
 (define-key ac-complete-mode-map (kbd "M-n") 'ac-quick-help-scroll-down)
 
-(defalias 'ac 'auto-complete-mode)
+
 ;;======================================================
 ;; Highlight-symbol
 ;;======================================================
