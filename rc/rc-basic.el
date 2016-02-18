@@ -688,8 +688,14 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (global-set-key (kbd "C-h SPC") 'help-jump-to-help-window)
 (defun help-jump-to-help-window ()
   (interactive)
-  (switch-to-buffer-other-window "*Help*"))
+  (switch-to-buffer "*Help*"))
 
+;; Remap some keys
+(add-hook 'help-mode-hook (lambda ()
+			    (define-key help-mode-map (kbd "[") 'help-go-back)
+			    (define-key help-mode-map (kbd "]") 'help-go-forward)
+			    (define-key help-mode-map (kbd "q") 'help-go-back)
+			    (define-key help-mode-map (kbd "Q") 'quit-window)))
 
 (provide 'rc-basic)
 ;;; basic.el ends here
