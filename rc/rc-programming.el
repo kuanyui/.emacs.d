@@ -7,35 +7,16 @@
 ;; 	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
 ;; 	     (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
 
-;;======================================================
-;; Auto-complete
-;;======================================================
-(add-to-list 'load-path "~/.emacs.d/lisps/auto-complete")
-(require 'auto-complete-config)
-(add-to-list 'ac-user-dictionary-files "~/.emacs.d/ac-dict") ;;我原本只有放user這個
-;; ;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict") ; 原本沒有
-(ac-config-default)
+;; ======================================================
+;; Company
+;; ======================================================
 
-;; ;;(global-auto-complete-mode -1)
+(autoload 'company-mode "company" nil t)
+(setq company-minimum-prefix-length 1)
 
 
-(define-key ac-mode-map (kbd "C-c h") 'ac-last-quick-help)
-(define-key ac-mode-map (kbd "C-c H") 'ac-last-help)
-
-;;(require 'ac-company)
-;;(ac-company-define-source ac-source-company-elisp company-elisp)
-;;(add-hook 'emacs-lisp-mode-hook
-;;       (lambda ()
-;;         (add-to-list 'ac-sources 'ac-source-company-elisp)))
-
-;;(add-hook 'css-mode-hook 'ac-css-mode-setup)
-
-(setq ac-use-menu-map t)
-;; ;; 讓C-s可以在auto-complete選單裡使用。
-(define-key ac-complete-mode-map (kbd "C-s") 'ac-isearch)
-(define-key ac-complete-mode-map (kbd "M-p") 'ac-quick-help-scroll-up)
-(define-key ac-complete-mode-map (kbd "M-n") 'ac-quick-help-scroll-down)
-
+(add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
 
 ;;======================================================
 ;; Highlight-symbol
