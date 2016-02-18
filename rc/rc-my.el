@@ -37,10 +37,11 @@
 (add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
 (require 'writing-utils)
 (require 'page-title)
-(require 'hexo)
+;;(require 'hexo)
 (require 'flickr)
 (require 'markdown-and-html)
 (require 'markdown-toc)
+(require 'minibuffer-enhancements)
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (require 'livedoor-opml-to-markdown)
