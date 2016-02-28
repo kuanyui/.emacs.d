@@ -5,6 +5,7 @@
 (setq user-mail-address "azazabc123@gmail.com")
 (setq user-full-name "kuanyui")
 
+(set-locale-environment "UTF-8")
 
 (defmacro buffer-real-name ()
   "This macro will return the real filename of current
