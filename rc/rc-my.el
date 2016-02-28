@@ -30,6 +30,13 @@
 (require 'fsc)
 (global-set-key (kbd "C-c f s") 'fsc)
 
+
+;; ======================================================
+;; hexo.el
+;; ======================================================
+(add-to-list 'load-path "~/.emacs.d/git/hexo.el/")
+(require 'hexo)
+
 ;;======================================================
 ;; writing-utils.el 寫作加強
 ;;======================================================
@@ -37,7 +44,6 @@
 (add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
 (require 'writing-utils)
 (require 'page-title)
-;;(require 'hexo)
 (require 'flickr)
 (require 'markdown-and-html)
 (require 'markdown-toc)
@@ -95,7 +101,7 @@
 ;;======================================================
 (add-to-list 'load-path "~/.emacs.d/git/moedict/")
 (require 'moedict)
-
+(global-set-key (kbd "C-c m d") 'moedict)
 ;; ======================================================
 ;; fm-bookmarks.el
 ;; ======================================================
