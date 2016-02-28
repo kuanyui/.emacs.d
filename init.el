@@ -64,7 +64,40 @@
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
-    ((major-mode . org-mode)
+    ((eval when
+           (and
+            (buffer-file-name)
+            (file-regular-p
+             (buffer-file-name))
+            (string-match-p "^[^.]"
+                            (buffer-file-name)))
+           (emacs-lisp-mode)
+           (when
+               (fboundp
+                (quote flycheck-mode))
+             (flycheck-mode -1))
+           (unless
+               (featurep
+                (quote package-build))
+             (let
+                 ((load-path
+                   (cons ".." load-path)))
+               (require
+                (quote package-build))))
+           (package-build-minor-mode)
+           (set
+            (make-local-variable
+             (quote package-build-working-dir))
+            (expand-file-name "../working/"))
+           (set
+            (make-local-variable
+             (quote package-build-archive-dir))
+            (expand-file-name "../packages/"))
+           (set
+            (make-local-variable
+             (quote package-build-recipes-dir))
+            default-directory))
+     (major-mode . org-mode)
      (major-mode . org)
      (org-html-link-org-files-as-html)
      (pangu-spacing-real-insert-separtor . t)
