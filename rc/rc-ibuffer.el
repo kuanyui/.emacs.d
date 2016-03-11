@@ -1,5 +1,8 @@
 ;;; rc-ibuffer.el ---                                -*- lexical-binding: t; -*-
 
+(require 'helm-buffers)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+
 ;;======================================================
 ;; IBuffer
 ;;======================================================
