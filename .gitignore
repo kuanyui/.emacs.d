@@ -33,3 +33,9 @@ org-clock-save.el
 /lisps/org-ioslide/
 /lisps/powerline/
 /elpa/*.txt
+recentf
+*.cache
+/tldr/
+/todo/
+/tutorial/
+/bookmarks
