@@ -4,6 +4,9 @@
 ;; C
 ;;======================================================
 (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+(require 'company)
+(require 'cc-mode)
+(require 'flycheck)
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
@@ -33,6 +36,8 @@
   (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
   (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
   (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  (setq flycheck-gcc-language-standard "c++11")
+  (flycheck-mode 1)
   (rainbow-delimiters-mode-enable))
 
 
