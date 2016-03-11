@@ -45,16 +45,14 @@
   (lambda () (interactive) (newline) (comment-dwim nil)))
 
 ;;======================================================
-;; Jedi: Auto-complete for Python
+;; Company-Jedi : Completion for Python
 ;;======================================================
 
-(require 'jedi)
-(autoload 'jedi:setup "jedi" nil t)
-(setq jedi:setup-keys t)
-(setq jedi:complete-on-dot t)
-(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
-(add-hook 'python-mode-hook 'jedi:setup)
+(require 'company-jedi)
+(defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
 
+(add-hook 'python-mode-hook 'my/python-mode-hook)
 ;; ======================================================
 ;; Elpy
 ;; ======================================================
