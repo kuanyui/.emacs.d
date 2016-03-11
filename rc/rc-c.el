@@ -40,7 +40,7 @@
   (interactive)
   (save-buffer)
   (if (file-exists-p (file-name-base)) (delete-file (file-name-base)))
-  (shell-command (format "g++ -Wall %s -o %s && ./%s"
+  (shell-command (format "g++ -Wall -std=c++11 %s -o %s && echo '================================================' && ./%s"
                          (buffer-real-name)
                          (file-name-base)
                          (file-name-base))))
