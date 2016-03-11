@@ -153,14 +153,14 @@
 	   ((:keywords "abbrev" "convenience" "matching")
 	    (:url . "http://company-mode.github.io/"))])
  (company-math .
-	       [(1 0 1)
+	       [(1 1)
 		((company
 		  (0 8 0))
 		 (math-symbol-lists
 		  (1 0)))
-		"Completion backends for unicode math symbols and latex tags" single
-		((:url . "https://github.com/vspinu/company-math")
-		 (:keywords "unicode" "symbols" "completion"))])
+		"Completion backends for unicode math symbols and latex tags" tar
+		((:keywords "unicode" "symbols" "completion")
+		 (:url . "https://github.com/vspinu/company-math"))])
  (company-statistics .
 		     [(0 2 2)
 		      ((emacs
@@ -187,7 +187,7 @@
  (csv-mode .
 	   [(1 5)
 	    nil "Major mode for editing comma/char separated values" single
-	    ((:url . "http://centaur.maths.qmul.ac.uk/Emacs/")
+	    ((:url . "http://elpa.gnu.org/packages/csv-mode.html")
 	     (:keywords "convenience"))])
  (darkroom .
 	   [(0 1)
@@ -390,7 +390,7 @@
 		((:keywords "html" "xml")
 		 (:url . "https://github.com/validator/validator"))])
  (hydra .
-	[(0 13 4)
+	[(0 13 5)
 	 ((cl-lib
 	   (0 5)))
 	 "Make bindings that stick around." tar
@@ -481,17 +481,17 @@
 	     ((:url . "http://elpa.gnu.org/packages/markchars.html")
 	      (:keywords))])
  (math-symbol-lists .
-		    [(1 0)
-		     nil "Lists of Unicode math symbols and latex commands" single
-		     ((:url . "https://github.com/vspinu/math-symbol-lists")
-		      (:keywords "unicode" "symbols" "mathematics"))])
+		    [(1 1)
+		     nil "Lists of Unicode math symbols and latex commands" tar
+		     ((:keywords "unicode" "symbols" "mathematics")
+		      (:url . "https://github.com/vspinu/math-symbol-lists"))])
  (memory-usage .
 	       [(0 2)
 		nil "Analyze the memory usage of Emacs in various ways" single
 		((:url . "http://elpa.gnu.org/packages/memory-usage.html")
 		 (:keywords "maint"))])
  (metar .
-	[(0 1)
+	[(0 2)
 	 ((cl-lib
 	   (0 5)))
 	 "Retrieve and decode METAR weather information" single
@@ -582,7 +582,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20160222)
+      [(20160307)
        nil "Outline-based notes management and organizer" tar nil])
  (osc .
       [(0 1)
@@ -712,7 +712,7 @@
 	   ((:url . "https://github.com/Malabarba/spinner.el")
 	    (:keywords "processes" "mode-line"))])
  (stream .
-	 [(2 1 0)
+	 [(2 2 0)
 	  ((emacs
 	    (25)))
 	  "Implementation of streams" single
@@ -754,7 +754,7 @@
 		      ((:url . "http://elpa.gnu.org/packages/temp-buffer-browse.html")
 		       (:keywords "convenience"))])
  (test-simple .
-	      [(1 1)
+	      [(1 2 0)
 	       ((cl-lib
 		 (0)))
 	       "Simple Unit Test Framework for Emacs Lisp" single
@@ -780,7 +780,7 @@
 	       ((:url . "http://elpa.gnu.org/packages/tramp-theme.html")
 		(:keywords "convenience" "faces"))])
  (transcribe .
-	     [(1 0 2)
+	     [(1 3 0)
 	      nil "Package for audio transcriptions" single
 	      ((:url . "http://elpa.gnu.org/packages/transcribe.html")
 	       (:keywords))])
