@@ -26,6 +26,9 @@
                ("Markdown" (or
                             (name . "^diary$")
                             (mode . markdown-mode)))
+               ("C/C++ header" (name . "\\.h$"))
+               ("C/C++ source" (or (mode . c-mode)
+                                   (mode . c++-mode)))
                ("ReStructText" (mode . rst-mode))
                ("JS" (or
                       (mode . javascript-mode)
