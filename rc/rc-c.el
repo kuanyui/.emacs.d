@@ -3,10 +3,11 @@
 ;;======================================================
 ;; C
 ;;======================================================
-(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 (require 'company)
 (require 'cc-mode)
 (require 'flycheck)
+
+(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
@@ -37,6 +38,10 @@
   (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
   (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
   (setq flycheck-gcc-language-standard "c++11")
+  ;; open header file on #include <...>
+  (define-key c++-mode-map (kbd "C-c h") 'ff-find-other-file)
+  
+  (semantic-mode t)
   (flycheck-mode 1)
   (rainbow-delimiters-mode-enable))
 
@@ -50,6 +55,43 @@
                          (file-name-base)
                          (file-name-base))))
 
+
+;; ======================================================
+;; Semantic
+;; ======================================================
+(require 'semantic)
+(global-semantic-idle-completions-mode nil) ;; 好像跟 Company 的功能重疊
+(global-semantic-decoration-mode t)
+(global-semantic-highlight-func-mode t) ;; 其實預設就是開的，就是螢幕最上面那一條
+(global-semantic-show-unmatched-syntax-mode t)
+
+;; ======================================================
+;; eldoc
+;; ======================================================
+;;(add-hook 'c-mode-common-hook 'my-cc-eldoc-setup)
+;;(defun my-cc-eldoc-setup ()
+;;  (setq c-eldoc-includes "`pkg-config --cflags --libs` -I./ -I../")
+;;  (c-turn-on-eldoc-mode))
+
+;; ======================================================
+;; gtags
+;; ======================================================
+(require 'helm-gtags)
+(require 'asm-mode)
+
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; Set key bindings
+(define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+(define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+(define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+(define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
 
 (provide 'rc-c)
 ;;; rc-c.el ends here
