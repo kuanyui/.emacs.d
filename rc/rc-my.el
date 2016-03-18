@@ -48,6 +48,7 @@
 (require 'markdown-and-html)
 (require 'markdown-toc)
 (require 'minibuffer-enhancements)
+(global-set-key (kbd "C-a") #'beginning-of-line-or-indentation)
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (require 'livedoor-opml-to-markdown)
