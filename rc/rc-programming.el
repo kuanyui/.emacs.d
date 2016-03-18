@@ -13,7 +13,7 @@
 
 (autoload 'company-mode "company" nil t)
 (setq company-minimum-prefix-length 1)
-
+(setq company-idle-delay 0)
 
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
