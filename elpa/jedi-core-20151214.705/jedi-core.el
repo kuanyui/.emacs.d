@@ -2,7 +2,7 @@
 
 ;; Author: Takafumi Arakaki <aka.tkf at gmail.com>
 ;; Package-Requires: ((emacs "24") (epc "0.1.0") (python-environment "0.0.2") (cl-lib "0.5"))
-;; Version: 0.2.5
+;; Version: 0.2.7
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -41,7 +41,7 @@
   :group 'completion
   :prefix "jedi:")
 
-(defconst jedi:version "0.2.5")
+(defconst jedi:version "0.2.7")
 
 (defvar jedi:source-dir (if load-file-name
                             (file-name-directory load-file-name)
@@ -633,8 +633,9 @@ See: https://github.com/tkf/emacs-jedi/issues/54"
       (concat call_name "(" (mapconcat #'identity params ", ") ")"))))
 
 (defun jedi:get-in-function-call--tooltip-show (args)
-  (when (and args (or (not (boundp 'auto-complete-mode))
-                      (and (boundp 'ac-completing) (not ac-completing))))
+  (when (and args (or (and (boundp 'ac-completing) (not ac-completing))
+                      (and (boundp 'company-pseudo-tooltip-overlay)
+                           (not company-pseudo-tooltip-overlay))))
     (jedi:tooltip-show
      (apply #'jedi:get-in-function-call--construct-call-signature args))))
 
