@@ -209,7 +209,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq linum-right-space nil)
 (setq linum-left-space nil)
 (setq linum-format 'dynamic)
-(global-linum-mode t)
+
+;; 預設就把萬惡的linum關掉 [2016-03-31 木 19:10]
+;;(global-linum-mode t)
 
 
 (setq inhibit-linum-mode-alist
@@ -554,6 +556,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (if xclip-mode
       (turn-on-xclip)
     (turn-off-xclip)))
+(turn-off-xclip)
 
 ;;======================================================
 ;; Frames 操作加強
@@ -619,7 +622,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 
 (setq-default mode-line-format
-	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
+	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
 		(vc-mode vc-mode) " "
 		mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
@@ -684,6 +687,18 @@ mouse-1: Display Line and Column Mode Menu"))))))
 			    (define-key help-mode-map (kbd "]") 'help-go-forward)
 			    (define-key help-mode-map (kbd "q") 'help-go-back)
 			    (define-key help-mode-map (kbd "Q") 'quit-window)))
+
+;; ======================================================
+;; Tramp
+;; ======================================================
+
+(defun find-file-root ()
+  "*Open a file as the root user.
+   Prepends `find-file-root-prefix' to the selected file name so that it
+   maybe accessed via the corresponding tramp method."
+
+  (interactive)
+  (find-file (format "/sudo::%s" (read-file-name "Find file as root: "))))
 
 (provide 'rc-basic)
 ;;; basic.el ends here
