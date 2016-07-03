@@ -20,6 +20,7 @@
 (setq org-log-done t)
 
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
+(define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
 
 ;; In tmux/tty, M-S-RET will be inpretered to this shit.
 (define-key org-mode-map (kbd "ESC <kp-enter>") 'org-insert-todo-heading)
