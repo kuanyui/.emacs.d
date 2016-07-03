@@ -345,15 +345,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
       ";; If you have no shadows, you're not in the light
 ;; -- Lady Gaga
 ")
-;;自動啟動flyspell-mode拼字檢查
-;;(setq-default flyspell-mode t)
-;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
-;;(setq-default flyspell-prog-mode t)
-(global-set-key (kbd "C-x <f3>") 'flyspell-mode)
-(global-set-key (kbd "C-c <f3>") 'flyspell-buffer)
-(global-set-key (kbd "<f3>") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-x <f4>") 'ispell-buffer)
-(global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
 
 ;; aspell
 (setq ispell-program-name "aspell"
@@ -432,6 +423,20 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq helm-grep-default-recurse-command "ack -H --smart-case --nogroup --nocolour %e %p %f")
 
 
+(global-set-key (kbd "C-x <f2>") 'kmacro-start-macro-or-insert-counter)
+(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
+
+;;自動啟動flyspell-mode拼字檢查
+;;(setq-default flyspell-mode t)
+;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
+;;(setq-default flyspell-prog-mode t)
+(global-set-key (kbd "C-x <f3>") 'flyspell-mode)
+(global-set-key (kbd "C-c <f3>") 'flyspell-buffer)
+(global-set-key (kbd "<f3>") 'flyspell-check-previous-highlighted-word)
+(global-set-key (kbd "C-x <f4>") 'ispell-buffer)
+(global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
+
+
 (global-set-key (kbd "<f9>") 'open-note)
 (defun open-note ()
   "Open stick note."
@@ -507,8 +512,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; Tmux 相關設定
 ;;======================================================
 
-(global-set-key (kbd "<f1>") 'kmacro-start-macro-or-insert-counter)
-(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
 (defun zsh () (interactive) (term "/bin/zsh"))
 
 ;;解決tmux下無法切換buffer以及一些key-binding的問題
