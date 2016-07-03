@@ -883,6 +883,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
                              '(
                                (sh . t)
                                (emacs-lisp . t)
+                               (dot . t)
                                ))
 
 

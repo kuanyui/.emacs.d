@@ -7,7 +7,6 @@
 (require 'cc-mode)
 (require 'flycheck)
 
-(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
@@ -40,8 +39,8 @@
   (setq flycheck-gcc-language-standard "c++11")
   ;; open header file on #include <...>
   (define-key c++-mode-map (kbd "C-c h") 'ff-find-other-file)
-  
-  (semantic-mode t)
+  ;;(semantic-mode t)
+
   (flycheck-mode 1)
   (rainbow-delimiters-mode-enable))
 
@@ -60,10 +59,32 @@
 ;; Semantic
 ;; ======================================================
 (require 'semantic)
+(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 (global-semantic-idle-completions-mode nil) ;; 好像跟 Company 的功能重疊
 (global-semantic-decoration-mode t)
 (global-semantic-highlight-func-mode t) ;; 其實預設就是開的，就是螢幕最上面那一條
 (global-semantic-show-unmatched-syntax-mode t)
+(mapc (lambda (x)
+        (semantic-add-system-include (format "/usr/include/%s" x) 'c++-mode))
+      '("QtTest"
+        "QtXml"
+        "QtXmlPatterns"
+        "QtNetwork"
+        "QtOpenGL"
+        "QtScript"
+        "QtSql"
+        "QtGui"
+        "QtHelp"
+        "QtMultimedia"
+        "QtDBus"
+        "QtDeclarative"
+        "QtDesigner"
+        "QtCore"
+        "Qt3Support"
+        "Qt"
+        "QtSvg"
+        "QtScriptTools"
+        "QtUiTools"))
 
 ;; ======================================================
 ;; eldoc
@@ -92,6 +113,30 @@
 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
 (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+
+;; ======================================================
+;; irony
+;; ======================================================
+(require 'irony)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
+ ;; replace the `completion-at-point' and `complete-symbol' bindings in
+ ;; irony-mode's buffers by irony-mode's function
+ (defun my-irony-mode-hook ()
+   (define-key irony-mode-map [remap completion-at-point] 'irony-completion-at-point-async)
+   (define-key irony-mode-map [remap complete-symbol] 'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+
 
 (provide 'rc-c)
 ;;; rc-c.el ends here
