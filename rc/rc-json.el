@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(defun search-comic-info ()
+(defun comic-search-google ()
   (interactive)
   (let ((url (url-encode-url
               (concat "https://www.google.co.jp/search?q="
@@ -38,10 +38,24 @@
                        )))))
     (eww url)))
 
+(defun comic-insert-new-row ()
+  (interactive)
+  (save-excursion
+    (insert "    {\"title\": \"\",
+     \"jptitle\": \"\",
+     \"author\": \"\",
+     \"type\": 2,
+     \"rating\": -1,
+     \"progress\": \"已讀完\",
+     \"status\": \"已完結/連載中\",
+     \"comment\": \"\" },")))
+
 (defun my-json-setup ()
   (rainbow-delimiters-mode-enable)
   (flycheck-mode 1)
-  (define-key json-mode-map (kbd "<f3>") 'search-comic-info))
+  (define-key json-mode-map (kbd "<f3>") 'comic-search-google)
+  (define-key json-mode-map (kbd "<f4>") 'comic-insert-new-row)
+  )
 
 (add-hook 'json-mode-hook 'my-json-setup)
 

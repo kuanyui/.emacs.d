@@ -50,7 +50,7 @@
 
 ;; 自動斷開camelCase
 (add-hook 'prog-mode-hook (lambda () (subword-mode 1)))
-
+(global-subword-mode t)
 ;;======================================================
 ;; Code folding
 ;;======================================================
@@ -103,8 +103,10 @@
 (defun all-css-modes() (css-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . all-css-modes)) ;; Load both major and minor modes in one call based on file type
 
-(defun my-xml-mode () (rainbow-mode) (xml-mode))
+(defun my-xml-mode () (rainbow-mode 1) (xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . my-xml-mode))
+
+(add-hook 'nxml-mode-hook #'my-xml-mode)
 
 (require 'stylus-mode)
 
