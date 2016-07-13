@@ -15,6 +15,7 @@
 (require 'rc-gnus)
 (require 'rc-twittering)
 (require 'rc-magit)
+(require 'rc-emms)
 
 (require 'rc-org)
 (require 'rc-markdown)
