@@ -209,7 +209,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq linum-right-space nil)
 (setq linum-left-space nil)
 (setq linum-format 'dynamic)
-(global-linum-mode t)
+
+;; 預設就把萬惡的linum關掉 [2016-03-31 木 19:10]
+;;(global-linum-mode t)
 
 
 (setq inhibit-linum-mode-alist
@@ -343,15 +345,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
       ";; If you have no shadows, you're not in the light
 ;; -- Lady Gaga
 ")
-;;自動啟動flyspell-mode拼字檢查
-;;(setq-default flyspell-mode t)
-;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
-;;(setq-default flyspell-prog-mode t)
-(global-set-key (kbd "C-x <f3>") 'flyspell-mode)
-(global-set-key (kbd "C-c <f3>") 'flyspell-buffer)
-(global-set-key (kbd "<f3>") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-x <f4>") 'ispell-buffer)
-(global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
 
 ;; aspell
 (setq ispell-program-name "aspell"
@@ -430,6 +423,20 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq helm-grep-default-recurse-command "ack -H --smart-case --nogroup --nocolour %e %p %f")
 
 
+(global-set-key (kbd "C-x <f2>") 'kmacro-start-macro-or-insert-counter)
+(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
+
+;;自動啟動flyspell-mode拼字檢查
+;;(setq-default flyspell-mode t)
+;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
+;;(setq-default flyspell-prog-mode t)
+(global-set-key (kbd "C-x <f3>") 'flyspell-mode)
+(global-set-key (kbd "C-c <f3>") 'flyspell-buffer)
+(global-set-key (kbd "<f3>") 'flyspell-check-previous-highlighted-word)
+(global-set-key (kbd "C-x <f4>") 'ispell-buffer)
+(global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
+
+
 (global-set-key (kbd "<f9>") 'open-note)
 (defun open-note ()
   "Open stick note."
@@ -505,8 +512,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; Tmux 相關設定
 ;;======================================================
 
-(global-set-key (kbd "<f1>") 'kmacro-start-macro-or-insert-counter)
-(global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
 (defun zsh () (interactive) (term "/bin/zsh"))
 
 ;;解決tmux下無法切換buffer以及一些key-binding的問題
@@ -554,6 +559,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (if xclip-mode
       (turn-on-xclip)
     (turn-off-xclip)))
+(turn-off-xclip)
 
 ;;======================================================
 ;; Frames 操作加強
@@ -619,7 +625,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 
 (setq-default mode-line-format
-	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-buffer-identification mode-line-position
+	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
 		(vc-mode vc-mode) " "
 		mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
@@ -684,6 +690,18 @@ mouse-1: Display Line and Column Mode Menu"))))))
 			    (define-key help-mode-map (kbd "]") 'help-go-forward)
 			    (define-key help-mode-map (kbd "q") 'help-go-back)
 			    (define-key help-mode-map (kbd "Q") 'quit-window)))
+
+;; ======================================================
+;; Tramp
+;; ======================================================
+
+(defun find-file-root ()
+  "*Open a file as the root user.
+   Prepends `find-file-root-prefix' to the selected file name so that it
+   maybe accessed via the corresponding tramp method."
+
+  (interactive)
+  (find-file (format "/sudo::%s" (read-file-name "Find file as root: "))))
 
 (provide 'rc-basic)
 ;;; basic.el ends here
