@@ -30,7 +30,7 @@
 (require 'rc-lisp)
 (require 'rc-scheme)
 (require 'rc-css)
-(require 'rc-javascript)
+(require 'rc-js)
 (require 'rc-json)
 (require 'rc-shell)
 (require 'rc-qml)

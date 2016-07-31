@@ -42,9 +42,10 @@
     (define-key qml-mode-map (kbd "M-n")'highlight-symbol-next)
     (define-key qml-mode-map (kbd "M-p")'highlight-symbol-prev)
     (define-key qml-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-    ))
+    (add-hook 'qml-mode-hook (lambda () (js2-mode-exit)))
+    )
+  )
 
-(add-hook 'qml-mode-hook (lambda () (js2-mode-exit)))
 
 ;; ======================================================
 ;; imenu
