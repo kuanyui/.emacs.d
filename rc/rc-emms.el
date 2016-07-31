@@ -11,10 +11,13 @@
 (emms-standard)
 (setq emms-source-file-default-directory "~/multimedia/")
 
-;; ======================================================
-;; Auto save play list when exit emacs
-;; ======================================================
+(setq emms-repeat-playlist t)
+(setq emms-seek-seconds 3)
 
+;; ======================================================
+;; Auto save playlist when exit emacs, and load automatically when startup
+;; ======================================================
+(defvar emms-auto-save-playlist-path (concat emms-directory "/" "auto-save.m3u"))
 
 (global-set-key (kbd "C-c e") 'my-emms)
 
@@ -22,11 +25,40 @@
   (interactive)
   (if (or (null emms-playlist-buffer)
           (not (buffer-live-p emms-playlist-buffer)))
-      (emms-history-load))
+      ;; (emms-history-load)  ;; fuck you useless history-load, broken shit.
+      (emms-add-m3u-playlist emms-auto-save-playlist-path)
+    )
   (emms-playlist-mode-go))
 
-(add-hook 'kill-emacs-hook (lambda () (if emms-playlist-buffer (emms-history-save))))
+(add-hook 'kill-emacs-hook
+          (lambda ()
+            (if emms-playlist-buffer
+                (emms-playlist-save 'm3u emms-auto-save-playlist-path)
+              )))
 
+
+;; ======================================================
+;; Progress bar when seeking
+;; ======================================================
+(defun my-emms-indicate-seek (_shit)
+  (let* ((total-playing-time (emms-track-get
+                              (emms-playlist-current-selected-track)
+                              'info-playing-time))
+         (elapsed/total (/ (* 100 emms-playing-time) total-playing-time)))
+    (with-temp-message (format "[%-100s] %2d%%"
+                               (make-string elapsed/total ?=)
+                               elapsed/total)
+      (sit-for 2))))
+
+(add-hook 'emms-player-seeked-functions #'my-emms-indicate-seek)
+
+
+;; ======================================================
+;; Use Mediainfo to get info
+;; ======================================================
+
+(require 'emms-info-mediainfo)
+(add-to-list 'emms-info-functions #'emms-info-mediainfo)
 
 ;; ======================================================
 ;; use MPV as backend
@@ -42,7 +74,7 @@
 ;; Add file to playlist from Dired
 ;; ======================================================
 
-(define-key dired-mode-map (kbd "M-a") 'dired-add-to-emms-playlist)
+(define-key dired-mode-map (kbd "a") 'dired-add-to-emms-playlist)
 
 
 ;; Disable video output to prevent a stupid new window.
@@ -56,7 +88,7 @@
                       "flv" "webm"))
             (file-audio-or-video-p file-path))
         (emms-add-dired)))
-  (next-line))
+  (dired-next-line 1))
 
 
 (defun file-audio-or-video-p (file-path)
@@ -69,13 +101,45 @@
 
 
 ;; ======================================================
+;; Playlist format: I hate ID3Tag, but don't show full path neither.
+;; ======================================================
+;;(setq emms-playlist-insert-track-function 'emms-playlist-simple-insert-track) ; unchanged
+;;(setq emms-track-description-function 'emms-info-track-description) ; unchanged
+(setq emms-track-description-function 'my-emms-get-track-one-line-info)
+(defun my-emms-get-track-one-line-info (track)
+  (let ((artist (emms-track-get track 'info-artist))
+        (year (emms-track-get track 'info-year))
+        (album (emms-track-get track 'info-album))
+        (tracknumber (emms-track-get track 'info-tracknumber))
+        (title (emms-track-get track 'info-title)))
+    ;; Considering removing this. I hate ID3 tag.
+    (if (or artist title)
+        (mapconcat #'identity
+                   (remove nil (list
+                                (if (> (length tracknumber) 0)
+                                    (format "%02d" (string-to-number tracknumber))
+                                  nil)
+                                (if (> (length artist) 0) artist nil)
+                                (if (> (length year) 0) year nil)
+                                (if (> (length album) 0) album nil)
+                                (if (> (length title) 0) title nil)))
+                   "/")
+      ;; if no ID3 tag found
+      (let* ((fullpath (emms-track-get track 'name))
+             (splitted-fullpath (split-string fullpath "/"))
+             (len (length splitted-fullpath)))
+        (if (<= len 5)
+            (file-name-base fullpath)
+          (string-join (nthcdr (- len 2) splitted-fullpath) "/"))))))
+
+;; ======================================================
 ;; Mode-line
 ;; ======================================================
 
 ;; Show only file name, instead of full file path
 (defadvice emms-track-description (after show-only-filename activate)
   (setq ad-return-value
-        (substring (file-name-base ad-return-value) 1)))
+        (string-trim (file-name-base ad-return-value))))
 
 
 ;; Replace `emms-mode-line-icon-function'
@@ -88,31 +152,31 @@
           (emms-mode-line-playlist-current)))
 
 
+;; Format
 (setq emms-playing-time-display-format "(%s)")
 (setq emms-mode-line-format "[%s]")
 
-(emms-mode-line 1)
-(emms-playing-time 1)
+(emms-mode-line -1)
+(emms-playing-time -1)
 
-;; (require 'emms-state)
+;; emms-state.el
+(require 'emms-state)
+(setq emms-state-stop "#")
+(setq emms-state-play ">")
+(setq emms-state-pause "||")
+(setq emms-state-mode-line-string
+      '("" emms-state ""
+        (emms-state-current-playing-time
+         (:propertize emms-state-current-playing-time
+                      face emms-state-current-playing-time))
+        (emms-state-total-playing-time
+         ("/"
+          (:propertize emms-state-total-playing-time
+                       face emms-state-total-playing-time)
+          ))
+        emms-mode-line-string))
 
-;; (setq emms-state-stop "x")
-;; (setq emms-state-play ">")
-;; (setq emms-state-pause "||")
-
-;; (setq emms-state-mode-line-string
-;;       '("" emms-state " "
-;;         (emms-state-current-playing-time
-;;          (:propertize emms-state-current-playing-time
-;;                       face emms-state-current-playing-time))
-;;         (emms-state-total-playing-time
-;;          ("("
-;;           (:propertize emms-state-total-playing-time
-;;                        face emms-state-total-playing-time)
-;;           ")"))
-;;         emms-mode-line-string))
-
-;; (emms-state-mode)
+(emms-state-mode)
 
 
 (provide 'rc-emms)
