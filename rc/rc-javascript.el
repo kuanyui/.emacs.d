@@ -48,8 +48,8 @@
 
   )
 
-(autoload 'tern-mode "tern.el" nil t)
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+;;(autoload 'tern-mode "tern.el" nil t)
+;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
 
 ;; (define-key js2-mode-map (kbd "<f5>") 'call-nodejs-command)
 (defun call-nodejs-command ()
