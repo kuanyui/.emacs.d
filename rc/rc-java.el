@@ -11,12 +11,7 @@
 			   (buffer-real-name)
 			   (file-name-base))))
   (define-key java-mode-map (kbd "<f5>") 'java-compile-and-execute-current-file)
-  ;; Highlight Symbol
-  (require 'highlight-symbol)
-  (define-key java-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-  (define-key java-mode-map (kbd "M-n")'highlight-symbol-next)
-  (define-key java-mode-map (kbd "M-p")'highlight-symbol-prev)
-  (define-key java-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  
   (add-hook 'java-mode-hook 'highlight-symbol-mode)
   ;; Rainbow delimiters
   (rainbow-delimiters-mode t)

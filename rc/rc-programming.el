@@ -30,21 +30,30 @@
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 0)
 
-(eval-after-load 'c++-mode
-  (lambda () (define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-    (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
-    (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
-    (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-    ))
 
-(eval-after-load 'qml-mode
-  (lambda () (define-key qml-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-    (define-key qml-mode-map (kbd "M-n")'highlight-symbol-next)
-    (define-key qml-mode-map (kbd "M-p")'highlight-symbol-prev)
-    (define-key qml-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-    (add-hook 'qml-mode-hook (lambda () (js2-mode-exit)))
-    )
-  )
+;; ======================================================
+;; CSS / Stylus keymap
+;; ======================================================
+(mapc
+ (lambda (name)
+   (let ((mode-symbol      (intern (concat name "-mode")))
+         (mode-hook-symbol (intern (concat name "-mode-hook")))
+         (mode-map-symbol  (intern (concat name "-mode-map"))))
+     (if (fboundp mode-symbol)
+         (require mode-symbol nil :no-error))
+     (if (boundp mode-hook-symbol)
+         (add-hook mode-hook-symbol 'highlight-symbol-mode))
+     (if (boundp mode-map-symbol)
+         (progn (define-key (symbol-value mode-map-symbol) (kbd "C-c M-n") 'highlight-symbol-at-point)
+                (define-key (symbol-value mode-map-symbol) (kbd "M-n")'highlight-symbol-next)
+                (define-key (symbol-value mode-map-symbol) (kbd "M-p")'highlight-symbol-prev)
+                (define-key (symbol-value mode-map-symbol) (kbd "C-c M-p") 'highlight-symbol-query-replace)))
+     ))
+ '("css" "stylus" "jade"
+   "conf" "conf-colon"
+   "c++" "c" "java"
+   "qml"
+   "prog"))
 
 
 ;; ======================================================
@@ -118,11 +127,6 @@
 
 (add-hook 'nxml-mode-hook #'my-xml-mode)
 
-(require 'stylus-mode)
-
-(defun my-stylus-mode () (stylus-mode) (rainbow-mode))
-(add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
-(add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 
 
 ;;======================================================
