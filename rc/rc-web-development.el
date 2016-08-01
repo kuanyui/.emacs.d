@@ -64,5 +64,22 @@
 (add-hook 'web-mode-hook 'emmet-mode)
 
 
+;; ======================================================
+;; Stylus / Jade <= (SWS mode) https://github.com/brianc/jade-mode
+;; ======================================================
+
+(require 'sws-mode)
+(require 'stylus-mode)
+(require 'jade-mode)
+
+(defun my-stylus-mode () (stylus-mode) (rainbow-mode))
+(add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
+(add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+
+
+
+
+
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here

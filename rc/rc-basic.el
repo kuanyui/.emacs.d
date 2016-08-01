@@ -105,7 +105,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; Find file at point
 ;; ======================================================
 (require 'ffap)
-(ffap-bindings)
+(global-set-key (kbd "C-x C-f") 'find-file-at-point)
 
 ;; ============================================
 ;; Coldnew's Font Size Conf for Org-Table
@@ -187,7 +187,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 35)
-(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+;;(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+(global-set-key (kbd "C-x C-r") 'helm-recentf)
+
 ;;(run-with-timer 0 (* 10 60) 'recentf-save-list)
 
 ;; 讓手遠離方向鍵
