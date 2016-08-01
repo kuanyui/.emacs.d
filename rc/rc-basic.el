@@ -100,6 +100,13 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;(global-set-key (kbd "C--") 'sacha/decrease-font-size)
 ;;)
 
+
+;; ======================================================
+;; Find file at point
+;; ======================================================
+(require 'ffap)
+(ffap-bindings)
+
 ;; ============================================
 ;; Coldnew's Font Size Conf for Org-Table
 ;; ============================================
