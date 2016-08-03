@@ -36,7 +36,7 @@
 (add-hook 'js2-mode-hook
           (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
 (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
-
+(setq js2-basic-offset 8)
 
 (defun js-comint-my-conf ()
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
