@@ -38,18 +38,18 @@
 ;; Auto-Complete support
 (setq web-mode-ac-sources-alist
       '(("css" . (ac-source-css-property))
-	("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+        ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
 
 (setq web-mode-extra-snippets '(
-				("django" . (
-					     ("a" . "{% | %}")
-					     ("%" . "{% | %}")
-					     ("" . "{% | %}")
-					     ("c" . "{# | #}")
-					     ("#" . "{# | #}")
-					     )
-				 )
-				)
+                                ("django" . (
+                                             ("a" . "{% | %}")
+                                             ("%" . "{% | %}")
+                                             ("" . "{% | %}")
+                                             ("c" . "{# | #}")
+                                             ("#" . "{# | #}")
+                                             )
+                                 )
+                                )
       )
 
 ;; Django & Web-mode
@@ -77,9 +77,36 @@
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
+(require 'smart-tab)
+(global-smart-tab-mode 1)
+
+(defun set-tab-width-to-2 ()
+  (setq-local tab-width 2))
+
+(add-hook 'stylus-mode-hook #'set-tab-width-to-2)
+(add-hook 'jade-mode-hook #'set-tab-width-to-2)
+
+;; ======================================================
+;; Jade + Embedded CoffeeScript (MMM-mode)
+;; ======================================================
+
+(require 'coffee-mode)
+(custom-set-variables '(coffee-tab-width 2))
 
 
+(setq whitespace-action '(auto-cleanup))
+(setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
 
+
+(require 'mmm-mode)
+(mmm-add-classes
+ '((mmm-ml-jade-coffee-mode
+    :submode coffee-mode
+    :face mmm-code-submode-face
+    :front ":coffee-script\n"
+    :back "^\n$")))
+
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-jade-coffee-mode)
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
