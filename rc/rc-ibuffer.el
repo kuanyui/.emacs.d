@@ -37,11 +37,13 @@
                       (mode . nodejs-repl-mode)))
                ("CSS" (or
 		       (mode . css-mode)
-		       (mode . stylus-mode)))
-               ("Web Development" (or
-                                   (mode . html-mode)
-				   (mode . web-mode)
-                                   (name . "\\.yml$")))
+		       (mode . stylus-mode)
+                       (mode . less-css-mode)))
+               ("HTML/Template" (or
+                                 (mode . html-mode)
+                                 (mode . web-mode)
+                                 (mode . jade-mode)
+                                 (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
 	       ("Haskell" (or (mode . haskell-mode)
 			      (mode . interactive-haskell-mode)
