@@ -42,7 +42,7 @@
                ("HTML/Template" (or
                                  (mode . html-mode)
                                  (mode . web-mode)
-                                 (mode . jade-mode)
+                                 (name . "\\.jade$")
                                  (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
 	       ("Haskell" (or (mode . haskell-mode)
