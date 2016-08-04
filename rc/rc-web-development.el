@@ -89,9 +89,16 @@
 ;; ======================================================
 ;; Jade + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
-
+(require 'jade-mode)
 (require 'coffee-mode)
+(require 'less-css-mode)
+
 (custom-set-variables '(coffee-tab-width 2))
+(add-hook 'jade-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'coffee-mode-hook 'rainbow-delimiters-mode)
+
+(defvar less-css-mode-hook '())
+(add-hook 'less-css-mode-hook 'rainbow-mode)
 
 
 (setq whitespace-action '(auto-cleanup))
@@ -99,6 +106,14 @@
 
 
 (require 'mmm-mode)
+(defun mmm-mode-restart! ()
+  (interactive)
+  (mmm-mode-off)
+  (mmm-mode-on)
+  (message "mmm-mode restarted!"))
+(define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
+
+
 (mmm-add-classes
  '((mmm-ml-jade-coffee-mode
     :submode coffee-mode
