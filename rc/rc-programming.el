@@ -180,6 +180,7 @@
 ;; Whitespace
 ;;======================================================
 (require 'whitespace)
+(global-set-key (kbd "C-c <deletechar>") 'whitespace-cleanup)
 
 ;;======================================================
 ;; Helm-dash - Looking up documents

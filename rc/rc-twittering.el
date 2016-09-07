@@ -11,6 +11,8 @@
 (twittering-enable-unread-status-notifier) ;;顯示未讀訊息數
 ;;(setq-default twittering-icon-mode t) ;;預設顯示頭像
 (global-set-key (kbd "C-x <f8>") 'twit)
+
+(setq twittering-number-of-tweets-on-retrieval 200)
 ;;開啟自己的favorite timeline
 (defun my-twittering-favorites-timeline ()
   (interactive)
