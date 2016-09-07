@@ -16,6 +16,7 @@
 (require 'rc-twittering)
 (require 'rc-magit)
 (require 'rc-emms)
+(require 'rc-eww)
 
 (require 'rc-org)
 (require 'rc-markdown)

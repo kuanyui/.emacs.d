@@ -112,6 +112,7 @@
   (mmm-mode-on)
   (message "mmm-mode restarted!"))
 (define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
+(define-key jade-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 
 
 (mmm-add-classes
