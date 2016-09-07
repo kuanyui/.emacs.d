@@ -30,34 +30,43 @@
                ("C/C++ source" (or (mode . c-mode)
                                    (mode . c++-mode)))
                ("ReStructText" (mode . rst-mode))
+               ("CSS" (or
+                       (mode . stylus-mode)
+                       (mode . less-css-mode)
+                       (mode . css-mode)))
                ("JS" (or
                       (mode . javascript-mode)
                       (mode . js2-mode)
                       (mode . json-mode)
+                      (name . "\\*js\\*")
                       (mode . nodejs-repl-mode)))
-               ("CSS" (or
-		       (mode . css-mode)
-		       (mode . stylus-mode)
-                       (mode . less-css-mode)))
+               ("JS" (or
+                      (mode . javascript-mode)
+                      (mode . js2-mode)
+                      (mode . json-mode)
+                      (mode . nodejs-repl-mode))) 
+               ("Coffee" (or
+                          (name . "\\*CoffeeREPL\\*")
+                          (mode . coffee-mode)))
                ("HTML/Template" (or
                                  (mode . html-mode)
                                  (mode . web-mode)
                                  (name . "\\.jade$")
                                  (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
-	       ("Haskell" (or (mode . haskell-mode)
-			      (mode . interactive-haskell-mode)
-			      (mode . inferior-haskell-mode)
-			      (name . "HS-Error")
-			      (name . "*haskell-process-log*")))
+               ("Haskell" (or (mode . haskell-mode)
+                              (mode . interactive-haskell-mode)
+                              (mode . inferior-haskell-mode)
+                              (name . "HS-Error")
+                              (name . "\\*haskell-process-log\\*")))
                ("Python" (or (mode . python-mode)
                              (mode . ipython-mode)
                              (mode . inferior-python-mode)))
                ("Ruby" (or
-			(mode . ruby-mode)
-			(mode . enh-ruby-mode)
-			(mode . inf-ruby-mode)
-			))
+                        (mode . ruby-mode)
+                        (mode . enh-ruby-mode)
+                        (mode . inf-ruby-mode)
+                        ))
                ("LaTeX" (or (mode . latex-mode)
                             (name . "*.tex$")))
                ("IRC" (or
@@ -99,6 +108,8 @@
                ("Org" (or
                        (mode . org-mode)
                        (name . "^\\*Calendar\\*$")))
+               ("helm" (name . "*helm"))
+               ("Ag" (name . "^\\*ag search"))
                ))))
 
 
