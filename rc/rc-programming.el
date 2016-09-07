@@ -235,9 +235,9 @@
 ;; disable ido faces to see flx highlights.
 (setq ido-use-faces nil)
 (setq ido-enable-flex-matching t)
-
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
 
+(setq projectile-enable-caching t)
 (projectile-global-mode t)
 (setq projectile-indexing-method 'alien)
 
