@@ -23,6 +23,8 @@ org-clock-save.el
 /ramen.ogg
 /misc
 /private
+/emms
+/node-*
 
 /.python-environments/
 /places
