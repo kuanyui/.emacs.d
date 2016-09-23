@@ -15,7 +15,7 @@
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
 (require 'js-comint)
-(setq inferior-js-program-command "js")
+(setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node")
 
 (setq process-coding-system-alist
       (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
@@ -36,7 +36,7 @@
 (add-hook 'js2-mode-hook
           (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
 (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
-(setq js2-basic-offset 8)
+(setq js2-basic-offset 2)
 
 (defun js-comint-my-conf ()
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
@@ -52,7 +52,7 @@
 ;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
 
 ;; (define-key js2-mode-map (kbd "<f5>") 'call-nodejs-command)
-(defun call-nodejs-command ()
+(defun call-nodunejs-command ()
   (interactive)
   (save-buffer)(shell-command (format "node %s" (buffer-real-name))))
 

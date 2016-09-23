@@ -122,7 +122,17 @@
     :front ":coffee-script\n"
     :back "^\n$")))
 
+(mmm-add-classes
+ '((mmm-ml-jade-es6-mode
+    :submode javascript-mode
+    :face mmm-code-submode-face
+    :front "^ *script\\.\n"
+    :front-offset 0
+    :back "^\n$")))
+
+
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-jade-coffee-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-jade-es6-mode)
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
