@@ -105,7 +105,18 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; Find file at point
 ;; ======================================================
 (require 'ffap)
-(global-set-key (kbd "C-x C-f") 'find-file-at-point)
+(global-set-key (kbd "C-x C-f") (lambda () (interactive)
+                                  (find-file-at-point)
+                                  (move-end-of-line 1))) ;Why not work?!
+
+;; shit not work...
+(defadvice find-file-at-point (after auto-goto-eol activate)
+  (move-end-of-line 1))
+
+(defadvice ffap-file-finder (after auto-goto-eol activate)
+  (move-end-of-line 1))
+
+
 
 ;; ============================================
 ;; Coldnew's Font Size Conf for Org-Table
