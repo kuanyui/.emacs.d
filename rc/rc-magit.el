@@ -14,11 +14,11 @@
 (define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
 
-(defun magit-log-all ()
-  (interactive)
-  (magit-log-popup)
-  (magit-key-mode-toggle-option (quote logging) "--all"))
-(define-key magit-mode-map (kbd "l") 'magit-log-all)
+;; (defun magit-log-all ()
+;;   (interactive)
+;;   (magit-log-popup)
+;;   (magit-key-mode-toggle-option (quote logging) "--all"))
+;; (define-key magit-mode-map (kbd "l") 'magit-log-all)
 
 (require 'git-timemachine)
 
