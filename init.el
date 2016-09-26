@@ -44,6 +44,8 @@
 (require 'rc-qml)
 (require 'rc-c)
 (require 'rc-sql)
+(require 'rc-qt)
+
 (require 'rc-my)
 
 (require 'rc-junk)
