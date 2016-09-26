@@ -13,19 +13,19 @@
 ;;======================================================
 ;; kaomoji.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/kaomoji.el/")
+(add-to-list 'load-path "~/.emacs.d/git/kaomoji/")
 (require 'kaomoji)
 
 ;;======================================================
 ;; tldr.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/tldr.el/")
+(add-to-list 'load-path "~/.emacs.d/git/tldr/")
 (require 'tldr)
 
 ;;======================================================
 ;; fsc.el Fuck the Speeching Censorship
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/under-construction/fsc/")
+(add-to-list 'load-path "~/.emacs.d/git/fsc/")
 
 (require 'fsc)
 (global-set-key (kbd "C-c f s") 'fsc)
@@ -34,7 +34,7 @@
 ;; ======================================================
 ;; hexo.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/hexo.el/")
+(add-to-list 'load-path "~/.emacs.d/git/hexo/")
 (require 'hexo)
 
 ;;======================================================
@@ -143,7 +143,7 @@
 ;; ======================================================
 ;; ta.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/ta.el/")
+(add-to-list 'load-path "~/.emacs.d/git/ta/")
 (require 'ta)
 
 (setq ta-delay 0.1)
@@ -176,7 +176,7 @@
 ;; taiwan-holidays.el 台灣的節慶支援
 ;; ======================================================
 
-(add-to-list 'load-path "~/.emacs.d/git/taiwan-holidays.el/")
+(add-to-list 'load-path "~/.emacs.d/git/taiwan-holidays/")
 (require 'taiwan-holidays)
 (setq mark-holidays-in-calendar t)
 (setq taiwan-holidays-important-holidays taiwan-holidays-taiwan-holidays)
