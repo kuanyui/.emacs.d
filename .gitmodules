@@ -28,3 +28,6 @@
 [submodule "git/writing-utils"]
 	path = git/writing-utils
 	url = git@github.com:kuanyui/writing-utils.el.git
+[submodule "git/ta"]
+	path = git/ta
+	url = git@github.com:kuanyui/ta.el.git
