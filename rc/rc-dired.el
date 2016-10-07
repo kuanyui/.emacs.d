@@ -10,20 +10,27 @@
 
 (setq dired-dwim-target t)
 ;; M-RET to call `kde-open` to open file.
+
+(defmacro system-open-command ()
+  '(or (executable-find "kde-open")
+       (executable-find "open")
+       (executable-find "xdg-open")))
+
 (defun dired-open-file-with-external-program ()
   "Open file with external program in dired"
   (interactive)
   (let* ((file (dired-get-filename nil t)))
     (message "Opening %s..." file)
-    (call-process "kde-open" nil 0 nil file)
+    (call-process (system-open-command) nil 0 nil file)
     (message "Opening %s done" file)))
+
 (define-key dired-mode-map (kbd "M-RET") 'dired-open-file-with-external-program)
 (define-key dired-mode-map (kbd "C-M-j") 'dired-open-file-with-external-program)
 
 (defun open-current-directory-with-external-program ()
   "Open current directory with external program."
   (interactive)
-  (call-process "kde-open" nil 0 nil (file-truename default-directory)))
+  (call-process (system-open-command) nil 0 nil (file-truename default-directory)))
 (define-key dired-mode-map (kbd "C-x C-j") 'open-current-directory-with-external-program)
 
 
