@@ -26,8 +26,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;;執行Shell外部程式的搜尋路徑(意同$PATH)
 (setenv "PATH" (concat (getenv "PATH") ":"
-		       (getenv "HOME") "/.cabal/bin/" ":"
-		       (getenv "HOME")"/.scripts/"))
+                       (getenv "HOME") "/.cabal/bin/" ":"
+                       (getenv "HOME")"/.scripts/"))
 
 (setq shell-file-name "/bin/zsh")
 (setq shell-command-switch "-ic")
@@ -236,16 +236,16 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 (setq inhibit-linum-mode-alist
       `(eshell-mode
-	shell-mode
-	term-mode
-	erc-mode
-	compilation-mode
-	woman-mode
-	w3m-mode
-	magit-mode
-	magit-status-mode
-	,(if (not (window-system)) 'twittering-mode)
-	))
+        shell-mode
+        term-mode
+        erc-mode
+        compilation-mode
+        woman-mode
+        w3m-mode
+        magit-mode
+        magit-status-mode
+        ,(if (not (window-system)) 'twittering-mode)
+        ))
 
 (defadvice linum-on (around inhibit-for-modes activate)
   "Stop turing linum-mode if it is in the inhibit-linum-mode-alist."
@@ -557,29 +557,65 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-buffer-and-message) ;;這樣測試.emacs方便多了...
 
-;;Linux下與其他Applications的剪貼簿
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 ;; [FIXME] 這不知是啥
 ;;(load-file "~/.emacs.d/lisps/copypaste.el")
-(defun cp ()
-  (interactive)
-  (if (region-active-p)
-      (progn
-        (shell-command-on-region (region-beginning) (region-end) "xsel -i")
-        (message "Yanked region to clipboard!")
-        (deactivate-mark))
-    (message "No region active; can't yank to clipboard!")))
 
-;;xclip-mode
-(load "~/.emacs.d/lisps/xclip-1.0.el")
-(define-minor-mode xclip-mode
-  "Minor mode to use the `xclip' program to copy&paste."
-  :global t
-  (if xclip-mode
-      (turn-on-xclip)
-    (turn-off-xclip)))
-(turn-off-xclip)
+(cond ((eq system-type 'darwin)
+       ;; ======================================================
+       ;; Mac OS X
+       ;; ======================================================
+       (defun cp ()
+         (interactive)
+         (call-process-region (point) (mark) "pbcopy")
+         (setq deactivate-mark t))
+
+       (defun paste ()
+         (interactive)
+         (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+       (defun cut ()
+         (interactive)
+         (cp)
+         (delete-region (region-beginning) (region-end)))
+
+       (defun send-killring-to-osx (text &optional push)
+         (let ((process-connection-type nil))
+           (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+             (process-send-string proc text)
+             (process-send-eof proc))))
+
+       (defun get-clipboard-from-osx ()
+         (shell-command-to-string "pbpaste"))
+
+       (setq interprogram-cut-function 'send-killring-to-osx)
+       (setq interprogram-paste-function 'get-clipboard-from-osx)
+       )
+      ((eq system-type 'gnu/linux)
+       ;; ======================================================
+       ;; Linux
+       ;; ======================================================
+       (setq x-select-enable-clipboard t)
+       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+       (defun cp ()
+         (interactive)
+         (if (region-active-p)
+             (progn
+               (shell-command-on-region (region-beginning) (region-end) "xsel -i")
+               (message "Yanked region to clipboard!")
+               (deactivate-mark))
+           (message "No region active; can't yank to clipboard!")))
+
+       ;;xclip-mode
+       (load "~/.emacs.d/lisps/xclip-1.0.el")
+       (define-minor-mode xclip-mode
+         "Minor mode to use the `xclip' program to copy&paste."
+         :global t
+         (if xclip-mode
+             (turn-on-xclip)
+           (turn-off-xclip)))
+       (turn-off-xclip)
+       ))
+
 
 ;;======================================================
 ;; Frames 操作加強
@@ -645,46 +681,46 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 
 (setq-default mode-line-format
-	      '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
-		(vc-mode vc-mode) " "
-		mode-line-modes mode-line-misc-info mode-line-end-spaces))
+              '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
+                (vc-mode vc-mode) " "
+                mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
 (setq mode-line-position
       `((1 ,(propertize
-	     " %p"
-	     'local-map mode-line-column-line-number-mode-map
-	     'mouse-face 'mode-line-highlight
-	     ;; XXX needs better description
-	     'help-echo "Size indication mode\n\
+             " %p"
+             'local-map mode-line-column-line-number-mode-map
+             'mouse-face 'mode-line-highlight
+             ;; XXX needs better description
+             'help-echo "Size indication mode\n\
 mouse-1: Display Line and Column Mode Menu"))
-	(size-indication-mode
-	 (2 ,(propertize
-	      "/%I"
-	      'local-map mode-line-column-line-number-mode-map
-	      'mouse-face 'mode-line-highlight
-	      ;; XXX needs better description
-	      'help-echo "Size indication mode\n\
+        (size-indication-mode
+         (2 ,(propertize
+              "/%I"
+              'local-map mode-line-column-line-number-mode-map
+              'mouse-face 'mode-line-highlight
+              ;; XXX needs better description
+              'help-echo "Size indication mode\n\
 mouse-1: Display Line and Column Mode Menu")))
-	(line-number-mode
-	 ((column-number-mode
-	   (1 ,(propertize
-		"(%l,%c)"
-		'local-map mode-line-column-line-number-mode-map
-		'mouse-face 'mode-line-highlight
-		'help-echo "Line number and Column number\n\
+        (line-number-mode
+         ((column-number-mode
+           (1 ,(propertize
+                "(%l,%c)"
+                'local-map mode-line-column-line-number-mode-map
+                'mouse-face 'mode-line-highlight
+                'help-echo "Line number and Column number\n\
 mouse-1: Display Line and Column Mode Menu"))
-	   (1 ,(propertize
-		"L%l"
-		'local-map mode-line-column-line-number-mode-map
-		'mouse-face 'mode-line-highlight
-		'help-echo "Line Number\n\
+           (1 ,(propertize
+                "L%l"
+                'local-map mode-line-column-line-number-mode-map
+                'mouse-face 'mode-line-highlight
+                'help-echo "Line Number\n\
 mouse-1: Display Line and Column Mode Menu"))))
-	 ((column-number-mode
-	   (1 ,(propertize
-		"C%c"
-		'local-map mode-line-column-line-number-mode-map
-		'mouse-face 'mode-line-highlight
-		'help-echo "Column number\n\
+         ((column-number-mode
+           (1 ,(propertize
+                "C%c"
+                'local-map mode-line-column-line-number-mode-map
+                'mouse-face 'mode-line-highlight
+                'help-echo "Column number\n\
 mouse-1: Display Line and Column Mode Menu"))))))
       )
 
@@ -706,10 +742,10 @@ mouse-1: Display Line and Column Mode Menu"))))))
 
 ;; Remap some keys
 (add-hook 'help-mode-hook (lambda ()
-			    (define-key help-mode-map (kbd "[") 'help-go-back)
-			    (define-key help-mode-map (kbd "]") 'help-go-forward)
-			    (define-key help-mode-map (kbd "q") 'help-go-back)
-			    (define-key help-mode-map (kbd "Q") 'quit-window)))
+                            (define-key help-mode-map (kbd "[") 'help-go-back)
+                            (define-key help-mode-map (kbd "]") 'help-go-forward)
+                            (define-key help-mode-map (kbd "q") 'help-go-back)
+                            (define-key help-mode-map (kbd "Q") 'quit-window)))
 
 ;; ======================================================
 ;; Tramp
