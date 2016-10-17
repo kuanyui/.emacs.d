@@ -1,0 +1,33 @@
+[submodule "git/moe-theme"]
+	path = git/moe-theme
+	url = git@github.com:kuanyui/moe-theme.el.git
+[submodule "git/fm-bookmarks"]
+	path = git/fm-bookmarks
+	url = git@github.com:kuanyui/fm-bookmarks.el.git
+[submodule "git/hexo"]
+	path = git/hexo
+	url = git@github.com:kuanyui/hexo.el.git
+[submodule "git/kaomoji"]
+	path = git/kaomoji
+	url = git@github.com:kuanyui/kaomoji.el.git
+[submodule "git/moedict"]
+	path = git/moedict
+	url = git@github.com:kuanyui/moedict.el.git
+[submodule "git/tldr"]
+	path = git/tldr
+	url = git@github.com:kuanyui/tldr.el.git
+[submodule "git/taiwan-holidays"]
+	path = git/taiwan-holidays
+	url = git@github.com:emacs-tw/taiwan-holidays.el.git
+[submodule "git/org-ioslide"]
+	path = git/org-ioslide
+	url = git@github.com:coldnew/org-ioslide.git
+[submodule "git/fsc"]
+	path = git/fsc
+	url = git@github.com:kuanyui/fsc.el.git
+[submodule "git/writing-utils"]
+	path = git/writing-utils
+	url = git@github.com:kuanyui/writing-utils.el.git
+[submodule "git/ta"]
+	path = git/ta
+	url = git@github.com:kuanyui/ta.el.git
