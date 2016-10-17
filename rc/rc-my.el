@@ -25,7 +25,7 @@
 ;;======================================================
 ;; fsc.el Fuck the Speeching Censorship
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/under-construction/fsc/")
+(add-to-list 'load-path "~/.emacs.d/git/fsc/")
 
 (require 'fsc)
 (global-set-key (kbd "C-c f s") 'fsc)
@@ -102,6 +102,7 @@
 ;;======================================================
 (add-to-list 'load-path "~/.emacs.d/git/moedict/")
 (require 'moedict)
+(require 'moedict-stroke)
 (global-set-key (kbd "C-c m m") 'moedict)
 ;; ======================================================
 ;; fm-bookmarks.el
