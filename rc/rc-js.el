@@ -69,5 +69,16 @@
   (message "Copied!")
   )
 
+(defun js-onohiroko-auto-set-indent ()
+  "Auto decide how many spaces for indentation.
+
+  [WARNING] This function is just for my personal using
+scenario; which is ABSOLUTE NOT what you guess. "
+  (if (string-match (map 'string 'identity '(73 110 116 114 105 115 105 110 103))
+                    (buffer-file-name))
+      (setq-local js-indent-level 2)))
+
+(add-hook 'mmm-mode-hook 'js-onohiroko-auto-set-indent)
+
 (provide 'rc-js)
 ;;; rc-javascript.el ends here
