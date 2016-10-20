@@ -2,8 +2,8 @@
 
 ;;kuanyui's ~/.emacs
 
-(setq user-mail-address "azazabc123@gmail.com")
-(setq user-full-name "kuanyui")
+;;(setq user-mail-address "azazabc123@gmail.com")
+;;(setq user-full-name "kuanyui")
 
 (set-locale-environment "UTF-8")
 
