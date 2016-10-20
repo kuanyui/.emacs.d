@@ -109,24 +109,28 @@ If not, kill-buffer instead. "
 
 (add-hook 'twittering-new-tweets-hook 'twittering-filters-apply)
 
-(setq twittering-filter-tweets
-      '(
-	"http://4sq.com/.*"
-	"http://adf.ly/.*"
-	"I liked a @YouTube video"
-	"我喜歡一部 .*@YouTube 影片"
-	"中時"
-	"郭董"
-	"nikeplus"
-	"采潔"
-	"羅淑蕾"
-	"連勝文"
-	"神豬"
-	"連D"
-	"有錢就好了"
-	"蔡正元"
-	"星球與廣大的銀河系！"
-	))
+(when (member user-full-name '("kuanyui" "onohiroko"))
+  (setq twittering-filter-tweets
+        (list "http://4sq.com/.*"
+              "http://adf.ly/.*"
+              "I liked a @YouTube video"
+              "我喜歡一部 .*@YouTube 影片"
+              "中時"
+              "郭董"
+              "nikeplus"
+              "采潔"
+              "羅淑蕾"
+              "連勝文"
+              "連D"
+              "有錢就好了"
+              "有.*就好了"
+              "蔡正元"
+              "星球與廣大的銀河系！"
+              (map 'string #'1+ '(119 96 115 104 100 113 107 104 106 100 75 100 100))))
+  (setq twittering-filter-users
+        (list (map 'string #'1+ '(119 96 115 104 100 113 107 104 106 100 75 100 100))))
+  nil
+  )
 
 (defalias 'short-url 'twittering-tinyurl-replace-at-point)
 
