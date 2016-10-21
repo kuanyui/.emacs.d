@@ -78,23 +78,23 @@
 (add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
 (require 'smart-tab)
-(global-smart-tab-mode 1)
+;;(global-smart-tab-mode 1)
 
 (defun set-tab-width-to-2 ()
   (setq-local tab-width 2))
 
 (add-hook 'stylus-mode-hook #'set-tab-width-to-2)
-(add-hook 'jade-mode-hook #'set-tab-width-to-2)
+(add-hook 'pug-mode-hook #'set-tab-width-to-2)
 
 ;; ======================================================
 ;; Jade + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
-(require 'jade-mode)
+(require 'pug-mode)
 (require 'coffee-mode)
 (require 'less-css-mode)
 
 (custom-set-variables '(coffee-tab-width 2))
-(add-hook 'jade-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'pug-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'coffee-mode-hook 'rainbow-delimiters-mode)
 
 (defvar less-css-mode-hook '())
@@ -112,18 +112,18 @@
   (mmm-mode-on)
   (message "mmm-mode restarted!"))
 (define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
-(define-key jade-mode-map (kbd "<f5>") 'mmm-mode-restart!)
+(define-key pug-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 
 
 (mmm-add-classes
- '((mmm-ml-jade-coffee-mode
+ '((mmm-ml-pug-coffee-mode
     :submode coffee-mode
     :face mmm-code-submode-face
     :front ":coffee-script\n"
     :back "^\n$")))
 
 (mmm-add-classes
- '((mmm-ml-jade-es6-mode
+ '((mmm-ml-pug-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
     :front "^ *script\\.\n"
@@ -131,8 +131,8 @@
     :back "^\n$")))
 
 
-(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-jade-coffee-mode)
-(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-jade-es6-mode)
+(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
+(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
