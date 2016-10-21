@@ -130,7 +130,15 @@
     :front-offset 0
     :back "^\n$")))
 
+(mmm-add-classes
+ '((mmm-ml-pug-css-mode
+    :submode css-mode
+    :face mmm-code-submode-face
+    :front "^ *style\\.\n"
+    :front-offset 0
+    :back "^$")))
 
+(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
 
