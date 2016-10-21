@@ -48,12 +48,15 @@
   "Go back to the parent directory (..), and the cursor will be moved to where
 the previous directory."
   (interactive)
-  (let* ((DIR (buffer-name)))
+  (let* ((DIR (or (uniquify-buffer-base-name)
+                  (buffer-name))))
     (if (equal DIR "*Find*")
         (quit-window t)
       (progn (find-alternate-file "..")
+             (goto-char (point-min))
              (search-forward DIR nil :no-error)
-             (revert-buffer)))))
+             ;;(revert-buffer)
+             ))))
 
 
 ;; 按Enter開檔案時Dired時不會一直開新的Dired buffer（按Enter時只用同一個Dired開檔案）
