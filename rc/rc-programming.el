@@ -30,6 +30,16 @@
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 0)
 
+;; ======================================================
+;; Editor Config
+;; ======================================================
+(require 'editorconfig)
+(defun enable-editorconfig-mode ()
+  (editorconfig-mode 1))
+
+(add-hook 'prog-mode-hook #'enable-editorconfig-mode)
+(add-hook 'html-mode-hook #'enable-editorconfig-mode)
+(add-hook 'css-mode-hook #'enable-editorconfig-mode)
 
 ;; ======================================================
 ;; CSS / Stylus keymap
@@ -136,23 +146,7 @@
 (require 'mmm-mode)
 (require 'mmm-auto)
 (setq mmm-global-mode 'maybe)
-(mmm-add-classes
- '((mmm-ml-css-mode
-    :submode css-mode
-    :face mmm-code-submode-face
-    :front "<style[^>]*>"
-    :back "\n?[ \t]*</style>"
-    )
-   (mmm-ml-javascript-mode
-    :submode javascript-mode
-    :face mmm-code-submode-face
-    :front "<script[^>]*>[^<]"
-    :front-offset -1
-    :back "\n?[ \t]*</script>"
-    )
-   ))
-(mmm-add-mode-ext-class 'html-mode nil 'mmm-ml-javascript-mode)
-(mmm-add-mode-ext-class 'html-mode nil 'mmm-ml-css-mode)
+
 
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 

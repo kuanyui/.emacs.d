@@ -102,7 +102,7 @@
 ;;======================================================
 (add-to-list 'load-path "~/.emacs.d/git/moedict/")
 (require 'moedict)
-(require 'moedict-stroke)
+;;(require 'moedict-stroke)
 (global-set-key (kbd "C-c m m") 'moedict)
 ;; ======================================================
 ;; fm-bookmarks.el
