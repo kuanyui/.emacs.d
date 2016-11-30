@@ -1,5 +1,6 @@
 ;;; rc-qml.el ---                                    -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path "~/.emacs.d/git/qml-mode/")
 (require 'qml-mode)
 (add-to-list 'auto-mode-alist '("\\.qml\\'" . qml-mode))
 (add-hook 'qml-mode-hook '(lambda ()
@@ -14,6 +15,10 @@
     (if (file-exists-p (concat default-directory file))
         (shell-command (format "python3 %s" file))
       (shell-command (format "qmlviewer %s" (buffer-real-name))))))
+
+
+(add-to-list 'load-path "~/.emacs.d/git/company-qml/")
+(add-to-list 'company-backends 'company-qml)
 
 
 (provide 'rc-qml)

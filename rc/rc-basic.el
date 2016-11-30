@@ -578,17 +578,17 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
          (cp)
          (delete-region (region-beginning) (region-end)))
 
-       (defun send-killring-to-osx (text &optional push)
-         (let ((process-connection-type nil))
-           (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-             (process-send-string proc text)
-             (process-send-eof proc))))
+       ;; (defun send-killring-to-osx (text &optional push)
+       ;;   (let ((process-connection-type nil))
+       ;;     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+       ;;       (process-send-string proc text)
+       ;;       (process-send-eof proc))))
 
-       (defun get-clipboard-from-osx ()
-         (shell-command-to-string "pbpaste"))
+       ;; (defun get-clipboard-from-osx ()
+       ;;   (shell-command-to-string "pbpaste"))
 
-       (setq interprogram-cut-function 'send-killring-to-osx)
-       (setq interprogram-paste-function 'get-clipboard-from-osx)
+       ;; (setq interprogram-cut-function 'send-killring-to-osx)
+       ;; (setq interprogram-paste-function 'get-clipboard-from-osx)
        )
       ((eq system-type 'gnu/linux)
        ;; ======================================================

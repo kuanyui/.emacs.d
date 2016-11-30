@@ -17,7 +17,7 @@
 
 (setq org-directory "~/org")
 (define-key global-map "\C-cl" 'org-store-link)
-(setq org-log-done t)
+
 
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
 (define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
@@ -35,9 +35,14 @@
 
 (setq org-hide-emphasis-markers t)
 
-;;org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
-(setq org-log-done 'time)
-;;(setq org-log-done 'note)
+;; org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
+;; (setq org-log-done 'time)
+;; (setq org-log-done 'note)
+;; (setq org-log-into-drawer t)
+;; (setq org-log-reschedule 'note)
+;; (setq org-log-redeadline t)
+;; (setq org-log-done 'time)
+
 (defun org-insert-bold ()
   "Insert *bold* at cursor point."
   (interactive)
@@ -359,14 +364,10 @@ unwanted space when exporting org-mode to html."
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key (kbd "<f11>") 'org-agenda)
 
-(setq org-log-into-drawer t)
-(setq org-log-reschedule 'note)
-(setq org-log-redeadline t)
-(setq org-log-done 'time)
 (setq org-todo-keywords
-      '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "APPT(a!)" "|" "DONE(d!)")
-        (type "PROJECT(p!)" "|" "DONE(d!)")
-        (type "|" "CANCELLED(x@)" "DEFERRED(f@)")))
+      '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "|" "DONE(d!)")
+        (type "DISCUSSING(D!)"  "WTF(W!)" "|" "DONE(d!)")
+        (type "|" "ABANDONED(a@)" "NOTMYBUSINESS(n@)")))
 
 
 
