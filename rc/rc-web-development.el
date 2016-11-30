@@ -87,8 +87,9 @@
 (add-hook 'pug-mode-hook #'set-tab-width-to-2)
 
 ;; ======================================================
-;; Jade + Embedded CoffeeScript (MMM-mode)
+;; Jade (Pug) + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
+(add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
 (require 'pug-mode)
 (require 'coffee-mode)
 (require 'less-css-mode)
@@ -108,11 +109,18 @@
 (require 'mmm-mode)
 (defun mmm-mode-restart! ()
   (interactive)
-  (mmm-mode-off)
-  (mmm-mode-on)
-  (message "mmm-mode restarted!"))
+  (let ((ext (file-name-extension (buffer-name))))
+    (cond ((string= ext "jade")
+           (jade-mode))
+          ((string= ext "vue")
+           (html-mode))
+          (t nil))
+    (mmm-mode-off)
+    (mmm-mode-on)
+    (message "mmm-mode restarted!")))
 (define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 (define-key pug-mode-map (kbd "<f5>") 'mmm-mode-restart!)
+(define-key html-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 
 
 (mmm-add-classes
@@ -130,17 +138,49 @@
     :front-offset 0
     :back "^\n$")))
 
-(mmm-add-classes
- '((mmm-ml-pug-css-mode
-    :submode css-mode
-    :face mmm-code-submode-face
-    :front "^ *style\\.\n"
-    :front-offset 0
-    :back "^$")))
-
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
+
+
+;; ======================================================
+;; Vue.js
+;; ======================================================
+
+;;(add-to-list 'vue-modes '(:type template :name pug :mode jade-mode))
+
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . html-mode))
+
+(mmm-add-classes
+ '((mmm-html-vue-pug-mode
+    :submode pug-mode
+    :face mmm-code-submode-face
+    :front "<template lang=\"pug\">\n"
+    :back "</template>"
+    :front-offset 0
+    )
+
+   (mmm-html-vue-es6-mode
+    :submode javascript-mode
+    :face mmm-code-submode-face
+    :front "<script>\n"
+    :back "</script>"
+    :front-offset 0
+    )
+
+   (mmm-html-vue-scss-mode
+    :submode scss-mode
+    :face mmm-code-submode-face
+    :front "<style lang=[\"']scss[\"'] rel=[\"']stylesheet/scss[\"']>\n"
+    :back "</style>"
+    :front-offset 0
+    ))
+ )
+
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-pug-mode)
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
+
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here

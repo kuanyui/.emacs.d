@@ -37,3 +37,6 @@
 [submodule "git/company-qml"]
 	path = git/company-qml
 	url = git@github.com:cute-jumper/company-qml.git
+[submodule "git/emacs-pug-mode"]
+	path = git/emacs-pug-mode
+	url = https://github.com/hlissner/emacs-pug-mode.git
