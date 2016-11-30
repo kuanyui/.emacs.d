@@ -1,6 +1,6 @@
 ;;; rc-lisp.el ---                                   -*- lexical-binding: t; -*-
 ;; 很三八的把Lisp程式碼中的lambda顯示成λ
-(global-prettify-symbols-mode 1)
+;;(global-prettify-symbols-mode -1)
 
 ;;======================================================
 ;; SLIME

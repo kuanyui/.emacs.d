@@ -31,3 +31,9 @@
 [submodule "git/ta"]
 	path = git/ta
 	url = git@github.com:kuanyui/ta.el.git
+[submodule "git/qml-mode"]
+	path = git/qml-mode
+	url = git@github.com:kuanyui/qml-mode.git
+[submodule "git/company-qml"]
+	path = git/company-qml
+	url = git@github.com:cute-jumper/company-qml.git
