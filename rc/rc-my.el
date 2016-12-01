@@ -13,13 +13,13 @@
 ;;======================================================
 ;; kaomoji.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/kaomoji/")
+(add-to-list 'load-path "~/.emacs.d/git/kaomoji.el/")
 (require 'kaomoji)
 
 ;;======================================================
 ;; tldr.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/tldr/")
+(add-to-list 'load-path "~/.emacs.d/git/tldr.el/")
 (require 'tldr)
 
 ;;======================================================
@@ -34,7 +34,7 @@
 ;; ======================================================
 ;; hexo.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/hexo/")
+(add-to-list 'load-path "~/.emacs.d/git/hexo.el/")
 (require 'hexo)
 
 ;;======================================================
@@ -144,7 +144,7 @@
 ;; ======================================================
 ;; ta.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/ta/")
+(add-to-list 'load-path "~/.emacs.d/git/ta.el/")
 (require 'ta)
 
 (setq ta-delay 0.1)
@@ -164,7 +164,7 @@
         rst-mode-hook
         twittering-edit-mode-hook))
 
-;; Modify the character under cursor 
+;; Modify the character under cursor
 ;; 修改游標下的字
 (define-key ta-mode-map (kbd "M-p") 'ta-previous-homophony)
 (define-key ta-mode-map (kbd "M-n") 'ta-next-homophony)
