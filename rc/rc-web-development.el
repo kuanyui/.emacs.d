@@ -71,6 +71,7 @@
 (require 'sws-mode)
 (require 'stylus-mode)
 (require 'jade-mode)
+(require 'pug-mode)
 
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
@@ -85,10 +86,12 @@
 
 (add-hook 'stylus-mode-hook #'set-tab-width-to-2)
 (add-hook 'pug-mode-hook #'set-tab-width-to-2)
+(add-hook 'jade-mode-hook #'set-tab-width-to-2)
 
 ;; ======================================================
 ;; Jade (Pug) + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
+
 (add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
 (require 'pug-mode)
 (require 'coffee-mode)
@@ -121,22 +124,21 @@
 (define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 (define-key pug-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 (define-key html-mode-map (kbd "<f5>") 'mmm-mode-restart!)
-
+(define-key jade-mode-map (kbd "<f5>") 'mmm-mode-restart!)
 
 (mmm-add-classes
  '((mmm-ml-pug-coffee-mode
     :submode coffee-mode
     :face mmm-code-submode-face
     :front ":coffee-script\n"
-    :back "^\n$")))
+    :back "^\n\n")))
 
 (mmm-add-classes
  '((mmm-ml-pug-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
     :front "^ *script\\.\n"
-    :front-offset 0
-    :back "^\n$")))
+    :back "^\n\n")))
 
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
@@ -180,6 +182,10 @@
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-pug-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
+
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 
 
 (provide 'rc-web-development)
