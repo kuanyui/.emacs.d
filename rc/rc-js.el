@@ -45,8 +45,10 @@
   (local-set-key (kbd "<f5>") 'js-send-buffer)
   (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
   (local-set-key "\C-cl" 'js-load-file-and-go)
-
   )
+(font-lock-add-keywords 'coffee-mode
+                        '(
+                          ("\\$scope" 0 'font-lock-builtin-face)))
 
 ;;(autoload 'tern-mode "tern.el" nil t)
 ;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
@@ -63,22 +65,11 @@
     (lambda (line)
       (concat "'" line "'"))
     (remove-if (lambda (str) (eq (length str) 0))
-	       (split-string (buffer-string) "\n"))
+               (split-string (buffer-string) "\n"))
     " +\n")
    )
   (message "Copied!")
   )
-
-(defun js-onohiroko-auto-set-indent ()
-  "Auto decide how many spaces for indentation.
-
-  [WARNING] This function is just for my personal using
-scenario; which is ABSOLUTE NOT what you guess. "
-  (if (string-match (map 'string 'identity '(73 110 116 114 105 115 105 110 103))
-                    (buffer-file-name))
-      (setq-local js-indent-level 2)))
-
-(add-hook 'mmm-mode-hook 'js-onohiroko-auto-set-indent)
 
 (provide 'rc-js)
 ;;; rc-javascript.el ends here
