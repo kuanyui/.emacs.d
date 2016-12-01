@@ -40,3 +40,19 @@
 [submodule "git/emacs-pug-mode"]
 	path = git/emacs-pug-mode
 	url = https://github.com/hlissner/emacs-pug-mode.git
+[submodule "git/hexo.el"]
+	path = git/hexo.el
+	url = git@github.com:kuanyui/hexo.el.git
+[submodule "git/ta.el"]
+	path = git/ta.el
+	url = git@github.com:kuanyui/ta.el.git
+[submodule "git/taiwan-holidays.el"]
+	path = git/taiwan-holidays.el
+	url = git@github.com:emacs-tw/taiwan-holidays.el.git
+[submodule "git/tldr.el"]
+	path = git/tldr.el
+	url = git@github.com:kuanyui/tldr.el.git
+[submodule "git/kaomoji.el"]
+	path = git/kaomoji.el
+	url = git@github.com:kuanyui/kaomoji.el.git
+
