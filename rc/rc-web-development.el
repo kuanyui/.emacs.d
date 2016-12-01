@@ -67,7 +67,7 @@
 ;; ======================================================
 ;; Stylus / Jade <= (SWS mode) https://github.com/brianc/jade-mode
 ;; ======================================================
-
+(add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
 (require 'sws-mode)
 (require 'stylus-mode)
 (require 'jade-mode)
