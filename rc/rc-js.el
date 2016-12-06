@@ -14,6 +14,8 @@
 
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
+(setq js2-strict-missing-semi-warning nil)
+
 (require 'js-comint)
 (setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node")
 

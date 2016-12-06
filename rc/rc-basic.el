@@ -99,7 +99,10 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; (global-set-key (kbd "C-+") 'sacha/increase-font-size)
 ;;(global-set-key (kbd "C--") 'sacha/decrease-font-size)
 ;;)
-
+(global-set-key (kbd "C-c C-r") (lambda ()
+                                  (interactive)
+                                  (revert-buffer nil t)
+                                  (message "Buffer reverted.")))
 
 ;; ======================================================
 ;; Find file at point
