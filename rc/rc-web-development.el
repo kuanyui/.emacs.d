@@ -110,21 +110,7 @@
 
 
 (require 'mmm-mode)
-(defun mmm-mode-restart! ()
-  (interactive)
-  (let ((ext (file-name-extension (buffer-name))))
-    (cond ((string= ext "jade")
-           (jade-mode))
-          ((string= ext "vue")
-           (html-mode))
-          (t nil))
-    (mmm-mode-off)
-    (mmm-mode-on)
-    (message "mmm-mode restarted!")))
-(define-key mmm-mode-map (kbd "<f5>") 'mmm-mode-restart!)
-(define-key pug-mode-map (kbd "<f5>") 'mmm-mode-restart!)
-(define-key html-mode-map (kbd "<f5>") 'mmm-mode-restart!)
-(define-key jade-mode-map (kbd "<f5>") 'mmm-mode-restart!)
+
 
 (mmm-add-classes
  '((mmm-ml-pug-coffee-mode
@@ -157,7 +143,7 @@
  '((mmm-html-vue-pug-mode
     :submode pug-mode
     :face mmm-code-submode-face
-    :front "<template lang=\"pug\">\n"
+    :front "<template lang=[\"']pug[\"']>\n"
     :back "</template>"
     :front-offset 0
     )
@@ -165,7 +151,7 @@
    (mmm-html-vue-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
-    :front "<script>\n"
+    :front "<script[^>]*>\n"
     :back "</script>"
     :front-offset 0
     )
@@ -187,6 +173,49 @@
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 
+
+;; ======================================================
+;; Shortcut to restart mmm-mode
+;; ======================================================
+
+(defun mmm-mode-restart! ()
+  (interactive)
+  (widen)
+  (let ((ext (file-name-extension (buffer-name))))
+    (cond ((string= ext "jade")
+           (jade-mode))
+          ((string= ext "vue")
+           (html-mode))
+          (t nil))
+    (mmm-mode-off)
+    (mmm-mode-on)
+    (message "mmm-mode restarted!")))
+
+(define-key mmm-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(define-key pug-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(define-key jade-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(define-key html-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+
+(defun narrow-to-js ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let* ((beg (progn (re-search-forward "<script[^>]*> *" nil :no-error)
+                       (right-char 1)
+                       (point)))
+           (end (progn (re-search-forward "</script>" nil :no-error)
+                       (left-char 9)
+                       (point))))
+      (narrow-to-region beg end)
+      (js2-mode)
+      )))
+
+(define-key mmm-mode-map (kbd "<f7>") 'narrow-to-js)
+(define-key pug-mode-map (kbd "<f7>") 'narrow-to-js)
+(define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
+(define-key html-mode-map (kbd "<f7>") 'narrow-to-js)
+(require 'js2-mode)
+(define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
