@@ -159,7 +159,7 @@
    (mmm-html-vue-scss-mode
     :submode scss-mode
     :face mmm-code-submode-face
-    :front "<style lang=[\"']scss[\"'] rel=[\"']stylesheet/scss[\"']>\n"
+    :front "<style lang=[\"']scss[\"'] rel=[\"']stylesheet/scss[\"'][^>]*>\n"
     :back "</style>"
     :front-offset 0
     ))
@@ -173,6 +173,11 @@
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 
+(add-hook 'css-mode-hook 'company-mode)
+(add-hook 'scss-mode-hook 'company-mode)
+(add-hook 'html-mode-hook 'company-mode)
+(add-hook 'js-mode-hook 'company-mode)
+(add-hook 'js2-mode-hook 'company-mode)
 
 ;; ======================================================
 ;; Shortcut to restart mmm-mode
