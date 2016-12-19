@@ -117,7 +117,13 @@
     :submode coffee-mode
     :face mmm-code-submode-face
     :front ":coffee-script\n"
-    :back "^\n\n")))
+    :back "^\n\n")
+   (mmm-ml-pug-css-mode
+    :submode css-mode
+    :face mmm-code-submode-face
+    :front "^style\\.\n"
+    :back "^\n\n")
+   ))
 
 (mmm-add-classes
  '((mmm-ml-pug-es6-mode
