@@ -143,36 +143,36 @@ If not, kill-buffer instead. "
 ;; ====================================================
 ;; Popup notification by calling `notify-send' (reply & DM)
 ;; ====================================================
+(when (eq system-type 'gnu/linux)
+  (add-hook 'twittering-new-tweets-hook 'twittering-my-notification)
+  (defun twittering-my-notification ()
+    (let ((timeline-name (twittering-timeline-spec-to-string twittering-new-tweets-spec)))
+      (if (member timeline-name '(":replies" ":direct_messages"))
+          (let ((n twittering-new-tweets-count)
+                ;;statuses are raw data of new tweets
+                (statuses twittering-new-tweets-statuses))
+            ;; When we initialize a timeline, it fetch 20 new tweets by default.
+            ;; But we don't need this kind of notification. So:
+            (if (not (eq 20 (length statuses)))
+                (start-process "twittering-notify" nil "notify-send"
+                               "-i" (expand-file-name "~/.emacs.d/icon.png")
+                               "New tweets"
+                               (format (cond ((string= timeline-name ":replies")
+                                              "%d New Reply:\n%s")
+                                             ((string= timeline-name ":direct_messages")
+                                              "%d New DM:\n%s"))
+                                       n
+                                       (twittering-my-notification-format-statuses statuses))))))))
 
-(add-hook 'twittering-new-tweets-hook 'twittering-my-notification)
-(defun twittering-my-notification ()
-  (let ((timeline-name (twittering-timeline-spec-to-string twittering-new-tweets-spec)))
-    (if (member timeline-name '(":replies" ":direct_messages"))
-	(let ((n twittering-new-tweets-count)
-	      ;;statuses are raw data of new tweets
-	      (statuses twittering-new-tweets-statuses))
-	  ;; When we initialize a timeline, it fetch 20 new tweets by default.
-	  ;; But we don't need this kind of notification. So:
-	  (if (not (eq 20 (length statuses)))
-	      (start-process "twittering-notify" nil "notify-send"
-			     "-i" (expand-file-name "~/.emacs.d/icon.png")
-			     "New tweets"
-			     (format (cond ((string= timeline-name ":replies")
-					    "%d New Reply:\n%s")
-					   ((string= timeline-name ":direct_messages")
-					    "%d New DM:\n%s"))
-				     n
-				     (twittering-my-notification-format-statuses statuses))))))))
-
-(defun twittering-my-notification-format-statuses (statuses)
-  "Format statuses for `twittering-my-notification'."
-  (mapconcat
-   (lambda (s) (format "%s: %s"
-		   (cdr (assq 'user-screen-name s))
-		   (replace-regexp-in-string "\n" "" (cdr (assq 'text s)))
-		   ))
-   statuses
-   "\n"))
+  (defun twittering-my-notification-format-statuses (statuses)
+    "Format statuses for `twittering-my-notification'."
+    (mapconcat
+     (lambda (s) (format "%s: %s"
+                         (cdr (assq 'user-screen-name s))
+                         (replace-regexp-in-string "\n" "" (cdr (assq 'text s)))
+                         ))
+     statuses
+     "\n")))
 
 ;; ====================================================
 ;; Press "o" to open the page of current tweet.

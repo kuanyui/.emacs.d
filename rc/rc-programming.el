@@ -12,7 +12,7 @@
 ;; ======================================================
 
 (autoload 'company-mode "company" nil t)
-(setq company-minimum-prefix-length 1)
+(setq company-minimum-prefix-length 3)
 (setq company-idle-delay 0.3)
 
 (add-hook 'prog-mode-hook 'company-mode)
