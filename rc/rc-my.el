@@ -13,13 +13,13 @@
 ;;======================================================
 ;; kaomoji.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/kaomoji.el/")
+(add-to-list 'load-path "~/.emacs.d/git/kaomoji/")
 (require 'kaomoji)
 
 ;;======================================================
 ;; tldr.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/tldr.el/")
+(add-to-list 'load-path "~/.emacs.d/git/tldr/")
 (require 'tldr)
 
 ;;======================================================
@@ -34,7 +34,7 @@
 ;; ======================================================
 ;; hexo.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/hexo.el/")
+(add-to-list 'load-path "~/.emacs.d/git/hexo/")
 (require 'hexo)
 
 ;;======================================================
@@ -144,7 +144,7 @@
 ;; ======================================================
 ;; ta.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/ta.el/")
+(add-to-list 'load-path "~/.emacs.d/git/ta/")
 (require 'ta)
 
 (setq ta-delay 0.1)

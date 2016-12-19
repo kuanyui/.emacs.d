@@ -29,6 +29,7 @@
                ("C/C++ header" (name . "\\.h$"))
                ("C/C++ source" (or (mode . c-mode)
                                    (mode . c++-mode)))
+               ("Vue" (name . "\\.vue$"))
                ("ReStructText" (mode . rst-mode))
                ("CSS" (or
                        (mode . stylus-mode)

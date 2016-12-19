@@ -179,6 +179,30 @@
 (add-hook 'js-mode-hook 'company-mode)
 (add-hook 'js2-mode-hook 'company-mode)
 
+(add-hook 'css-mode-hook 'highlight-symbol-mode)
+(add-hook 'scss-mode-hook 'highlight-symbol-mode)
+(add-hook 'html-mode-hook 'highlight-symbol-mode)
+(add-hook 'js-mode-hook 'highlight-symbol-mode)
+(add-hook 'js2-mode-hook 'highlight-symbol-mode)
+
+
+(add-hook 'html-mode-hook 'add-keywords-for-vuejs)
+(add-hook 'js-mode-hook 'add-keywords-for-vuejs)
+(add-hook 'js2-mode-hook 'add-keywords-for-vuejs)
+(add-hook 'mmm-mode-hook 'add-keywords-for-vuejs)
+(add-hook 'mmm-major-mode-hook 'add-keywords-for-vuejs)
+
+(defun add-keywords-for-vuejs ()
+  (if (string-suffix-p ".vue" (buffer-name))
+      (font-lock-add-keywords nil
+                              (mapcar (lambda (k)
+                                        (cons k 'font-lock-preprocessor-face))
+                                      '("components" "data" "computed" "props" "watch" "events" "methods"
+                                        "vuex" "getters" "setters" "actions"))
+                              )
+    ))
+
+
 ;; ======================================================
 ;; Shortcut to restart mmm-mode
 ;; ======================================================
