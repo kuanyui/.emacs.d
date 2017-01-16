@@ -17,7 +17,11 @@
 (setq js2-strict-missing-semi-warning nil)
 
 (require 'js-comint)
-(setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node")
+(cond ((eq system-type 'darwin) 
+       (setq inferior-js-program-command "node"))
+      ((eq system-type 'gnu/linux)
+       (setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node"))
+      )
 
 (setq process-coding-system-alist
       (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
@@ -48,9 +52,9 @@
   (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
-(font-lock-add-keywords 'coffee-mode
-                        '(
-                          ("\\$scope" 0 'font-lock-builtin-face)))
+
+(font-lock-add-keywords 'coffee-mode '(("\\$scope" 0 'font-lock-builtin-face)))
+(font-lock-add-keywords 'js-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 
 ;;(autoload 'tern-mode "tern.el" nil t)
 ;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
