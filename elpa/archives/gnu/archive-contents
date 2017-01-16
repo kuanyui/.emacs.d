@@ -80,7 +80,7 @@
 	 ((:keywords "async")
 	  (:url . "http://elpa.gnu.org/packages/async.html"))])
  (auctex .
-	 [(11 89 7)
+	 [(11 89 8)
 	  nil "Integrated environment for *TeX*" tar
 	  ((:url . "http://www.gnu.org/software/auctex/"))])
  (aumix-mode .
@@ -136,8 +136,10 @@
 	      ((:url . "http://elpa.gnu.org/packages/cl-generic.html")
 	       (:keywords))])
  (cl-lib .
-	 [(0 5)
-	  nil "Properly prefixed CL functions and macros" single
+	 [(0 6)
+	  ((emacs
+	    (21)))
+	  "Properly prefixed CL functions and macros" single
 	  ((:url . "http://elpa.gnu.org/packages/cl-lib.html")
 	   (:keywords))])
  (coffee-mode .
@@ -178,7 +180,7 @@
 		      ((:keywords "abbrev" "convenience" "matching")
 		       (:url . "https://github.com/company-mode/company-statistics"))])
  (context-coloring .
-		   [(8 0 1)
+		   [(8 1 0)
 		    ((emacs
 		      (24 3)))
 		    "Highlight by scope" tar
@@ -291,7 +293,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 1 2)
+	    [(1 2 3)
 	     ((emacs
 	       (25))
 	      (stream
@@ -472,6 +474,13 @@
 	    "Improved JavaScript editing mode" tar
 	    ((:keywords "languages" "javascript")
 	     (:url . "https://github.com/mooz/js2-mode/"))])
+ (json-mode .
+	    [(0 1)
+	     ((emacs
+	       (25 1)))
+	     "Major mode for editing JSON files" single
+	     ((:url . "http://elpa.gnu.org/packages/json-mode.html")
+	      (:keywords "data"))])
  (jumpc .
 	[(3 0)
 	 nil "jump to previous insertion points" single
@@ -514,7 +523,7 @@
 	       ((:url . "http://github.com/rocky/emacs-loc-changes")
 		(:keywords))])
  (loccur .
-	 [(1 2 2)
+	 [(1 2 3)
 	  ((cl-lib
 	    (0)))
 	  "Perform an occur-like folding in current buffer" single
@@ -638,7 +647,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20161118)
+      [(20161224)
        nil "Outline-based notes management and organizer" tar nil])
  (osc .
       [(0 1)

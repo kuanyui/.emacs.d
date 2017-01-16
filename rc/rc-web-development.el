@@ -113,18 +113,23 @@
 
 
 (mmm-add-classes
- '((mmm-ml-pug-coffee-mode
-    :submode coffee-mode
-    :face mmm-code-submode-face
-    :front ":coffee-script\n"
-    :back "^\n\n")))
-
-(mmm-add-classes
  '((mmm-ml-pug-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
     :front "^ *script\\.\n"
-    :back "^\n\n")))
+    :back "^\n\n")
+   (mmm-ml-pug-coffee-mode
+    :submode coffee-mode
+    :face mmm-code-submode-face
+    :front ":coffee-script\n"
+    :back "^\n\n")
+   (mmm-ml-pug-css-mode
+    :submode scss-mode
+    :face mmm-code-submode-face
+    :front "^style\.\n"
+    :back "^\n\n")
+   )
+ )
 
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
@@ -227,22 +232,37 @@
 
 (defun narrow-to-js ()
   (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (let* ((beg (progn (re-search-forward "<script[^>]*> *" nil :no-error)
-                       (right-char 1)
-                       (point)))
-           (end (progn (re-search-forward "</script>" nil :no-error)
-                       (left-char 9)
-                       (point))))
-      (narrow-to-region beg end)
-      (js2-mode)
-      )))
+  (cond ((string-suffix-p ".vue" (buffer-name))
+         (save-excursion
+           (goto-char (point-min))
+           (let* ((beg (progn (re-search-forward "<script[^>]*> *" nil :no-error)
+                              (right-char 1)
+                              (point)))
+                  (end (progn (re-search-forward "</script>" nil :no-error)
+                              (left-char 9)
+                              (point))))
+             (narrow-to-region beg end)
+             (js2-mode)
+             )))
+        ((string-suffix-p ".jade" (buffer-name))
+         (save-excursion
+           (goto-char (point-min))
+           (let* ((beg (progn (re-search-forward "script\.\n" nil :no-error)
+                              (right-char 1)
+                              (point)))
+                  (end (point-max)))
+             (narrow-to-region beg end)
+             (js2-mode)
+             )))
+        (t
+         (message "Error, please edit `narrow-to-js'"))
+        ))
 
 (define-key mmm-mode-map (kbd "<f7>") 'narrow-to-js)
 (define-key pug-mode-map (kbd "<f7>") 'narrow-to-js)
 (define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
 (define-key html-mode-map (kbd "<f7>") 'narrow-to-js)
+
 (require 'js2-mode)
 (define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 

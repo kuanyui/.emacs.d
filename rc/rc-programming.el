@@ -28,7 +28,7 @@
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-(setq highlight-symbol-idle-delay 0)
+(setq highlight-symbol-idle-delay 1.0)
 
 ;; ======================================================
 ;; Editor Config
