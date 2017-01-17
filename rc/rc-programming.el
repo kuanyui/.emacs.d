@@ -174,7 +174,14 @@
 ;; Whitespace
 ;;======================================================
 (require 'whitespace)
-(global-set-key (kbd "C-c <deletechar>") 'whitespace-cleanup)
+(global-set-key (kbd "C-c <deletechar>") 'my-whitespace-cleanup)
+(defun my-whitespace-cleanup ()
+  (interactive)
+  (whitespace-cleanup)
+  (if (string-suffix-p ".jade" (buffer-name))
+      (save-excursion
+        (goto-char (point-max))
+        (insert "\n\n\n"))))
 
 ;;======================================================
 ;; Helm-dash - Looking up documents
