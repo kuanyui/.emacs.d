@@ -3,9 +3,9 @@
 ;; Highlight \n, %s...etc
 ;; This will cause highlight-symbol corrupt!
 ;; (add-hook 'prog-mode-hook
-;; 	  '(lambda ()
-;; 	     (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
-;; 	     (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
+;;        '(lambda ()
+;;           (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
+;;           (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
 
 ;; ======================================================
 ;; Company
@@ -181,7 +181,9 @@
   (if (string-suffix-p ".jade" (buffer-name))
       (save-excursion
         (goto-char (point-max))
-        (insert "\n\n\n"))))
+        (insert "\n\n\n")
+        ))
+  (save-buffer))
 
 ;;======================================================
 ;; Helm-dash - Looking up documents
