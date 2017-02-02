@@ -18,6 +18,7 @@
 
 
 (add-to-list 'load-path "~/.emacs.d/git/company-qml/")
+(require 'company)
 (add-to-list 'company-backends 'company-qml)
 
 

@@ -12,7 +12,7 @@
 ;; ======================================================
 
 (autoload 'company-mode "company" nil t)
-(setq company-minimum-prefix-length 3)
+(setq company-minimum-prefix-length 1)
 (setq company-idle-delay 0.3)
 
 (add-hook 'prog-mode-hook 'company-mode)
@@ -271,6 +271,23 @@
 (setq wgrep-auto-save-buffer t)
 (setq wgrep-enable-key (kbd "C-x C-w"))
 (setq wgrep-change-readonly-file t)
+
+
+;; ======================================================
+;; SVG
+;; ======================================================
+(setq svg-path-d-keyword
+      '(
+        ("[A-z]" (0 font-lock-builtin-face append))
+        ("," (0 font-lock-constant-face append))
+        ))
+;;(qml--gen-font-lock-keywords '("aaa") 'font-lock-keyword-face)
+(setq svg-path-d-keywords '(svg-path-d-keyword))
+
+(define-derived-mode svg-path-d-mode fundamental-mode "<path d>"
+  (setq-local font-lock-defaults (list svg-path-d-keywords)))
+
+
 
 (provide 'rc-programming)
 

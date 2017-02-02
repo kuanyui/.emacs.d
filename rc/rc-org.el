@@ -516,11 +516,11 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 (define-key global-map "\C-cc" 'org-capture)
 
 ;; [Agenda]
-(global-set-key (kbd "<f12>") (lambda () (interactive) (org-agenda nil " ")))
+;;(global-set-key (kbd "<f12>") (lambda () (interactive) (org-agenda nil " ")))
 ;; [Capture]
-(global-set-key (kbd "<f11>") (lambda () (interactive) (org-capture)))
+;;(global-set-key (kbd "<f11>") (lambda () (interactive) (org-capture)))
 ;; [Capture] Diary+Timer
-(global-set-key (kbd "ESC <f11>") (lambda () (interactive) (org-capture nil "D")))
+;;(global-set-key (kbd "ESC <f11>") (lambda () (interactive) (org-capture nil "D")))
 
 
 (setq org-capture-templates

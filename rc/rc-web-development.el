@@ -76,7 +76,9 @@
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+(add-to-list 'auto-mode-alist '("\\.jade$" . pug-mode))
+
+(add-hook 'pug-mode-hook 'rainbow-mode)
 
 (require 'smart-tab)
 ;;(global-smart-tab-mode 1)
@@ -116,7 +118,7 @@
  '((mmm-ml-pug-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
-    :front "^ *script\\.\n"
+    :front "^ *script\.\n"
     :back "^\n\n")
    (mmm-ml-pug-coffee-mode
     :submode coffee-mode
@@ -170,13 +172,14 @@
     ))
  )
 
+
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-pug-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
 
-(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
-(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
-(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
+;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
+;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
+;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 
 (add-hook 'css-mode-hook 'company-mode)
 (add-hook 'scss-mode-hook 'company-mode)
@@ -265,6 +268,16 @@
 
 (require 'js2-mode)
 (define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+
+
+
+;; ======================================================
+;; Firefox Controller
+;; ======================================================
+(require 'firefox-controller)
+(global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
+(global-set-key (kbd "C-c <f5>") 'firefox-controller-page-refresh)
+
 
 (provide 'rc-web-development)
 ;;; rc-web-development.el ends here
