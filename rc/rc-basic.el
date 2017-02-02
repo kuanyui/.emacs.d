@@ -26,6 +26,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;;執行Shell外部程式的搜尋路徑(意同$PATH)
 (setenv "PATH" (concat (getenv "PATH") ":"
+                       "/usr/local/bin/" ":"
                        (getenv "HOME") "/.cabal/bin/" ":"
                        (getenv "HOME")"/.scripts/"))
 
@@ -493,6 +494,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (defun open-blog-dir ()
   (interactive)(find-file "~/Dropbox/Blog"))
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
+
+(global-set-key (kbd "<f12>") 'other-frame)
 
 ;; StarDict
 ;; please install sdcv on your system first

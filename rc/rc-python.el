@@ -3,8 +3,12 @@
 ;; Python
 ;;======================================================
 (require 'python)
-
 (setq org-babel-python-command "python3")
+
+(require 'flycheck)
+(add-hook 'python-mode-hook 'flycheck-mode)
+(setq flycheck-pylintrc "~/.pylintrc")
+(setq flycheck-pylint-use-symbolic-id nil)  ;; Fuck useless
 
 (setq
  python-shell-interpreter "python3"
@@ -44,17 +48,46 @@
 (define-key python-mode-map (kbd "M-RET")
   (lambda () (interactive) (newline) (comment-dwim nil)))
 
+;; ======================================================
+;; Venv
+;; ======================================================
+;; Fuck the Emacs. Useless at all.
+(require 'virtualenvwrapper)
+(add-hook 'python-mode-hook 'projectile-mode)
+(venv-initialize-interactive-shells) ;; if you want interactive shell support
+(setq projectile-switch-project-action 'venv-projectile-auto-workon)
+
+(setq venv-dirlookup-names '(".venv" "venv"))
+;;(setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
+
+
 ;;======================================================
 ;; Company-Jedi : Completion for Python
 ;;======================================================
+;; NOTICE: Company-jedi is not related to jedi-mode (Auto-Completion-based)!
 
 (require 'company-jedi)
+(autoload 'jedi:setup "jedi" nil t)
+(add-hook 'python-mode-hook 'jedi:setup)
 (defun my/python-mode-hook ()
   (add-to-list 'company-backends 'company-jedi)
   (define-key python-mode-map (kbd "<f1>") #'jedi:show-doc)
   )
-
 (add-hook 'python-mode-hook 'my/python-mode-hook)
+
+;; jedi:environment-root
+;; python-environment-directory
+;; python-environment-default-root-name
+
+;; ======================================================
+;; Anaconda (Completion)
+;; ======================================================
+;;(add-hook 'python-mode-hook 'anaconda-mode)
+;;(add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+;;(eval-after-load "company"
+;;'(add-to-list 'company-backends 'company-anaconda))
+;;(eval-after-load "company"
+;;'(add-to-list 'company-backends '(company-anaconda :with company-capf)))
 ;; ======================================================
 ;; Elpy
 ;; ======================================================
