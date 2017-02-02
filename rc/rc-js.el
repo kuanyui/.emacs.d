@@ -55,6 +55,7 @@
 
 (font-lock-add-keywords 'coffee-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js-mode '(("\\$scope" 0 'font-lock-builtin-face)))
+(font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
 
 ;;(autoload 'tern-mode "tern.el" nil t)
 ;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
