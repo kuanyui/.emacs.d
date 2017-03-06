@@ -42,6 +42,7 @@
 (add-hook 'js2-mode-hook
           (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
 (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'js-mode-hook #'rainbow-delimiters-mode)
 (setq js2-basic-offset 2)
 
 (defun js-comint-my-conf ()
@@ -56,6 +57,15 @@
 (font-lock-add-keywords 'coffee-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
+
+(font-lock-add-keywords 'js-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
+(font-lock-add-keywords 'coffee-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
+
+(font-lock-add-keywords 'js-mode '(("=>" 0 'font-lock-function-name-face)))
+
+;; (font-lock-add-keywords 'js-mode '(("(\\([$A-z0-9_]+\\)\\(?:[ \n]*,[ \n]*\\([A-z0-9$_]+\\)\\)*[\n ]*) *=>" 0 'font-lock-variable-face)))
+
+
 
 ;;(autoload 'tern-mode "tern.el" nil t)
 ;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))

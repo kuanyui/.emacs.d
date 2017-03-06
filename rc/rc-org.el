@@ -18,8 +18,11 @@
 (setq org-directory "~/org")
 (define-key global-map "\C-cl" 'org-store-link)
 
-
+(require 'python)
 (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
+(global-set-key (kbd "C-c i !") 'org-time-stamp-inactive)
+(define-key python-mode-map (kbd "C-c !") 'org-time-stamp-inactive)
+
 (define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
 
 ;; In tmux/tty, M-S-RET will be inpretered to this shit.

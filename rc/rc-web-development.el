@@ -118,17 +118,22 @@
  '((mmm-ml-pug-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
-    :front "^ *script\.\n"
+    :front "^ *script\\.\n"
     :back "^\n\n")
    (mmm-ml-pug-coffee-mode
     :submode coffee-mode
     :face mmm-code-submode-face
-    :front ":coffee-script\n"
+    :front "^ *script\n +:coffee-script\n"
+    :back "^\n\n")
+   (mmm-ml-pug-coffee-mode
+    :submode javascript-mode
+    :face mmm-code-submode-face
+    :front "^ *script\n +:babel\n"
     :back "^\n\n")
    (mmm-ml-pug-css-mode
     :submode scss-mode
     :face mmm-code-submode-face
-    :front "^style\.\n"
+    :front "^style\\.\n"
     :back "^\n\n")
    )
  )
@@ -136,6 +141,11 @@
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
+
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
+
 
 
 ;; ======================================================
@@ -177,9 +187,6 @@
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
 
-;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
-;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
-;; (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 
 (add-hook 'css-mode-hook 'company-mode)
 (add-hook 'scss-mode-hook 'company-mode)
@@ -220,7 +227,7 @@
   (widen)
   (let ((ext (file-name-extension (buffer-name))))
     (cond ((string= ext "jade")
-           (jade-mode))
+           (pug-mode))
           ((string= ext "vue")
            (html-mode))
           (t nil))
@@ -248,15 +255,19 @@
              (js2-mode)
              )))
         ((string-suffix-p ".jade" (buffer-name))
-         (save-excursion
-           (goto-char (point-min))
-           (let* ((beg (progn (re-search-forward "script\.\n" nil :no-error)
-                              (right-char 1)
-                              (point)))
-                  (end (point-max)))
-             (narrow-to-region beg end)
-             (js2-mode)
-             )))
+         (let* ((coffee? (save-excursion (goto-char (point-min))
+                                         (re-search-forward ":coffee-script" nil :no-error))))
+           (save-excursion
+             (goto-char (point-min))
+             (if (null (re-search-forward "^ *script\. *\n" nil :no-error))
+                 (progn (goto-char (point-min))
+                        (re-search-forward "^ *script *\n" nil :no-error)))
+             (if coffee? (re-search-forward ":coffee-script" nil :no-error))
+             (let* ((beg (progn (right-char 1) (point)))
+                    (end (point-max)))
+               (narrow-to-region beg end)
+               (if coffee? (coffee-mode) (js2-mode))
+               ))))
         (t
          (message "Error, please edit `narrow-to-js'"))
         ))
@@ -268,6 +279,7 @@
 
 (require 'js2-mode)
 (define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(define-key coffee-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
 
 
@@ -276,7 +288,8 @@
 ;; ======================================================
 (require 'firefox-controller)
 (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
-(global-set-key (kbd "C-c <f5>") 'firefox-controller-page-refresh)
+(define-key pug-mode-map (kbd "<f5>") 'firefox-controller-page-refresh)
+(define-key jade-mode-map (kbd "<f5>") 'firefox-controller-page-refresh)
 
 
 (provide 'rc-web-development)
