@@ -10,19 +10,19 @@
   "Convert color spec under cursor from '#rrggbb' to CSS HSL format.
 '#ffefd5' => hsl(37,100%,91%)"
   (interactive)
-  (let* (
-         (bds (bounds-of-thing-at-point 'word))
-         (p1 (car bds))
-         (p2 (cdr bds))
-         (currentWord (buffer-substring-no-properties p1 p2)))
-
-    (if (string-match "[a-fA-F0-9]\\{6\\}" currentWord)
+  (let* ((search-from (- (point) 7))
+         (search-to   (+ (point) 7))
+         (substr (buffer-substring-no-properties search-from search-to))
+         (matched-from (string-match "#[a-fA-F0-9]\\{6\\}" substr))
+         (matched-to (match-end 0))
+         (color-code (match-string 0 substr)))
+    (if matched-from
         (progn
-          (delete-region p1 p2 )
-          (if (looking-back "#") (delete-char -1))
-          (insert (color-code--hex-to-hsl currentWord )))
+          (message (format "%s %s %s" matched-from matched-to color-code))
+          (delete-region (+ search-from matched-from) (+ search-from matched-to))
+          (insert (color-code--hex-to-hsl color-code)))
       (progn
-        (error "The current word 「%s」 is not of the form #rrggbb." currentWord)
+        (error "The current word 「%s」 is not of the form #rrggbb." color-code)
         )
       )))
 
@@ -30,8 +30,10 @@
   "Convert hexStr color to CSS HSL format.
 Return a string.
  (color-code--hex-to-hsl \"#ffefd5\") => \"hsl(37,100%,91%)\""
-  (let* (
-         (colorVec (color-code--convert-hex-to-vec hexStr))
+  (let* ((clean-hex (if (string-prefix-p "#" hexStr)
+                        (substring hexStr 1)
+                      hexStr))
+         (colorVec (color-code--convert-hex-to-vec clean-hex))
          (xR (elt colorVec 0))
          (xG (elt colorVec 1))
          (xB (elt colorVec 2))
@@ -75,14 +77,14 @@ Return value is float."
          (string (buffer-substring-no-properties p1 p2)))
 
     (if (string-match "[a-fA-F0-9]\\{6\\}" string)
-	(progn
-	  (delete-region p1 p2 )
-	  (if (looking-back "#") (delete-char -1))
-	  (insert
-	   (format "rgb(%s, %s, %s)"
-		   (string-to-number (substring string 0 2) 16)
-		   (string-to-number (substring string 2 4) 16)
-		   (string-to-number (substring string 4 6) 16)))))))
+        (progn
+          (delete-region p1 p2 )
+          (if (looking-back "#") (delete-char -1))
+          (insert
+           (format "rgb(%s, %s, %s)"
+                   (string-to-number (substring string 0 2) 16)
+                   (string-to-number (substring string 2 4) 16)
+                   (string-to-number (substring string 4 6) 16)))))))
 
 ;; (autoload 'scss-mode "scss-mode")
 ;; (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
