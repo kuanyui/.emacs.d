@@ -125,7 +125,7 @@
     :face mmm-code-submode-face
     :front "^ *script\n +:coffee-script\n"
     :back "^\n\n")
-   (mmm-ml-pug-coffee-mode
+   (mmm-ml-pug-es6-babel-mode
     :submode javascript-mode
     :face mmm-code-submode-face
     :front "^ *script\n +:babel\n"
@@ -141,10 +141,12 @@
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
+(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-babel-mode)
 
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
+(mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-babel-mode)
 
 
 
@@ -186,7 +188,7 @@
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-pug-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
-
+(add-hook 'jade-mode-hook 'rainbow-mode)
 
 (add-hook 'css-mode-hook 'company-mode)
 (add-hook 'scss-mode-hook 'company-mode)
@@ -231,6 +233,7 @@
           ((string= ext "vue")
            (html-mode))
           (t nil))
+    (my-whitespace-cleanup)
     (mmm-mode-off)
     (mmm-mode-on)
     (message "mmm-mode restarted!")))
@@ -288,8 +291,13 @@
 ;; ======================================================
 (require 'firefox-controller)
 (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
-(define-key pug-mode-map (kbd "<f5>") 'firefox-controller-page-refresh)
-(define-key jade-mode-map (kbd "<f5>") 'firefox-controller-page-refresh)
+(defun firefox-save-buffer-and-refresh-firefox ()
+  (interactive)
+  (save-buffer)
+  (firefox-controller-page-refresh))
+(define-key pug-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+(define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+(define-key nxml-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 
 
 (provide 'rc-web-development)
