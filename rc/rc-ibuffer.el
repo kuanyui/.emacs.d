@@ -49,10 +49,12 @@
                ("Coffee" (or
                           (name . "\\*CoffeeREPL\\*")
                           (mode . coffee-mode)))
+               ("Jade" (or
+                        (name . "\\.pug$")
+                        (name . "\\.jade$")))
                ("HTML/Template" (or
                                  (mode . html-mode)
                                  (mode . web-mode)
-                                 (name . "\\.jade$")
                                  (name . "\\.yml$")))
                ("QML" (mode . qml-mode))
                ("Haskell" (or (mode . haskell-mode)
