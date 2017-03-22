@@ -29,6 +29,7 @@
   (add-to-list 'company-backends 'company-c-headers)
   (define-key c++-mode-map (kbd "<f5>") 'c++-compile-current-file)
   (setq flycheck-gcc-language-standard "c++11")
+  (setq flycheck-clang-language-standard "c++11")
   ;; open header file on #include <...>
   (define-key c++-mode-map (kbd "C-c h") 'ff-find-other-file)
   ;;(semantic-mode t)
