@@ -178,7 +178,7 @@
    (mmm-html-vue-scss-mode
     :submode scss-mode
     :face mmm-code-submode-face
-    :front "<style lang=[\"']scss[\"'] rel=[\"']stylesheet/scss[\"'][^>]*>\n"
+    :front "<style .*lang=[\"']scss[\"'][^>]*>\n"
     :back "</style>"
     :front-offset 0
     ))
@@ -290,6 +290,7 @@
 ;; Firefox Controller
 ;; ======================================================
 (require 'firefox-controller)
+(require 'nxml-mode)
 (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
 (defun firefox-save-buffer-and-refresh-firefox ()
   (interactive)
