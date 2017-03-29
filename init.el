@@ -84,7 +84,26 @@
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((org-html-allow-name-attribute-in-anchors)
+     (org-html-style . "")
+     (org-html-toplevel-hlevel . 1)
+     (org-html-with-latex)
+     (org-html-use-infojs)
+     (org-html-infojs-template . "")
+     (org-html-mathjax-template . "")
+     (org-html-postamble)
+     (org-html-preamble)
+     (org-html-head-include-scripts)
+     (org-export-with-toc)
+     (org-export-with-latex)
+     (org-export-time-stamp-file)
+     (org-export-with-section-numbers)
+     (org-export-with-title)
+     (org-export-with-email)
+     (org-export-with-date)
+     (org-export-with-creator)
+     (org-export-with-author)
+     (eval progn
            (require
             (quote projectile))
            (setq-local flycheck-pylintrc
