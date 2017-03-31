@@ -131,7 +131,7 @@
     :front "^ *script\n +:babel\n"
     :back "^\n\n")
    (mmm-ml-pug-css-mode
-    :submode scss-mode
+    :submode omg-scss-mode
     :face mmm-code-submode-face
     :front "^style\\.\n"
     :back "^\n\n")
@@ -176,7 +176,7 @@
     )
 
    (mmm-html-vue-scss-mode
-    :submode scss-mode
+    :submode omg-scss-mode
     :face mmm-code-submode-face
     :front "<style .*lang=[\"']scss[\"'][^>]*>\n"
     :back "</style>"
@@ -299,6 +299,36 @@
 (define-key pug-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key nxml-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+
+
+;; ======================================================
+;; For Refactoring Shitty legacy API name
+;; ======================================================
+(font-lock-add-keywords 'js-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
+(font-lock-add-keywords 'pug-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
+(font-lock-add-keywords 'jade-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
+(font-lock-add-keywords 'fundamental-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
+(defun my-find-possible-shit-api ()
+  (interactive)
+  (let (case-fold-search)
+    (re-search-backward "\\b\\.[A-Z][A-z]+\\b" nil t)
+    (message "%s" (char-to-string (char-after (+ 1 (point)))))
+    (if (and (string-match-p "[A-Z]" (char-to-string (char-after (+ 1 (point)))))
+             (string-match-p "[A-Z]" (char-to-string (char-after (+ 2 (point)))))
+             (string-match-p "[A-Z]" (char-to-string (char-after (+ 3 (point))))))
+        (my-find-possible-shit-api)
+      )
+    ))
+(define-key pug-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+(define-key js-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+
+(require 'go-mode)
+(defun my-go-find-possible-shit-api ()
+  (interactive)
+  (let (case-fold-search)
+    (re-search-backward "`json:\"[A-Z][A-z]+" nil t)
+    ))
+(define-key go-mode-map (kbd "<f4>") 'my-go-find-possible-shit-api)
 
 
 (provide 'rc-web-development)
