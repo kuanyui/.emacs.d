@@ -12,6 +12,7 @@
   (term-send-raw-string (format "netsettingipv4 %s 255.255.254.0 192.168.16.254 8.8.8.8"
                                 (read-from-minibuffer "IP (130~139) " "192.168.16.")))
   (term-send-raw-string "netstatus")
+  (term-send-raw-string "save")
   (term-send-raw-string "..")
   )
 
