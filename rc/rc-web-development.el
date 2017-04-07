@@ -79,6 +79,8 @@
 (add-to-list 'auto-mode-alist '("\\.jade$" . pug-mode))
 
 (add-hook 'pug-mode-hook 'rainbow-mode)
+(add-hook 'pug-mode-hook 'hl-line-mode)
+(add-hook 'js-mode-hook 'hl-line-mode)
 
 (require 'smart-tab)
 ;;(global-smart-tab-mode 1)
@@ -162,7 +164,7 @@
  '((mmm-html-vue-pug-mode
     :submode pug-mode
     :face mmm-code-submode-face
-    :front "<template lang=[\"']pug[\"']>\n"
+    :front "<template lang=[\"']\\(pug\\|jade\\)[\"']>\n"
     :back "</template>"
     :front-offset 0
     )
@@ -291,6 +293,14 @@
 ;; ======================================================
 (require 'firefox-controller)
 (require 'nxml-mode)
+(require 'highlight-symbol)
+(define-key nxml-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+(define-key nxml-mode-map (kbd "M-n")'highlight-symbol-next)
+(define-key nxml-mode-map (kbd "M-p")'highlight-symbol-prev)
+(define-key nxml-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+(add-hook 'nxml-mode-hook 'highlight-symbol-mode)
+(setq highlight-symbol-idle-delay 1.0)
+
 (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
 (defun firefox-save-buffer-and-refresh-firefox ()
   (interactive)
@@ -302,33 +312,42 @@
 
 
 ;; ======================================================
-;; For Refactoring Shitty legacy API name
+;; Some dirty shit for refactoring shitty legacy code
 ;; ======================================================
-(font-lock-add-keywords 'js-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
-(font-lock-add-keywords 'pug-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
-(font-lock-add-keywords 'jade-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
-(font-lock-add-keywords 'fundamental-mode '(("\\b\\.[A-Z][A-z]+\\b" 0 'font-lock-warning-face)))
-(defun my-find-possible-shit-api ()
-  (interactive)
-  (let (case-fold-search)
-    (re-search-backward "\\b\\.[A-Z][A-z]+\\b" nil t)
-    (message "%s" (char-to-string (char-after (+ 1 (point)))))
-    (if (and (string-match-p "[A-Z]" (char-to-string (char-after (+ 1 (point)))))
-             (string-match-p "[A-Z]" (char-to-string (char-after (+ 2 (point)))))
-             (string-match-p "[A-Z]" (char-to-string (char-after (+ 3 (point))))))
-        (my-find-possible-shit-api)
-      )
-    ))
-(define-key pug-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
-(define-key js-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
-
-(require 'go-mode)
-(defun my-go-find-possible-shit-api ()
-  (interactive)
-  (let (case-fold-search)
-    (re-search-backward "`json:\"[A-Z][A-z]+" nil t)
-    ))
-(define-key go-mode-map (kbd "<f4>") 'my-go-find-possible-shit-api)
+;;(font-lock-add-keywords 'js-mode '(("\\b[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)
+;;("\\b[A-Z][A-z0-9]+ *: *" 0 'font-lock-warning-face)
+;;("['\"][A-Z][A-z0-9]+[\"']" 0 'font-lock-warning-face)
+;;))
+;;(font-lock-add-keywords 'coffee-mode '(("\\b[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)
+;;                                       ("\\b[A-Z][A-z0-9]+ *: *" 0 'font-lock-warning-face)
+;;                                       ("['\"][A-Z][A-z0-9]+[\"']" 0 'font-lock-warning-face)
+;;                                       ))
+;;
+;;(font-lock-add-keywords 'pug-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
+;;(font-lock-add-keywords 'jade-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
+;;(font-lock-add-keywords 'fundamental-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
+;;(defun my-find-possible-shit-api ()
+;;(interactive)
+;;(let (case-fold-search)
+;;(re-search-backward "\\(\\._?[A-Z][A-z0-9]+\\|\\b_?[A-Z][A-z0-9]+ *: *\\|['\"]_?[A-Z][A-z0-9]+[\"']\\)" nil t)
+;;(message "%s" (char-to-string (char-after (+ 1 (point)))))
+;;(if (and (string-match-p "[A-Z]" (char-to-string (char-after (+ 1 (point)))))
+;;(string-match-p "[A-Z]" (char-to-string (char-after (+ 2 (point)))))
+;;(string-match-p "[A-Z]" (char-to-string (char-after (+ 3 (point))))))
+;;(my-find-possible-shit-api)
+;;)
+;;))
+;;(define-key pug-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+;;(define-key js-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+;;(define-key coffee-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+;;
+;;(require 'go-mode)
+;;(defun my-go-find-possible-shit-api ()
+;;(interactive)
+;;(let (case-fold-search)
+;;(re-search-backward "`json:\"[A-Z][A-z0-9]+" nil t)
+;;))
+;;(define-key go-mode-map (kbd "<f4>") 'my-go-find-possible-shit-api)
 
 
 (provide 'rc-web-development)
