@@ -29,8 +29,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                        "/usr/local/bin/" ":"
                        (getenv "HOME") "/.cabal/bin/" ":"
                        (getenv "HOME")"/.scripts/"))
-
-(setq shell-file-name "/bin/zsh")
+(if (member system-type '(darwin gnu/linux))
+    (setq shell-file-name "/bin/zsh")
+  (setq shell-file-name "/bin/bash"))
 (setq shell-command-switch "-ic")
 
 ;;(require 'whitespace)
