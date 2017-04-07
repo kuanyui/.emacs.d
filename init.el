@@ -23,7 +23,9 @@
 (require 'rc-gnus)
 (require 'rc-twittering)
 (require 'rc-magit)
-(require 'rc-emms)
+(if (member system-type '(darwin gnu/linux))
+    (require 'rc-emms)
+  )
 (require 'rc-eww)
 
 (require 'rc-org)
