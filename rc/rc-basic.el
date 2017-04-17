@@ -343,10 +343,10 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;(setq show-paren-style 'parentheses)
 (setq show-paren-style 'expression) ;;另一種突顯方式(突顯整個括號範圍)
 
-;; 隱藏沒在用的工具列
 (tool-bar-mode -1)
-;; 隱藏沒在用的選單
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
+
 ;;X Clipboard在游標處插入，而不是滑鼠點擊的地方插入。
 (setq mouse-yank-at-point t)
 
