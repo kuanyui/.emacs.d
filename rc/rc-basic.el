@@ -128,11 +128,16 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; ============================================
 ;; 特殊字型設定
 (when (window-system)
-  (defvar emacs-english-font "DejaVu Sans Mono"
-    "The font name of English.")
+  (if (eq system-type 'windows-nt)
+      (set-face-attribute 'default nil :font "Consolas-9"))
 
+  (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
   (defvar emacs-cjk-font "文泉驛等寬微米黑" "The font name for CJK.")
-  (setq emacs-cjk-font "WenQuanYi Micro Hei Mono")
+
+  (if (eq system-type 'windows-nt)
+      (setq emacs-cjk-font "Consolas"
+            emacs-english-font "Consolas")
+    (setq emacs-cjk-font "WenQuanYi Micro Hei Mono"))
 
   (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
