@@ -14,25 +14,24 @@ buffer (without parent directory) Because `uniquify' could cause
 e.g. ruby main.rb => ruby main.rb:directory_name"
   `(file-name-nondirectory buffer-file-name))
 
-;;掃描~/.emacs.d目錄
+;; packages which is not installed via packages.el
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
-
-;;Emacs24開始內建的package.el相關設定
+;; Packges.el
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 
-;;執行Shell外部程式的搜尋路徑(意同$PATH)
-(setenv "PATH" (concat (getenv "PATH") ":"
-                       "/usr/local/bin/" ":"
-                       (getenv "HOME") "/.cabal/bin/" ":"
-                       (getenv "HOME")"/.scripts/"))
-(if (member system-type '(darwin gnu/linux))
-    (setq shell-file-name "/bin/zsh")
-  (setq shell-file-name "/bin/bash"))
-(setq shell-command-switch "-ic")
+
+(cond ((member system-type '(darwin gnu/linux))
+       (setq shell-file-name "/bin/zsh")
+       (setq shell-command-switch "-ic")
+       (setenv "PATH" (concat (getenv "PATH") ":"
+                              "/usr/local/bin/" ":"
+                              (getenv "HOME") "/.cabal/bin/" ":"
+                              (getenv "HOME")"/.scripts/")))
+      ((member system-type 'cygwin) (setq shell-file-name "/bin/bash")))
 
 ;;(require 'whitespace)
 ;; (global-whitespace-mode)
