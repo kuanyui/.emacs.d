@@ -17,7 +17,7 @@
 (setq js2-strict-missing-semi-warning nil)
 
 (require 'js-comint)
-(cond ((eq system-type 'darwin) 
+(cond ((eq system-type 'darwin)
        (setq inferior-js-program-command "node"))
       ((eq system-type 'gnu/linux)
        (setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node"))
@@ -31,12 +31,12 @@
       (lambda ()
         ;; We like nice colors
         (ansi-color-for-comint-mode-on)
-	(rainbow-delimiters-mode)
+        (rainbow-delimiters-mode)
         ;; Deal with some prompt nonsense
         (add-to-list 'comint-preoutput-filter-functions
                      (lambda (output)
                        (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
-						 (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
+                                                 (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
 
 (add-hook 'js2-mode-hook 'js-comint-my-conf)
 (add-hook 'js2-mode-hook
@@ -63,6 +63,32 @@
 (font-lock-add-keywords 'coffee-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
 
 (font-lock-add-keywords 'js-mode '(("=>" 0 'font-lock-function-name-face)))
+
+;; ======================================================
+;; For Angular JS anti-human function [2017-06-06 火 14:17]
+;; ======================================================
+(defun angular-js-function-injection-sync ()
+  (interactive)
+  (when (or (eq major-mode 'js-mode)
+            (eq major-mode 'js2-mode)
+            (eq major-mode 'pug-mode)
+            (eq major-mode 'jade-mode))
+    (save-excursion
+      (let* ((beg (progn (move-beginning-of-line 1) (point) ))
+             (end (progn (move-end-of-line 1) (point) ))
+             (current-line (buffer-substring-no-properties beg end))
+             (matched (string-match "\\[\\(['\", \\$A-z0-9]+\\)\\(?:function *(\\(.+\\))\\|(\\(.+\\)) *=>\\)" current-line)))
+        (when matched
+          (let* ((head (match-string-no-properties 1 current-line))
+                 (args (split-string (replace-regexp-in-string " " "" (match-string-no-properties 3 current-line)) ","))
+                 (formatted-args (mapconcat (lambda (x) (format "\"%s\"" x)) args ", "))
+                 )
+
+            )
+          ))
+      )
+    ))
+(add-hook 'post-self-insert-hook 'angular-js-function-injection-sync)
 
 ;; (font-lock-add-keywords 'js-mode '(("(\\([$A-z0-9_]+\\)\\(?:[ \n]*,[ \n]*\\([A-z0-9$_]+\\)\\)*[\n ]*) *=>" 0 'font-lock-variable-face)))
 
