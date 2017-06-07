@@ -6,7 +6,7 @@ This is an init file for a non-programmer. Without any warranty surely because t
 >If `~/.emacs.d` existed already, please backup it first.
 
 ```shell
-cd ~ && git clone https://github.com/kuanyui/.emacs.d && cd .emacs.d && ./setup-emacs.sh
+cd ~ && git clone --recursive https://github.com/kuanyui/.emacs.d
 ```
 
 ## Byte Compile Packages in `elpa/` (Optional)
@@ -17,7 +17,7 @@ Compile `.el` into `.elc` may shorten startup time.
 emacs --load ./byte-compile-packages-in-elpa.el
 ```
 
-## Upgrading Packages (Optional)
+## Upgrading Packages (Not Recommended)
 
 >Notice: This action is not necessary. It's possible cause some compatibility problems or install a latest but broken package.
 
