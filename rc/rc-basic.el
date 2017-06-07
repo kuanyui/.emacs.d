@@ -211,6 +211,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
 
 ;;(run-with-timer 0 (* 10 60) 'recentf-save-list)
+(setq calc-group-char " ")
+(setq calc-group-digits 4)
 
 ;; 讓手遠離方向鍵
 (global-set-key (kbd "M-I") 'previous-line)
