@@ -67,13 +67,12 @@
 ;; ======================================================
 ;; For Angular JS anti-human function [2017-06-06 火 14:17]
 ;; ======================================================
-(defun angular-js-function-injection-sync ()
+(defun angular-js-function-injection-fill-strings ()
   (interactive)
   (when (and (or (eq major-mode 'js-mode)
                  (eq major-mode 'js2-mode)
                  (eq major-mode 'pug-mode)
-                 (eq major-mode 'jade-mode))
-             (memq this-command '(self-insert-command delete-backward-char kill-word delete-char delete-forward-char)))
+                 (eq major-mode 'jade-mode)))
     (let* ((beg (progn (move-beginning-of-line 1) (point) ))
            (end (progn (move-end-of-line 1) (point) ))
            (current-line (buffer-substring-no-properties beg end))
@@ -85,13 +84,14 @@
                (args-list (split-string (replace-regexp-in-string " " "" raw-args t) ","))
                (formatted-args (string-join args-list ", "))
                (formatted-string-args (mapconcat (lambda (x) (format "\"%s\"" x)) args-list ", "))
-               (new-str (concat  head "[" formatted-string-args ", (" formatted-args ") =>")))
-          (delete-region beg end)
+               (new-str (concat head "[" formatted-string-args ", (" formatted-args ") =>")))
+          (delete-region beg (+ beg (length old-str)))
+          (goto-char beg)
           (insert new-str)
-          (goto-char (- (length new-str) (length old-str)))
           )))
     ))
-(add-hook 'post-command-hook 'angular-js-function-injection-sync)
+
+(define-key js-mode-map (kbd "C-c C-a") 'angular-js-function-injection-fill-strings)
 
 
 ;; (font-lock-add-keywords 'js-mode '(("(\\([$A-z0-9_]+\\)\\(?:[ \n]*,[ \n]*\\([A-z0-9$_]+\\)\\)*[\n ]*) *=>" 0 'font-lock-variable-face)))
