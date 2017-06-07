@@ -29,6 +29,11 @@
   (term-send-raw-string "/")
   )
 
+(defun term-send-up    () (interactive) (term-send-raw-string "\e[A"))
+(defun term-send-down  () (interactive) (term-send-raw-string "\e[B"))
+(defun term-send-right () (interactive) (term-send-raw-string "\e[C"))
+(defun term-send-left  () (interactive) (term-send-raw-string "\e[D"))
+
 
 (provide 'rc-term)
 ;;; rc-term.el ends here
