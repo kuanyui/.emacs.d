@@ -98,6 +98,24 @@ Return value is float."
                    (string-to-number (substring string 2 4) 16)
                    (string-to-number (substring string 4 6) 16)))))))
 
+
+(defun color-code-rgb-to-hex ()
+  (interactive)
+  ((search-from (- (point) 16))
+   (search-to   (+ (point) 16))
+   (substr (buffer-substring-no-properties search-from search-to))
+   (matched-from (string-match "rgb( *\\([0-9]+\\) *, *\\([0-9]+\\) *, *\\([0-9]+\\) *)" substr))
+   (matched-to (match-end 0))
+   (r (string-to-number (match-string 1 substr)))
+   (g (string-to-number (match-string 2 substr)))
+   (b (string-to-number (match-string 3 substr))))
+  (if matched-from
+      (progn
+        (delete-region (+ search-from matched-from) (+ search-from matched-to))
+        (insert (format "#%x%x%x" r g b)))
+    )
+  )
+
 ;; (autoload 'scss-mode "scss-mode")
 ;; (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 
