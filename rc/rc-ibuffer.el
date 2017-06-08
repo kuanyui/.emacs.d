@@ -13,6 +13,7 @@
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
 (add-hook 'ibuffer-mode-hook 'hl-line-mode)
+(add-hook 'ibuffer-mode-hook 'ibuffer-do-sort-by-filename/process)
 ;; Kill ibuffer after quit
 (defadvice ibuffer-quit (after kill-ibuffer activate)
   "Kill the ibuffer buffer on exit."
@@ -29,6 +30,8 @@
                ("C/C++ header" (name . "\\.h$"))
                ("C/C++ source" (or (mode . c-mode)
                                    (mode . c++-mode)))
+               ("Go" (or (name . "\\.go$")
+                         (mode . go-mode)))
                ("Vue" (name . "\\.vue$"))
                ("ReStructText" (mode . rst-mode))
                ("CSS" (or
@@ -45,7 +48,7 @@
                       (mode . javascript-mode)
                       (mode . js2-mode)
                       (mode . json-mode)
-                      (mode . nodejs-repl-mode))) 
+                      (mode . nodejs-repl-mode)))
                ("Coffee" (or
                           (name . "\\*CoffeeREPL\\*")
                           (mode . coffee-mode)))
