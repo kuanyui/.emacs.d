@@ -108,6 +108,12 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                                   (message "Buffer reverted.")))
 
 ;; ======================================================
+;; Make window status undo-able
+;; ======================================================
+(require 'winner)
+(winner-mode 1)
+
+;; ======================================================
 ;; Find file at point
 ;; ======================================================
 (require 'ffap)
