@@ -289,7 +289,10 @@
 (define-derived-mode svg-path-d-mode fundamental-mode "<path d>"
   (setq-local font-lock-defaults (list svg-path-d-keywords)))
 
-
+;; ======================================================
+;; Flycheck
+;; ======================================================
+(setq flycheck-keymap-prefix (kbd "C-x !"))
 
 (provide 'rc-programming)
 
