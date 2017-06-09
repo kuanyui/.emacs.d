@@ -185,6 +185,8 @@
         ))
   (save-buffer))
 
+(add-hook 'before-save-hook 'my-whitespace-cleanup)
+
 ;;======================================================
 ;; Helm-dash - Looking up documents
 ;;======================================================
