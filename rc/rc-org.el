@@ -68,14 +68,20 @@
   (if (and (org-at-table-p)
            (not (eq (char-after (point)) 45))
            (not (region-active-p)))
-      (org-ctrl-c-ctrl-c))
+      (let ((ori-column (current-column)))
+        (org-ctrl-c-ctrl-c)
+        (beginning-of-line 1)
+        (right-char ori-column)))
   (next-line))
 (defun org-my-previous-line ()
   (interactive)
   (if (and (org-at-table-p)
            (not (eq (char-after (point)) 45))
            (not (region-active-p)))
-      (org-ctrl-c-ctrl-c))
+      (let ((ori-column (current-column)))
+        (org-ctrl-c-ctrl-c)
+        (beginning-of-line 1)
+        (right-char ori-column)))
   (previous-line))
 (define-key org-mode-map (kbd "TAB") 'org-my-tab)
 (define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
@@ -530,24 +536,24 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
       '(("T" "Scheduled Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
          "** TODO %? %^G\n SCHEDULED: %^{ Sheduled: }T Created: %U \n  %i")
-	("t" "Todo" entry
+        ("t" "Todo" entry
          (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
          "** TODO %? %^G\n  Created: %U \n  %i")
-	("s" "School" entry
-	 (file+headline (concat org-directory "/agenda/School.org") "School")
-	 "** TODO %?\n  Created: %U \n  %i")
-	("r" "Reading" entry
-	 (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
-	 "** %? %i :Reading:\n  Created: %U")
-	("D" "Diary + Timer" entry
-	 (file+datetree (concat org-directory "/diary/diary.org"))
-	 "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
-	("d" "Diary" entry
-	 (file+datetree (concat org-directory "/diary/diary.org"))
-	 "* %? \n  Created: %U \n")
-	("e" "Event" entry
-	 (file+headline (concat org-directory "/agenda/Event.org") "Event")
-	 "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i")))
+        ("s" "School" entry
+         (file+headline (concat org-directory "/agenda/School.org") "School")
+         "** TODO %?\n  Created: %U \n  %i")
+        ("r" "Reading" entry
+         (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
+         "** %? %i :Reading:\n  Created: %U")
+        ("D" "Diary + Timer" entry
+         (file+datetree (concat org-directory "/diary/diary.org"))
+         "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+        ("d" "Diary" entry
+         (file+datetree (concat org-directory "/diary/diary.org"))
+         "* %? \n  Created: %U \n")
+        ("e" "Event" entry
+         (file+headline (concat org-directory "/agenda/Event.org") "Event")
+         "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i")))
 
 ;; I set my capture for diary like this:
 ;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
@@ -680,8 +686,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
          ("\\paragraph{%s}" . "\\paragraph*{%s}")
          ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-	("book"
-	 "\\documentclass[11pt,a4paper]{article}
+        ("book"
+         "\\documentclass[11pt,a4paper]{article}
 \\usepackage[margin=2cm]{geometry}
 \\usepackage{fontspec}
 \\setromanfont{cwTeXMing}
@@ -717,12 +723,12 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
   urlcolor=[rgb]{0,0.37,0.53},
   pagebackref=true,
   linktoc=all,}"
-	 ("\\chapter{%s}" . "\\chapter*{%s}")
-	 ("\\section{%s}" . "\\section*{%s}")
-	 ("\\subsection{%s}" . "\\subsection*{%s}")
-	 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-	 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-	 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+         ("\\chapter{%s}" . "\\chapter*{%s}")
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
         ))
 
 
