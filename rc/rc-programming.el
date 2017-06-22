@@ -174,7 +174,6 @@
 ;; Whitespace
 ;;======================================================
 (require 'whitespace)
-(global-set-key (kbd "C-c <deletechar>") 'my-whitespace-cleanup)
 (defun my-whitespace-cleanup ()
   (interactive)
   (let ((whitespace-style '(empty trailing)))
