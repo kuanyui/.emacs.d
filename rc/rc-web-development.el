@@ -5,6 +5,7 @@
 ;;======================================================
 
 (require 'web-mode)
+(define-key web-mode-map (kbd "<backtab>") 'web-mode-fold-or-unfold)
 
 (defun web-mode-element-close-and-indent ()
   (interactive)
