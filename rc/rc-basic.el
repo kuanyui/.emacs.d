@@ -140,7 +140,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
   (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
   (defvar emacs-cjk-font "文泉驛等寬微米黑" "The font name for CJK.")
-
+  (find-font (font-spec :name "LiHei Pro"))
+  (font-family-list)
   (if (eq system-type 'windows-nt)
       (setq emacs-cjk-font "Consolas"
             emacs-english-font "Consolas")
@@ -510,7 +511,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (interactive)(find-file "~/Dropbox/Blog"))
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
-(global-set-key (kbd "<f12>") 'other-frame)
+(global-set-key (kbd "<f11>") (lambda () (interactive) (other-frame 1)))
+(global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
 
 ;; StarDict
 ;; please install sdcv on your system first
