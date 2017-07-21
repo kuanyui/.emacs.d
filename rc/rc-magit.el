@@ -19,6 +19,7 @@
 (global-set-key (kbd "C-x g b") 'magit-blame)
 (define-key magit-mode-map (kbd "C-c d") 'magit-diff-staged)
 
+(defun magit-insert-pull-request (interactive) (insert "fetch = +refs/pull/*/head:refs/remotes/origin/pr/*"))
 
 ;; (defun magit-log-all ()
 ;;   (interactive)
