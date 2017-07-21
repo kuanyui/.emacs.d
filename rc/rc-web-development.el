@@ -302,7 +302,7 @@
 (add-hook 'nxml-mode-hook 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 1.0)
 
-(global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
+;; (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
 (defun firefox-save-buffer-and-refresh-firefox ()
   (interactive)
   (save-buffer)

@@ -371,7 +371,7 @@ unwanted space when exporting org-mode to html."
 ;; 指定agenda檔案位置清單
 (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
 (global-set-key "\C-ca" 'org-agenda)
-(global-set-key (kbd "<f11>") 'org-agenda)
+;;(global-set-key (kbd "<f11>") 'org-agenda)
 
 (setq org-todo-keywords
       '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "|" "DONE(d!)")
