@@ -54,6 +54,10 @@
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
 
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(setq mmm-parse-when-idle 't)
+
 ;; Syntax-highlight For coffee-template
 (font-lock-add-keywords
  'coffee-mode
@@ -61,6 +65,16 @@
    ("['\"]\\.[\\.0-9A-z-_]+?[\"']" 0 'font-lock-variable-name-face prepend) ; '.class-name'
    ("['\"]\\#[0-9A-z-_]+?[\"']" 0 'font-lock-keyword-face prepend)) ; '#id'
  )
+(mmm-add-classes
+ '((coffee-css-mode
+    :submode omg-scss-mode
+    :face mmm-code-submode-face
+    :front "^style +'''\n"
+    :back "^'''$")))
+(mmm-add-mode-ext-class 'coffee-mode nil 'coffee-css-mode)
+
+
+
 
 (font-lock-add-keywords 'js-mode '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend)))
 
