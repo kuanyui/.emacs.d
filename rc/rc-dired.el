@@ -54,7 +54,9 @@ the previous directory."
         (quit-window t)
       (progn (find-alternate-file "..")
              (goto-char (point-min))
-             (search-forward DIR nil :no-error)
+             (while (and (not (eobp))
+                         (not (equal (dired-get-filename t :no-error) DIR)))
+               (next-line))
              ;;(revert-buffer)
              ))))
 
