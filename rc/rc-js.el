@@ -54,10 +54,24 @@
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
 
+;; Syntax-highlight For coffee-template
+(font-lock-add-keywords
+ 'coffee-mode
+ '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend) ;  'user-name':"
+   ("['\"]\\.[\\.0-9A-z-_]+?[\"']" 0 'font-lock-variable-name-face prepend) ; '.class-name'
+   ("['\"]\\#[0-9A-z-_]+?[\"']" 0 'font-lock-keyword-face prepend)) ; '#id'
+ )
+
+(font-lock-add-keywords 'js-mode '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend)))
+
+
+(font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
+
+
 (font-lock-add-keywords 'coffee-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js2-mode '(("\\$scope" 0 'font-lock-builtin-face)))
-(font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
+
 
 (font-lock-add-keywords 'js-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
 (font-lock-add-keywords 'coffee-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
