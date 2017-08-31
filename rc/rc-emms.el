@@ -112,25 +112,13 @@
         (album (emms-track-get track 'info-album))
         (tracknumber (emms-track-get track 'info-tracknumber))
         (title (emms-track-get track 'info-title)))
-    ;; Considering removing this. I hate ID3 tag.
-    (if (or artist title)
-        (mapconcat #'identity
-                   (remove nil (list
-                                (if (> (length tracknumber) 0)
-                                    (format "%02d" (string-to-number tracknumber))
-                                  nil)
-                                (if (> (length artist) 0) artist nil)
-                                (if (> (length year) 0) year nil)
-                                (if (> (length album) 0) album nil)
-                                (if (> (length title) 0) title nil)))
-                   "/")
-      ;; if no ID3 tag found
-      (let* ((fullpath (emms-track-get track 'name))
-             (splitted-fullpath (split-string fullpath "/"))
-             (len (length splitted-fullpath)))
-        (if (<= len 5)
-            (file-name-base fullpath)
-          (string-join (nthcdr (- len 2) splitted-fullpath) "/"))))))
+    ;; if no ID3 tag found
+    (let* ((fullpath (emms-track-get track 'name))
+           (splitted-fullpath (split-string fullpath "/"))
+           (len (length splitted-fullpath)))
+      (if (<= len 5)
+          (file-name-base fullpath)
+        (string-join (nthcdr (- len 2) splitted-fullpath) "/")))))
 
 ;; ======================================================
 ;; Mode-line
