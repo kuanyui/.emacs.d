@@ -7,6 +7,9 @@
 ;;           (highlight-regexp "%[[:alpha:]]\\|\\\\[[:alpha:]]" 'font-lock-constant-face)
 ;;           (highlight-regexp "\\[\\(TODO\\|FIXME\\)\\]" 'org-todo)))
 
+;; Try another way...:
+;;(font-lock-add-keywords 'js-mode '(("\\(TODO\\|FIXME\\)" 0 'font-lock-warning-face prepend)))
+
 ;; ======================================================
 ;; Company
 ;; ======================================================
@@ -176,13 +179,15 @@
 (require 'whitespace)
 (defun my-whitespace-cleanup ()
   (interactive)
-  (let ((whitespace-style '(empty trailing)))
-    (whitespace-cleanup))
-  (if (string-suffix-p ".jade" (buffer-name))
-      (save-excursion
-        (goto-char (point-max))
-        (insert "\n\n\n")
-        )))
+  (if (null whitespace-style)
+      (message "Saved without my-whitespace-cleanup!")
+    (let ((whitespace-style '(empty trailing)))
+      (whitespace-cleanup)
+      (if (string-suffix-p ".jade" (buffer-name))
+          (save-excursion
+            (goto-char (point-max))
+            (insert "\n\n\n")
+            )))))
 
 (add-hook 'before-save-hook 'my-whitespace-cleanup)
 
