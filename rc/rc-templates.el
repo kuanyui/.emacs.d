@@ -53,12 +53,12 @@
     "#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t\n"
     "#+CREATOR: " (format "Emacs %s (Org mode %s)"
                           emacs-version (org-version nil nil)) "\n"
-    "#+DESCRIPTION:\n"
-    "#+EXCLUDE_TAGS: noexport\n"
-    "#+KEYWORDS:\n"
-    "#+LANGUAGE: en\n"
-    "#+SELECT_TAGS: export\n"
-    ))
+                          "#+DESCRIPTION:\n"
+                          "#+EXCLUDE_TAGS: noexport\n"
+                          "#+KEYWORDS:\n"
+                          "#+LANGUAGE: en\n"
+                          "#+SELECT_TAGS: export\n"
+                          ))
 
 ;; gitignore
 (defun touch-gitignore ()
@@ -71,6 +71,15 @@
         (copy-file (concat auto-insert-directory "template.gitignore") file)
         (message "Done.")))))
 
+(defun touch-dir-locals ()
+  (interactive)
+  (let* ((file (concat
+                (read-directory-name "Place  .dir-locals.el to: " nil nil) ".dir-locals.el")))
+    (if (file-exists-p file)
+        (message ".dir-locals.el has been exist, abort.")
+      (progn
+        (copy-file (concat auto-insert-directory "template.dir-locals.el") file)
+        (message "Done.")))))
 
 
 
