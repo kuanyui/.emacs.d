@@ -176,6 +176,7 @@
     :front "<script[^>]*>\n"
     :back "</script>"
     :front-offset 0
+    :creation-hook (lambda () (add-keywords-for-vuejs))
     )
 
    (mmm-html-vue-scss-mode
@@ -206,21 +207,22 @@
 (add-hook 'js2-mode-hook 'highlight-symbol-mode)
 
 
+(defun add-keywords-for-vuejs ()
+  (if (string-suffix-p ".vue" (buffer-name))
+      (font-lock-add-keywords
+       nil
+       (mapcar (lambda (k)
+                 (cons k 'font-lock-preprocessor-face))
+               '("components" "data" "computed" "props" "watch" "events" "methods"
+                 "vuex" "getters" "setters" "actions" "ready"))
+       )
+    ))
+
 (add-hook 'html-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'js-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'js2-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'mmm-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'mmm-major-mode-hook 'add-keywords-for-vuejs)
-
-(defun add-keywords-for-vuejs ()
-  (if (string-suffix-p ".vue" (buffer-name))
-      (font-lock-add-keywords nil
-                              (mapcar (lambda (k)
-                                        (cons k 'font-lock-preprocessor-face))
-                                      '("components" "data" "computed" "props" "watch" "events" "methods"
-                                        "vuex" "getters" "setters" "actions"))
-                              )
-    ))
 
 
 ;; ======================================================
@@ -306,6 +308,7 @@
 (defun firefox-save-buffer-and-refresh-firefox ()
   (interactive)
   (save-buffer)
+  (revert-buffer nil t)
   (firefox-controller-page-refresh))
 (define-key pug-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
