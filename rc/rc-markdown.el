@@ -34,7 +34,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
 (mapc 'my-mmm-markdown-auto-class
       '("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
         "markdown" "python" "r" "ruby" "sql" "stata" "xml" "js"))
-
+(defalias 'cpp-mode 'c++-mode)
 ;; [TODO] 把markdown的outline搞得跟org-mode的key-binding接近一點
 
 (provide 'rc-markdown)
