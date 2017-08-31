@@ -4,8 +4,11 @@
 ;;======================================================
 (require 'python)
 (setq org-babel-python-command "python3")
-
 (require 'flycheck)
+;; flycheck-python-flake8-executable
+;; flycheck-python-pycompile-executable
+;; flycheck-python-pylint-executable
+
 (add-hook 'python-mode-hook 'flycheck-mode)
 (setq flycheck-pylintrc "~/.pylintrc")
 (setq flycheck-pylint-use-symbolic-id nil)  ;; Fuck useless
@@ -22,6 +25,7 @@
  python-shell-completion-string-code
  "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
+(define-key python-mode-map (kbd "C-c C-r") 'revert-buffer-without-confirm)
 (define-key python-mode-map (kbd "<f6>") 'python2-compile-with-shell-command)
 (defun python2-compile-with-shell-command ()
   (interactive)
@@ -60,20 +64,31 @@
 (setq venv-dirlookup-names '(".venv" "venv"))
 ;;(setq-default mode-line-format (cons '(:exec venv-current-name) mode-line-format))
 
+;; ======================================================
+;; elpy
+;; ======================================================
 
+(elpy-enable)
+(setq elpy-modules '(elpy-module-sane-defaults
+                     elpy-module-company
+                     elpy-module-eldoc
+                     elpy-module-flymake
+                     elpy-module-pyvenv
+                     elpy-module-yasnippet
+                     elpy-module-django))
 ;;======================================================
 ;; Company-Jedi : Completion for Python
 ;;======================================================
 ;; NOTICE: Company-jedi is not related to jedi-mode (Auto-Completion-based)!
 
-(require 'company-jedi)
-(autoload 'jedi:setup "jedi" nil t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi)
-  (define-key python-mode-map (kbd "<f1>") #'jedi:show-doc)
-  )
-(add-hook 'python-mode-hook 'my/python-mode-hook)
+;; (require 'company-jedi)
+;; (autoload 'jedi:setup "jedi" nil t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (defun my/python-mode-hook ()
+;; (add-to-list 'company-backends 'company-jedi)
+;; (define-key python-mode-map (kbd "<f1>") #'jedi:show-doc)
+;; )
+;; (add-hook 'python-mode-hook 'my/python-mode-hook)
 
 ;; jedi:environment-root
 ;; python-environment-directory
