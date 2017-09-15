@@ -218,6 +218,7 @@
        )
     ))
 
+(add-hook 'web-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'html-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'js-mode-hook 'add-keywords-for-vuejs)
 (add-hook 'js2-mode-hook 'add-keywords-for-vuejs)
