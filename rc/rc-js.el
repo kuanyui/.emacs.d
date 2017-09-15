@@ -74,23 +74,33 @@
 (mmm-add-mode-ext-class 'coffee-mode nil 'coffee-css-mode)
 
 
+;; ======================================================
+;; Some customed highlight for js-mode
+;; (Because js2-mode cannot work in mmm-mode)
+;; ======================================================
 
-
+;;  Highlight object keys
+;; {'foo': 1}, { foo: 1 }
 (font-lock-add-keywords 'js-mode '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend)))
-
-
 (font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
 
+;; Highlight ES6 function defining syntax
+;; hello (...) { ... }
+(font-lock-add-keywords 'js-mode '(("\\([0-9A-z-_]+\\) *(.*) *{" 1 'font-lock-function-name-face keep)))
 
+
+;; Highlight $scope for Angular
 (font-lock-add-keywords 'coffee-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 (font-lock-add-keywords 'js2-mode '(("\\$scope" 0 'font-lock-builtin-face)))
 
-
+;; Highlight console.log
 (font-lock-add-keywords 'js-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
 (font-lock-add-keywords 'coffee-mode '(("\\bconsole\\.[A-z]+\\b" 0 'font-lock-constant-face)))
 
+;; Highlight ES6 Arrow function
 (font-lock-add-keywords 'js-mode '(("=>" 0 'font-lock-function-name-face)))
+
 
 ;; ======================================================
 ;; For Angular JS anti-human function [2017-06-06 火 14:17]
