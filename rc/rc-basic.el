@@ -703,11 +703,22 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (rich-minority-mode 1)
 (setf rm-blacklist "")
 
+(defface projectile-mode-line
+  '((((class color) (background light)) (:foreground "#444" :bold t))
+    (((class color) (background dark)) (:foreground "#444" :bold t)))
+  "Face for title. ex:"
+  :group 'projectile-faces)
+
+(setq projectile-mode-line '(:eval
+                             (propertize
+                              (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
+                              'face 'projectile-mode-line
+                              )))
 
 (setq-default mode-line-format
               '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
                 (vc-mode vc-mode) " "
-                mode-line-modes mode-line-misc-info mode-line-end-spaces))
+                mode-line-modes projectile-mode-line mode-line-misc-info mode-line-end-spaces))
 
 (setq mode-line-position
       `((1 ,(propertize
