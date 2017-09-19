@@ -4,6 +4,7 @@
 ;; Magit!
 ;;======================================================
 
+(setq magit-diff-refine-hunk 'all)
 (setq magit-last-seen-setup-instructions "1.4.0")
 (add-to-list 'load-path "~/.emacs.d/lisps/magit/lisp/")
 (require 'magit)
