@@ -275,7 +275,7 @@
 ;; wgrep
 ;; ======================================================
 (setq wgrep-auto-save-buffer t)
-(setq wgrep-enable-key (kbd "C-x C-w"))
+(setq wgrep-enable-key (kbd "C-x C-q"))
 (setq wgrep-change-readonly-file t)
 
 
