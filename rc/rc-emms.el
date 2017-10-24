@@ -36,7 +36,7 @@
                 (emms-playlist-save 'm3u emms-auto-save-playlist-path)
               )))
 
-
+(add-to-list 'emms-player-base-format-list "3gpp")
 ;; ======================================================
 ;; Progress bar when seeking
 ;; ======================================================
@@ -82,7 +82,7 @@
   (interactive)
   (let ((file-path (dired-get-filename)))
     (if (or (member (file-name-extension file-path)
-                    '("ogg" "mp3" "wav" "mpg" "mpeg" "wmv" "wma"
+                    '("ogg" "mp3" "wav" "mpg" "mpeg" "wmv" "wma" "3gpp"
                       "mov" "avi" "divx" "ogm" "ogv" "asf" "mkv"
                       "rm" "rmvb" "mp4" "flac" "vrob" "m4a" "ape"
                       "flv" "webm"))
