@@ -1,5 +1,8 @@
 ;;; rc-edit.el ---                                -*- lexical-binding: t; -*-
-
+(defun my-align (start end regexp)
+  "Repeat alignment with respect to the given regular expression."
+  (interactive "r\nsAlign regexp: ")
+  (align-regexp start end (concat "\\(\\s-*\\)" regexp) 1 1 t))
 ;;======================================================
 ;; Goto-last-change
 ;;======================================================
