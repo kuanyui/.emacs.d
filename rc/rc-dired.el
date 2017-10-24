@@ -16,6 +16,20 @@
        (executable-find "open")
        (executable-find "xdg-open")))
 
+(defun get-open-program (filename)
+  (let ((ext (downcase (file-name-extension filename)))
+        (exe-tester (if (eq system-type 'darwin)
+                        (lambda (app) (eq 0 (call-process (format "open") nil nil t "-Ra" "XnViewMP")))
+                      #'executable-find
+                      )))
+    (cond ((member ext '("jpg" "jpeg" "png" "gif"))
+           (find-if exe-tester '("XnViewMP")))
+          ((member ext '("mov" "mp4" "mp3" "mkv" "avi" "flv"))
+           (find-if exe-tester '("mpv" "vlc")))
+          )))
+(get-open-program "test.mp4")
+
+
 (defun dired-open-file-with-external-program ()
   "Open file with external program in dired"
   (interactive)
@@ -193,7 +207,7 @@ the previous directory."
   "Add a multimedia file or all multimedia files under a directory into SMPlayer's playlist via Dired."
   (interactive)
   (require 'cl)
-  (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\|.webm\\)$")
+  (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\|.webm\\|.3gpp\\)$")
          (FILE (dired-get-filename nil t)))
     (if (file-directory-p FILE)    ;if it's a dir.
         (let* ((FILE_LIST (directory-files FILE t PATTERN))
