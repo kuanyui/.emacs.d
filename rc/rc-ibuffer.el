@@ -36,6 +36,7 @@
                ("ReStructText" (mode . rst-mode))
                ("CSS" (or
                        (mode . stylus-mode)
+                       (name . "\\.scss$")
                        (mode . less-css-mode)
                        (mode . css-mode)))
                ("JS" (or
