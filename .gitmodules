@@ -56,3 +56,6 @@
 	path = git/kaomoji.el
 	url = git@github.com:kuanyui/kaomoji.el.git
 
+[submodule "yajade-mode"]
+	path = git/yajade-mode
+	url = git@github.com:kuanyui/yajade-mode.git

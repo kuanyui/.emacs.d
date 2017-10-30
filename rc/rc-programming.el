@@ -62,7 +62,7 @@
                 (define-key (symbol-value mode-map-symbol) (kbd "M-p")'highlight-symbol-prev)
                 (define-key (symbol-value mode-map-symbol) (kbd "C-c M-p") 'highlight-symbol-query-replace)))
      ))
- '("css" "stylus" "jade"
+ '("css" "stylus" "jade" "yajade"
    "conf" "conf-colon"
    "c++" "c" "java"
    "qml"

@@ -1,5 +1,9 @@
 ;;; rc-web-development.el ---                        -*- lexical-binding: t; -*-
 
+;; ======================================================
+;; SCSS-mode
+;; ======================================================
+
 ;;======================================================
 ;; Web-mode
 ;;======================================================
@@ -69,15 +73,17 @@
 ;; Stylus / Jade <= (SWS mode) https://github.com/brianc/jade-mode
 ;; ======================================================
 (add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
+(add-to-list 'load-path "~/.emacs.d/git/yajade-mode")
 (require 'sws-mode)
 (require 'stylus-mode)
 (require 'jade-mode)
+(require 'yajade-mode)
 (require 'pug-mode)
 
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . pug-mode))
+(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
 (add-hook 'pug-mode-hook 'rainbow-mode)
 (add-hook 'pug-mode-hook 'hl-line-mode)
@@ -112,6 +118,12 @@
 
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
+
+(defun ttt ()
+  (interactive)
+  (let ((whitespace-style '(trailing space-before-tab indentation empty space-after-tab)))
+    (whitespace-cleanup)))
+;;       =================== test ===================================
 
 
 (require 'mmm-mode)
@@ -151,6 +163,11 @@
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-es6-babel-mode)
 
+(mmm-add-mode-ext-class 'yajade-mode nil 'mmm-ml-pug-css-mode)
+(mmm-add-mode-ext-class 'yajade-mode nil 'mmm-ml-pug-coffee-mode)
+(mmm-add-mode-ext-class 'yajade-mode nil 'mmm-ml-pug-es6-mode)
+(mmm-add-mode-ext-class 'yajade-mode nil 'mmm-ml-pug-es6-babel-mode)
+
 
 
 ;; ======================================================
@@ -162,12 +179,11 @@
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . html-mode))
 
 (mmm-add-classes
- '((mmm-html-vue-pug-mode
-    :submode pug-mode
-    :face mmm-code-submode-face
-    :front "<template lang=[\"']\\(pug\\|jade\\)[\"']>\n"
+ '((mmm-html-vue-jade-mode
+    :submode yajade-mode
+    :front "<template lang=[\"']\\(?:pug\\|jade\\)[\"']>"
     :back "</template>"
-    :front-offset 0
+    ;; :creation-hook (lambda () (rainbow-mode -1))
     )
 
    (mmm-html-vue-es6-mode
@@ -189,10 +205,10 @@
  )
 
 
-(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-pug-mode)
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-jade-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
-(add-hook 'jade-mode-hook 'rainbow-mode)
+;; (add-hook 'jade-mode-hook 'rainbow-mode)
 
 (add-hook 'css-mode-hook 'company-mode)
 (add-hook 'scss-mode-hook 'company-mode)
@@ -235,7 +251,7 @@
   (widen)
   (let ((ext (file-name-extension (buffer-name))))
     (cond ((string= ext "jade")
-           (pug-mode))
+           (jade-mode))
           ((string= ext "vue")
            (html-mode))
           (t nil))
