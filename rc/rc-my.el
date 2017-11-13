@@ -7,6 +7,17 @@
 
 ;;; Code:
 
+;; ======================================================
+;; cakecrumbs.el
+;; ======================================================
+(add-to-list 'load-path "~/.emacs.d/git/cakecrumbs/")
+(require 'cakecrumbs)
+(cakecrumbs-auto-setup)
+
+;; ======================================================
+;; resize-fram.el
+;; ======================================================
+
 (require 'resize-frame)
 (global-set-key (kbd "M-`") 'resize-frame)
 
