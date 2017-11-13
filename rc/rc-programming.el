@@ -34,6 +34,10 @@
 (setq highlight-symbol-idle-delay 1.0)
 
 ;; ======================================================
+;; Which Func
+;; ======================================================
+
+;; ======================================================
 ;; Editor Config
 ;; ======================================================
 (require 'editorconfig)
@@ -47,21 +51,20 @@
 ;; ======================================================
 ;; CSS / Stylus keymap
 ;; ======================================================
+
 (mapc
  (lambda (name)
    (let ((mode-symbol      (intern (concat name "-mode")))
          (mode-hook-symbol (intern (concat name "-mode-hook")))
          (mode-map-symbol  (intern (concat name "-mode-map"))))
-     (if (fboundp mode-symbol)
-         (require mode-symbol nil :no-error))
-     (if (boundp mode-hook-symbol)
-         (add-hook mode-hook-symbol 'highlight-symbol-mode))
-     (if (boundp mode-map-symbol)
-         (progn (define-key (symbol-value mode-map-symbol) (kbd "C-c M-n") 'highlight-symbol-at-point)
-                (define-key (symbol-value mode-map-symbol) (kbd "M-n")'highlight-symbol-next)
-                (define-key (symbol-value mode-map-symbol) (kbd "M-p")'highlight-symbol-prev)
-                (define-key (symbol-value mode-map-symbol) (kbd "C-c M-p") 'highlight-symbol-query-replace)))
-     ))
+     (eval-after-load mode-symbol
+       `(progn
+          (add-hook   (quote ,mode-hook-symbol) 'highlight-symbol-mode)
+          (define-key ,mode-map-symbol (kbd "C-c M-n") 'highlight-symbol-at-point)
+          (define-key ,mode-map-symbol (kbd "M-n")'highlight-symbol-next)
+          (define-key ,mode-map-symbol (kbd "M-p")'highlight-symbol-prev)
+          (define-key ,mode-map-symbol (kbd "C-c M-p") 'highlight-symbol-query-replace))))
+   )
  '("css" "stylus" "jade" "yajade"
    "conf" "conf-colon"
    "c++" "c" "java"
@@ -127,6 +130,7 @@
 ;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
 ;;======================================================
 (require 'rainbow-mode)
+(setq rainbow-html-colors t)  ;; highlight hsl()
 (global-set-key (kbd "C-x r a") 'rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
 (setq rainbow-ansi-colors nil)
@@ -189,6 +193,8 @@
             (insert "\n\n\n")
             )))))
 
+(remove-hook 'before-save-hook 'my-whitespace-cleanup)
+(remove-hook 'after-save-hook 'swoop-cache-clear)
 (add-hook 'before-save-hook 'my-whitespace-cleanup)
 
 ;;======================================================
