@@ -74,16 +74,18 @@
 ;; ======================================================
 (add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
 (add-to-list 'load-path "~/.emacs.d/git/yajade-mode")
+
 (require 'sws-mode)
 (require 'stylus-mode)
 (require 'jade-mode)
 (require 'yajade-mode)
 (require 'pug-mode)
 
+
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
 (add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+;;(add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
 
 (add-hook 'pug-mode-hook 'rainbow-mode)
 (add-hook 'pug-mode-hook 'hl-line-mode)
@@ -183,20 +185,22 @@
     :submode yajade-mode
     :front "<template lang=[\"']\\(?:pug\\|jade\\)[\"']>"
     :back "</template>"
+    :front-offset 1
+    :back-offset 1
     ;; :creation-hook (lambda () (rainbow-mode -1))
     )
 
    (mmm-html-vue-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
-    :front "<script[^>]*>\n"
+    :front "<script[^>]*?>\n"
     :back "</script>"
     :front-offset 0
     :creation-hook (lambda () (add-keywords-for-vuejs))
     )
 
    (mmm-html-vue-scss-mode
-    :submode omg-scss-mode
+    :submode less-css-mode
     :face mmm-code-submode-face
     :front "<style .*lang=[\"']scss[\"'][^>]*>\n"
     :back "</style>"
