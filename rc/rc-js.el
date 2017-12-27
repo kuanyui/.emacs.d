@@ -11,7 +11,6 @@
 ;;Javascript
 ;; js2
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
 (setq js2-strict-missing-semi-warning nil)
@@ -86,7 +85,7 @@
 
 ;; Highlight ES6 function defining syntax
 ;; hello (...) { ... }
-(font-lock-add-keywords 'js-mode '(("\\([0-9A-z-_]+\\) *(.*) *{" 1 'font-lock-function-name-face keep)))
+(font-lock-add-keywords 'js-mode '(("\\([0-9A-z-_]+\\) *(.*) *{" 1 'font-lock-function-name-face 'keep)) )
 
 
 ;; Highlight $scope for Angular

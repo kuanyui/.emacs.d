@@ -48,11 +48,14 @@
 ;;        (t (:bold t :italic t)))
 ;;    "Font Lock mode face used for function calls."
 ;;    :group 'font-lock-highlighting-faces))
+
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(
                           ("#?'[-a-zA-Z_][-a-zA-Z0-9_:/+]*" 0 'font-lock-constant-face)
-                          ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-keyword-face)
-                          ("(setq \\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-variable-name-face)))
+                          ;;   ("(\\([-a-zA-Z0-9_/]+\\)" 1 'font-lock-function-face)
+                          ("(setq \\([-a-zA-Z0-9_/$:]+\\)" 1 'font-lock-variable-name-face))
+                        )
+(add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode)
 
 (define-key emacs-lisp-mode-map (kbd "C-h 1") 'lookup-elisp-function-doc)
 (define-key emacs-lisp-mode-map (kbd "C-h 2") 'lookup-elisp-variable-doc)

@@ -10,7 +10,8 @@
   (setq-local comment-continue " *")
   (setq-local comment-start-skip "/[*/]+[ \t]*")
   (setq-local comment-end-skip "[ \t]*\\(?:\n\\|\\*+/\\)"))
-(add-to-list 'auto-mode-alist '("\\.scss$" . omg-scss-mode))
+
+(add-to-list 'auto-mode-alist '("\\.scss$" . less-css-mode))  ;; scss-mode is suck, freezing all the time.
 
 ;;======================================================
 ;; Color code convert (derived from Xah Lee's CSS Mode)
@@ -82,21 +83,19 @@ Return value is float."
 
 (defun color-code-hex-to-rgb ()
   (interactive)
-  (let* (
-         (bds (bounds-of-thing-at-point 'word))
-         (p1 (car bds))
-         (p2 (cdr bds))
-         (string (buffer-substring-no-properties p1 p2)))
-
-    (if (string-match "[a-fA-F0-9]\\{6\\}" string)
-        (progn
-          (delete-region p1 p2 )
-          (if (looking-back "#") (delete-char -1))
-          (insert
-           (format "rgb(%s, %s, %s)"
-                   (string-to-number (substring string 0 2) 16)
-                   (string-to-number (substring string 2 4) 16)
-                   (string-to-number (substring string 4 6) 16)))))))
+  (let* ((search-from (- (point) 7))
+         (search-to   (+ (point) 7))
+         (substr (buffer-substring-no-properties search-from search-to))
+         (matched-from (string-match "#[a-fA-F0-9]\\{6\\}" substr))
+         (matched-to (match-end 0))
+         (color-code (match-string 0 substr))
+         (string (buffer-substring-no-properties matched-from matched-to)))
+    (if (delete-region matched-from matched-to)
+        (insert
+         (format "rgb(%s, %s, %s)"
+                 (string-to-number (substring string 0 2) 16)
+                 (string-to-number (substring string 2 4) 16)
+                 (string-to-number (substring string 4 6) 16))))))
 
 
 (defun color-code-rgb-to-hex ()

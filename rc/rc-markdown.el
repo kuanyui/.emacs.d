@@ -28,12 +28,15 @@ If SUBMODE is not provided, use `LANG-mode' by default."
         (front (concat "^```" lang "[\n\r]+"))
         (back "^```"))
     (mmm-add-classes (list (list class :submode submode :front front :back back)))
-    (mmm-add-mode-ext-class 'markdown-mode nil class)))
+    (mmm-add-mode-ext-class 'markdown-mode nil class)
+    (mmm-add-mode-ext-class 'gfm-mode nil class)
+    ))
 
 ;; Mode names that derive directly from the language name
 (mapc 'my-mmm-markdown-auto-class
       '("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
         "markdown" "python" "r" "ruby" "sql" "stata" "xml" "js"))
+
 (defalias 'cpp-mode 'c++-mode)
 ;; [TODO] 把markdown的outline搞得跟org-mode的key-binding接近一點
 
