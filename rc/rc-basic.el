@@ -700,7 +700,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; God-mode
 ;; ======================================================
 
-(global-set-key (kbd "M-z") 'god-local-mode)
+;; (global-set-key (kbd "M-z") 'god-local-mode)
 
 ;;======================================================
 ;; Shorten indicators in Mode-line
