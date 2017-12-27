@@ -72,14 +72,14 @@
 ;; ======================================================
 ;; Stylus / Jade <= (SWS mode) https://github.com/brianc/jade-mode
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
+
 (add-to-list 'load-path "~/.emacs.d/git/yajade-mode")
 
 (require 'sws-mode)
 (require 'stylus-mode)
 (require 'jade-mode)
 (require 'yajade-mode)
-(require 'pug-mode)
+
 
 
 (defun my-stylus-mode () (stylus-mode) (rainbow-mode))
@@ -87,8 +87,8 @@
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
 
-(add-hook 'pug-mode-hook 'rainbow-mode)
-(add-hook 'pug-mode-hook 'hl-line-mode)
+
+
 (add-hook 'js-mode-hook 'hl-line-mode)
 
 (require 'smart-tab)
@@ -98,20 +98,20 @@
   (setq-local tab-width 2))
 
 (add-hook 'stylus-mode-hook #'set-tab-width-to-2)
-(add-hook 'pug-mode-hook #'set-tab-width-to-2)
+
 (add-hook 'jade-mode-hook #'set-tab-width-to-2)
 
 ;; ======================================================
 ;; Jade (Pug) + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
 
-(add-to-list 'load-path "~/.emacs.d/git/emacs-pug-mode")
-(require 'pug-mode)
+
+
 (require 'coffee-mode)
 (require 'less-css-mode)
 
 (custom-set-variables '(coffee-tab-width 2))
-(add-hook 'pug-mode-hook 'rainbow-delimiters-mode)
+
 (add-hook 'coffee-mode-hook 'rainbow-delimiters-mode)
 
 (defvar less-css-mode-hook '())
@@ -155,10 +155,10 @@
    )
  )
 
-(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-css-mode)
-(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-coffee-mode)
-(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-mode)
-(mmm-add-mode-ext-class 'pug-mode nil 'mmm-ml-pug-es6-babel-mode)
+
+
+
+
 
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-css-mode)
 (mmm-add-mode-ext-class 'jade-mode nil 'mmm-ml-pug-coffee-mode)
@@ -265,7 +265,7 @@
     (message "mmm-mode restarted!")))
 
 (define-key mmm-mode-map (kbd "<f6>") 'mmm-mode-restart!)
-(define-key pug-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+
 (define-key jade-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 (define-key html-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
@@ -302,7 +302,7 @@
         ))
 
 (define-key mmm-mode-map (kbd "<f7>") 'narrow-to-js)
-(define-key pug-mode-map (kbd "<f7>") 'narrow-to-js)
+
 (define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
 (define-key html-mode-map (kbd "<f7>") 'narrow-to-js)
 
@@ -331,7 +331,7 @@
   (save-buffer)
   (revert-buffer nil t)
   (firefox-controller-page-refresh))
-(define-key pug-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+
 (define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key yajade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key nxml-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
@@ -349,7 +349,7 @@
 ;;                                       ("['\"][A-Z][A-z0-9]+[\"']" 0 'font-lock-warning-face)
 ;;                                       ))
 ;;
-;;(font-lock-add-keywords 'pug-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
+
 ;;(font-lock-add-keywords 'jade-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
 ;;(font-lock-add-keywords 'fundamental-mode '(("\\b\\.[A-Z][A-z0-9]+\\b" 0 'font-lock-warning-face)))
 ;;(defun my-find-possible-shit-api ()
@@ -363,7 +363,7 @@
 ;;(my-find-possible-shit-api)
 ;;)
 ;;))
-;;(define-key pug-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
+
 ;;(define-key js-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
 ;;(define-key coffee-mode-map (kbd "<f4>") 'my-find-possible-shit-api)
 ;;
