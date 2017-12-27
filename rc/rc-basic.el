@@ -17,6 +17,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; packages which is not installed via packages.el
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
+(mapc (lambda (x) (add-to-list 'load-path x))
+      (directory-files "~/.emacs.d/git" t "^[^.]"))
+
 ;; Packges.el
 (require 'package)
 (package-initialize)
@@ -592,7 +595,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
          (interactive)
          (call-process-region (point) (mark) "pbcopy")
          (setq deactivate-mark t))
-
        (defun paste ()
          (interactive)
          (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
@@ -694,10 +696,15 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
  kept-old-versions 2
  version-control t)       ; use versioned backups
 
+;; ======================================================
+;; God-mode
+;; ======================================================
+
+(global-set-key (kbd "M-z") 'god-local-mode)
+
 ;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
-
 
 (require 'rich-minority)
 (rich-minority-mode 1)
@@ -716,7 +723,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                               )))
 
 (setq-default mode-line-format
-              '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
+              '((god-local-mode (:eval (propertize " G " 'face 'compilation-error)))
+                "%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
                 (vc-mode vc-mode) " "
                 mode-line-modes projectile-mode-line mode-line-misc-info mode-line-end-spaces))
 
@@ -793,6 +801,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
 
   (interactive)
   (find-file (format "/sudo::%s" (read-file-name "Find file as root: "))))
+
 
 (provide 'rc-basic)
 ;;; basic.el ends here
