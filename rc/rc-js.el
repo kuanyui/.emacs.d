@@ -108,7 +108,7 @@
   (interactive)
   (when (and (or (eq major-mode 'js-mode)
                  (eq major-mode 'js2-mode)
-                 (eq major-mode 'pug-mode)
+                 (eq major-mode 'yajade-mode)
                  (eq major-mode 'jade-mode)))
     (let* ((beg (progn (move-beginning-of-line 1) (point) ))
            (end (progn (move-end-of-line 1) (point) ))
