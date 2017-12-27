@@ -1,4 +1,5 @@
 ;;; rc-qml.el ---                                    -*- lexical-binding: t; -*-
+(require 'qmake-mode)
 
 (add-to-list 'load-path "~/.emacs.d/git/qml-mode/")
 (require 'qml-mode)

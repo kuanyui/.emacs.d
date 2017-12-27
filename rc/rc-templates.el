@@ -81,6 +81,11 @@
         (copy-file (concat auto-insert-directory "template.dir-locals.el") file)
         (message "Done.")))))
 
+(defun insert-git-remotes-pr ()
+  (interactive)
+  (let ((remote-name (read-from-minibuffer "Remote name (origin/upstream/other): " "upstream")))
+    (insert (format "fetch = +refs/pull/*/head:refs/remotes/%s/pr/*" remote-name))))
+
 
 
 (provide 'rc-templates)

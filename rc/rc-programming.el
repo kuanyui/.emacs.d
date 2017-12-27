@@ -10,6 +10,11 @@
 ;; Try another way...:
 ;;(font-lock-add-keywords 'js-mode '(("\\(TODO\\|FIXME\\)" 0 'font-lock-warning-face prepend)))
 
+(defun vscode ()
+  "Fucking Apple macOS. pbcopy in tmux not works after upgrading to High Sierra.
+Call VSCode to do this manually."
+  (shell-command (format "\"/Applications/Visual Studio Code.app/Contents/MacOS/Electron\" %s" ""))
+  )
 ;; ======================================================
 ;; Company
 ;; ======================================================
@@ -70,7 +75,6 @@
    "c++" "c" "java"
    "qml"
    "prog"))
-
 
 ;; ======================================================
 ;; imenu

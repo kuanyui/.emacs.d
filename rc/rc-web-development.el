@@ -333,6 +333,7 @@
   (firefox-controller-page-refresh))
 (define-key pug-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+(define-key yajade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 (define-key nxml-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
 
 
