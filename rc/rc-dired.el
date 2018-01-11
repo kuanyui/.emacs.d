@@ -11,10 +11,11 @@
 (setq dired-dwim-target t)
 ;; M-RET to call `kde-open` to open file.
 
-(defmacro system-open-command ()
-  '(or (executable-find "kde-open")
-       (executable-find "open")
-       (executable-find "xdg-open")))
+(defun system-open-command ()
+  (or
+   (executable-find "xdg-open")
+   (executable-find "kde-open")
+   (executable-find "open")))
 
 (defun get-open-program (filename)
   (let ((ext (downcase (file-name-extension filename)))
