@@ -1,5 +1,7 @@
 ;;; rc-emms.el ---                                   -*- lexical-binding: t; -*-
 
+;; Please install `mediainfo' and `mpv' on your system first;
+;; my configuration use them as backend of EMMS.
 
 ;; ======================================================
 ;; Requirement: mpv, mp3info
