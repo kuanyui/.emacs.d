@@ -227,6 +227,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq calc-group-char " ")
 (setq calc-group-digits 4)
 
+;; Always follow symbol link to real file when find-file.
+(setq vc-follow-symlinks t)
+
 ;; 讓手遠離方向鍵
 (global-set-key (kbd "M-I") 'previous-line)
 (global-set-key (kbd "M-J") 'left-char)
