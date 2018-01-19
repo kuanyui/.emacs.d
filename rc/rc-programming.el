@@ -10,11 +10,6 @@
 ;; Try another way...:
 ;;(font-lock-add-keywords 'js-mode '(("\\(TODO\\|FIXME\\)" 0 'font-lock-warning-face prepend)))
 
-(defun vscode ()
-  "Fucking Apple macOS. pbcopy in tmux not works after upgrading to High Sierra.
-Call VSCode to do this manually."
-  (shell-command (format "\"/Applications/Visual Studio Code.app/Contents/MacOS/Electron\" %s" ""))
-  )
 ;; ======================================================
 ;; Company
 ;; ======================================================
@@ -261,11 +256,19 @@ Call VSCode to do this manually."
 (setq projectile-enable-caching t)
 (projectile-global-mode t)
 (setq projectile-indexing-method 'alien)
-
+(setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;;Helm integration with Projectile
 (require 'helm-projectile)
-(helm-projectile-on)
+(helm-projectile-off)
+;; (helm-projectile-on)  // I just want to use its ag/ack/grep/recentf support
+(add-hook 'projectile-mode-hook
+          (lambda ()
+            (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
+            (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
+            (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
+            (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
+            (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)))
 
 
 ;;======================================================
