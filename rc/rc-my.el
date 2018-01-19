@@ -68,38 +68,18 @@
 ;; moe-theme.el
 ;;======================================================
 
-(add-to-list 'load-path "~/.emacs.d/lisps/powerline/")
-(require 'powerline)
-
 (add-to-list 'custom-theme-load-path "~/.emacs.d/git/moe-theme/")
-(add-to-list 'load-path "~/.emacs.d/git/moe-theme/")
 
 (require 'moe-theme)
-(setq moe-theme-highlight-buffer-id nil)
-(setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
-(setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
-(setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+(require 'moe-theme-flavours)
 
-(moe-theme-set-color 'cyan)
-
-;; (setq moe-theme-builtin 'red
-;;       moe-theme-comment-delimiter 'grey
-;;       moe-theme-comment 'grey
-;;       moe-theme-constant 'purple
-;;       moe-theme-doc 'grey
-;;       moe-theme-function-name 'green
-;;       moe-theme-keyword 'magenta
-;;       moe-theme-preprocessor 'light-blue
-;;       moe-theme-negation-char 'yellow
-;;       moe-theme-regexp-grouping-backslash nil
-;;       moe-theme-regexp-grouping-construct nil
-;;       moe-theme-string 'yellow
-;;       moe-theme-type 'blue
-;;       moe-theme-variable-name 'orange
-;;       moe-theme-warning 'red)
-
-
-(moe-dark)
+(setq moe-theme-colorize-modeline-by-frame-id t)
+;; (setq moe-theme-resize-title-markdown '(1.5 1.4 1.3 1.2 1.0 1.0))
+;; (setq moe-theme-resize-title-org '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+;; (setq moe-theme-resize-title-rst '(1.5 1.4 1.3 1.2 1.1 1.0))
+(load-theme 'moe-dark t nil)
+;; (moe-theme-apply-color 'cyan)
+;; (moe-dark)
 
 ;;(moe-theme-random-color)
 ;;(powerline-moe-theme)
@@ -191,6 +171,7 @@
 (add-to-list 'load-path "~/.emacs.d/git/taiwan-holidays/")
 (require 'taiwan-holidays)
 (setq mark-holidays-in-calendar t)
+(setq calendar-mark-holidays-flag t)
 (setq taiwan-holidays-important-holidays taiwan-holidays-taiwan-holidays)
 (setq calendar-holidays taiwan-holidays-important-holidays)
 
