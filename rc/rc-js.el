@@ -19,11 +19,16 @@
 (cond ((eq system-type 'darwin)
        (setq inferior-js-program-command "node"))
       ((eq system-type 'gnu/linux)
-       (setq inferior-js-program-command "~/.emacs.d/node-v6.5.0-linux-x64/bin/node"))
-      )
+       (setq inferior-js-program-command "node")))
 
 (setq process-coding-system-alist
       (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
+
+(defun js-run-with-shell-command ()
+  (interactive)
+  (save-buffer)
+  (shell-command (format "node %s" (buffer-real-name))))
+(define-key js2-mode-map (kbd "<f5>") 'js-run-with-shell-command)
 
 
 (setq inferior-js-mode-hook
@@ -48,7 +53,8 @@
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
   (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
   (local-set-key "\C-cb" 'js-send-buffer)
-  (local-set-key (kbd "<f5>") 'js-send-buffer)
+  (local-set-key (kbd "<f5>") 'js-run-with-shell-command)
+  (local-set-key (kbd "C-x <f5>") 'js-send-buffer)
   (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
