@@ -10,10 +10,15 @@
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
-  (add-to-list 'company-backends 'company-c-headers)
-  (c-set-style "linux")
-  (define-key c-mode-map (kbd "<f5>") 'c-compile-current-file)
-  )
+  ;; Check if FILENAME.cpp existed in same directory.
+  ;; If found, switch to c++-mode.
+  (if (file-exists-p (concat (file-name-base (buffer-file-name)) ".cpp"))
+      (c++-mode)
+    (progn
+      (add-to-list 'company-backends 'company-c-headers)
+      (c-set-style "linux")
+      (define-key c-mode-map (kbd "<f5>") 'c-compile-current-file)
+      )))
 (defun c-compile-current-file ()
   (interactive)
   (save-buffer)
