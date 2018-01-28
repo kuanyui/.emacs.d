@@ -1,5 +1,5 @@
 (getenv "GOPATH")
-(require 'golint)
+(require 'golint nil t)
 
 (defun my-go-setup ()
   (set (make-local-variable 'company-backends) '(company-go))
