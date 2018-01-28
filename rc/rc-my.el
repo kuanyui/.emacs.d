@@ -12,6 +12,7 @@
 ;; ======================================================
 (add-to-list 'load-path "~/.emacs.d/git/cakecrumbs/")
 (require 'cakecrumbs)
+(setq cakecrumbs-refresh-delay-seconds 0)
 (cakecrumbs-auto-setup)
 
 ;; ======================================================
