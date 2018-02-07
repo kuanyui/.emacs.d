@@ -1,55 +1,25 @@
 ;;; rc-javascript.el ---                             -*- lexical-binding: t; -*-
 
-;; open javascript interactive shell.
-(defun jsc ()
-  (interactive)
-  (eshell "JSC")
-  (insert "rhino")
-  (eshell-send-input ""))
-
-
-;;Javascript
-;; js2
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
-(setq js2-strict-missing-semi-warning nil)
+;; ======================================================
+;; My JavaScript config
+;; ======================================================
+(add-hook 'js2-mode-hook 'my-js-conf)
 
-(require 'js-comint)
-(cond ((eq system-type 'darwin)
-       (setq inferior-js-program-command "node"))
-      ((eq system-type 'gnu/linux)
-       (setq inferior-js-program-command "node")))
+(defun my-js-conf ()
+  (setq js2-basic-offset 2)
+  (setq js2-strict-missing-semi-warning nil)
+  (setq js2-indent-switch-body t)
+  (rainbow-delimiters-mode)
+  (my--js-comint-conf)
+  (my--js-flow-autoconf)
+  (flycheck-mode 1)
+  (company-mode-on)
+  )
 
-(setq process-coding-system-alist
-      (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
-
-(defun js-run-with-shell-command ()
-  (interactive)
-  (save-buffer)
-  (shell-command (format "node %s" (buffer-real-name))))
-(define-key js2-mode-map (kbd "<f5>") 'js-run-with-shell-command)
-
-
-(setq inferior-js-mode-hook
-      (lambda ()
-        ;; We like nice colors
-        (ansi-color-for-comint-mode-on)
-        (rainbow-delimiters-mode)
-        ;; Deal with some prompt nonsense
-        (add-to-list 'comint-preoutput-filter-functions
-                     (lambda (output)
-                       (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
-                                                 (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
-
-(add-hook 'js2-mode-hook 'js-comint-my-conf)
-(add-hook 'js2-mode-hook
-          (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
-(add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'js-mode-hook #'rainbow-delimiters-mode)
-(setq js2-basic-offset 2)
-
-(defun js-comint-my-conf ()
+(defun my--js-comint-conf ()
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
   (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
   (local-set-key "\C-cb" 'js-send-buffer)
@@ -59,6 +29,27 @@
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
 
+(defun my--js-flow-autoconf ()
+  (when (flow-minor-tag-present-p)
+    (js-mode)
+    (flow-minor-mode)
+    (message "flow detected"))
+  )
+
+;; ======================================================
+;; flow
+;; ======================================================
+(with-eval-after-load 'flycheck
+  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
+  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
+  (flycheck-add-next-checker 'javascript-flow 'javascript-eslint))
+
+(with-eval-after-load 'company
+  (add-to-list 'company-backends 'company-flow))
+
+;; ======================================================
+;; mmm-mode
+;; ======================================================
 (require 'mmm-mode)
 (setq mmm-global-mode 'maybe)
 (setq mmm-parse-when-idle 't)
@@ -86,8 +77,8 @@
 
 ;;  Highlight object keys
 ;; {'foo': 1}, { foo: 1 }
-(font-lock-add-keywords 'js-mode '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend)))
-(font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
+;; (font-lock-add-keywords 'js-mode '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend)))
+;; (font-lock-add-keywords 'js-mode '(("\\b[0-9A-z]+?:" 0 'font-lock-type-face)))
 
 ;; Highlight ES6 function defining syntax
 ;; hello (...) { ... }
@@ -135,32 +126,46 @@
     ))
 
 (define-key js-mode-map (kbd "C-c C-a") 'angular-js-function-injection-fill-strings)
-
-
 ;; (font-lock-add-keywords 'js-mode '(("(\\([$A-z0-9_]+\\)\\(?:[ \n]*,[ \n]*\\([A-z0-9$_]+\\)\\)*[\n ]*) *=>" 0 'font-lock-variable-face)))
+;; ======================================================
+;; Comint
+;; ======================================================
+(require 'js-comint)
+(cond ((eq system-type 'darwin)
+       (setq inferior-js-program-command "node"))
+      ((eq system-type 'gnu/linux)
+       (setq inferior-js-program-command "node")))
 
+(setq process-coding-system-alist
+      (cons '("js" utf-8 . utf-8) process-coding-system-alist)) ;shit didn't work
 
-
-;;(autoload 'tern-mode "tern.el" nil t)
-;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-
-;; (define-key js2-mode-map (kbd "<f5>") 'call-nodejs-command)
-(defun call-nodunejs-command ()
+(defun js-run-with-shell-command ()
   (interactive)
-  (save-buffer)(shell-command (format "node %s" (buffer-real-name))))
+  (save-buffer)
+  (shell-command (format "node %s" (buffer-real-name))))
+(define-key js2-mode-map (kbd "<f5>") 'js-run-with-shell-command)
 
-(defun js-buffer-to-multiline-string ()
+
+(setq inferior-js-mode-hook
+      (lambda ()
+        ;; We like nice colors
+        (ansi-color-for-comint-mode-on)
+        (rainbow-delimiters-mode)
+        ;; Deal with some prompt nonsense
+        (add-to-list 'comint-preoutput-filter-functions
+                     (lambda (output)
+                       (replace-regexp-in-string ".*1G\.\.\..*5G" "..."
+                                                 (replace-regexp-in-string ".*1G.*3G" "&gt;" output))))))
+;; ======================================================
+;; Shell
+;; ======================================================
+;; open javascript interactive shell.
+(defun jsc ()
   (interactive)
-  (kill-new
-   (mapconcat
-    (lambda (line)
-      (concat "'" line "'"))
-    (remove-if (lambda (str) (eq (length str) 0))
-               (split-string (buffer-string) "\n"))
-    " +\n")
-   )
-  (message "Copied!")
-  )
+  (eshell "JSC")
+  (insert "rhino")
+  (eshell-send-input ""))
+
 
 (provide 'rc-js)
 ;;; rc-javascript.el ends here
