@@ -13,14 +13,21 @@
 ;; ======================================================
 ;; Company
 ;; ======================================================
-
+;; write-file-functions '(delete-trailing-whitespace time-stamp recentf-track-opened-file undo-tree-save-history-hook)
 (autoload 'company-mode "company" nil t)
 (setq company-minimum-prefix-length 1)
 (setq company-idle-delay 0.3)
 
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
+
+;; ======================================================
+;; Flyspell
+;; ======================================================
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(setq ispell-program-name "aspell")
+;; force the English dictionary, support Camel Case spelling check (tested with aspell 0.6)
+(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together" "--run-together-limit=5" "--run-together-min=2"))
 
 ;;======================================================
 ;; Highlight-symbol
@@ -70,8 +77,10 @@
    "conf" "conf-colon"
    "c++" "c" "java"
    "qml"
+   "js" "js2" "javascript"
    "prog"))
 
+(require 'cc-mode)
 (define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
 (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
 (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)

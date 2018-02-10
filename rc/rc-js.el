@@ -6,20 +6,22 @@
 ;; ======================================================
 ;; My JavaScript config
 ;; ======================================================
-(add-hook 'js2-mode-hook 'my-js-conf)
+;; (add-to-list 'load-path "~/.emacs.d/git/flow-js2-mode")
+;; (require 'flow-js2-mode)
 
-(defun my-js-conf ()
+(add-hook 'js2-mode-hook 'my-js2-conf)
+(defun my-js2-conf ()
+  (my--js2-flow-autoconf)
+  (my--js2-comint-conf)
   (setq js2-basic-offset 2)
   (setq js2-strict-missing-semi-warning nil)
   (setq js2-indent-switch-body t)
   (rainbow-delimiters-mode)
-  (my--js-comint-conf)
-  (my--js-flow-autoconf)
   (flycheck-mode 1)
   (company-mode-on)
   )
 
-(defun my--js-comint-conf ()
+(defun my--js2-comint-conf ()
   (local-set-key "\C-x\C-e" 'js-send-last-sexp)
   (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
   (local-set-key "\C-cb" 'js-send-buffer)
@@ -28,17 +30,19 @@
   (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
-
-(defun my--js-flow-autoconf ()
+(require 'flow-minor-mode)
+(defun my--js2-flow-autoconf ()
   (when (flow-minor-tag-present-p)
-    (js-mode)
+    ;; (flow-js2-mode) ; this still has lots of errors.
+    (js-mode)  ;; fallback to js-mode
     (flow-minor-mode)
-    (message "flow detected"))
+    (message "Flow detected, fallback to js-mode + flow-minor-mode"))
   )
 
 ;; ======================================================
 ;; flow
 ;; ======================================================
+(require 'flycheck-flow)
 (with-eval-after-load 'flycheck
   (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
   (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
