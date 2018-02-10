@@ -1,6 +1,7 @@
 *.log
+*.pyc
 *~
-.#*
+-.#*
 .DS_Store
 .mc-lists.el
 *.elc
