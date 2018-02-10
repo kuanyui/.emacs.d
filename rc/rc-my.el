@@ -10,7 +10,6 @@
 ;; ======================================================
 ;; cakecrumbs.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/cakecrumbs/")
 (require 'cakecrumbs)
 (setq cakecrumbs-refresh-delay-seconds 0)
 (cakecrumbs-auto-setup)
@@ -25,19 +24,16 @@
 ;;======================================================
 ;; kaomoji.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/kaomoji/")
 (require 'kaomoji)
 
 ;;======================================================
 ;; tldr.el
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/tldr/")
 (require 'tldr)
 
 ;;======================================================
 ;; fsc.el Fuck the Speeching Censorship
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/fsc/")
 
 (require 'fsc)
 (global-set-key (kbd "C-c f s") 'fsc)
@@ -46,14 +42,12 @@
 ;; ======================================================
 ;; hexo.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/hexo/")
 (require 'hexo)
 
 ;;======================================================
 ;; writing-utils.el 寫作加強
 ;;======================================================
 ;; Details: https://github.com/kuanyui/writing-utils.el
-(add-to-list 'load-path "~/.emacs.d/git/writing-utils/")
 (require 'writing-utils)
 (require 'page-title)
 (require 'flickr)
@@ -92,14 +86,12 @@
 ;;======================================================
 ;; moedict.el 萌典
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/moedict/")
 (require 'moedict)
 ;;(require 'moedict-stroke)
 (global-set-key (kbd "C-c m m") 'moedict)
 ;; ======================================================
 ;; fm-bookmarks.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/fm-bookmarks/")
 (require 'fm-bookmarks)
 
 ;; Available options: kde4, gnome3, pcmanfm, custom
@@ -136,7 +128,6 @@
 ;; ======================================================
 ;; ta.el
 ;; ======================================================
-(add-to-list 'load-path "~/.emacs.d/git/ta/")
 (require 'ta)
 
 (setq ta-delay 0.1)
@@ -168,8 +159,6 @@
 ;; ======================================================
 ;; taiwan-holidays.el 台灣的節慶支援
 ;; ======================================================
-
-(add-to-list 'load-path "~/.emacs.d/git/taiwan-holidays/")
 (require 'taiwan-holidays)
 (setq mark-holidays-in-calendar t)
 (setq calendar-mark-holidays-flag t)

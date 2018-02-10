@@ -1,41 +1,41 @@
 [submodule "git/moe-theme"]
-	path = git/moe-theme
+	path = git/source/moe-theme
 	url = git@github.com:kuanyui/moe-theme.el.git
 [submodule "git/fm-bookmarks"]
-	path = git/fm-bookmarks
+	path = git/source/fm-bookmarks
 	url = git@github.com:kuanyui/fm-bookmarks.el.git
 [submodule "git/hexo"]
-	path = git/hexo
+	path = git/source/hexo
 	url = git@github.com:kuanyui/hexo.el.git
 [submodule "git/kaomoji"]
-	path = git/kaomoji
+	path = git/source/kaomoji
 	url = git@github.com:kuanyui/kaomoji.el.git
 [submodule "git/moedict"]
-	path = git/moedict
+	path = git/source/moedict
 	url = git@github.com:kuanyui/moedict.el.git
 [submodule "git/tldr"]
-	path = git/tldr
+	path = git/source/tldr
 	url = git@github.com:kuanyui/tldr.el.git
 [submodule "git/taiwan-holidays"]
-	path = git/taiwan-holidays
+	path = git/source/taiwan-holidays
 	url = git@github.com:emacs-tw/taiwan-holidays.el.git
 [submodule "git/org-ioslide"]
-	path = git/org-ioslide
+	path = git/forks/org-ioslide
 	url = git@github.com:coldnew/org-ioslide.git
 [submodule "git/fsc"]
-	path = git/fsc
+	path = git/source/fsc
 	url = git@github.com:kuanyui/fsc.el.git
 [submodule "git/writing-utils"]
-	path = git/writing-utils
+	path = git/source/writing-utils
 	url = git@github.com:kuanyui/writing-utils.el.git
 [submodule "git/ta"]
-	path = git/ta
+	path = git/source/ta
 	url = git@github.com:kuanyui/ta.el.git
 [submodule "git/qml-mode"]
-	path = git/qml-mode
+	path = git/forks/qml-mode
 	url = git@github.com:kuanyui/qml-mode.git
 [submodule "git/company-qml"]
-	path = git/company-qml
+	path = git/forks/company-qml
 	url = git@github.com:cute-jumper/company-qml.git
 [submodule "git/hexo.el"]
 	path = git/hexo.el
@@ -54,16 +54,16 @@
 	url = git@github.com:kuanyui/kaomoji.el.git
 
 [submodule "yajade-mode"]
-	path = git/yajade-mode
+	path = git/source/yajade-mode
 	url = git@github.com:kuanyui/yajade-mode.git
 [submodule "git/cakecrumbs"]
-	path = git/cakecrumbs
+	path = git/source/cakecrumbs
 	url = git@github.com:kuanyui/cake-crumbs.el.git
 [submodule "git/browser-refresh"]
-	path = git/browser-refresh
+	path = git/forks/browser-refresh
 	url = git@github.com:kuanyui/emacs-browser-refresh
 [submodule "git/flow-js2-mode"]
-	path = git/flow-js2-mode
+	path = git/forks/flow-js2-mode
 	url = git@github.com:Fuco1/flow-js2-mode.git
 [submodule "elpa"]
 	path = elpa
