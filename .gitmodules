@@ -65,3 +65,6 @@
 [submodule "git/flow-js2-mode"]
 	path = git/flow-js2-mode
 	url = git@github.com:Fuco1/flow-js2-mode.git
+[submodule "elpa"]
+	path = elpa
+	url = git@github.com:kuanyui/elpa.git
