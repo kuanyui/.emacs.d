@@ -32,9 +32,6 @@ org-clock-save.el
 /org-clock-save_flymake.el
 /.directory
 /image-dired/
-/lisps/emacs-calfw/
-/lisps/org-ioslide/
-/lisps/powerline/
 /elpa/*.txt
 recentf
 *.cache
