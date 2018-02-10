@@ -1,2 +1,5 @@
-- /elpa/
-- /lisps/
+-/elpa
+-/lisps
+-/git/moedict/stroke-data-json/
+-/git
+-.*.js

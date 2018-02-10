@@ -13,12 +13,5 @@
 
 (add-to-list 'auto-mode-alist '("\\.scss$" . less-css-mode))  ;; scss-mode is suck, freezing all the time.
 
-;;======================================================
-;; Color code convert (derived from Xah Lee's CSS Mode)
-;;======================================================
-;; (I rename the functions because they are easier to memorize...)
-
-(require 'kolor)
-
 (provide 'rc-css)
 ;;; rc-css.el ends here

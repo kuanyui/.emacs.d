@@ -41,6 +41,7 @@
 (require 'rc-lisp)
 (require 'rc-scheme)
 (require 'rc-css)
+(require 'rc-kolor)
 (require 'rc-js)
 (require 'rc-json)
 (require 'rc-shell)
@@ -70,8 +71,10 @@
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
+    ("ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
  '(delete-selection-mode nil)
+ '(flycheck-javascript-flow-args nil)
+ '(global-hungry-delete-mode t)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guide-key-mode nil)
  '(helm-mode nil)
@@ -83,11 +86,16 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (make-color flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode multiple-cursors helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode magit less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode git-gutter-fringe gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers coffee-mode cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
+    (company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode multiple-cursors helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode magit less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode git-gutter-fringe gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers coffee-mode cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
-    ((org-html-allow-name-attribute-in-anchors)
+    ((auto-revert-mode . t)
+     (eval progn
+           (aggressive-indent-mode -1))
+     (aggressive-indent-mode)
+     (js2-indent-switch-body . t)
+     (org-html-allow-name-attribute-in-anchors)
      (org-html-style . "")
      (org-html-toplevel-hlevel . 1)
      (org-html-with-latex)
