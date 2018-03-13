@@ -37,21 +37,6 @@
 [submodule "git/company-qml"]
 	path = git/forks/company-qml
 	url = git@github.com:cute-jumper/company-qml.git
-[submodule "git/hexo.el"]
-	path = git/hexo.el
-	url = git@github.com:kuanyui/hexo.el.git
-[submodule "git/ta.el"]
-	path = git/ta.el
-	url = git@github.com:kuanyui/ta.el.git
-[submodule "git/taiwan-holidays.el"]
-	path = git/taiwan-holidays.el
-	url = git@github.com:emacs-tw/taiwan-holidays.el.git
-[submodule "git/tldr.el"]
-	path = git/tldr.el
-	url = git@github.com:kuanyui/tldr.el.git
-[submodule "git/kaomoji.el"]
-	path = git/kaomoji.el
-	url = git@github.com:kuanyui/kaomoji.el.git
 
 [submodule "yajade-mode"]
 	path = git/source/yajade-mode
