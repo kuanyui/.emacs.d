@@ -3,6 +3,34 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
+(defun my-js2-fold-functions ()
+  (interactive)
+  (js2-mode-hide-functions))
+
+(defun my-js2-fold-all ()
+  (interactive)
+  (js2-mode-hide-functions)
+  (js2-mode-hide-comments))
+
+(defun my-js2-expand ()
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((bounds (js2-mode-invisible-overlay-bounds)))
+      (while (and (not (eolp))
+                  (null bounds))
+        (right-char)
+        (setq bounds (js2-mode-invisible-overlay-bounds)))
+      (if bounds
+          (js2-mode-show-element)
+        (message "Not in a folded line"))
+      )))
+
+(defun my-js2-expand-all ()
+  (interactive)
+  (js2-mode-show-functions)
+  (js2-mode-show-comments))
+
 ;; ======================================================
 ;; My JavaScript config
 ;; ======================================================
@@ -16,6 +44,10 @@
   (setq js2-basic-offset 2)
   (setq js2-strict-missing-semi-warning nil)
   (setq js2-indent-switch-body t)
+  (define-key js2-mode-map (kbd "C-c f f") 'my-js2-fold-functions)
+  (define-key js2-mode-map (kbd "C-c f F") 'my-js2-fold-all)
+  (define-key js2-mode-map (kbd "C-c f e") 'my-js2-expand)
+  (define-key js2-mode-map (kbd "C-c f E") 'my-js2-expand-all)
   (rainbow-delimiters-mode)
   (flycheck-mode 1)
   (company-mode-on)
