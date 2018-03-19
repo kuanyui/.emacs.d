@@ -324,15 +324,11 @@
 (setq highlight-symbol-idle-delay 1.0)
 
 ;; (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
-(defun firefox-save-buffer-and-refresh-firefox ()
-  (interactive)
-  (save-buffer)
-  (revert-buffer nil t)
-  (firefox-controller-page-refresh))
 
-(define-key jade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
-(define-key yajade-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
-(define-key nxml-mode-map (kbd "<f5>") 'firefox-save-buffer-and-refresh-firefox)
+(require 'browser-f5)
+(define-key jade-mode-map (kbd "<f5>") 'browser-f5)
+(define-key yajade-mode-map (kbd "<f5>") 'browser-f5)
+(define-key nxml-mode-map (kbd "<f5>") 'browser-f5)
 
 
 ;; ======================================================
