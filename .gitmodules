@@ -37,16 +37,15 @@
 [submodule "git/company-qml"]
 	path = git/forks/company-qml
 	url = git@github.com:cute-jumper/company-qml.git
-
-[submodule "yajade-mode"]
+[submodule "git/yajade-mode"]
 	path = git/source/yajade-mode
 	url = git@github.com:kuanyui/yajade-mode.git
 [submodule "git/cakecrumbs"]
 	path = git/source/cakecrumbs
 	url = git@github.com:kuanyui/cake-crumbs.el.git
-[submodule "git/browser-refresh"]
-	path = git/forks/browser-refresh
-	url = git@github.com:kuanyui/emacs-browser-refresh
+[submodule "git/browser-f5"]
+	path = git/source/browser-f5
+	url = git@github.com:kuanyui/browser-f5.el.git
 [submodule "git/flow-js2-mode"]
 	path = git/forks/flow-js2-mode
 	url = git@github.com:Fuco1/flow-js2-mode.git
