@@ -522,9 +522,6 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (interactive)(find-file "~/Dropbox/Blog"))
 (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
-(global-set-key (kbd "<f11>") (lambda () (interactive) (other-frame 1)))
-(global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
-
 ;; StarDict
 ;; please install sdcv on your system first
 (global-set-key (kbd "C-c d s") 'stardict-lookup)
@@ -809,6 +806,23 @@ mouse-1: Display Line and Column Mode Menu"))))))
   (interactive)
   (find-file (format "/sudo::%s" (read-file-name "Find file as root: "))))
 
+
+;; ======================================================
+;; Elscreen
+;; ======================================================
+
+(cond ((window-system)
+       (setq elscreen-display-tab nil)
+       (elscreen-start)
+       (global-set-key (kbd "<f11>") 'elscreen-previous)
+       (global-set-key (kbd "<f12>") 'elscreen-next)
+       ;; (elscreen-get-screen-list)
+       ;; (elscreen-get-current-screen)
+       )
+      (t
+       (global-set-key (kbd "<f11>") (lambda () (interactive) (other-frame 1)))
+       (global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
+       ))
 
 (provide 'rc-basic)
 ;;; basic.el ends here
