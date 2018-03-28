@@ -3,6 +3,8 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
+(setq js2-include-node-externs t)  ;; process, global... etc.
+
 (defun my-js2-fold-functions ()
   (interactive)
   (js2-mode-hide-functions))
