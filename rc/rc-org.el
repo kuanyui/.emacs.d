@@ -114,9 +114,9 @@
 (setq org-file-apps '((auto-mode . emacs)
                       ("\\.mm\\'" . default)
                       ("\\.x?html?\\'" . "xdg-open %s")
-                      ("\\.pdf\\'" . "kde-open %s")
-                      ("\\.png\\'" . "kde-open %s")
-                      ("\\.jpg\\'" . "kde-open %s")))
+                      ("\\.pdf\\'" . "xdg-open %s")
+                      ("\\.png\\'" . "xdg-open %s")
+                      ("\\.jpg\\'" . "xdg-open %s")))
 ;; Syntax Highlight in outputed files
 (setq org-src-fontify-natively t)
 
@@ -614,6 +614,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 (define-key org-mode-map (kbd "C-c C-x t") 'org-clock-sum-today-by-tags)
 
+;; Enable async export by default
+(setq org-export-in-background nil)
 
 (setq org-latex-classes
       '(("article"
@@ -896,6 +898,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
                                (emacs-lisp . t)
                                (dot . t)
                                ))
+
+
 
 
 (provide 'rc-org)
