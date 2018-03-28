@@ -95,9 +95,10 @@
 ;; Syntax-highlight For coffee-template
 (font-lock-add-keywords
  'coffee-mode
- '(("['\"][0-9A-z-_]+?[\"']:" 0 'font-lock-type-face prepend) ;  'user-name':"
-   ("['\"]\\.[\\.0-9A-z-_]+?[\"']" 0 'font-lock-variable-name-face prepend) ; '.class-name'
-   ("['\"]\\#[0-9A-z-_]+?[\"']" 0 'font-lock-keyword-face prepend)) ; '#id'
+ '(("['\"][0-9A-Za-z-_]+?[\"']:" 0 'font-lock-type-face prepend) ;  'user-name':"
+   ("\\([.][.0-9A-Za-z-_]+?\\)[\"']" 1 'font-lock-variable-name-face prepend) ; '.class-name'
+   ("['\"]\\([#][0-9A-Za-z-_]+\\)" 1 'font-lock-keyword-face prepend) ; '#id'
+   )
  )
 (mmm-add-classes
  '((coffee-css-mode
