@@ -96,8 +96,9 @@
 (font-lock-add-keywords
  'coffee-mode
  '(("['\"][0-9A-Za-z-_]+?[\"']:" 0 'font-lock-type-face prepend) ;  'user-name':"
-   ("\\([.][.0-9A-Za-z-_]+?\\)[\"']" 1 'font-lock-variable-name-face prepend) ; '.class-name'
-   ("['\"]\\([#][0-9A-Za-z-_]+\\)" 1 'font-lock-keyword-face prepend) ; '#id'
+   ("['\"][.#].*?\\([.][.0-9A-Za-z-_]+\\)[\"']" 1 'font-lock-variable-name-face prepend) ; '.class-name'
+   ("['\"]\\([.][0-9A-Za-z-_]+\\)" 1 'font-lock-variable-name-face prepend) ; '#class-name' in the beginning
+   ("['\"]\\([#][0-9A-Za-z-_]+\\)" 1 'font-lock-keyword-face prepend) ; '#id' in the beginning
    )
  )
 (mmm-add-classes
