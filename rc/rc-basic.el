@@ -115,6 +115,13 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (revert-buffer nil t)
   (message "Buffer reverted."))
 
+;; Always split window vertically. (e.g. Magit, ibuffer)
+
+;; Because I prefer tiny fonts under terminal.
+;; By default, when height greater than some degree, Emacs will split window horizontally.
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
+
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
