@@ -734,10 +734,13 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                               )))
 
 (setq-default mode-line-format
-              '((god-local-mode (:eval (propertize " G " 'face 'compilation-error)))
+              '(
+                (god-local-mode (:eval (propertize " G " 'face 'compilation-error)))
                 "%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
                 (vc-mode vc-mode) " "
-                mode-line-modes projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+                mode-line-modes
+                (auto-revert-mode (:eval (propertize " A " 'face 'compilation-mode-line-exit)))
+                projectile-mode-line mode-line-misc-info mode-line-end-spaces))
 
 (setq mode-line-position
       `((1 ,(propertize
