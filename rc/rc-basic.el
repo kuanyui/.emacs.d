@@ -322,7 +322,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (customize-set-variable 'scroll-bar-mode 'right)
 
 (require 'hungry-delete)
-(global-hungry-delete-mode t)
+;; (global-hungry-delete-mode t)
 (global-set-key (kbd "C-x <deletechar>") 'global-hungry-delete-mode)
 ;; (global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
 
