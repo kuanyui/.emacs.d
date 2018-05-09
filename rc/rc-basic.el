@@ -120,7 +120,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; Because I prefer tiny fonts under terminal.
 ;; By default, when height greater than some degree, Emacs will split window horizontally.
 (setq split-height-threshold nil)
-(setq split-width-threshold 0)
+(setq split-width-threshold 280)
 
 ;; ======================================================
 ;; Make window status undo-able
