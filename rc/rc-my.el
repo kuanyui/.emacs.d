@@ -164,7 +164,10 @@
 (setq calendar-mark-holidays-flag t)
 (setq taiwan-holidays-important-holidays taiwan-holidays-taiwan-holidays)
 (setq calendar-holidays taiwan-holidays-important-holidays)
-
+;; ======================================================
+;; pff
+;; ======================================================
+(require 'pff)
 
 (provide 'rc-my)
 ;;; rc-my.el ends here

@@ -49,6 +49,9 @@
 [submodule "git/flow-js2-mode"]
 	path = git/forks/flow-js2-mode
 	url = git@github.com:Fuco1/flow-js2-mode.git
+[submodule "git/pff"]
+	path = git/source/pff
+	url = git@github.com:kuanyui/pff.el.git
 [submodule "elpa"]
 	path = elpa
 	url = git@github.com:kuanyui/elpa.git
