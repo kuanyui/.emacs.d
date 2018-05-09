@@ -279,8 +279,9 @@
             (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
             (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
             (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
-            (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)))
-
+            (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
+            (define-key projectile-mode-map [remap projectile-find-file] #'pff))
+          )
 
 ;;======================================================
 ;; Tree
