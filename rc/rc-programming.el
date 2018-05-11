@@ -151,6 +151,7 @@
 (setq rainbow-html-colors t)  ;; highlight hsl()
 (global-set-key (kbd "C-x r a") 'rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
+(add-hook 'yajade-mode-hook 'rainbow-mode)
 (setq rainbow-ansi-colors nil)
 
 ;; CSS and Rainbow modes
@@ -263,10 +264,9 @@
 (setq ido-use-faces nil)
 (setq ido-enable-flex-matching t)
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
-
+(setq projectile-indexing-method 'alien)
 (setq projectile-enable-caching t)
 (projectile-global-mode t)
-(setq projectile-indexing-method 'alien)
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;;Helm integration with Projectile

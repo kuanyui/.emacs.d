@@ -1,7 +1,6 @@
 ;;; basic.el ---                                     -*- lexical-binding: t; -*-
 
 ;;kuanyui's ~/.emacs
-
 ;;(setq user-mail-address "azazabc123@gmail.com")
 ;;(setq user-full-name "kuanyui")
 
@@ -226,6 +225,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (require 'undo-tree)
 (global-undo-tree-mode)
 (global-set-key (kbd "C-M-_") 'undo-tree-redo)
+(global-set-key (kbd "M-?") 'undo-tree-redo)
 
 ;;recents最近開啟的檔案，C-x C-r
 (require 'recentf)
