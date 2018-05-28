@@ -55,3 +55,6 @@
 [submodule "elpa"]
 	path = elpa
 	url = git@github.com:kuanyui/elpa.git
+[submodule "git/coffee-mode"]
+	path = git/forks/coffee-mode
+	url = git@github.com:kuanyui/coffee-mode.git
