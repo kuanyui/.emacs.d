@@ -894,7 +894,6 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
 (org-babel-do-load-languages 'org-babel-load-languages
                              '(
-                               (sh . t)
                                (emacs-lisp . t)
                                (dot . t)
                                ))
