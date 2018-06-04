@@ -120,7 +120,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; By default, when height greater than some degree, Emacs will split window horizontally.
 (setq split-height-threshold nil)
 (setq split-width-threshold 280)
-
+(global-display-line-numbers-mode 1)
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
@@ -322,7 +322,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (customize-set-variable 'scroll-bar-mode 'right)
 
 (require 'hungry-delete)
-;; (global-hungry-delete-mode t)
+(global-hungry-delete-mode -1)
 (global-set-key (kbd "C-x <deletechar>") 'global-hungry-delete-mode)
 ;; (global-set-key (kbd "C-c <deletechar>") 'global-hungry-delete-mode)
 
