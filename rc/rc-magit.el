@@ -30,5 +30,14 @@
 (require 'git-timemachine)
 
 
+(getenv "GIT_SSH_COMMAND")
+
+(defun sshkey-selector ()
+  (interactive)
+  (let* ((keys (mapcar (lambda (x) (replace-regexp-in-string "[.]pub$" "" x))
+                       (directory-files "~/.ssh/" nil "[.]pub$")))
+         (chosen (ido-completing-read "Select a key: " keys)))
+    (setenv "GIT_SSH_COMMAND" (format "ssh -o 'IdentitiesOnly=yes' -i ~/.ssh/%s" chosen))))
+
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
