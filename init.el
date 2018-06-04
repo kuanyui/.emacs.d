@@ -74,7 +74,6 @@
     ("ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
  '(delete-selection-mode nil)
  '(flycheck-javascript-flow-args nil)
- '(global-hungry-delete-mode t)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guide-key-mode nil)
  '(helm-mode nil)
