@@ -3,7 +3,12 @@
 
 (defun my-serial-term ()
   (interactive)
-  (serial-term "/dev/cu.usbserial" 115200))
+  (let ((file (cl-find-if #'file-exists-p
+                          '("/dev/cu.usbserial"
+                            "/dev/ttyUSB0"))))
+    (if (not file)
+        (message "No console interface detected. Forgot to plug it?")
+      (serial-term file 115200))))
 
 (defun my-serial-term-set-switch-ip ()
   (interactive)
