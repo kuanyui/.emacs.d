@@ -230,7 +230,7 @@
       (font-lock-add-keywords
        nil
        (mapcar (lambda (k)
-                 (cons k 'font-lock-preprocessor-face))
+                 (cons (format "\\b%s\\b" k) 'font-lock-preprocessor-face))
                '("components" "data" "computed" "props" "watch" "events" "methods"
                  "vuex" "getters" "setters" "actions" "ready"))
        )
@@ -326,6 +326,7 @@
 ;; (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
 
 (require 'browser-f5)
+(define-key web-mode-map (kbd "<f5>") 'browser-f5)
 (define-key jade-mode-map (kbd "<f5>") 'browser-f5)
 (define-key yajade-mode-map (kbd "<f5>") 'browser-f5)
 (define-key nxml-mode-map (kbd "<f5>") 'browser-f5)
