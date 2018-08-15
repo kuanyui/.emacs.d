@@ -29,18 +29,6 @@
 ;; force the English dictionary, support Camel Case spelling check (tested with aspell 0.6)
 (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together" "--run-together-limit=5" "--run-together-min=2"))
 
-;;======================================================
-;; Highlight-symbol
-;;======================================================
-
-(require 'highlight-symbol)
-(define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-(add-hook 'prog-mode-hook 'highlight-symbol-mode)
-(setq highlight-symbol-idle-delay 1.0)
-
 ;; ======================================================
 ;; Which Func
 ;; ======================================================
@@ -59,6 +47,17 @@
 ;; ======================================================
 ;; CSS / Stylus keymap
 ;; ======================================================
+;;======================================================
+;; Highlight-symbol
+;;======================================================
+
+(require 'highlight-symbol)
+(define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+(define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
+(define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
+(define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+(add-hook 'prog-mode-hook 'highlight-symbol-mode)
+(setq highlight-symbol-idle-delay 1.0)
 
 (mapc
  (lambda (name)
@@ -76,7 +75,7 @@
  '("css" "stylus" "jade" "yajade"
    "conf" "conf-colon"
    "c++" "c" "java"
-   "qml"
+   "qml" "makefile"
    "js" "js2" "javascript"
    "prog"))
 
@@ -90,6 +89,10 @@
 (define-key c-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key c-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 
+(define-key makefile-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+(define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
+(define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
+(define-key makefile-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 ;; ======================================================
 ;; imenu
 ;; ======================================================
