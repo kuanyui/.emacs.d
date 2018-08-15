@@ -641,6 +641,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                (message "Yanked region to clipboard!")
                (deactivate-mark))
            (message "No region active; can't yank to clipboard!")))
+       (defun paste ()
+         (interactive)
+         (insert (shell-command-to-string "xsel -o")))
 
        ;;xclip-mode
        (load "~/.emacs.d/lisps/xclip-1.0.el")
@@ -732,16 +735,18 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
                               (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
                               'face 'projectile-mode-line
                               )))
-
+(require 'flycheck)
+(setq flycheck-mode-line-prefix "Fc")
 (setq-default mode-line-format
               '(
                 (god-local-mode (:eval (propertize " G " 'face 'compilation-error)))
                 "%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
-                (vc-mode vc-mode) " "
+                (vc-mode vc-mode)
                 mode-line-modes
+  		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
+                " "
                 (auto-revert-mode (:eval (propertize " A " 'face 'compilation-mode-line-exit)))
                 projectile-mode-line mode-line-misc-info mode-line-end-spaces))
-
 (setq mode-line-position
       `((1 ,(propertize
              " %p"
