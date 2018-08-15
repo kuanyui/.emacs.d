@@ -617,6 +617,8 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 ;; Enable async export by default
 (setq org-export-in-background nil)
 
+(setq org-highlight-latex-and-related '(entities latex script))
+
 (setq org-latex-classes
       '(("article"
          "
