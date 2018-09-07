@@ -89,10 +89,10 @@
 (define-key c-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key c-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 
-(define-key makefile-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key makefile-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+;; (define-key makefile-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+;; (define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
+;; (define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
+;; (define-key makefile-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 ;; ======================================================
 ;; imenu
 ;; ======================================================
