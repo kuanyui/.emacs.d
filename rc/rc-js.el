@@ -66,12 +66,64 @@
   )
 (require 'flow-minor-mode)
 (defun my--js2-flow-autoconf ()
-  (when (flow-minor-tag-present-p)
+  (when (my-js-flow-tag-exists-p)
     ;; (flow-js2-mode) ; this still has lots of errors.
     (js-mode)  ;; fallback to js-mode
-    (flow-minor-mode)
+    ;; (flow-minor-mode)
+    ;; (lsp-js-flow-enable)
+    (require 'eglot)
+    (eglot-ensure)
     (message "Flow detected, fallback to js-mode + flow-minor-mode"))
   )
+
+(defun my-js-flow-tag-exists-p ()
+  "Return true if the '// @flow' tag is present in the current buffer."
+  (save-excursion
+    (goto-char (point-min))
+    (let (stop found)
+      (while (not stop)
+        (when (not (re-search-forward "[^\n[:space:]]" nil t))
+          (setq stop t))
+        (if (equal (point) (point-min))
+            (setq stop t)
+          (backward-char))
+        (cond ((or (looking-at "//+[ ]*@flow")
+                   (looking-at "/\\**[ ]*@flow"))
+               (setq found t)
+               (setq stop t))
+              ((looking-at "//")
+               (forward-line))
+              ((looking-at "/\\*")
+               (when (not (re-search-forward "*/" nil t))
+                 (setq stop t)))
+              (t (setq stop t))))
+      found)))
+
+(require 'lsp-mode)
+(require 'lsp-javascript-flow)
+(lsp-define-stdio-client
+ lsp-js-flow "js"
+ (lambda () (locate-dominating-file "." "package.json"))
+ nil
+ :ignore-messages '("\[INFO].*?nuclide")
+ :command-fn (lambda () `("flow-language-server" "--stdio")))
+
+
+(setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
+                              (python-mode . ("pyls"))
+                              ((js-mode
+                                js2-mode
+                                rjsx-mode) . ("flow-language-server" "--stdio"))
+                              (sh-mode . ("bash-language-server" "start"))
+                              ((c++-mode c-mode) . ("ccls"))
+                              (ruby-mode
+                               . ("solargraph" "socket" "--port"
+                                  :autoport))
+                              (php-mode . ("php" "vendor/felixfbecker/\
+language-server/bin/php-language-server.php"))
+                              (haskell-mode . ("hie-wrapper"))
+                              (kotlin-mode . ("kotlin-language-server"))
+                              (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
 
 ;; ======================================================
 ;; flow

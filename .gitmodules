@@ -58,3 +58,6 @@
 [submodule "git/coffee-mode"]
 	path = git/forks/coffee-mode
 	url = git@github.com:kuanyui/coffee-mode.git
+[submodule "git/forks/eglot"]
+	path = git/forks/eglot
+	url = git@github.com:joaotavora/eglot.git
