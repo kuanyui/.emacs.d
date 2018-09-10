@@ -5,25 +5,26 @@
 ;;======================================================
 ;; SLIME
 ;;======================================================
-(require 'slime-autoloads)
-(require 'slime)
-(require 'ac-slime)
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
-;; Optionally, specify the lisp program you are using. Default is "lisp"
-(setq inferior-lisp-program "/usr/bin/sbcl")
-(setq slime-lisp-implementations
-      '((sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
-(setq slime-net-coding-system 'utf-8-unix)
-(setq slime-contribs '(slime-fancy))
-(slime-setup)
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-;(eval-after-load 'slime
-;  `(define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)
-;  `(define-key slime-mode-map (kbd "C-M-_") 'undo-tree-redo))
+;; (require 'slime-autoloads)
+;; (require 'slime)
+;; (require 'ac-slime)
+;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+;; (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+;; (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;; ;; Optionally, specify the lisp program you are using. Default is "lisp"
+;; (setq inferior-lisp-program "/usr/bin/sbcl")
+;; (setq slime-lisp-implementations
+;;       '((sbcl ("/usr/bin/sbcl") :coding-system utf-8-unix)))
+;; (setq slime-net-coding-system 'utf-8-unix)
+;; (setq slime-contribs '(slime-fancy))
+;; (slime-setup)
+;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+
+                                        ;(eval-after-load 'slime
+                                        ;  `(define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)
+                                        ;  `(define-key slime-mode-map (kbd "C-M-_") 'undo-tree-redo))
 (add-hook 'lisp-mode-hook
 	  (lambda ()
 	    (define-key lisp-mode-map (kbd "M-_") 'undo-tree-redo)))
