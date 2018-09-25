@@ -329,5 +329,29 @@
 
 (provide 'rc-programming)
 
+;; ======================================================
+;; LSP (eglot)
+;; ======================================================
+(setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
+                              (python-mode . ("pyls"))
+                              ((js-mode
+                                js2-mode
+                                typescript-mode
+                                rjsx-mode) . ("javascript-typescript-stdio"))
+                              (sh-mode . ("bash-language-server" "start"))
+                              ((c++-mode c-mode) . ("ccls"))
+                              (ruby-mode
+                               . ("solargraph" "socket" "--port"
+                                  :autoport))
+                              (php-mode . ("php" "vendor/felixfbecker/\
+language-server/bin/php-language-server.php"))
+                              (haskell-mode . ("hie-wrapper"))
+                              (kotlin-mode . ("kotlin-language-server"))
+                              (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
 
+(with-eval-after-load 'eglot
+  (define-key eglot-mode-map (kbd "<f2>") 'xref-find-definitions)
+  (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
+  ;;(define-key eglot-mode-map (kbd "C-c M-p") 'eglot-rename)
+  )
 ;;; rc-programming.el ends here

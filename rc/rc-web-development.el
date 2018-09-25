@@ -191,25 +191,43 @@
    (mmm-html-vue-es6-mode
     :submode javascript-mode
     :face mmm-code-submode-face
-    :front "<script[^>]*?>\n"
+    :front "<script>\n"
     :back "</script>"
     :front-offset 0
     :creation-hook (lambda () (add-keywords-for-vuejs))
     )
-
+   (mmm-html-vue-ts-mode
+    :submode typescript-mode
+    :face mmm-code-submode-face
+    :front "<script .*lang=[\"']ts[\"'][^>]*?>\n"
+    :back "</script>"
+    :front-offset 0
+                                        ; :creation-hook (lambda () (add-keywords-for-vuejs))
+    )
    (mmm-html-vue-scss-mode
     :submode less-css-mode
     :face mmm-code-submode-face
     :front "<style .*lang=[\"']scss[\"'][^>]*>\n"
     :back "</style>"
     :front-offset 0
-    ))
+    )
+   (mmm-html-vue-stylus-mode
+    :submode stylus-mode
+    :face mmm-code-submode-face
+    :front "<style .*lang=[\"']stylus[\"'][^>]*>\n"
+    :back "</style>"
+    :front-offset 0
+    )
+   )
  )
 
 
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-jade-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-es6-mode)
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-ts-mode)
 (mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-scss-mode)
+(mmm-add-mode-ext-class 'html-mode nil 'mmm-html-vue-stylus-mode)
+
 ;; (add-hook 'jade-mode-hook 'rainbow-mode)
 
 (add-hook 'css-mode-hook 'company-mode)
