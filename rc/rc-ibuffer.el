@@ -40,7 +40,10 @@
                        (mode . less-css-mode)
                        (mode . css-mode)))
                ("JS" (or
+                      (mode . typescript-mode)
                       (mode . javascript-mode)
+                      (mode . js-mode)
+                      (mode . jsx-mode)
                       (mode . js2-mode)
                       (mode . json-mode)
                       (name . "\\*js\\*")

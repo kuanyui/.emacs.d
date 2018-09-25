@@ -34,13 +34,20 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (cond ((member system-type '(darwin gnu/linux))
        (setq shell-file-name "/bin/zsh")
        (setq shell-command-switch "-ic")
-       (setenv "PATH" (string-join (list (getenv "PATH")
-                                         "/usr/local/bin/"
-                                         (concat (getenv "HOME") "/.cabal/bin/")
-                                         (concat (getenv "HOME")"/.scripts/"))
-                                   ":")))
+       (exec-path-from-shell-initialize)
+       ;; (setenv "PATH" (string-join (list (getenv "PATH")
+       ;;                                    "/usr/local/bin/"
+       ;;                                    (concat (getenv "HOME") "/.cabal/bin/")
+       ;;                                    (concat (getenv "HOME")"/.scripts/")
+       ;;                                    (concat (getenv "HOME")"/.nvm/versions/node/v7.9.0/bin/")
+       ;;                                    )
+       ;;                              ":")))
+       ;; (setq exec-path (split-string (getenv "PATH") ":")
+       )
       ((member system-type 'cygwin) (setq shell-file-name "/bin/bash")))
 
+(getenv "PATH")
+(executable-find "flow-language-server")
 ;;(require 'whitespace)
 ;; (global-whitespace-mode)
 ;; (whitespace-mode)
@@ -739,13 +746,14 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq flycheck-mode-line-prefix "Fc")
 (setq-default mode-line-format
               '(
-                (god-local-mode (:eval (propertize " G " 'face 'compilation-error)))
+                (god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
                 "%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
                 (vc-mode vc-mode)
                 mode-line-modes
   		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
                 " "
-                (auto-revert-mode (:eval (propertize " A " 'face 'compilation-mode-line-exit)))
+                (auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
+                (lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
                 projectile-mode-line mode-line-misc-info mode-line-end-spaces))
 (setq mode-line-position
       `((1 ,(propertize

@@ -99,43 +99,27 @@
               (t (setq stop t))))
       found)))
 
-(require 'lsp-mode)
-(require 'lsp-javascript-flow)
-(lsp-define-stdio-client
- lsp-js-flow "js"
- (lambda () (locate-dominating-file "." "package.json"))
- nil
- :ignore-messages '("\[INFO].*?nuclide")
- :command-fn (lambda () `("flow-language-server" "--stdio")))
-
-
-(setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
-                              (python-mode . ("pyls"))
-                              ((js-mode
-                                js2-mode
-                                rjsx-mode) . ("flow-language-server" "--stdio"))
-                              (sh-mode . ("bash-language-server" "start"))
-                              ((c++-mode c-mode) . ("ccls"))
-                              (ruby-mode
-                               . ("solargraph" "socket" "--port"
-                                  :autoport))
-                              (php-mode . ("php" "vendor/felixfbecker/\
-language-server/bin/php-language-server.php"))
-                              (haskell-mode . ("hie-wrapper"))
-                              (kotlin-mode . ("kotlin-language-server"))
-                              (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
+;; (require 'lsp-mode)
+;; (require 'lsp-javascript-flow)
+;; (lsp-define-stdio-client
+;; lsp-js-flow "js"
+;; (lambda () (locate-dominating-file "." "package.json"))
+;; nil
+;; :ignore-messages '("\[INFO].*?nuclide")
+;; :command-fn (lambda () `("flow-language-server" "--stdio")))
+;;
 
 ;; ======================================================
 ;; flow
 ;; ======================================================
-(require 'flycheck-flow)
-(with-eval-after-load 'flycheck
-  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
-  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
-  (flycheck-add-next-checker 'javascript-flow 'javascript-eslint))
+;; (require 'flycheck-flow)
+;; (with-eval-after-load 'flycheck
+;;   (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
+;;   (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
+;;   (flycheck-add-next-checker 'javascript-flow 'javascript-eslint))
 
-(with-eval-after-load 'company
-  (add-to-list 'company-backends 'company-flow))
+;; (with-eval-after-load 'company
+;; (add-to-list 'company-backends 'company-flow))
 
 ;; ======================================================
 ;; mmm-mode
@@ -273,6 +257,31 @@ language-server/bin/php-language-server.php"))
     (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
+;; ======================================================
+;; TypeScript
+;; ======================================================
+
+(defun my/use-tslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (tslint (and root
+                      (expand-file-name "node_modules/.bin/tslint"
+                                        root))))
+    (when (and tslint (file-executable-p tslint))
+      (setq-local flycheck-typescript-tslint-executable tslint))))
+(add-hook 'flycheck-mode-hook #'my/use-tslint-from-node-modules)
+
+(add-hook 'typescript-mode-hook 'my-ts-conf)
+(defun my-ts-conf ()
+  (rainbow-delimiters-mode)
+  (flycheck-mode 1)
+  (company-mode-on)
+  (require 'eglot)
+  (eglot-ensure)
+  )
+
 
 (provide 'rc-js)
 ;;; rc-javascript.el ends here
