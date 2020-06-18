@@ -6,7 +6,7 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-;; (package-initialize)
+ (package-initialize)
 
 ;; (add-to-list 'load-path "~/.emacs.d/rc")
 ;; (require 'rc-basic)
@@ -22,9 +22,14 @@
 ;;
 ;; (require 'rc-gnus)
 ;; (require 'rc-twittering)
-(add-to-list 'load-path "~/.emacs.d/rc")
-(add-to-list 'load-path "~/.emacs.d/git/forks/magit/")
-(require 'rc-magit)
+(add-to-list 'load-path "~/.emacs.d/git/forks/magit/lisp")
+(add-to-list 'load-path "~/.emacs.d/git/forks/magit-popup/")
+(require 'magit)
+(global-set-key (kbd "C-x g s") 'magit-status)
+(global-set-key (kbd "C-x g l") 'magit-log)
+(global-set-key (kbd "C-x g b") 'magit-blame)
+
+;; (require 'rc-magit)
 ;; (if (member system-type '(darwin gnu/linux))
 ;; (require 'rc-emms)
 ;; )
@@ -87,13 +92,13 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (git-commit visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode git-gutter-fringe gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
+    (visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
     ((auto-revert-mode . t)
      (eval progn
-           (aggressive-indent-mode -1))
+	   (aggressive-indent-mode -1))
      (aggressive-indent-mode)
      (js2-indent-switch-body . t)
      (org-html-allow-name-attribute-in-anchors)
@@ -116,51 +121,51 @@
      (org-export-with-creator)
      (org-export-with-author)
      (eval progn
-           (require
-            (quote projectile))
-           (setq-local flycheck-pylintrc
-                       (concat
-                        (projectile-project-root)
-                        ".pylintrc")))
+	   (require
+	    (quote projectile))
+	   (setq-local flycheck-pylintrc
+		       (concat
+			(projectile-project-root)
+			".pylintrc")))
      (eval progn
-           (setq-local python-environment-directory
-                       (concat default-directory "venv/")))
+	   (setq-local python-environment-directory
+		       (concat default-directory "venv/")))
      (jedi:environment-root . "venv/")
      (jedi:environment-root . "./venv/")
      (js2-strict-missing-semi-warning)
      (eval when
-           (and
-            (buffer-file-name)
-            (file-regular-p
-             (buffer-file-name))
-            (string-match-p "^[^.]"
-                            (buffer-file-name)))
-           (emacs-lisp-mode)
-           (when
-               (fboundp
-                (quote flycheck-mode))
-             (flycheck-mode -1))
-           (unless
-               (featurep
-                (quote package-build))
-             (let
-                 ((load-path
-                   (cons ".." load-path)))
-               (require
-                (quote package-build))))
-           (package-build-minor-mode)
-           (set
-            (make-local-variable
-             (quote package-build-working-dir))
-            (expand-file-name "../working/"))
-           (set
-            (make-local-variable
-             (quote package-build-archive-dir))
-            (expand-file-name "../packages/"))
-           (set
-            (make-local-variable
-             (quote package-build-recipes-dir))
-            default-directory))
+	   (and
+	    (buffer-file-name)
+	    (file-regular-p
+	     (buffer-file-name))
+	    (string-match-p "^[^.]"
+			    (buffer-file-name)))
+	   (emacs-lisp-mode)
+	   (when
+	       (fboundp
+		(quote flycheck-mode))
+	     (flycheck-mode -1))
+	   (unless
+	       (featurep
+		(quote package-build))
+	     (let
+		 ((load-path
+		   (cons ".." load-path)))
+	       (require
+		(quote package-build))))
+	   (package-build-minor-mode)
+	   (set
+	    (make-local-variable
+	     (quote package-build-working-dir))
+	    (expand-file-name "../working/"))
+	   (set
+	    (make-local-variable
+	     (quote package-build-archive-dir))
+	    (expand-file-name "../packages/"))
+	   (set
+	    (make-local-variable
+	     (quote package-build-recipes-dir))
+	    default-directory))
      (major-mode . org-mode)
      (major-mode . org)
      (org-html-link-org-files-as-html)
