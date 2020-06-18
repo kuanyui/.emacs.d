@@ -41,3 +41,4 @@ recentf
 /bookmarks
 *.eld
 /elpa/archives/
+/session.*
