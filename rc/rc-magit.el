@@ -3,6 +3,13 @@
 ;;======================================================
 ;; Magit!
 ;;======================================================
+(add-to-list 'load-path "~/.emacs.d/git/forks/magit/lisp")
+(add-to-list 'load-path "~/.emacs.d/git/forks/magit-popup/")
+(require 'magit)
+(global-set-key (kbd "C-x g s") 'magit-status)
+(global-set-key (kbd "C-x g l") 'magit-log)
+(global-set-key (kbd "C-x g b") 'magit-blame)
+
 ;; (global-git-gutter-mode +1)
 ;; (setq magit-diff-refine-hunk 'all)
 ;; (setq magit-last-seen-setup-instructions "1.4.0")
@@ -16,9 +23,6 @@
 ;; (magit-status))
 ;;
 ;; (setq magit-auto-revert-mode t)
-(global-set-key (kbd "C-x g s") 'magit-status)
-(global-set-key (kbd "C-x g l") 'magit-log)
-(global-set-key (kbd "C-x g b") 'magit-blame)
 
 ;; (defun my-magit-insert-pull-request (interactive) (insert "fetch = +refs/pull/*/head:refs/remotes/origin/pr/*"))
 ;;
