@@ -127,7 +127,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; By default, when height greater than some degree, Emacs will split window horizontally.
 (setq split-height-threshold nil)
 (setq split-width-threshold 280)
-(global-display-line-numbers-mode 1)
+;; (global-display-line-numbers-mode 1)
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
@@ -412,8 +412,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ")
 
 ;; aspell
-(setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
+(setq ispell-program-name "aspell")
+(setq ispell-extra-args '("--sug-mode=normal" "--lang=en_US" "--dont-run-together"))
+;; (setq ispell-extra-args '("--sug-mode=ultra"))
 (setq ispell-dictionary "american")
 
 
