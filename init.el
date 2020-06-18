@@ -6,58 +6,60 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
+;; (package-initialize)
 
+;; (add-to-list 'load-path "~/.emacs.d/rc")
+;; (require 'rc-basic)
+;; (require 'rc-programming)
+;; (require 'rc-web-development)
+;; (require 'rc-templates)
+;; (require 'rc-edit)
+;; (require 'rc-dired)
+;; (require 'rc-ibuffer)
+;; (require 'rc-eshell)
+;; (require 'rc-calendar)
+;; (require 'rc-term)
+;;
+;; (require 'rc-gnus)
+;; (require 'rc-twittering)
 (add-to-list 'load-path "~/.emacs.d/rc")
-(require 'rc-basic)
-(require 'rc-programming)
-(require 'rc-web-development)
-(require 'rc-templates)
-(require 'rc-edit)
-(require 'rc-dired)
-(require 'rc-ibuffer)
-(require 'rc-eshell)
-(require 'rc-calendar)
-(require 'rc-term)
-
-(require 'rc-gnus)
-(require 'rc-twittering)
+(add-to-list 'load-path "~/.emacs.d/git/forks/magit/")
 (require 'rc-magit)
-(if (member system-type '(darwin gnu/linux))
-    (require 'rc-emms)
-  )
-(require 'rc-eww)
-
-(require 'rc-org)
-(require 'rc-markdown)
-
-(require 'rc-misc)
-(require 'rc-private)
-
-(require 'rc-python)
-(require 'rc-haskell)
-(require 'rc-ruby)
-(require 'rc-perl)
-(require 'rc-lisp)
-(require 'rc-scheme)
-(require 'rc-css)
-(require 'rc-kolor)
-(require 'rc-js)
-(require 'rc-json)
-(require 'rc-shell)
-(require 'rc-qml)
-(require 'rc-c)
-(require 'rc-go)
-(require 'rc-sql)
-(require 'rc-qt)
-(require 'rc-makefile)
-
-(require 'rc-my)
-
-(require 'rc-junk)
-
-(require 'rc-site-lisp)
-
+;; (if (member system-type '(darwin gnu/linux))
+;; (require 'rc-emms)
+;; )
+;; (require 'rc-eww)
+;;
+;; (require 'rc-org)
+;; (require 'rc-markdown)
+;;
+;; (require 'rc-misc)
+;; (require 'rc-private)
+;;
+;; (require 'rc-python)
+;; (require 'rc-haskell)
+;; (require 'rc-ruby)
+;; (require 'rc-perl)
+;; (require 'rc-lisp)
+;; (require 'rc-scheme)
+;; (require 'rc-css)
+;; (require 'rc-kolor)
+;; (require 'rc-js)
+;; (require 'rc-json)
+;; (require 'rc-shell)
+;; (require 'rc-qml)
+;; (require 'rc-c)
+;; (require 'rc-go)
+;; (require 'rc-sql)
+;; (require 'rc-qt)
+;; (require 'rc-makefile)
+;;
+;; (require 'rc-my)
+;;
+;; (require 'rc-junk)
+;;
+;; (require 'rc-site-lisp)
+;;
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================
@@ -71,7 +73,7 @@
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
+    ("9820d60186991c88d161653cd9b300697091ff8a7de90f0fcd678ff7ed1a0af0" "c92baa556823c45f5320ed087e0db9093d785b9cd8bd5d63e61661632520e5d6" "ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
  '(delete-selection-mode nil)
  '(flycheck-javascript-flow-args nil)
  '(gud-gdb-command-name "gdb --annotate=1")
@@ -85,7 +87,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode magit less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode git-gutter-fringe gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
+    (git-commit visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode git-gutter-fringe gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
@@ -169,13 +171,13 @@
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
- '(xclip-mode t))
+ '(xclip-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:inherit nil :stipple nil :background "#303030" :foreground "#c6c6c6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "ADBO" :family "Source Code Pro")))))
 
 (put 'dired-find-alternate-file 'disabled nil)

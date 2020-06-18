@@ -15,6 +15,9 @@
 (require 'ox-ioslide)
 (require 'ox-ioslide-helper)
 
+;; Don't hide == ~~ [[]]
+(setq org-descriptive-links nil)
+
 (setq org-directory "~/org")
 (define-key global-map "\C-cl" 'org-store-link)
 
@@ -366,7 +369,7 @@ unwanted space when exporting org-mode to html."
   (setq ad-return-value (sacha/org-html-checkbox (ad-get-arg 0))))
 
 ;; To follow links with RET, rather than a 2 key combo:
-(setq org-return-follows-link t)
+(setq org-return-follows-link nil)
 
 ;; 指定agenda檔案位置清單
 (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))

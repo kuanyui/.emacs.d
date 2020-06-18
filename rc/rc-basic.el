@@ -442,17 +442,17 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;;Emacs內建的自動補完hippie-expand
 (global-set-key [(meta ?/)] 'hippie-expand)
 (setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev                 ; 搜索当前 buffer
-        try-expand-dabbrev-visible         ; 搜索当前可见窗口
-        try-expand-dabbrev-all-buffers     ; 搜索所有 buffer
-        try-expand-dabbrev-from-kill       ; 从 kill-ring 中搜索
-        try-complete-file-name-partially   ; 文件名部分匹配
-        try-complete-file-name             ; 文件名匹配
-        try-expand-all-abbrevs             ; 匹配所有缩写词
-        try-expand-list                    ; 补全一个列表
-        try-expand-line                    ; 补全当前行
-        try-complete-lisp-symbol-partially ; 部分补全 elisp symbol
-        try-complete-lisp-symbol))         ; 补全 lisp symbol
+      '(try-expand-dabbrev
+        try-expand-dabbrev-visible
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
 
 (load "~/.emacs.d/lisps/complete-with-calc.el")
 
@@ -642,6 +642,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
        (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
        (defun cp ()
          (interactive)
+         (if (not (executable-find "xsel")) (error "`xsel` is required, please install it first."))
          (if (region-active-p)
              (progn
                (shell-command-on-region (region-beginning) (region-end) "xsel -i")
