@@ -160,7 +160,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
       (set-face-attribute 'default nil :font "Consolas-9"))
 
   (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
-  (defvar emacs-cjk-font "文泉驛等寬微米黑" "The font name for CJK.")
+  (defvar emacs-cjk-font "Noto Sans CJK JP" "The font name for CJK.")
   (find-font (font-spec :name "LiHei Pro"))
   (font-family-list)
   (if (eq system-type 'windows-nt)
