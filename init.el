@@ -71,8 +71,7 @@
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2)
  '(custom-safe-themes
-   (quote
-    ("9820d60186991c88d161653cd9b300697091ff8a7de90f0fcd678ff7ed1a0af0" "c92baa556823c45f5320ed087e0db9093d785b9cd8bd5d63e61661632520e5d6" "ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default)))
+   '("9820d60186991c88d161653cd9b300697091ff8a7de90f0fcd678ff7ed1a0af0" "c92baa556823c45f5320ed087e0db9093d785b9cd8bd5d63e61661632520e5d6" "ea25088829a4b234eaff8912f226df503ab66db86cdc0c89a440848cbd448707" "07373425a2edce47f60ec0ed07c6ac44c1802c67991064604a4aa0428194b0d6" "9c5e3dce6768038ba77c9529526f230fa001174abaac1f7e85a50f7af5be5bb3" "03dfd9158d921f45c71b00863434b025dd6cb884ce7777d554f4fe3cb5da8e68" "c6cc8a612a77c9fb96f9b5c69009e9e2bbaf6be66887a689917c88a68c11cd28" default))
  '(delete-selection-mode nil)
  '(flycheck-javascript-flow-args nil)
  '(gud-gdb-command-name "gdb --annotate=1")
@@ -80,19 +79,16 @@
  '(helm-mode nil)
  '(large-file-warning-threshold nil)
  '(mark-even-if-inactive t)
- '(org-agenda-files (quote ("~/org/agenda/Event.org" "~/org/agenda/Todo.org")))
+ '(org-agenda-files '("~/org/agenda/Event.org" "~/org/agenda/Todo.org"))
  '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
+   '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m))
  '(package-selected-packages
-   (quote
-    (visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process)))
+   '(magit visual-regexp eslint-fix js2-mode company-flow flycheck-flow manage-minor-mode flow-minor-mode golint column-marker col-highlight pug-mode anaconda-mode company-anaconda jedi-core firefox-controller flymake-json editorconfig vue-mode helm-dash helm-ag helm-projectile projectile yaml-mode xterm-color wgrep-ag wgrep-ack web-mode web-beautify visual-regexp-steroids virtualenvwrapper undo-tree twittering-mode tuareg swoop sudden-death stylus-mode sr-speedbar sqlup-mode sql-indent smooth-scrolling smartparens smart-tab smart-operator slime-company sicp scss-mode rich-minority rainbow-mode rainbow-identifiers rainbow-delimiters python-info pylint py-smart-operator powerline php-mode paradox pangu-spacing ox-html5slide oauth nodejs-repl neotree mmm-mode mediawiki markdown-mode less-css-mode json-mode js2-refactor js-comint jade-mode indent-guide ibuffer-projectile hungry-delete htmlize hlinum highlight-symbol helm-gtags haml-mode goto-chg google-translate go-mode gh ggtags geiser flymake-shell flymake-python-pyflakes flymake-haml flymake-css flycheck flx-ido fiplr f esup esqlite enh-ruby-mode emr emms-state emms-player-mpv emmet-mode elpy discover direx dired+ company-jedi company-c-headers cmake-mode cmake-ide calfw bbdb-csv-import bbdb- aggressive-indent ag ack ace-jump-mode ac-slime ac-js2 ac-inf-ruby ac-haskell-process))
  '(paradox-github-token t)
  '(safe-local-variable-values
-   (quote
-    ((auto-revert-mode . t)
+   '((auto-revert-mode . t)
      (eval progn
-	   (aggressive-indent-mode -1))
+           (aggressive-indent-mode -1))
      (aggressive-indent-mode)
      (js2-indent-switch-body . t)
      (org-html-allow-name-attribute-in-anchors)
@@ -115,59 +111,58 @@
      (org-export-with-creator)
      (org-export-with-author)
      (eval progn
-	   (require
-	    (quote projectile))
-	   (setq-local flycheck-pylintrc
-		       (concat
-			(projectile-project-root)
-			".pylintrc")))
+           (require 'projectile)
+           (setq-local flycheck-pylintrc
+                       (concat
+                        (projectile-project-root)
+                        ".pylintrc")))
      (eval progn
-	   (setq-local python-environment-directory
-		       (concat default-directory "venv/")))
+           (setq-local python-environment-directory
+                       (concat default-directory "venv/")))
      (jedi:environment-root . "venv/")
      (jedi:environment-root . "./venv/")
      (js2-strict-missing-semi-warning)
      (eval when
-	   (and
-	    (buffer-file-name)
-	    (file-regular-p
-	     (buffer-file-name))
-	    (string-match-p "^[^.]"
-			    (buffer-file-name)))
-	   (emacs-lisp-mode)
-	   (when
-	       (fboundp
-		(quote flycheck-mode))
-	     (flycheck-mode -1))
-	   (unless
-	       (featurep
-		(quote package-build))
-	     (let
-		 ((load-path
-		   (cons ".." load-path)))
-	       (require
-		(quote package-build))))
-	   (package-build-minor-mode)
-	   (set
-	    (make-local-variable
-	     (quote package-build-working-dir))
-	    (expand-file-name "../working/"))
-	   (set
-	    (make-local-variable
-	     (quote package-build-archive-dir))
-	    (expand-file-name "../packages/"))
-	   (set
-	    (make-local-variable
-	     (quote package-build-recipes-dir))
-	    default-directory))
+           (and
+            (buffer-file-name)
+            (file-regular-p
+             (buffer-file-name))
+            (string-match-p "^[^.]"
+                            (buffer-file-name)))
+           (emacs-lisp-mode)
+           (when
+               (fboundp 'flycheck-mode)
+             (flycheck-mode -1))
+           (unless
+               (featurep 'package-build)
+             (let
+                 ((load-path
+                   (cons ".." load-path)))
+               (require 'package-build)))
+           (package-build-minor-mode)
+           (set
+            (make-local-variable 'package-build-working-dir)
+            (expand-file-name "../working/"))
+           (set
+            (make-local-variable 'package-build-archive-dir)
+            (expand-file-name "../packages/"))
+           (set
+            (make-local-variable 'package-build-recipes-dir)
+            default-directory))
      (major-mode . org-mode)
      (major-mode . org)
      (org-html-link-org-files-as-html)
      (pangu-spacing-real-insert-separtor . t)
-     (pangu-spacing-mode . t))))
- '(scroll-bar-mode (quote right))
+     (pangu-spacing-mode . t)))
+ '(scroll-bar-mode 'right)
  '(transient-mark-mode 1)
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
  '(xclip-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -62,6 +62,7 @@
   (interactive)
   (org-cycle)
   (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
+
 (defun org-my-shifttab ()
   (interactive)
   (org-shifttab)
@@ -86,10 +87,15 @@
         (beginning-of-line 1)
         (right-char ori-column)))
   (previous-line))
-(define-key org-mode-map (kbd "TAB") 'org-my-tab)
-(define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
+;; (define-key org-mode-map (kbd "TAB") 'org-my-tab)
+;; (define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
 (define-key org-mode-map (kbd "<down>") 'org-my-next-line)
 (define-key org-mode-map (kbd "<up>") 'org-my-previous-line)
+
+;; After org-mode 9.2, we need to require `org-tempo' module
+;; to make easy-template work
+(when (not (version< (org-version) "9.2"))
+  (require 'org-tempo))
 
 ;;(defun org-my-ctrl-c-ctrl-c ()
 ;;  (interactive)
