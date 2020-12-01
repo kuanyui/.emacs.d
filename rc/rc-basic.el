@@ -25,9 +25,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;; Packges.el
 (require 'package)
-(package-initialize)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(if (< emacs-major-version 27) (package-initialize))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 
 (require 'subr-x)
