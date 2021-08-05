@@ -149,6 +149,20 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (defadvice ffap-file-finder (after auto-goto-eol activate)
   (move-end-of-line 1))
 
+(defun get-screen-pixel-density ()
+  "Return nil on terminal.
+Otherwise, return DPI (1 inch = 2.54 cm)
+"
+  (let* ((screen0 (car (display-monitor-attributes-list)))
+         (mm (alist-get 'mm-size screen0))
+         (px (alist-get 'geometry screen0))
+         (w-mm (nth 0 mm))
+         (w-px (nth 2 px))
+         )
+    (if (eq w-mm nil)
+        nil
+      (* 25.4 (/ w-px (float w-mm)))
+      )))
 
 
 ;; ============================================
@@ -170,6 +184,15 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
   (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
+
+  ;; Auto adjust font-size for Hi-res screen
+  (let ((dpi (get-screen-pixel-density)))
+    (setq emacs-font-size-pair
+          (cond
+           ((eq dpi nil) (error "This should not be executed under terminal."))
+           ((> dpi 150) '(17 . 20))
+           (t '(12 . 14))
+           )))
 
   (defvar emacs-font-size-pair-list
     '(( 5 .  6) (9 . 10) (10 . 12)(12 . 14)
