@@ -8,65 +8,66 @@
 ;; Web-mode
 ;;======================================================
 
-(require 'web-mode)
-(define-key web-mode-map (kbd "<backtab>") 'web-mode-fold-or-unfold)
+;; (require 'web-mode)
+(with-eval-after-load 'web-mode
+  (define-key web-mode-map (kbd "<backtab>") 'web-mode-fold-or-unfold)
 
-(defun web-mode-element-close-and-indent ()
-  (interactive)
-  (web-mode-element-close)
-  (indent-for-tab-command))
+  (defun web-mode-element-close-and-indent ()
+    (interactive)
+    (web-mode-element-close)
+    (indent-for-tab-command))
 
-(define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
+  (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
 
-;; If non-nil, when enter `</' , element will be closed automatically.
-;; Else, use `C-c/' to do the same jog.
-(setq web-mode-enable-auto-closing nil)
+  ;; If non-nil, when enter `</' , element will be closed automatically.
+  ;; Else, use `C-c/' to do the same jog.
+  (setq web-mode-enable-auto-closing nil)
 
-(setq-default indent-tabs-mode nil)
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)	; js, php...
+  (setq-default indent-tabs-mode nil)
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)	; js, php...
+    )
+  (setq-default web-mode-markup-indent-offset 2)
+  (setq-default web-mode-css-indent-offset 2)
+  (setq-default web-mode-code-indent-offset 2)	; js, php...
+
+
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+  (setq web-mode-auto-close-style 1)
+  (setq web-mode-tag-auto-close-style 1)
+  (web-mode-toggle-current-element-highlight)
+  (setq web-mode-enable-current-column-highlight t)
+  ;; Auto-Complete support
+  (setq web-mode-ac-sources-alist
+        '(("css" . (ac-source-css-property))
+          ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
+  (setq web-mode-extra-snippets '(
+                                  ("django" . (
+                                               ("a" . "{% | %}")
+                                               ("%" . "{% | %}")
+                                               ("" . "{% | %}")
+                                               ("c" . "{# | #}")
+                                               ("#" . "{# | #}")
+                                               )
+                                   )
+                                  )
+        )
+  ;; Django & Web-mode
+  (setq web-mode-engines-alist
+        '(
+          ("django" . "\\.html\\'")
+          ("erb" . "\\.ejs\\'")
+          ))
+  (require 'emmet-mode)
+  (add-hook 'web-mode-hook 'emmet-mode)
   )
-(setq-default web-mode-markup-indent-offset 2)
-(setq-default web-mode-css-indent-offset 2)
-(setq-default web-mode-code-indent-offset 2)	; js, php...
 
-
-(add-hook 'web-mode-hook 'my-web-mode-hook)
-
-(setq web-mode-auto-close-style 1)
-(setq web-mode-tag-auto-close-style 1)
-(web-mode-toggle-current-element-highlight)
-(setq web-mode-enable-current-column-highlight t)
-;; Auto-Complete support
-(setq web-mode-ac-sources-alist
-      '(("css" . (ac-source-css-property))
-        ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-
-(setq web-mode-extra-snippets '(
-                                ("django" . (
-                                             ("a" . "{% | %}")
-                                             ("%" . "{% | %}")
-                                             ("" . "{% | %}")
-                                             ("c" . "{# | #}")
-                                             ("#" . "{# | #}")
-                                             )
-                                 )
-                                )
-      )
-
-;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
-(setq web-mode-engines-alist
-      '(
-        ("django" . "\\.html\\'")
-        ("erb" . "\\.ejs\\'")
-        ))
-
-(require 'emmet-mode)
-(add-hook 'web-mode-hook 'emmet-mode)
 
 
 ;; ======================================================
@@ -106,15 +107,16 @@
 
 
 (require 'coffee-mode)
-(require 'less-css-mode)
 
 (custom-set-variables '(coffee-tab-width 2))
 
 (add-hook 'coffee-mode-hook 'rainbow-delimiters-mode)
 
-(defvar less-css-mode-hook '())
-(add-hook 'less-css-mode-hook 'rainbow-mode)
-
+(with-eval-after-load 'less-css
+  (require 'less-css-mode)
+  (defvar less-css-mode-hook '())
+  (add-hook 'less-css-mode-hook 'rainbow-mode)
+  )
 
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
@@ -283,7 +285,7 @@
 (define-key mmm-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
 (define-key jade-mode-map (kbd "<f6>") 'mmm-mode-restart!)
-(define-key html-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(with-eval-after-load 'html-mode (define-key html-mode-map (kbd "<f6>") 'mmm-mode-restart!))
 
 (defun narrow-to-js ()
   (interactive)
@@ -320,7 +322,7 @@
 (define-key mmm-mode-map (kbd "<f7>") 'narrow-to-js)
 
 (define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
-(define-key html-mode-map (kbd "<f7>") 'narrow-to-js)
+(with-eval-after-load 'html-mode (define-key html-mode-map (kbd "<f7>") 'narrow-to-js))
 
 (require 'js2-mode)
 (define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
@@ -332,22 +334,25 @@
 ;; Firefox Controller
 ;; ======================================================
 (require 'firefox-controller)
-(require 'nxml-mode)
+
 (require 'highlight-symbol)
-(define-key nxml-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key nxml-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key nxml-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key nxml-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-(add-hook 'nxml-mode-hook 'highlight-symbol-mode)
+
+(with-eval-after-load 'nxml-mode
+  (define-key nxml-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+  (define-key nxml-mode-map (kbd "M-n")'highlight-symbol-next)
+  (define-key nxml-mode-map (kbd "M-p")'highlight-symbol-prev)
+  (define-key nxml-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  (add-hook 'nxml-mode-hook 'highlight-symbol-mode)
+  )
 (setq highlight-symbol-idle-delay 1.0)
 
 ;; (global-set-key (kbd "<f11>") 'firefox-controller-remote-mode)
 
 (require 'browser-f5)
-(define-key web-mode-map (kbd "<f5>") 'browser-f5)
-(define-key jade-mode-map (kbd "<f5>") 'browser-f5)
-(define-key yajade-mode-map (kbd "<f5>") 'browser-f5)
-(define-key nxml-mode-map (kbd "<f5>") 'browser-f5)
+(with-eval-after-load 'web-mode (define-key web-mode-map (kbd "<f5>") 'browser-f5))
+(with-eval-after-load 'jade-mode (define-key jade-mode-map (kbd "<f5>") 'browser-f5))
+(with-eval-after-load 'yajade-mode (define-key yajade-mode-map (kbd "<f5>") 'browser-f5))
+(with-eval-after-load 'nxml-mode (define-key nxml-mode-map (kbd "<f5>") 'browser-f5))
 
 
 ;; ======================================================

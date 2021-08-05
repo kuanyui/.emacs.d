@@ -3,13 +3,12 @@
 ;;======================================================
 ;; Magit!
 ;;======================================================
-(add-to-list 'load-path "~/.emacs.d/git/forks/magit/lisp")
-(add-to-list 'load-path "~/.emacs.d/git/forks/magit-popup/")
-(require 'magit)
+(with-eval-after-load 'magit
+  (require 'magit)
+  )
 (global-set-key (kbd "C-x g s") 'magit-status)
 (global-set-key (kbd "C-x g l") 'magit-log)
 (global-set-key (kbd "C-x g b") 'magit-blame)
-
 ;; (global-git-gutter-mode +1)
 ;; (setq magit-diff-refine-hunk 'all)
 ;; (setq magit-last-seen-setup-instructions "1.4.0")

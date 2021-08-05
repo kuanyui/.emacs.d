@@ -3,133 +3,134 @@
 ;; Org-mode
 ;;======================================================
 ;;(delete "/usr/local/share/emacs/24.4/lisp/org" load-path)
-(require 'org-install)
-(require 'org)
-(require 'org-habit)
-(require 'ox)
-(require 'ox-md)
-(require 'ox-odt)
-(require 'org-checklist)
+(with-eval-after-load 'org
+  (require 'org-install)
+  (require 'org)
+  (require 'org-habit)
+  (require 'ox)
+  (require 'ox-md)
+  (require 'ox-odt)
+  (require 'org-checklist)
 
-(add-to-list 'load-path "~/.emacs.d/git/org-ioslide")
-(require 'ox-ioslide)
-(require 'ox-ioslide-helper)
+  (add-to-list 'load-path "~/.emacs.d/git/org-ioslide")
+  (require 'ox-ioslide)
+  (require 'ox-ioslide-helper)
 
-;; Don't hide == ~~ [[]]
-(setq org-descriptive-links nil)
+  ;; Don't hide == ~~ [[]]
+  (setq org-descriptive-links nil)
 
-(setq org-directory "~/org")
-(define-key global-map "\C-cl" 'org-store-link)
+  (setq org-directory "~/org")
+  (define-key global-map "\C-cl" 'org-store-link)
 
-(require 'python)
-(global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
-(global-set-key (kbd "C-c i !") 'org-time-stamp-inactive)
-(define-key python-mode-map (kbd "C-c !") 'org-time-stamp-inactive)
+  (require 'python)
+  (global-set-key (kbd "C-c !") 'org-time-stamp-inactive)
+  (global-set-key (kbd "C-c i !") 'org-time-stamp-inactive)
+  (define-key python-mode-map (kbd "C-c !") 'org-time-stamp-inactive)
 
-(define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
+  (define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
 
-;; In tmux/tty, M-S-RET will be inpretered to this shit.
-(define-key org-mode-map (kbd "ESC <kp-enter>") 'org-insert-todo-heading)
+  ;; In tmux/tty, M-S-RET will be inpretered to this shit.
+  (define-key org-mode-map (kbd "ESC <kp-enter>") 'org-insert-todo-heading)
 
-(setq org-display-table t)
-(setq org-display-inline-images t)
-;;讓org中顯示圖片能夠先用imagemagick自動縮放
-(setq org-image-actual-width '(300)) ;; 可以設定成一個數字
-;;解決org-mode下中文不自動換行的問題
-(add-hook 'org-mode-hook
-          (lambda () (setq truncate-lines nil)))
+  (setq org-display-table t)
+  (setq org-display-inline-images t)
+  ;;讓org中顯示圖片能夠先用imagemagick自動縮放
+  (setq org-image-actual-width '(300)) ;; 可以設定成一個數字
+  ;;解決org-mode下中文不自動換行的問題
+  (add-hook 'org-mode-hook
+            (lambda () (setq truncate-lines nil)))
 
-(setq org-hide-emphasis-markers t)
+  (setq org-hide-emphasis-markers t)
 
-;; org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
-;; (setq org-log-done 'time)
-;; (setq org-log-done 'note)
-;; (setq org-log-into-drawer t)
-;; (setq org-log-reschedule 'note)
-;; (setq org-log-redeadline t)
-;; (setq org-log-done 'time)
+  ;; org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
+  ;; (setq org-log-done 'time)
+  ;; (setq org-log-done 'note)
+  ;; (setq org-log-into-drawer t)
+  ;; (setq org-log-reschedule 'note)
+  ;; (setq org-log-redeadline t)
+  ;; (setq org-log-done 'time)
 
-(defun org-insert-bold ()
-  "Insert *bold* at cursor point."
-  (interactive)
-  (insert " ** ")
-  (backward-char 2))
-(define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
-
-
-;; Fix the nightmare when a table contains full-width characters.
-(defun org-my-tab ()
-  (interactive)
-  (org-cycle)
-  (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
-
-(defun org-my-shifttab ()
-  (interactive)
-  (org-shifttab)
-  (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
-(defun org-my-next-line ()
-  (interactive)
-  (if (and (org-at-table-p)
-           (not (eq (char-after (point)) 45))
-           (not (region-active-p)))
-      (let ((ori-column (current-column)))
-        (org-ctrl-c-ctrl-c)
-        (beginning-of-line 1)
-        (right-char ori-column)))
-  (next-line))
-(defun org-my-previous-line ()
-  (interactive)
-  (if (and (org-at-table-p)
-           (not (eq (char-after (point)) 45))
-           (not (region-active-p)))
-      (let ((ori-column (current-column)))
-        (org-ctrl-c-ctrl-c)
-        (beginning-of-line 1)
-        (right-char ori-column)))
-  (previous-line))
-;; (define-key org-mode-map (kbd "TAB") 'org-my-tab)
-;; (define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
-(define-key org-mode-map (kbd "<down>") 'org-my-next-line)
-(define-key org-mode-map (kbd "<up>") 'org-my-previous-line)
-
-;; After org-mode 9.2, we need to require `org-tempo' module
-;; to make easy-template work
-(when (not (version< (org-version) "9.2"))
-  (require 'org-tempo))
-
-;;(defun org-my-ctrl-c-ctrl-c ()
-;;  (interactive)
-;;  (let ((relative-pos 0))                   ;from left's closest pipe
-;;    (if (org-at-table-p)
-;;        (setq relative-pos ()))
-;;    (right-char relative-pos))
-
-;; active Babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((gnuplot . t)))
-;; add additional languages with '((language . t)))
-
-;; Never ask when evaluate code blocks
-;;http://orgmode.org/manual/Code-evaluation-security.html
-(setq org-confirm-babel-evaluate nil)
+  (defun org-insert-bold ()
+    "Insert *bold* at cursor point."
+    (interactive)
+    (insert " ** ")
+    (backward-char 2))
+  (define-key org-mode-map (kbd "C-c b") 'org-insert-bold)
 
 
-(define-key org-mode-map "\M-\C-g" 'org-plot/gnuplot)
+  ;; Fix the nightmare when a table contains full-width characters.
+  (defun org-my-tab ()
+    (interactive)
+    (org-cycle)
+    (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
 
-;;輸出上下標？
-;;(setq org-export-with-sub-superscripts nil)
+  (defun org-my-shifttab ()
+    (interactive)
+    (org-shifttab)
+    (if (org-at-table-p) (org-ctrl-c-ctrl-c)))
+  (defun org-my-next-line ()
+    (interactive)
+    (if (and (org-at-table-p)
+             (not (eq (char-after (point)) 45))
+             (not (region-active-p)))
+        (let ((ori-column (current-column)))
+          (org-ctrl-c-ctrl-c)
+          (beginning-of-line 1)
+          (right-char ori-column)))
+    (next-line))
+  (defun org-my-previous-line ()
+    (interactive)
+    (if (and (org-at-table-p)
+             (not (eq (char-after (point)) 45))
+             (not (region-active-p)))
+        (let ((ori-column (current-column)))
+          (org-ctrl-c-ctrl-c)
+          (beginning-of-line 1)
+          (right-char ori-column)))
+    (previous-line))
+  ;; (define-key org-mode-map (kbd "TAB") 'org-my-tab)
+  ;; (define-key org-mode-map (kbd "<backtab>") 'org-my-shifttab)
+  (define-key org-mode-map (kbd "<down>") 'org-my-next-line)
+  (define-key org-mode-map (kbd "<up>") 'org-my-previous-line)
 
-(setq org-file-apps '((auto-mode . emacs)
-                      ("\\.mm\\'" . default)
-                      ("\\.x?html?\\'" . "xdg-open %s")
-                      ("\\.pdf\\'" . "xdg-open %s")
-                      ("\\.png\\'" . "xdg-open %s")
-                      ("\\.jpg\\'" . "xdg-open %s")))
-;; Syntax Highlight in outputed files
-(setq org-src-fontify-natively t)
+  ;; After org-mode 9.2, we need to require `org-tempo' module
+  ;; to make easy-template work
+  (when (not (version< (org-version) "9.2"))
+    (require 'org-tempo))
 
-(setq org-html-style "<style type=\"text/css\">
+  ;;(defun org-my-ctrl-c-ctrl-c ()
+  ;;  (interactive)
+  ;;  (let ((relative-pos 0))                   ;from left's closest pipe
+  ;;    (if (org-at-table-p)
+  ;;        (setq relative-pos ()))
+  ;;    (right-char relative-pos))
+
+  ;; active Babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((gnuplot . t)))
+  ;; add additional languages with '((language . t)))
+
+  ;; Never ask when evaluate code blocks
+  ;;http://orgmode.org/manual/Code-evaluation-security.html
+  (setq org-confirm-babel-evaluate nil)
+
+
+  (define-key org-mode-map "\M-\C-g" 'org-plot/gnuplot)
+
+  ;;輸出上下標？
+  ;;(setq org-export-with-sub-superscripts nil)
+
+  (setq org-file-apps '((auto-mode . emacs)
+                        ("\\.mm\\'" . default)
+                        ("\\.x?html?\\'" . "xdg-open %s")
+                        ("\\.pdf\\'" . "xdg-open %s")
+                        ("\\.png\\'" . "xdg-open %s")
+                        ("\\.jpg\\'" . "xdg-open %s")))
+  ;; Syntax Highlight in outputed files
+  (setq org-src-fontify-natively t)
+
+  (setq org-html-style "<style type=\"text/css\">
 * {
     font-family:WenQuanYi Micro Hei,Microsoft JhengHei,Helvetica,sans-serif;
     color: #555555;
@@ -338,299 +339,299 @@ h2.footnotes {
 
 </style>")
 
-;;(add-function :override org-html-checkbox
-;;(defun org-html-checkbox (checkbox)
-;;  "Format CHECKBOX into HTML."
-;;  (case checkbox (on "<code>[X]</code>")
-;;    (off "<code>[&#xa0;]</code>")
-;;    (trans "<code>[-]</code>")
-;;    (t "")))
+  ;;(add-function :override org-html-checkbox
+  ;;(defun org-html-checkbox (checkbox)
+  ;;  "Format CHECKBOX into HTML."
+  ;;  (case checkbox (on "<code>[X]</code>")
+  ;;    (off "<code>[&#xa0;]</code>")
+  ;;    (trans "<code>[-]</code>")
+  ;;    (t "")))
 
 
-;; org輸出html時中文不要有奇怪的空白。（by coldnew the God）
-;; Avoid unnecessary/wrong spaces when export to HTML.
-(defadvice org-html-paragraph (before org-html-paragraph-advice
-                                      (paragraph contents info) activate)
-  "Join consecutive Chinese lines into a single long line without
+  ;; org輸出html時中文不要有奇怪的空白。（by coldnew the God）
+  ;; Avoid unnecessary/wrong spaces when export to HTML.
+  (defadvice org-html-paragraph (before org-html-paragraph-advice
+                                        (paragraph contents info) activate)
+    "Join consecutive Chinese lines into a single long line without
 unwanted space when exporting org-mode to html."
-  (let* ((origin-contents (ad-get-arg 1))
-         (fix-regexp "[[:multibyte:]]")
-         (fixed-contents
-          (replace-regexp-in-string
-           (concat
-            "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+    (let* ((origin-contents (ad-get-arg 1))
+           (fix-regexp "[[:multibyte:]]")
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
 
-    (ad-set-arg 1 fixed-contents)))
+      (ad-set-arg 1 fixed-contents)))
 
-;; Export UTF-8 checkboxes
-;; This snippet turns - [X] into ☑ and - [ ] into ☐.
-(defun sacha/org-html-checkbox (checkbox)
-  "Format CHECKBOX into HTML."
-  (case checkbox
-    (on "<span class=\"check\">&#x2611;</span>") ; checkbox (checked)
-    (off "<span class=\"checkbox\">&#x2610;</span>")
-    (trans "<code>[-]</code>")
-    (t "")))
-(defadvice org-html-checkbox (around sacha activate)
-  (setq ad-return-value (sacha/org-html-checkbox (ad-get-arg 0))))
+  ;; Export UTF-8 checkboxes
+  ;; This snippet turns - [X] into ☑ and - [ ] into ☐.
+  (defun sacha/org-html-checkbox (checkbox)
+    "Format CHECKBOX into HTML."
+    (case checkbox
+      (on "<span class=\"check\">&#x2611;</span>") ; checkbox (checked)
+      (off "<span class=\"checkbox\">&#x2610;</span>")
+      (trans "<code>[-]</code>")
+      (t "")))
+  (defadvice org-html-checkbox (around sacha activate)
+    (setq ad-return-value (sacha/org-html-checkbox (ad-get-arg 0))))
 
-;; To follow links with RET, rather than a 2 key combo:
-(setq org-return-follows-link nil)
+  ;; To follow links with RET, rather than a 2 key combo:
+  (setq org-return-follows-link nil)
 
-;; 指定agenda檔案位置清單
-(setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
-(global-set-key "\C-ca" 'org-agenda)
-;;(global-set-key (kbd "<f11>") 'org-agenda)
+  ;; 指定agenda檔案位置清單
+  (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
+  (global-set-key "\C-ca" 'org-agenda)
+  ;;(global-set-key (kbd "<f11>") 'org-agenda)
 
-(setq org-todo-keywords
-      '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "|" "DONE(d!)")
-        (type "DISCUSSING(D!)"  "WTF(W!)" "|" "DONE(d!)")
-        (type "|" "ABANDONED(a@)" "NOTMYBUSINESS(n@)")))
+  (setq org-todo-keywords
+        '((type "TODO(t!)" "STARTED(s!)" "WAITING(w!)" "|" "DONE(d!)")
+          (type "DISCUSSING(D!)"  "WTF(W!)" "|" "DONE(d!)")
+          (type "|" "ABANDONED(a@)" "NOTMYBUSINESS(n@)")))
 
 
 
 ;;;;;;;;;;;;AGENDA~~~~~~ =w="
-;;Including all org files from a directory into the agenda
-;;(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
-;; 啊啊啊啊Agenda自訂
-;; shortcut可以一個字母以上
-;; Example:  http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
+  ;;Including all org files from a directory into the agenda
+  ;;(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
+  ;; 啊啊啊啊Agenda自訂
+  ;; shortcut可以一個字母以上
+  ;; Example:  http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
 
 
 
-;; Do not dim blocked tasks
-(setq org-agenda-dim-blocked-tasks nil)
-;; Compact the block agenda view
-(setq org-agenda-compact-blocks nil);; nil為加上分隔線，t為去掉
-;; 用describe-char來查你想要的seperator char code
-(setq org-agenda-block-separator 45)
+  ;; Do not dim blocked tasks
+  (setq org-agenda-dim-blocked-tasks nil)
+  ;; Compact the block agenda view
+  (setq org-agenda-compact-blocks nil);; nil為加上分隔線，t為去掉
+  ;; 用describe-char來查你想要的seperator char code
+  (setq org-agenda-block-separator 45)
 
-;; (setq org-stuck-projects
-;;       '("TODO=\"PROJECT\""
-;;         ("ACTION" "WAITING")
-;;         nil
-;;         nil))
+  ;; (setq org-stuck-projects
+  ;;       '("TODO=\"PROJECT\""
+  ;;         ("ACTION" "WAITING")
+  ;;         nil
+  ;;         nil))
 
-;; Function to skip tag
-;; From http://stackoverflow.com/questions/10074016/org-mode-filter-on-tag-in-agenda-view
-(defun ky/org-agenda-skip-tag (tag &optional others)
-  "Skip all entries that correspond to TAG.
+  ;; Function to skip tag
+  ;; From http://stackoverflow.com/questions/10074016/org-mode-filter-on-tag-in-agenda-view
+  (defun ky/org-agenda-skip-tag (tag &optional others)
+    "Skip all entries that correspond to TAG.
 
 If OTHERS is true, skip all entries that do not correspond to TAG."
-  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
-        (current-headline (or (and (org-at-heading-p)
-                                   (point))
-                              (save-excursion (org-back-to-heading)))))
-    (if others
-        (if (not (member tag (org-get-tags-at current-headline)))
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
+          (current-headline (or (and (org-at-heading-p)
+                                     (point))
+                                (save-excursion (org-back-to-heading)))))
+      (if others
+          (if (not (member tag (org-get-tags-at current-headline)))
+              next-headline
+            nil)
+        (if (member tag (org-get-tags-at current-headline))
             next-headline
-          nil)
-      (if (member tag (org-get-tags-at current-headline))
-          next-headline
-        nil))))
+          nil))))
 
-(setq org-agenda-custom-commands
-      '(
-        ("w" todo "STARTED") ;; (1) (3) (4)
-        ;; ...other commands here
+  (setq org-agenda-custom-commands
+        '(
+          ("w" todo "STARTED") ;; (1) (3) (4)
+          ;; ...other commands here
 
-        ("D" "Daily Action List"
-         ((agenda "" ((org-agenda-ndays 1)
-                      (org-agenda-sorting-strategy
-                       (quote ((agenda time-up priority-down tag-up) )))
-                      (org-deadline-warning-days 0)
-                      ))))
+          ("D" "Daily Action List"
+           ((agenda "" ((org-agenda-ndays 1)
+                        (org-agenda-sorting-strategy
+                         (quote ((agenda time-up priority-down tag-up) )))
+                        (org-deadline-warning-days 0)
+                        ))))
 
-        ("P" "Projects"
-         ((tags "Project")))
-        (" " "Agenda"
-         ((todo "STARTED"
-                ((org-agenda-overriding-header "What you should doing right now!")
-                 (org-tags-match-list-sublevels nil)))
-          (todo "WAITING"
-                ((org-agenda-overriding-header "Things waiting on the perenially disorganised masses")
-                 (org-tags-match-list-sublevels nil)))
+          ("P" "Projects"
+           ((tags "Project")))
+          (" " "Agenda"
+           ((todo "STARTED"
+                  ((org-agenda-overriding-header "What you should doing right now!")
+                   (org-tags-match-list-sublevels nil)))
+            (todo "WAITING"
+                  ((org-agenda-overriding-header "Things waiting on the perenially disorganised masses")
+                   (org-tags-match-list-sublevels nil)))
 
-          (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
-                                                   (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
-          ;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
-          (todo ""
-                ((org-agenda-overriding-header "All other TODOs")
-                 (org-agenda-todo-ignore-scheduled t)
-                 (org-agenda-todo-ignore-deadlines t)
-                 (org-agenda-todo-ignore-with-date t)
-                 (org-agenda-todo-ignore-timestamp t)
-                 (org-agenda-skip-function '(ky/org-agenda-skip-tag "Project"))
-                 ))
-          (tags-todo "Project" ((org-agenda-overriding-header "Projects' TODOs")))
-          )) ;; review waiting items
-        ;; ...other commands here
+            (agenda "Timetable, diary & date tasks" ((org-agenda-ndays 7)
+                                                     (org-deadline-warning-days 45))) ;; review upcoming deadlines and appointments
+            ;;          (stuck "") ;; review stuck projects as designated by org-stuck-projects
+            (todo ""
+                  ((org-agenda-overriding-header "All other TODOs")
+                   (org-agenda-todo-ignore-scheduled t)
+                   (org-agenda-todo-ignore-deadlines t)
+                   (org-agenda-todo-ignore-with-date t)
+                   (org-agenda-todo-ignore-timestamp t)
+                   (org-agenda-skip-function '(ky/org-agenda-skip-tag "Project"))
+                   ))
+            (tags-todo "Project" ((org-agenda-overriding-header "Projects' TODOs")))
+            )) ;; review waiting items
+          ;; ...other commands here
 
-        ("d" "Upcoming deadlines" agenda ""
-         ((org-agenda-entry-types '(:deadline))
-          ;; a slower way to do the same thing
-          ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))
-          (org-agenda-ndays 1)
-          (org-deadline-warning-days 60)
-          (org-agenda-time-grid nil)))
-        ;; ...other commands here
+          ("d" "Upcoming deadlines" agenda ""
+           ((org-agenda-entry-types '(:deadline))
+            ;; a slower way to do the same thing
+            ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))
+            (org-agenda-ndays 1)
+            (org-deadline-warning-days 60)
+            (org-agenda-time-grid nil)))
+          ;; ...other commands here
 
-        ("c" "Weekly schedule" agenda ""
-         ((org-agenda-ndays 7)          ;; agenda will start in week view
-          (org-agenda-repeating-timestamp-show-all t)   ;; ensures that repeating events appear on all relevant dates
-          (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-        ;; limits agenda view to timestamped items
-        ;; ...other commands here
+          ("c" "Weekly schedule" agenda ""
+           ((org-agenda-ndays 7)          ;; agenda will start in week view
+            (org-agenda-repeating-timestamp-show-all t)   ;; ensures that repeating events appear on all relevant dates
+            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+          ;; limits agenda view to timestamped items
+          ;; ...other commands here
 
-        ("P" "Printed agenda"
-         ((agenda "" ((org-agenda-ndays 7)                      ;; overview of appointments
-                      (org-agenda-start-on-weekday nil)         ;; calendar begins today
-                      (org-agenda-repeating-timestamp-show-all t)
-                      (org-agenda-entry-types '(:timestamp :sexp))))
-          (agenda "" ((org-agenda-ndays 1)                      ;; daily agenda
-                      (org-deadline-warning-days 7)             ;; 7 day advanced warning for deadlines
-                      (org-agenda-todo-keyword-format "[ ]")
-                      (org-agenda-scheduled-leaders '("" ""))
-                      (org-agenda-prefix-format "%t%s")))
-          (todo "TODO"                                          ;; todos sorted by context
-                ((org-agenda-prefix-format "[ ] %T: ")
-                 (org-agenda-sorting-strategy '(tag-up priority-down))
-                 (org-agenda-todo-keyword-format "")
-                 (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
-         ((org-agenda-with-colors nil)
-          (org-agenda-compact-blocks t)
-          (org-agenda-remove-tags t)
-          (ps-number-of-columns 2)
-          (ps-landscape-mode t))
-         ("~/agenda.ps"))
-        ;; other commands go here
-        ))
+          ("P" "Printed agenda"
+           ((agenda "" ((org-agenda-ndays 7)                      ;; overview of appointments
+                        (org-agenda-start-on-weekday nil)         ;; calendar begins today
+                        (org-agenda-repeating-timestamp-show-all t)
+                        (org-agenda-entry-types '(:timestamp :sexp))))
+            (agenda "" ((org-agenda-ndays 1)                      ;; daily agenda
+                        (org-deadline-warning-days 7)             ;; 7 day advanced warning for deadlines
+                        (org-agenda-todo-keyword-format "[ ]")
+                        (org-agenda-scheduled-leaders '("" ""))
+                        (org-agenda-prefix-format "%t%s")))
+            (todo "TODO"                                          ;; todos sorted by context
+                  ((org-agenda-prefix-format "[ ] %T: ")
+                   (org-agenda-sorting-strategy '(tag-up priority-down))
+                   (org-agenda-todo-keyword-format "")
+                   (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
+           ((org-agenda-with-colors nil)
+            (org-agenda-compact-blocks t)
+            (org-agenda-remove-tags t)
+            (ps-number-of-columns 2)
+            (ps-landscape-mode t))
+           ("~/agenda.ps"))
+          ;; other commands go here
+          ))
 
-(setq org-refile-targets '(("Todo.org" :maxlevel . 1)
-                           ("School.org" :maxlevel . 1)
-                           ("Learning.org" :maxlevel . 1)
-                           ("Project.org" :maxlevel . 2)
-                           ("Event.org" :maxlevel . 1)
-                           ("Reading.org" :maxlevel . 1)))
+  (setq org-refile-targets '(("Todo.org" :maxlevel . 1)
+                             ("School.org" :maxlevel . 1)
+                             ("Learning.org" :maxlevel . 1)
+                             ("Project.org" :maxlevel . 2)
+                             ("Event.org" :maxlevel . 1)
+                             ("Reading.org" :maxlevel . 1)))
 
 
-;;To save the clock history across Emacs sessions, use
+  ;;To save the clock history across Emacs sessions, use
 
-(setq org-clock-persist 'history)
-(org-clock-persistence-insinuate)
-;; Use a drawer to place clocking info
-(setq org-clock-into-drawer t)
-;; Global clocking key
-(global-set-key (kbd "C-c C-x C-x") 'org-clock-in-last)
-(global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
-(global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
-(add-to-list 'recentf-exclude ".+org-clock-save\\.el$")
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
+  ;; Use a drawer to place clocking info
+  (setq org-clock-into-drawer t)
+  ;; Global clocking key
+  (global-set-key (kbd "C-c C-x C-x") 'org-clock-in-last)
+  (global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
+  (global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
+  (add-to-list 'recentf-exclude ".+org-clock-save\\.el$")
                                         ;Now that OrgMode and RememberMode are included in Emacs (as of Emacs 23), activation is as simple as:
-;;(org-remember-insinuate)
-;;This excellent feature inspired Capture in OrgMode and that is now (Aug2010) recommended for new users, see http://orgmode.org/manual/Capture.html#Capture
+  ;;(org-remember-insinuate)
+  ;;This excellent feature inspired Capture in OrgMode and that is now (Aug2010) recommended for new users, see http://orgmode.org/manual/Capture.html#Capture
 
-;;Org-Capture
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-(define-key global-map "\C-cc" 'org-capture)
+  ;;Org-Capture
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (define-key global-map "\C-cc" 'org-capture)
 
-;; [Agenda]
-;;(global-set-key (kbd "<f12>") (lambda () (interactive) (org-agenda nil " ")))
-;; [Capture]
-;;(global-set-key (kbd "<f11>") (lambda () (interactive) (org-capture)))
-;; [Capture] Diary+Timer
-;;(global-set-key (kbd "ESC <f11>") (lambda () (interactive) (org-capture nil "D")))
+  ;; [Agenda]
+  ;;(global-set-key (kbd "<f12>") (lambda () (interactive) (org-agenda nil " ")))
+  ;; [Capture]
+  ;;(global-set-key (kbd "<f11>") (lambda () (interactive) (org-capture)))
+  ;; [Capture] Diary+Timer
+  ;;(global-set-key (kbd "ESC <f11>") (lambda () (interactive) (org-capture nil "D")))
 
 
-(setq org-capture-templates
-      '(("T" "Scheduled Todo" entry
-         (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
-         "** TODO %? %^G\n SCHEDULED: %^{ Sheduled: }T Created: %U \n  %i")
-        ("t" "Todo" entry
-         (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
-         "** TODO %? %^G\n  Created: %U \n  %i")
-        ("s" "School" entry
-         (file+headline (concat org-directory "/agenda/School.org") "School")
-         "** TODO %?\n  Created: %U \n  %i")
-        ("r" "Reading" entry
-         (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
-         "** %? %i :Reading:\n  Created: %U")
-        ("D" "Diary + Timer" entry
-         (file+datetree (concat org-directory "/diary/diary.org"))
-         "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
-        ("d" "Diary" entry
-         (file+datetree (concat org-directory "/diary/diary.org"))
-         "* %? \n  Created: %U \n")
-        ("e" "Event" entry
-         (file+headline (concat org-directory "/agenda/Event.org") "Event")
-         "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i")))
+  (setq org-capture-templates
+        '(("T" "Scheduled Todo" entry
+           (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
+           "** TODO %? %^G\n SCHEDULED: %^{ Sheduled: }T Created: %U \n  %i")
+          ("t" "Todo" entry
+           (file+headline (concat org-directory "/agenda/Todo.org") "Todo")
+           "** TODO %? %^G\n  Created: %U \n  %i")
+          ("s" "School" entry
+           (file+headline (concat org-directory "/agenda/School.org") "School")
+           "** TODO %?\n  Created: %U \n  %i")
+          ("r" "Reading" entry
+           (file+headline (concat org-directory "/agenda/Reading.org") "Reading")
+           "** %? %i :Reading:\n  Created: %U")
+          ("D" "Diary + Timer" entry
+           (file+datetree (concat org-directory "/diary/diary.org"))
+           "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+          ("d" "Diary" entry
+           (file+datetree (concat org-directory "/diary/diary.org"))
+           "* %? \n  Created: %U \n")
+          ("e" "Event" entry
+           (file+headline (concat org-directory "/agenda/Event.org") "Event")
+           "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i")))
 
-;; I set my capture for diary like this:
-;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
-;;but it create duplicated "datetree" every time call this capture http://paste.opensuse.org/21805084 Any body know what's happened?
+  ;; I set my capture for diary like this:
+  ;; ("d" "Diary" entry  (file+datetree (concat org-directory "/diary/diary.org")) "* %^{Description: } %^g  \n  %i %?\n" :clock-in t :clock-keep t)
+  ;;but it create duplicated "datetree" every time call this capture http://paste.opensuse.org/21805084 Any body know what's happened?
 
-(setq cfw:org-capture-template
-      '("c" "calfw" entry
-        (file+headline (concat org-directory "/agenda/Event.org") "Event")
-        "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i"))
+  (setq cfw:org-capture-template
+        '("c" "calfw" entry
+          (file+headline (concat org-directory "/agenda/Event.org") "Event")
+          "** %? %^g\n SCHEDULED: %^{Event's date&time? }T\n  %i"))
 
-;; capture jump to link
-(define-key global-map "\C-cx"
-  (lambda () (interactive) (org-capture nil "x")))
+  ;; capture jump to link
+  (define-key global-map "\C-cx"
+    (lambda () (interactive) (org-capture nil "x")))
 
-;; used by org-clock-sum-today-by-tags
-(defun filter-by-tags ()
-  (let ((head-tags (org-get-tags-at)))
-    (member current-tag head-tags)))
+  ;; used by org-clock-sum-today-by-tags
+  (defun filter-by-tags ()
+    (let ((head-tags (org-get-tags-at)))
+      (member current-tag head-tags)))
 
-;; 每日時間統計
-;; http://www.mastermindcn.com/2012/02/org_mode_quite_a_life/
-(defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-  (interactive "P")
-  (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-         (files (org-add-archive-files (org-agenda-files)))
-         (include-tags '("ACADEMIC" "ENGLISH" "SCHOOL"
-                         "LEARNING" "OUTPUT" "OTHER"))
-         (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-         (output-string "")
-         (tstart (or tstart
-                     (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
-                     (org-time-today)))
-         (tend (or tend
-                   (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
-                   (+ tstart 86400)))
-         h m file item prompt donesomething)
-    (while (setq file (pop files))
-      (setq org-agenda-buffer (if (file-exists-p file)
-                                  (org-get-agenda-file-buffer file)
-                                (error "No such file %s" file)))
-      (with-current-buffer org-agenda-buffer
-        (dolist (current-tag include-tags)
-          (org-clock-sum tstart tend 'filter-by-tags)
-          (setcdr (assoc current-tag tags-time-alist)
-                  (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-    (while (setq item (pop tags-time-alist))
-      (unless (equal (cdr item) 0)
-        (setq donesomething t)
-        (setq h (/ (cdr item) 60)
-              m (- (cdr item) (* 60 h)))
-        (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-    (unless donesomething
-      (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-    (unless noinsert
-      (insert output-string))
-    output-string))
+  ;; 每日時間統計
+  ;; http://www.mastermindcn.com/2012/02/org_mode_quite_a_life/
+  (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+    (interactive "P")
+    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+           (files (org-add-archive-files (org-agenda-files)))
+           (include-tags '("ACADEMIC" "ENGLISH" "SCHOOL"
+                           "LEARNING" "OUTPUT" "OTHER"))
+           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+           (output-string "")
+           (tstart (or tstart
+                       (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+                       (org-time-today)))
+           (tend (or tend
+                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+                     (+ tstart 86400)))
+           h m file item prompt donesomething)
+      (while (setq file (pop files))
+        (setq org-agenda-buffer (if (file-exists-p file)
+                                    (org-get-agenda-file-buffer file)
+                                  (error "No such file %s" file)))
+        (with-current-buffer org-agenda-buffer
+          (dolist (current-tag include-tags)
+            (org-clock-sum tstart tend 'filter-by-tags)
+            (setcdr (assoc current-tag tags-time-alist)
+                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+      (while (setq item (pop tags-time-alist))
+        (unless (equal (cdr item) 0)
+          (setq donesomething t)
+          (setq h (/ (cdr item) 60)
+                m (- (cdr item) (* 60 h)))
+          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+      (unless donesomething
+        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+      (unless noinsert
+        (insert output-string))
+      output-string))
 
-(define-key org-mode-map (kbd "C-c C-x t") 'org-clock-sum-today-by-tags)
+  (define-key org-mode-map (kbd "C-c C-x t") 'org-clock-sum-today-by-tags)
 
-;; Enable async export by default
-(setq org-export-in-background nil)
+  ;; Enable async export by default
+  (setq org-export-in-background nil)
 
-(setq org-highlight-latex-and-related '(entities latex script))
+  (setq org-highlight-latex-and-related '(entities latex script))
 
-(setq org-latex-classes
-      '(("article"
-         "
+  (setq org-latex-classes
+        '(("article"
+           "
 \\documentclass[11pt,a4paper]{article}
 \\usepackage[margin=2cm]{geometry}
 \\usepackage{fontspec}
@@ -668,14 +669,14 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
   pagebackref=true,
   linktoc=all,}
 "
-         ("\\section{%s}" . "\\section*{%s}")
-         ("\\subsection{%s}" . "\\subsection*{%s}")
-         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-         ("\\paragraph{%s}" . "\\paragraph*{%s}")
-         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 
-        ("beamer"
-         "
+          ("beamer"
+           "
 \\documentclass[presentation]{beamer}
 \\usepackage{fontspec}
 \\setromanfont{wqyHeiMicro}
@@ -694,13 +695,13 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 \\linespread{1.36}
 
 "
-         ("\\section{%s}" . "\\section*{%s}")
-         ("\\subsection{%s}" . "\\subsection*{%s}")
-         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-         ("\\paragraph{%s}" . "\\paragraph*{%s}")
-         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-        ("book"
-         "\\documentclass[11pt,a4paper]{article}
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+          ("book"
+           "\\documentclass[11pt,a4paper]{article}
 \\usepackage[margin=2cm]{geometry}
 \\usepackage{fontspec}
 \\setromanfont{cwTeXMing}
@@ -736,181 +737,181 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
   urlcolor=[rgb]{0,0.37,0.53},
   pagebackref=true,
   linktoc=all,}"
-         ("\\chapter{%s}" . "\\chapter*{%s}")
-         ("\\section{%s}" . "\\section*{%s}")
-         ("\\subsection{%s}" . "\\subsection*{%s}")
-         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-         ("\\paragraph{%s}" . "\\paragraph*{%s}")
-         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-        ))
+           ("\\chapter{%s}" . "\\chapter*{%s}")
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+          ))
 
 
-;; [FIXME]
-;; 原本是不要讓org插入hypersetup（因為org-mode這部份設計成沒辦法自訂，或許可以去report一下？）
-;; 改成自行插入，但這樣pdfcreator沒辦法根據Emacs版本插入，pdfkeyword也會無效...幹。
-(setq org-latex-with-hyperref t)
+  ;; [FIXME]
+  ;; 原本是不要讓org插入hypersetup（因為org-mode這部份設計成沒辦法自訂，或許可以去report一下？）
+  ;; 改成自行插入，但這樣pdfcreator沒辦法根據Emacs版本插入，pdfkeyword也會無效...幹。
+  (setq org-latex-with-hyperref t)
 
-;; 把預設的fontenc拿掉
-;; 經過測試XeLaTeX輸出PDF時有fontenc[T1]的話中文會無法顯示。
-;; hyperref也拿掉，改從classes處就插入，原因見上面 org-latex-with-hyperref 的說明。
-(setq org-latex-default-packages-alist
-      '(("AUTO" "inputenc"  t)
-        ;;("T1"   "fontenc"   t)
-        (""     "fixltx2e"  nil)
-        (""     "graphicx"  t)
-        (""     "longtable" nil)
-        (""     "float"     nil)
-        (""     "wrapfig"   nil)
-        (""     "rotating"  nil)
-        ("normalem" "ulem"  t)
-        (""     "amsmath"   t)
-        (""     "textcomp"  t)
-        (""     "marvosym"  t)
-        (""     "wasysym"   t)
-        (""     "amssymb"   t)
-        (""     "hyperref"  nil)
-        "\\tolerance=1000"))
+  ;; 把預設的fontenc拿掉
+  ;; 經過測試XeLaTeX輸出PDF時有fontenc[T1]的話中文會無法顯示。
+  ;; hyperref也拿掉，改從classes處就插入，原因見上面 org-latex-with-hyperref 的說明。
+  (setq org-latex-default-packages-alist
+        '(("AUTO" "inputenc"  t)
+          ;;("T1"   "fontenc"   t)
+          (""     "fixltx2e"  nil)
+          (""     "graphicx"  t)
+          (""     "longtable" nil)
+          (""     "float"     nil)
+          (""     "wrapfig"   nil)
+          (""     "rotating"  nil)
+          ("normalem" "ulem"  t)
+          (""     "amsmath"   t)
+          (""     "textcomp"  t)
+          (""     "marvosym"  t)
+          (""     "wasysym"   t)
+          (""     "amssymb"   t)
+          (""     "hyperref"  nil)
+          "\\tolerance=1000"))
 
-;; Use XeLaTeX to export PDF in Org-mode
-(setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"))
+  ;; Use XeLaTeX to export PDF in Org-mode
+  (setq org-latex-pdf-process
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"))
 ;;;; Dependancies: wrapfig
 ;;;;(setq org-latex-default-class "ltjsarticle")
 ;;;;(setq org-latex-pdf-process '("lualatex %b" "lualatex %b"))
 
-(require 'ob-latex)
-(setq org-src-fontify-natively t)
+  (require 'ob-latex)
+  (setq org-src-fontify-natively t)
 
-;; Automatically generate LaTeX preview picture.
-(define-key org-mode-map (kbd "$") (lambda ()
-                                     (interactive)
-                                     (insert "$")
-                                     (save-excursion
-                                       (left-char 1)
-                                       (if (org-inside-LaTeX-fragment-p)
-                                           (progn
-                                             (right-char 2)
-                                             (org-preview-latex-fragment))))))
-
-
-(require 'ox-html5slide)
-
-(add-to-list 'load-path "~/.emacs.d/lisps/org-ioslide/")
-(require 'ox-ioslide)
-
-;;======================================================
-;; LaTeX
-;;======================================================
-;;(add-to-list 'tex-compile-commands '("xelatex %r"))
-(setq tex-compile-commands '(("xelatex %r")))
-(setq tex-command "xelatex")
-
-(setq-default TeX-engine 'xelatex)
-(setq TeX-command-list
-      '(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
-         (plain-tex-mode ams-tex-mode texinfo-mode)
-         :help "Run plain TeX")
-        ("LaTeX" "xelatex -interaction nonstopmode %t" TeX-run-TeX nil
-         (latex-mode doctex-mode)
-         :help "Run LaTeX")
-        ("Makeinfo" "makeinfo %t" TeX-run-compile nil
-         (texinfo-mode)
-         :help "Run Makeinfo with Info output")
-        ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
-         (texinfo-mode)
-         :help "Run Makeinfo with HTML output")
-        ("AmSTeX" "%(PDF)amstex %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
-         (ams-tex-mode)
-         :help "Run AMSTeX")
-        ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
-         (context-mode)
-         :help "Run ConTeXt once")
-        ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
-         (context-mode)
-         :help "Run ConTeXt until completion")
-        ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
-        ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
-        ("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
-        ("Print" "%p" TeX-run-command t t :help "Print the file")
-        ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
-        ("File" "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
-        ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
-        ("Check" "lacheck %s" TeX-run-compile nil
-         (latex-mode)
-         :help "Check LaTeX file for correctness")
-        ("Spell" "(TeX-ispell-document \"\")" TeX-run-function nil t :help "Spell-check the document")
-        ("Clean" "TeX-clean" TeX-run-function nil t :help "Delete generated intermediate files")
-        ("Clean All" "(TeX-clean t)" TeX-run-function nil t :help "Delete generated intermediate and output files")
-        ("Other" "" TeX-run-command t t :help "Run an arbitrary command")))
-
-;;======================================================
-;; calfw - Calendar Framework
-;;======================================================
-
-(require 'calfw)
-(require 'calfw-org)
-(require 'calfw-cal)
-(global-set-key (kbd "C-c A") 'my-cfw:open-org-calendar)
-(define-key org-agenda-mode-map (kbd "A") 'my-cfw:open-org-calendar)
-;; 解決開啟cfw後，原buffer中的cursor會自己莫名其妙亂跳走的怪問題。
-(defun my-cfw:open-org-calendar ()
-  (interactive)
-  (let ((currentBuf (current-buffer))
-        (currentPos (point)))
-    (cfw:open-org-calendar)
-    (switch-to-buffer currentBuf)
-    (goto-char currentPos))
-  (switch-to-buffer "*cfw-calendar*"))
-
-(defun my-cfw:define-key-calendar ()
-  (define-key cfw:calendar-mode-map "g" 'cfw:refresh-calendar-buffer)
-  (define-key cfw:calendar-mode-map "G" 'cfw:navi-goto-date-command))
-(add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-calendar)
-
-(defun my-cfw:define-key-details ()
-  (define-key cfw:details-mode-map "g" 'cfw:refresh-calendar-buffer)
-  (define-key cfw:details-mode-map "G" 'cfw:navi-goto-date-command))
-(add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-details)
-
-;; 吃太飽的話可以自己去定calendar-holidays
-;; Month
-(setq calendar-month-name-array
-  ["January" "February" "March"     "April"   "May"      "June"
-   "July"    "August"   "September" "October" "November" "December"])
-;; Week days
-(setq calendar-day-name-array
-      ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"])
-;; First day of the week
-(setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+  ;; Automatically generate LaTeX preview picture.
+  (define-key org-mode-map (kbd "$") (lambda ()
+                                       (interactive)
+                                       (insert "$")
+                                       (save-excursion
+                                         (left-char 1)
+                                         (if (org-inside-LaTeX-fragment-p)
+                                             (progn
+                                               (right-char 2)
+                                               (org-preview-latex-fragment))))))
 
 
+  (require 'ox-html5slide)
 
-(defun org-qt4-add-doc-link ()
-  (interactive)
-  (let* ((begin (progn (right-char 1) (backward-word 1) (point)))
-         (end (progn (forward-word 1) (point)))
-         (Q (buffer-substring-no-properties begin end)))
-    (if (string-match "^Q[A-z0-9]+" Q)
-        (progn
-          (delete-region begin end)
-          (insert
-           (format "[[http://qt-project.org/doc/qt-4.8/%s.html][%s]]"
-                   (downcase Q) Q)))
-      (message "This seems not to belong to Qt namespace"))))
-(define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
+  (add-to-list 'load-path "~/.emacs.d/lisps/org-ioslide/")
+  (require 'ox-ioslide)
+
+  ;;======================================================
+  ;; LaTeX
+  ;;======================================================
+  ;;(add-to-list 'tex-compile-commands '("xelatex %r"))
+  (setq tex-compile-commands '(("xelatex %r")))
+  (setq tex-command "xelatex")
+
+  (setq-default TeX-engine 'xelatex)
+  (setq TeX-command-list
+        '(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
+           (plain-tex-mode ams-tex-mode texinfo-mode)
+           :help "Run plain TeX")
+          ("LaTeX" "xelatex -interaction nonstopmode %t" TeX-run-TeX nil
+           (latex-mode doctex-mode)
+           :help "Run LaTeX")
+          ("Makeinfo" "makeinfo %t" TeX-run-compile nil
+           (texinfo-mode)
+           :help "Run Makeinfo with Info output")
+          ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
+           (texinfo-mode)
+           :help "Run Makeinfo with HTML output")
+          ("AmSTeX" "%(PDF)amstex %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
+           (ams-tex-mode)
+           :help "Run AMSTeX")
+          ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
+           (context-mode)
+           :help "Run ConTeXt once")
+          ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
+           (context-mode)
+           :help "Run ConTeXt until completion")
+          ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+          ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
+          ("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+          ("Print" "%p" TeX-run-command t t :help "Print the file")
+          ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
+          ("File" "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
+          ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
+          ("Check" "lacheck %s" TeX-run-compile nil
+           (latex-mode)
+           :help "Check LaTeX file for correctness")
+          ("Spell" "(TeX-ispell-document \"\")" TeX-run-function nil t :help "Spell-check the document")
+          ("Clean" "TeX-clean" TeX-run-function nil t :help "Delete generated intermediate files")
+          ("Clean All" "(TeX-clean t)" TeX-run-function nil t :help "Delete generated intermediate and output files")
+          ("Other" "" TeX-run-command t t :help "Run an arbitrary command")))
+
+  ;;======================================================
+  ;; calfw - Calendar Framework
+  ;;======================================================
+
+  (require 'calfw)
+  (require 'calfw-org)
+  (require 'calfw-cal)
+  (global-set-key (kbd "C-c A") 'my-cfw:open-org-calendar)
+  (define-key org-agenda-mode-map (kbd "A") 'my-cfw:open-org-calendar)
+  ;; 解決開啟cfw後，原buffer中的cursor會自己莫名其妙亂跳走的怪問題。
+  (defun my-cfw:open-org-calendar ()
+    (interactive)
+    (let ((currentBuf (current-buffer))
+          (currentPos (point)))
+      (cfw:open-org-calendar)
+      (switch-to-buffer currentBuf)
+      (goto-char currentPos))
+    (switch-to-buffer "*cfw-calendar*"))
+
+  (defun my-cfw:define-key-calendar ()
+    (define-key cfw:calendar-mode-map "g" 'cfw:refresh-calendar-buffer)
+    (define-key cfw:calendar-mode-map "G" 'cfw:navi-goto-date-command))
+  (add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-calendar)
+
+  (defun my-cfw:define-key-details ()
+    (define-key cfw:details-mode-map "g" 'cfw:refresh-calendar-buffer)
+    (define-key cfw:details-mode-map "G" 'cfw:navi-goto-date-command))
+  (add-hook 'cfw:calendar-mode-hook 'my-cfw:define-key-details)
+
+  ;; 吃太飽的話可以自己去定calendar-holidays
+  ;; Month
+  (setq calendar-month-name-array
+        ["January" "February" "March"     "April"   "May"      "June"
+         "July"    "August"   "September" "October" "November" "December"])
+  ;; Week days
+  (setq calendar-day-name-array
+        ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"])
+  ;; First day of the week
+  (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
 
 
 
-(org-babel-do-load-languages 'org-babel-load-languages
-                             '(
-                               (emacs-lisp . t)
-                               (dot . t)
-                               ))
+  (defun org-qt4-add-doc-link ()
+    (interactive)
+    (let* ((begin (progn (right-char 1) (backward-word 1) (point)))
+           (end (progn (forward-word 1) (point)))
+           (Q (buffer-substring-no-properties begin end)))
+      (if (string-match "^Q[A-z0-9]+" Q)
+          (progn
+            (delete-region begin end)
+            (insert
+             (format "[[http://qt-project.org/doc/qt-4.8/%s.html][%s]]"
+                     (downcase Q) Q)))
+        (message "This seems not to belong to Qt namespace"))))
+  (define-key org-mode-map (kbd "C-c i q") 'org-qt4-add-doc-link)
 
 
 
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '(
+                                 (emacs-lisp . t)
+                                 (dot . t)
+                                 ))
 
+
+
+  )
 (provide 'rc-org)
 ;;; rc-org.el ends here

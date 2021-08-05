@@ -81,8 +81,9 @@ With one `C-u' prefix, insert output following an arrow"
 
 (global-set-key (kbd "C-c C-x C-e") 'eval-elisp-sexp)
 ;; avoid key-binding conflict with org
-(define-key org-mode-map (kbd "C-c C-x C-e") 'org-clock-modify-effort-estimate)
-
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-x C-e") 'org-clock-modify-effort-estimate)
+  )
 
 (provide 'rc-lisp)
 ;;; rc-lisp.el ends here
