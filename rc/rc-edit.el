@@ -48,14 +48,14 @@
 ;; (global-set-key (kbd "M-RET") 'set-mark-command) ;這他媽的會跟org-mode衝啊！
 ;; (global-set-key (kbd "C-c RET") 'cua-set-rectangle-mark)
 ;;(global-set-key (kbd "C-x RET") 'mc/edit-lines)
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            ;;            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
-            (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-word-mode)
-            (define-key org-mode-map (kbd "C-c C-e") 'org-export-dispatch)
-            ))
-
+(with-eval-after-load 'org
+  (add-hook 'org-mode-hook
+            (lambda ()
+              ;;            (define-key org-mode-map (kbd "M-RET") 'set-mark-command) ;;讓org-mode能用M-RET來set-mark-command
+              (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-word-mode)
+              (define-key org-mode-map (kbd "C-c C-e") 'org-export-dispatch)
+              ))
+  )
 ;; ace-jump
 (global-set-key (kbd "C-c SPC") 'ace-jump-word-mode)
 

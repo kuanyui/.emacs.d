@@ -28,7 +28,7 @@
           ((member ext '("mov" "mp4" "mp3" "mkv" "avi" "flv"))
            (find-if exe-tester '("mpv" "vlc")))
           )))
-(get-open-program "test.mp4")
+;; (get-open-program "test.mp4")
 
 
 (defun dired-open-file-with-external-program ()

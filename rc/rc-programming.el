@@ -79,16 +79,16 @@
    "js" "js2" "javascript"
    "prog"))
 
-(require 'cc-mode)
-(define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-(define-key c-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-(define-key c-mode-map (kbd "M-n")'highlight-symbol-next)
-(define-key c-mode-map (kbd "M-p")'highlight-symbol-prev)
-(define-key c-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
-
+(with-eval-after-load 'cc-mode
+  (define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+  (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
+  (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
+  (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  (define-key c-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+  (define-key c-mode-map (kbd "M-n")'highlight-symbol-next)
+  (define-key c-mode-map (kbd "M-p")'highlight-symbol-prev)
+  (define-key c-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  )
 ;; (define-key makefile-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
 ;; (define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
 ;; (define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
@@ -273,8 +273,10 @@
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;;Helm integration with Projectile
-(require 'helm-projectile)
-(helm-projectile-off)
+(with-eval-after-load 'projectile
+  (require 'helm-projectile)
+  (helm-projectile-off)
+  )
 ;; (helm-projectile-on)  // I just want to use its ag/ack/grep/recentf support
 (add-hook 'projectile-mode-hook
           (lambda ()
@@ -285,7 +287,6 @@
             (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
             (define-key projectile-mode-map [remap projectile-find-file] #'pff))
           )
-
 ;;======================================================
 ;; Tree
 ;;======================================================
