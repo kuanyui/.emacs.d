@@ -873,5 +873,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
        (global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
        ))
 
+(setq tramp-default-method "ssh")
+
 (provide 'rc-basic)
 ;;; basic.el ends here
