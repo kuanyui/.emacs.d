@@ -40,8 +40,6 @@
   (add-hook 'org-mode-hook
             (lambda () (setq truncate-lines nil)))
 
-  (setq org-hide-emphasis-markers t)
-
   ;; org-mode裡的項目變成done時會自動加上CLOSED: [timestamp]戳記；改成'note為筆記
   ;; (setq org-log-done 'time)
   ;; (setq org-log-done 'note)
@@ -911,7 +909,102 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
                                  ))
 
 
+  (setq org-support-shift-select t)
+
+  (setq org-hide-emphasis-markers nil)
+  ;; Improve the readability of org-verbatim (e.g. =code=)
+  ;; https://archive.casouri.cat/note/2020/better-looking-verbatim-markup-in-org-mode/index.html
+  ;; (defun org-backtick-fontify (beg end)
+  ;; "Fontify ~ and = between BEG and END."
+  ;; (goto-char beg)
+  ;; (while (re-search-forward (rx (or "~" "=")) end t)
+  ;;   (let* ((text-props (text-properties-at (match-beginning 0)))
+  ;;          (face (plist-get text-props 'face)))
+  ;;     ;; Make it display backtick if the face indicates that
+  ;;     ;; it’s a code/verbatim delimiter.
+  ;;     (if (or (equal face '(org-code))
+  ;;             (equal face '(org-verbatim)))
+  ;;         (put-text-property
+  ;;          (match-beginning 0) (match-end 0) 'face 'font-lock-comment-face)
+  ;;       ;; Clean up our face if it’s not a code/verbatim
+  ;;       ;; delimiter anymore.
+  ;;       (when (equal (plist-get text-props 'face) 'font-lock-comment-face)
+  ;;         (put-text-property
+  ;;          (match-beginning 0) (match-end 0) 'face nil)))))
+  ;; (cons 'jit-lock-bounds (cons beg end)))
+  ;;
+  ;;   (define-minor-mode org-backtick-mode
+  ;;   "Display ~ and = as backticks."
+  ;;   :lighter ""
+  ;;   (if org-backtick-mode
+  ;;   ;; We want to run after org-mode’s font-lock function.
+  ;;   (add-hook 'jit-lock-functions #'org-backtick-fontify 91 t)
+  ;;   (remove-hook 'jit-lock-functions #'org-backtick-fontify t))
+  ;;   (jit-lock-refontify))
+
+  ;; https://www.reddit.com/r/emacs/comments/eipbvk/org_emphasis_marker_face/
+  ;; (defface org-emphasis-marker '((t (:inherit org-block-end-line)))
+  ;;   "Face for Org emphasis markers"
+  ;;   :group 'org-faces)
+  ;; (defun org-do-emphasis-faces (limit)
+  ;;   "Run through the buffer and emphasize strings."
+  ;;   (let ((quick-re (format "\\([%s]\\|^\\)\\([~=*/_+]\\)"
+  ;;       		    (car org-emphasis-regexp-components))))
+  ;;     (catch :exit
+  ;;       (while (re-search-forward quick-re limit t)
+  ;;         (let* ((marker (match-string 2))
+  ;;                (verbatim? (member marker '("~" "="))))
+  ;;           (when (save-excursion
+  ;;       	    (goto-char (match-beginning 0))
+  ;;       	    (and
+  ;;       	     ;; Do not match table hlines.
+  ;;       	     (not (and (equal marker "+")
+  ;;       		       (org-match-line
+  ;;       		        "[ \t]*\\(|[-+]+|?\\|\\+[-+]+\\+\\)[ \t]*$")))
+  ;;       	     ;; Do not match headline stars.  Do not consider
+  ;;       	     ;; stars of a headline as closing marker for bold
+  ;;       	     ;; markup either.
+  ;;       	     (not (and (equal marker "*")
+  ;;       		       (save-excursion
+  ;;       		         (forward-char)
+  ;;       		         (skip-chars-backward "*")
+  ;;       		         (looking-at-p org-outline-regexp-bol))))
+  ;;       	     ;; Match full emphasis markup regexp.
+  ;;       	     (looking-at (if verbatim? org-verbatim-re org-emph-re))
+  ;;       	     ;; Do not span over paragraph boundaries.
+  ;;       	     (not (string-match-p org-element-paragraph-separate
+  ;;       				  (match-string 2)))
+  ;;       	     ;; Do not span over cells in table rows.
+  ;;       	     (not (and (save-match-data (org-match-line "[ \t]*|"))
+  ;;       		       (string-match-p "|" (match-string 4))))))
+  ;;             (pcase-let ((`(,_ ,face ,_) (assoc marker org-emphasis-alist))
+  ;;       		  (m (if org-hide-emphasis-markers 4 2)))
+  ;;               (font-lock-prepend-text-property
+  ;;                (match-beginning m) (match-end m) 'face face)
+  ;;               (when verbatim?
+  ;;       	  (org-remove-flyspell-overlays-in
+  ;;       	   (match-beginning 0) (match-end 0))
+  ;;       	  (remove-text-properties (match-beginning 2) (match-end 2)
+  ;;       				  '(display t invisible t intangible t)))
+  ;;               (add-text-properties (match-beginning 2) (match-end 2)
+  ;;       			     '(font-lock-multiline t org-emphasis t))
+  ;;               ;; Begin new code ===========================
+  ;;               (font-lock-prepend-text-property
+  ;;                (match-beginning 3) (match-end 3) 'face 'org-emphasis-marker)
+  ;;               (font-lock-prepend-text-property
+  ;;                (match-end 4) (match-beginning 5) 'face 'org-emphasis-marker)
+  ;;               ;; End new code =============================
+  ;;               (when (and org-hide-emphasis-markers
+  ;;       		   (not (org-at-comment-p)))
+  ;;       	  (add-text-properties (match-end 4) (match-beginning 5)
+  ;;       			       '(invisible org-link))
+  ;;       	  (add-text-properties (match-beginning 3) (match-end 3)
+  ;;       			       '(invisible org-link)))
+  ;;               (throw :exit t))))))))
+
 
   )
+
+;; (setq org-emphasis-alist)
 (provide 'rc-org)
 ;;; rc-org.el ends here

@@ -31,13 +31,25 @@
 (require 'multiple-cursors)
 (global-set-key (kbd "C-x C-@") 'mc/edit-lines)
 ;;以下四種key-binding皆無法在terminal下使用orz改用M-'與M-"應該就沒問題，有空再來研究。
-;;(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-;;(global-set-key (kbd "C-;") 'mc/mark-next-like-this)
-;;(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-;;(global-set-key (kbd "C-:") 'mc/mark-previous-like-this)
-(global-set-key (kbd "M-'") 'mc/mark-next-like-this)
-(global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
+(if (window-system)
+    (progn
+      ;; Follow my VSCode configuration in GUI Emacs
+      (global-set-key (kbd "M-S-<up>") 'mc/mark-previous-like-this)
+      (global-set-key (kbd "M-S-<down>") 'mc/mark-next-like-this)
+      (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
+      (global-set-key (kbd "M-<up>") 'drag-stuff-up)
+      (global-set-key (kbd "M-<down>") 'drag-stuff-down)
+      (global-set-key (kbd "C-S-d") 'duplicate-thing)
+      (global-set-key (kbd "C-z") 'undo-tree-undo)
+      (global-set-key (kbd "C-S-z") 'undo-tree-redo)
+      )
+  (progn
+    (global-set-key (kbd "M-<up>") 'drag-stuff-up)
+    (global-set-key (kbd "M-<down>") 'drag-stuff-down)
+    (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
+    (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
+    ))
 (define-key mc/mark-more-like-this-extended-keymap (kbd "DEL") 'backward-delete-char-untabify)
 
 
