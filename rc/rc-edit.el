@@ -30,6 +30,8 @@
 ;;
 (require 'multiple-cursors)
 (global-set-key (kbd "C-x C-@") 'mc/edit-lines)
+(move-text-default-bindings)
+
 ;;以下四種key-binding皆無法在terminal下使用orz改用M-'與M-"應該就沒問題，有空再來研究。
 (if (window-system)
     (progn
@@ -37,15 +39,16 @@
       (global-set-key (kbd "M-S-<up>") 'mc/mark-previous-like-this)
       (global-set-key (kbd "M-S-<down>") 'mc/mark-next-like-this)
       (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
-      (global-set-key (kbd "M-<up>") 'drag-stuff-up)
-      (global-set-key (kbd "M-<down>") 'drag-stuff-down)
+      (global-set-key [M-down] 'move-text-down)
+      (global-set-key [M-up]   'move-text-up)
       (global-set-key (kbd "C-S-d") 'duplicate-thing)
       (global-set-key (kbd "C-z") 'undo-tree-undo)
       (global-set-key (kbd "C-S-z") 'undo-tree-redo)
       )
   (progn
-    (global-set-key (kbd "M-<up>") 'drag-stuff-up)
-    (global-set-key (kbd "M-<down>") 'drag-stuff-down)
+    (global-set-key [M-down] 'move-text-down)
+    (global-set-key [M-up]   'move-text-up)
+    (global-set-key (kbd "C-c d l") 'duplicate-thing)
     (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
     (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
     (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
