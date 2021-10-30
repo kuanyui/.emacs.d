@@ -663,29 +663,31 @@ Otherwise, return DPI (1 inch = 2.54 cm)
        ;; Linux
        ;; ======================================================
        (setq x-select-enable-clipboard t)
-       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-       (defun cp ()
-         (interactive)
-         (if (not (executable-find "xsel")) (error "`xsel` is required, please install it first."))
-         (if (region-active-p)
-             (progn
-               (shell-command-on-region (region-beginning) (region-end) "xsel -i")
-               (message "Yanked region to clipboard!")
-               (deactivate-mark))
-           (message "No region active; can't yank to clipboard!")))
-       (defun paste ()
-         (interactive)
-         (insert (shell-command-to-string "xsel -o")))
+       ;; Plese see https://www.emacswiki.org/emacs/CopyAndPaste
 
-       ;;xclip-mode
-       (load "~/.emacs.d/lisps/xclip-1.0.el")
-       (define-minor-mode xclip-mode
-         "Minor mode to use the `xclip' program to copy&paste."
-         :global t
-         (if xclip-mode
-             (turn-on-xclip)
-           (turn-off-xclip)))
-       (turn-off-xclip)
+       ;; (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+       ;; (defun cp ()
+       ;;   (interactive)
+       ;;   (if (not (executable-find "xsel")) (error "`xsel` is required, please install it first."))
+       ;;   (if (region-active-p)
+       ;;       (progn
+       ;;         (shell-command-on-region (region-beginning) (region-end) "xsel -i")
+       ;;         (message "Yanked region to clipboard!")
+       ;;         (deactivate-mark))
+       ;;     (message "No region active; can't yank to clipboard!")))
+       ;; (defun paste ()
+       ;;   (interactive)
+       ;;   (insert (shell-command-to-string "xsel -o")))
+
+       ;; ;;xclip-mode
+       ;; (load "~/.emacs.d/lisps/xclip-1.0.el")
+       ;; (define-minor-mode xclip-mode
+       ;;   "Minor mode to use the `xclip' program to copy&paste."
+       ;;   :global t
+       ;;   (if xclip-mode
+       ;;       (turn-on-xclip)
+       ;;     (turn-off-xclip)))
+       ;; (turn-off-xclip)
        ))
 
 
