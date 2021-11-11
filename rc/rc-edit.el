@@ -41,6 +41,8 @@
       (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
       (global-set-key [M-down] 'move-text-down)
       (global-set-key [M-up]   'move-text-up)
+      (global-set-key (kbd "M-'") 'mc/mark-next-like-this-symbol)
+      (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this-symbol)
       (global-set-key (kbd "C-S-d") 'duplicate-thing)
       (global-set-key (kbd "C-z") 'undo-tree-undo)
       (global-set-key (kbd "C-S-z") 'undo-tree-redo)
@@ -49,10 +51,13 @@
     (global-set-key [M-down] 'move-text-down)
     (global-set-key [M-up]   'move-text-up)
     (global-set-key (kbd "C-c d l") 'duplicate-thing)
-    (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
-    (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "M-'") 'mc/mark-next-like-this-symbol)
+    (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this-symbol)
+    ;; (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
+    ;; (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
     (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
     ))
+
 (define-key mc/mark-more-like-this-extended-keymap (kbd "DEL") 'backward-delete-char-untabify)
 
 
