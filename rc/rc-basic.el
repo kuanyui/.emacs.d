@@ -172,15 +172,15 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (when (window-system)
   (if (eq system-type 'windows-nt)
       (set-face-attribute 'default nil :font "Consolas-9"))
+  (if (eq system-type 'windows-nt)
+      (setq emacs-cjk-font "Consolas"
+            emacs-english-font "Consolas"))
 
   (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
   (defvar emacs-cjk-font "Noto Sans CJK JP" "The font name for CJK.")
-  (find-font (font-spec :name "LiHei Pro"))
-  (font-family-list)
-  (if (eq system-type 'windows-nt)
-      (setq emacs-cjk-font "Consolas"
-            emacs-english-font "Consolas")
-    (setq emacs-cjk-font "WenQuanYi Micro Hei Mono"))
+  ;;; for test
+  ;; (find-font (font-spec :name "LiHei Pro"))
+  ;; (font-family-list)
 
   (defvar emacs-font-size-pair '(12 . 14)
     "Default font size pair for (english . chinese)")
