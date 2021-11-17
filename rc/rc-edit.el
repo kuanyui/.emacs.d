@@ -53,8 +53,6 @@
     (global-set-key (kbd "C-c d l") 'duplicate-thing)
     (global-set-key (kbd "M-'") 'mc/mark-next-like-this-symbol)
     (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this-symbol)
-    ;; (global-set-key (kbd "M-'") 'mc/mark-next-like-this)
-    ;; (global-set-key (kbd "M-\"") 'mc/mark-previous-like-this)
     (global-set-key (kbd "C-c M-'") 'mc/mark-all-like-this)
     ))
 
