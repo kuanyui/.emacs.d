@@ -32,6 +32,10 @@
 (global-set-key (kbd "C-x C-@") 'mc/edit-lines)
 (move-text-default-bindings)
 
+
+;; Auto close parens
+(smartparens-global-mode)
+
 ;;以下四種key-binding皆無法在terminal下使用orz改用M-'與M-"應該就沒問題，有空再來研究。
 (if (window-system)
     (progn

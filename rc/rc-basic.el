@@ -348,8 +348,9 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (setq frame-title-format "%n%b (%f) - %F")
 ;;(setq frame-title-format '((:eval default-directory)))
 
-;;把捲軸移到右側
-(customize-set-variable 'scroll-bar-mode 'right)
+;; Hide scroll bar
+(scroll-bar-mode 0)
+;; (customize-set-variable 'scroll-bar-mode 'right)
 
 (require 'hungry-delete)
 (global-hungry-delete-mode -1)
@@ -408,7 +409,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(scroll-bar-mode -1)
 
 ;;X Clipboard在游標處插入，而不是滑鼠點擊的地方插入。
 (setq mouse-yank-at-point t)
