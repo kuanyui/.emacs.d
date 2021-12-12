@@ -1,6 +1,6 @@
 ;;; rc-ibuffer.el ---                                -*- lexical-binding: t; -*-
 
-(require 'helm-buffers)
+;; (require 'helm-buffers)  ; unneeded. autoloaded by package.el
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 
 ;;======================================================

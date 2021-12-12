@@ -157,13 +157,13 @@ abbrev for it."
 ;;======================================================
 ;; Swoop
 ;;======================================================
+;; (require 'swoop)
 
-(require 'swoop)
 ;; Change the keybinds to whatever you like :)
-(global-set-key (kbd "M-i") 'helm-swoop)
-;;(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-(global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-(global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+(global-set-key (kbd "M-i") 'swoop)
+;;(global-set-key (kbd "M-I") 'swoop-back-to-last-point)
+(global-set-key (kbd "C-c M-i") 'swoop-multi)
+;; (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
 
 
 

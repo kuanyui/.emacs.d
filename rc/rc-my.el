@@ -29,7 +29,8 @@
 ;;======================================================
 ;; tldr.el
 ;;======================================================
-(require 'tldr)
+;; (require 'tldr)
+(autoload 'tldr "tldr" "A major mode for tldr" t)
 (setq tldr-enabled-categories '("common" "linux"))
 ;;======================================================
 ;; fsc.el Fuck the Speeching Censorship

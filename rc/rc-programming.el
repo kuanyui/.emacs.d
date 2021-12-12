@@ -52,6 +52,7 @@
 ;;======================================================
 
 (require 'highlight-symbol)
+(define-key prog-mode-map (kbd "C-M-\"") 'highlight-symbol-at-point)
 (define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
 (define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
@@ -80,10 +81,12 @@
    "prog"))
 
 (with-eval-after-load 'cc-mode
+  (define-key c++-mode-map (kbd "C-M-\"") 'highlight-symbol-at-point)
   (define-key c++-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
   (define-key c++-mode-map (kbd "M-n")'highlight-symbol-next)
   (define-key c++-mode-map (kbd "M-p")'highlight-symbol-prev)
   (define-key c++-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+  (define-key c-mode-map (kbd "C-M-\"") 'highlight-symbol-at-point)
   (define-key c-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
   (define-key c-mode-map (kbd "M-n")'highlight-symbol-next)
   (define-key c-mode-map (kbd "M-p")'highlight-symbol-prev)
@@ -215,25 +218,25 @@
 ;;======================================================
 ;; Helm-dash - Looking up documents
 ;;======================================================
-(require 'helm-dash)
-(setq helm-dash-use-curl-and-wget t)
-(setq helm-dash-common-docsets '("Python 3" "Qt" "Django" "jQuery"))
 (global-set-key (kbd "C-c d d") 'helm-dash)
 
-(defmacro helm-dash-generate-doc-function(name-string)
-  (let ((name-symbol (replace-regexp-in-string "[_ ]" "-" (downcase name-string))))
-    `(defalias (quote ,(intern (concat "dash:" name-symbol)))
-       (function (lambda ()
-                   (interactive)
-                   (let ((helm-dash-common-docsets (quote (,name-string))))
-                     (helm-dash)))))))
+(with-eval-after-load 'helm-dash
+  (setq helm-dash-use-curl-and-wget t)
+  (setq helm-dash-common-docsets '("Python 3" "Qt" "Django" "jQuery"))
+  (defmacro helm-dash-generate-doc-function(name-string)
+    (let ((name-symbol (replace-regexp-in-string "[_ ]" "-" (downcase name-string))))
+      `(defalias (quote ,(intern (concat "dash:" name-symbol)))
+	 (function (lambda ()
+                     (interactive)
+                     (let ((helm-dash-common-docsets (quote (,name-string))))
+                       (helm-dash)))))))
 
-(helm-dash-generate-doc-function "Python 3")
-(helm-dash-generate-doc-function "Qt")
-(helm-dash-generate-doc-function "Django")
-(helm-dash-generate-doc-function "jQuery")
-(helm-dash-generate-doc-function "JavaScript")
-
+  (helm-dash-generate-doc-function "Python 3")
+  (helm-dash-generate-doc-function "Qt")
+  (helm-dash-generate-doc-function "Django")
+  (helm-dash-generate-doc-function "jQuery")
+  (helm-dash-generate-doc-function "JavaScript")
+  )
 ;;======================================================
 ;; Aggressive-ident-mode
 ;;======================================================
