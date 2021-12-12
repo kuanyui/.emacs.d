@@ -160,12 +160,13 @@
 ;; ======================================================
 ;; taiwan-holidays.el 台灣的節慶支援
 ;; ======================================================
-(autoload 'taiwan-holidays "taiwan-holidays" "A " t)
-(require 'taiwan-holidays)
-(setq mark-holidays-in-calendar t)
-(setq calendar-mark-holidays-flag t)
-(setq taiwan-holidays-important-holidays taiwan-holidays-taiwan-holidays)
-(setq calendar-holidays taiwan-holidays-important-holidays)
+(autoload 'taiwan-holidays "taiwan-holidays" "Calendar for Taiwan" t)
+(with-eval-after-load 'calendar
+  (require 'taiwan-holidays)
+  (setq mark-holidays-in-calendar t)
+  (setq calendar-mark-holidays-flag t)
+  (setq taiwan-holidays-important-holidays taiwan-holidays-taiwan-holidays)
+  (setq calendar-holidays taiwan-holidays-important-holidays))
 ;; ======================================================
 ;; pff
 ;; ======================================================
