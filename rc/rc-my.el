@@ -51,12 +51,18 @@
 ;;======================================================
 ;; Details: https://github.com/kuanyui/writing-utils.el
 (require 'writing-utils)
-(require 'page-title)
-(require 'flickr)
+;; (require 'flickr)
 (require 'markdown-and-html)
 (require 'markdown-toc)
 (require 'minibuffer-enhancements)
 (global-set-key (kbd "C-a") #'beginning-of-line-or-indentation)
+
+;; page-title -- one click to fetch & insert the title + URL of a page
+;; (require 'page-title)
+(autoload 'insert-link-with-title "page-title" "one click to fetch & insert the title + URL of a page" t)
+(with-eval-after-load 'markdown-mode (define-key markdown-mode-map (kbd "C-c i l") 'insert-link-with-title))
+(with-eval-after-load 'org (define-key org-mode-map (kbd "C-c i l") 'insert-link-with-title))
+(with-eval-after-load 'sgml-mode (define-key html-mode-map (kbd "C-c i l") 'insert-link-with-title))
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
 (require 'livedoor-opml-to-markdown)
