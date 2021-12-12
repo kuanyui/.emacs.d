@@ -155,12 +155,12 @@
 ;;======================================================
 ;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
 ;;======================================================
-(require 'rainbow-mode)
+;; (require 'rainbow-mode)
 (setq rainbow-html-colors t)  ;; highlight hsl()
+(setq rainbow-ansi-colors nil)
 (global-set-key (kbd "C-x r a") 'rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
 (add-hook 'yajade-mode-hook 'rainbow-mode)
-(setq rainbow-ansi-colors nil)
 
 ;; CSS and Rainbow modes
 (defun all-css-modes() (css-mode) (rainbow-mode))
@@ -276,7 +276,10 @@
 (setq projectile-enable-caching t)
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
-(projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
+;; (projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
+(global-set-key (kbd "C-c p s g") #'projectile-grep)
+(global-set-key (kbd "C-c p s s") #'projectile-ag)
+(global-set-key (kbd "C-c p r") #'projectile-recentf)
 
 
 ;;Helm integration with Projectile

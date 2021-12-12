@@ -110,45 +110,6 @@
      (org-export-with-date)
      (org-export-with-creator)
      (org-export-with-author)
-     (eval progn
-	   (require 'projectile)
-	   (setq-local flycheck-pylintrc
-		       (concat
-			(projectile-project-root)
-			".pylintrc")))
-     (eval progn
-	   (setq-local python-environment-directory
-		       (concat default-directory "venv/")))
-     (jedi:environment-root . "venv/")
-     (jedi:environment-root . "./venv/")
-     (js2-strict-missing-semi-warning)
-     (eval when
-	   (and
-	    (buffer-file-name)
-	    (file-regular-p
-	     (buffer-file-name))
-	    (string-match-p "^[^.]"
-			    (buffer-file-name)))
-	   (emacs-lisp-mode)
-	   (when
-	       (fboundp 'flycheck-mode)
-	     (flycheck-mode -1))
-	   (unless
-	       (featurep 'package-build)
-	     (let
-		 ((load-path
-		   (cons ".." load-path)))
-	       (require 'package-build)))
-	   (package-build-minor-mode)
-	   (set
-	    (make-local-variable 'package-build-working-dir)
-	    (expand-file-name "../working/"))
-	   (set
-	    (make-local-variable 'package-build-archive-dir)
-	    (expand-file-name "../packages/"))
-	   (set
-	    (make-local-variable 'package-build-recipes-dir)
-	    default-directory))
      (major-mode . org-mode)
      (major-mode . org)
      (org-html-link-org-files-as-html)

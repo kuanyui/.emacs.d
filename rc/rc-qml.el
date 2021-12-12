@@ -1,6 +1,15 @@
 ;;; rc-qml.el ---                                    -*- lexical-binding: t; -*-
-(require 'qmake-mode)
 
+;; ======================================================
+;; qmake
+;; ======================================================
+;; (require 'qmake-mode)
+(add-to-list 'auto-mode-alist '("\\.pr\\(i\\|o\\|f\\)\\'" . qmake-mode))
+
+
+;; ======================================================
+;; QML
+;; ======================================================
 (add-to-list 'load-path "~/.emacs.d/git/qml-mode/")
 (autoload 'qml-mode "qml-mode" "A major mode for QML" t)
 
