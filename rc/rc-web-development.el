@@ -324,12 +324,12 @@
 (define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
 (with-eval-after-load 'html-mode (define-key html-mode-map (kbd "<f7>") 'narrow-to-js))
 
-(require 'js2-mode)
-(define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 (define-key coffee-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
-
-
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(with-eval-after-load 'js2-mode
+  (define-key js2-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+  )
 ;; ======================================================
 ;; Firefox Controller
 ;; ======================================================
