@@ -5,11 +5,11 @@
 ;;======================================================
 
 (require 'company)
-(require 'flycheck)
 
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
+  (require 'flycheck)
   ;; Check if FILENAME.cpp existed in same directory.
   ;; If found, switch to c++-mode.
   (if (file-exists-p (concat (file-name-base (buffer-file-name)) ".cpp"))

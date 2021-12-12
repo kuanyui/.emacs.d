@@ -769,19 +769,32 @@ Otherwise, return DPI (1 inch = 2.54 cm)
                               (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
                               'face 'projectile-mode-line
                               )))
-(require 'flycheck)
-(setq flycheck-mode-line-prefix "Fc")
+
+(add-hook 'find-file-hook 'my-lazy-load-flycheck)
+(defun my-lazy-load-flycheck ()
+  (require 'flycheck)
+  ;; (message "Lazy loaded flycheck.")  ; FIXME: This load whenever a file opened...
+  )
+;; (require 'flycheck)
+(eval-after-load 'flycheck-mode
+  (setq flycheck-mode-line-prefix "Fc")
+  )
+
+;; ======================================================
+;; Mode-line
+;; ======================================================
 (setq-default mode-line-format
-              '(
-                (god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
-                "%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
-                (vc-mode vc-mode)
-                mode-line-modes
-  		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
-                " "
-                (auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
-                (lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
-                projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+	      '(
+		(god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
+		"%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
+		(vc-mode vc-mode)
+		mode-line-modes
+		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
+		" "
+		(auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
+		(lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
+		projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+
 (setq mode-line-position
       `((1 ,(propertize
              " %p"

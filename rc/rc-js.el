@@ -201,8 +201,8 @@
           (insert new-str)
           )))
     ))
-
-(define-key js-mode-map (kbd "C-c C-a") 'angular-js-function-injection-fill-strings)
+(with-eval-after-load 'js-mode
+  (define-key js-mode-map (kbd "C-c C-a") 'angular-js-function-injection-fill-strings))
 ;; (font-lock-add-keywords 'js-mode '(("(\\([$A-z0-9_]+\\)\\(?:[ \n]*,[ \n]*\\([A-z0-9$_]+\\)\\)*[\n ]*) *=>" 0 'font-lock-variable-face)))
 ;; ======================================================
 ;; Comint
