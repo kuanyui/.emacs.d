@@ -21,6 +21,8 @@
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
 
+;; Make all URLs clickable
+(add-hook 'prog-mode-hook 'goto-address-mode)
 ;; ======================================================
 ;; Flyspell
 ;; ======================================================
@@ -272,8 +274,10 @@
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
 (setq projectile-indexing-method 'alien)
 (setq projectile-enable-caching t)
-(projectile-global-mode t)
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
+
+(projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
+
 
 ;;Helm integration with Projectile
 ;; NOTE: Seems unnecessary
