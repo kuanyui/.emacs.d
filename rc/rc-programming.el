@@ -273,10 +273,11 @@
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;;Helm integration with Projectile
-(with-eval-after-load 'projectile
-  (require 'helm-projectile)
-  (helm-projectile-off)
-  )
+;; NOTE: Seems unnecessary
+;;  (with-eval-after-load 'projectile
+;;  (require 'helm-projectile)
+;;  (helm-projectile-off)
+;;  )
 ;; (helm-projectile-on)  // I just want to use its ag/ack/grep/recentf support
 (add-hook 'projectile-mode-hook
           (lambda ()
