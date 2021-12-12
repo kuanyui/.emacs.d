@@ -74,15 +74,10 @@
 ;; Stylus / Jade <= (SWS mode) https://github.com/brianc/jade-mode
 ;; ======================================================
 
-(require 'sws-mode)
-(require 'stylus-mode)
-(require 'jade-mode)
-(require 'yajade-mode)
-
-
-
-(defun my-stylus-mode () (stylus-mode) (rainbow-mode))
-(add-to-list 'auto-mode-alist '("\\.styl$" . my-stylus-mode))
+(autoload 'yajade-mode "yajade-mode" "A customized major mode for Jade/Pug" t)
+(add-to-list 'auto-mode-alist '("\\.styl$" . stylus-mode))
+(add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
+(add-to-list 'auto-mode-alist '("\\.pug" . yajade-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
 
@@ -284,7 +279,7 @@
 
 (define-key mmm-mode-map (kbd "<f6>") 'mmm-mode-restart!)
 
-(define-key jade-mode-map (kbd "<f6>") 'mmm-mode-restart!)
+(with-eval-after-load 'jade-mode (define-key jade-mode-map (kbd "<f6>") 'mmm-mode-restart!))
 (with-eval-after-load 'html-mode (define-key html-mode-map (kbd "<f6>") 'mmm-mode-restart!))
 
 (defun narrow-to-js ()
@@ -321,7 +316,7 @@
 
 (define-key mmm-mode-map (kbd "<f7>") 'narrow-to-js)
 
-(define-key jade-mode-map (kbd "<f7>") 'narrow-to-js)
+(with-eval-after-load 'jade-mode (define-key jade-mode-map (kbd "<f7>") 'narrow-to-js))
 (with-eval-after-load 'html-mode (define-key html-mode-map (kbd "<f7>") 'narrow-to-js))
 
 (define-key coffee-mode-map (kbd "<f6>") 'mmm-mode-restart!)
