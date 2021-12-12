@@ -50,6 +50,7 @@
   (define-key js2-mode-map (kbd "C-c f F") 'my-js2-fold-all)
   (define-key js2-mode-map (kbd "C-c f e") 'my-js2-expand)
   (define-key js2-mode-map (kbd "C-c f E") 'my-js2-expand-all)
+  (define-key js2-mode-map (kbd "<f5>") 'js-run-with-shell-command)
   (rainbow-delimiters-mode)
   (flycheck-mode 1)
   (company-mode-on)
@@ -219,7 +220,6 @@
   (interactive)
   (save-buffer)
   (shell-command (format "node %s" (buffer-real-name))))
-(define-key js2-mode-map (kbd "<f5>") 'js-run-with-shell-command)
 
 
 (setq inferior-js-mode-hook
