@@ -598,7 +598,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key (kbd "C-z") 'set-mark-command)
 
 ;;======================================================
-;; Tmux 相關設定
+;; Tmux
 ;;======================================================
 
 (defun zsh () (interactive) (term "/bin/zsh"))
