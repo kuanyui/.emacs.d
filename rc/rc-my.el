@@ -85,8 +85,9 @@
 
 ;;======================================================
 ;; moedict.el 萌典
-;;======================================================
-(require 'moedict)
+;;=====================================================
+(autoload 'moedict "moedict" "A major mode for moedict" t)
+;; (require 'moedict)
 ;;(require 'moedict-stroke)
 (global-set-key (kbd "C-c m m") 'moedict)
 ;; ======================================================
@@ -159,6 +160,7 @@
 ;; ======================================================
 ;; taiwan-holidays.el 台灣的節慶支援
 ;; ======================================================
+(autoload 'taiwan-holidays "taiwan-holidays" "A " t)
 (require 'taiwan-holidays)
 (setq mark-holidays-in-calendar t)
 (setq calendar-mark-holidays-flag t)
