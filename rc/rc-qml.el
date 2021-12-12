@@ -2,7 +2,8 @@
 (require 'qmake-mode)
 
 (add-to-list 'load-path "~/.emacs.d/git/qml-mode/")
-(require 'qml-mode)
+(autoload 'qml-mode "qml-mode" "A major mode for QML" t)
+
 (add-to-list 'auto-mode-alist '("\\.qml\\'" . qml-mode))
 (add-hook 'qml-mode-hook '(lambda ()
                             (local-set-key (kbd "<f5>") 'qml-call-qmlviewer)
@@ -19,8 +20,8 @@
 
 
 (add-to-list 'load-path "~/.emacs.d/git/company-qml/")
-(require 'company)
-(add-to-list 'company-backends 'company-qml)
+(with-eval-after-load 'company
+  (add-to-list 'company-backends 'company-qml))
 
 
 (provide 'rc-qml)
