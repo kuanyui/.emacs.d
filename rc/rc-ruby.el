@@ -4,16 +4,16 @@
 ;; Ruby
 ;;======================================================
 
-;; Smartparens can be used to match "end"s in Ruby code
-(require 'smartparens)
 
 (add-hook 'ruby-mode-hook 'my-ruby-hook)
 
 (defun my-ruby-hook ()
-  (enh-ruby-mode)
-  (require 'inf-ruby)
+  ;; Smartparens can be used to match "end"s in Ruby code
+  (require 'smartparens)
   (require 'smartparens-ruby)
   (show-smartparens-mode)
+  (enh-ruby-mode)
+  (require 'inf-ruby)
   (defun ruby-run-current-file ()
     (interactive)
     (save-buffer)
