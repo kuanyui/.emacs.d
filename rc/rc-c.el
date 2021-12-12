@@ -4,11 +4,11 @@
 ;; C
 ;;======================================================
 
-(require 'company)
 
 
 (add-hook 'c-mode-hook #'my-c-config)
 (defun my-c-config ()
+  (require 'company)
   (require 'flycheck)
   ;; Check if FILENAME.cpp existed in same directory.
   ;; If found, switch to c++-mode.
@@ -55,33 +55,63 @@
 ;; ======================================================
 ;; Semantic
 ;; ======================================================
-(require 'semantic)
-(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
-(global-semantic-idle-completions-mode nil) ;; 好像跟 Company 的功能重疊
-(global-semantic-decoration-mode t)
-(global-semantic-highlight-func-mode t) ;; 其實預設就是開的，就是螢幕最上面那一條
-(global-semantic-show-unmatched-syntax-mode t)
-(mapc (lambda (x)
-        (semantic-add-system-include (format "/usr/include/%s" x) 'c++-mode))
-      '("QtTest"
-        "QtXml"
-        "QtXmlPatterns"
-        "QtNetwork"
-        "QtOpenGL"
-        "QtScript"
-        "QtSql"
-        "QtGui"
-        "QtHelp"
-        "QtMultimedia"
-        "QtDBus"
-        "QtDeclarative"
-        "QtDesigner"
-        "QtCore"
-        "Qt3Support"
-        "Qt"
-        "QtSvg"
-        "QtScriptTools"
-        "QtUiTools"))
+;; (add-hook 'c-mode-common-hook 'my-cc-setup-semantic)
+(add-hook 'c-mode-hook 'my-cc-setup-semantic)
+(add-hook 'c++-mode-hook 'my-cc-setup-semantic)
+(defun my-cc-setup-semantic ()
+  (message "[DEBUG] ================> my-cc-setup-semantic run!")
+  (require 'semantic)
+  (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+  (global-semantic-idle-completions-mode nil) ;; 好像跟 Company 的功能重疊
+  (global-semantic-decoration-mode t)
+  (global-semantic-highlight-func-mode t) ;; 其實預設就是開的，就是螢幕最上面那一條
+  (global-semantic-show-unmatched-syntax-mode t)
+  (mapc (lambda (x)
+	  (semantic-add-system-include (format "/usr/include/%s" x) 'c++-mode))
+	'("QtTest"
+	  "QtXml"
+	  "QtXmlPatterns"
+	  "QtNetwork"
+	  "QtOpenGL"
+	  "QtScript"
+	  "QtSql"
+	  "QtGui"
+	  "QtHelp"
+	  "QtMultimedia"
+	  "QtDBus"
+	  "QtDeclarative"
+	  "QtDesigner"
+	  "QtCore"
+	  "Qt3Support"
+	  "Qt"
+	  "QtSvg"
+	  "QtScriptTools"
+	  "QtUiTools"))
+  )
+
+;; ======================================================
+;; gtags
+;; ======================================================
+(add-hook 'c-mode-hook 'my-cc-setup-semantic)
+(add-hook 'c++-mode-hook 'my-cc-setup-semantic)
+(defun my-cc-setup-gtags ()
+  (require 'helm-gtags)
+  (require 'asm-mode)
+
+  (add-hook 'c-mode-hook 'helm-gtags-mode)
+  (add-hook 'c++-mode-hook 'helm-gtags-mode)
+  (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+  ;; Set key bindings
+  (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+  (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+  (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+  (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+  (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+  (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+  (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+  (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+  )
 
 ;; ======================================================
 ;; eldoc
@@ -90,26 +120,6 @@
 ;;(defun my-cc-eldoc-setup ()
 ;;  (setq c-eldoc-includes "`pkg-config --cflags --libs` -I./ -I../")
 ;;  (c-turn-on-eldoc-mode))
-
-;; ======================================================
-;; gtags
-;; ======================================================
-(require 'helm-gtags)
-(require 'asm-mode)
-
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
-
-;; Set key bindings
-(define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-(define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-(define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-(define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
 
 ;; ======================================================
 ;; irony
