@@ -24,6 +24,16 @@
 (define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
 (define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
 
+
+;; ======================================================
+;; smartparens
+;; ======================================================
+
+;; Auto close parens
+(require 'smartparens-config)
+(smartparens-global-mode)
+;; (add-hook 'prog-mode-hook #'smartparens-mode)
+
 ;;======================================================
 ;; multiple-cursors
 ;;======================================================
@@ -33,10 +43,8 @@
 (move-text-default-bindings)
 
 
-;; Auto close parens
-(smartparens-global-mode)
 
-;;以下四種key-binding皆無法在terminal下使用orz改用M-'與M-"應該就沒問題，有空再來研究。
+
 (if (window-system)
     (progn
       ;; Follow my VSCode configuration in GUI Emacs
