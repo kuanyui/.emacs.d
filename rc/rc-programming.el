@@ -277,8 +277,8 @@
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;; (projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
-(global-set-key (kbd "C-c p s g") #'projectile-grep)
-(global-set-key (kbd "C-c p s s") #'projectile-ag)
+(global-set-key (kbd "C-c p s g") #'helm-projectile-grep)
+(global-set-key (kbd "C-c p s s") #'helm-projectile-ag)
 (global-set-key (kbd "C-c p r") #'projectile-recentf)
 
 
