@@ -178,7 +178,10 @@
 ;; ======================================================
 ;; pff
 ;; ======================================================
-(require 'pff)
+;; (require 'pff)
+(autoload 'pff "pff" "Project find-file")
+(global-set-key (kbd "C-c p f") #'pff)
+
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
