@@ -31,6 +31,9 @@
 
 ;; Auto close parens
 (require 'smartparens-config)
+(setq sp-autoinsert-if-followed-by-word nil)
+(setq sp-autoinsert-quote-if-followed-by-closing-pair nil)
+
 (smartparens-global-mode)
 ;; (add-hook 'prog-mode-hook #'smartparens-mode)
 
