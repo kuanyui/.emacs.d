@@ -909,6 +909,48 @@ mouse-1: Display Line and Column Mode Menu"))))))
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       )
 
+;; ======================================================
+;; vertico - vertical interactive completion M-x. Zsh-liked
+;; ======================================================
+(setq vertico-multiform-commands
+      '((describe-symbol (vertico-sort-function . vertico-sort-alpha))))
+(setq vertico-multiform-categories
+      '((symbol (vertico-sort-function . vertico-sort-alpha))
+	))
+(vertico-mode t)
+(define-key vertico-map "?" #'minibuffer-completion-help)
+;; (define-key vertico-map (kbd "RET") #'minibuffer-force-complete-and-exit)
+(define-key vertico-map (kbd "TAB") #'minibuffer-complete)
+
+;; Show description in M-x
+(marginalia-mode)
+
+;; ======================================================
+;; Treemacs - Sidebar File Manager
+;; ======================================================
+
+(with-eval-after-load 'treemacs
+  ;; prefer to expand/collpase nodes with a single mouse click
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
+  )
+
+;; ======================================================
+;; Centaur-tabs - tabs
+;; ======================================================
+;; (require 'centaur-tabs)
+;; (setq centaur-tabs-set-modified-marker t)
+;; (setq centaur-tabs-set-icons t)
+;; (setq centaur-tabs-style "bar")
+;; (setq centaur-tabs-height 32)
+;; (centaur-tabs-mode t)
+;; (centaur-tabs-headline-match) ; make the headline face match the centaur-tabs-default face
+;;
+;; ;; (setq centaur-tabs-plain-icons t)
+;; (setq centaur-tabs-set-bar 'under)  ; To display a colored bar at the left of the selected tab
+;; (setq centaur-tabs-gray-out-icons 'buffer)  ; To gray out icons for the unselected tabs
+;; (global-set-key (kbd "C-<tab>")  'centaur-tabs-forward)
+;; (global-set-key (kbd "<C-S-iso-lefttab>") 'centaur-tabs-backward)
+
 
 (provide 'rc-basic)
 ;;; basic.el ends here
