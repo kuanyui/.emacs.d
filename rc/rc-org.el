@@ -1,4 +1,20 @@
 ;;; rc-org.el ---                                    -*- lexical-binding: t; -*-
+(setq org-roam-directory (file-truename "~/Sync/Documents/org/roam"))
+(setq org-roam-db-location (file-truename "~/Sync/Documents/org/roam/org-roam.db"))
+(global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
+(global-set-key (kbd "C-c n f") 'org-roam-node-find)
+(global-set-key (kbd "C-c n g") 'org-roam-graph)
+(global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+(global-set-key (kbd "C-c n c") 'org-roam-capture)
+(global-set-key (kbd "C-c n j") 'org-roam-dailies-capture-today)
+(setq org-roam-v2-ack t)
+
+(with-eval-after-load 'org-roam
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
+  )
+
 ;;======================================================
 ;; Org-mode
 ;;======================================================
@@ -16,6 +32,7 @@
   (require 'ox-ioslide)
   (require 'ox-ioslide-helper)
 
+  (define-key org-mode-map (kbd "C-c C-x l") 'org-toggle-link-display)
   ;; Don't hide == ~~ [[]]
   (setq org-descriptive-links nil)
 
@@ -374,7 +391,7 @@ unwanted space when exporting org-mode to html."
     (setq ad-return-value (sacha/org-html-checkbox (ad-get-arg 0))))
 
   ;; To follow links with RET, rather than a 2 key combo:
-  (setq org-return-follows-link nil)
+  (setq org-return-follows-link t)
 
   ;; 指定agenda檔案位置清單
   (setq org-agenda-files (list (concat org-directory "/agenda/Todo.org")))
