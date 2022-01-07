@@ -127,7 +127,11 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; By default, when height greater than some degree, Emacs will split window horizontally.
 (setq split-height-threshold nil)
 (setq split-width-threshold 280)
-;; (global-display-line-numbers-mode 1)
+
+
+(global-display-line-numbers-mode 1)
+(global-diff-hl-mode 1)
+(diff-hl-margin-mode 1)
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
@@ -349,7 +353,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;(setq frame-title-format '((:eval default-directory)))
 
 ;; Hide scroll bar
-(scroll-bar-mode 0)
+(scroll-bar-mode -1)
 ;; (customize-set-variable 'scroll-bar-mode 'right)
 
 (require 'hungry-delete)
