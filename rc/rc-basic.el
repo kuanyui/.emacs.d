@@ -712,8 +712,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;switch frames in a visual way (C-x o)
 ;; (require 'switch-window)
 
-;; resize frame easily
-(require 'resize-frame)
+
 
 ;;======================================================
 ;; Emacs 本身key-binding改進
