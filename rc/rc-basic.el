@@ -130,8 +130,11 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 
 (global-display-line-numbers-mode 1)
-(global-diff-hl-mode 1)
-(diff-hl-margin-mode 1)
+
+(defun my-enable-diff-hl-mode ()
+  (if (not global-diff-hl-mode)
+      (global-diff-hl-mode 1)))
+(add-hook 'find-file-hooks 'my-enable-diff-hl-mode)
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
