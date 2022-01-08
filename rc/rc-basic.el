@@ -925,11 +925,18 @@ mouse-1: Display Line and Column Mode Menu"))))))
 	))
 (vertico-mode t)
 (define-key vertico-map "?" #'minibuffer-completion-help)
-;; (define-key vertico-map (kbd "RET") #'minibuffer-force-complete-and-exit)
-(define-key vertico-map (kbd "TAB") #'minibuffer-complete)
+;;(define-key vertico-map (kbd "C-j") #'minibuffer-force-complete-and-exit)
 
+(define-key vertico-map (kbd "TAB") #'minibuffer-complete)
+(define-key vertico-map (kbd "M-g") #'vertico-grid-mode)
+(vertico-grid-mode -1)
 ;; Show description in M-x
 (marginalia-mode)
+
+(require 'orderless)
+(setq completion-styles '(orderless))
+(setq completion-category-defaults nil)
+(setq completion-category-overrides '((file (styles partial-completion))))
 
 ;; ======================================================
 ;; Treemacs - Sidebar File Manager
