@@ -119,6 +119,9 @@
   ;;    (if (org-at-table-p)
   ;;        (setq relative-pos ()))
   ;;    (right-char relative-pos))
+
+  ;; Disable indentation by outlines
+  (setq org-adapt-indentation nil)
   ;; Disable indenting on org-babel restclient edits
   (setq org-edit-src-content-indentation 0)
 
