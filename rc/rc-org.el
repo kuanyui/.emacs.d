@@ -46,6 +46,9 @@
 
   (define-key org-mode-map (kbd "C-M-j") 'org-ctrl-c-ret)
 
+  ;; When <M-return> on outline, create outline after the end of current outline
+  (setq org-insert-heading-respect-content t)
+
   ;; In tmux/tty, M-S-RET will be inpretered to this shit.
   (define-key org-mode-map (kbd "ESC <kp-enter>") 'org-insert-todo-heading)
 
