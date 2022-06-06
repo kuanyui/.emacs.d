@@ -533,39 +533,39 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
 
 
-(global-set-key (kbd "<f9>") 'open-note)
-(defun open-note ()
-  "Open stick note."
-  (interactive)(find-file (concat org-directory "/notes.org")))
+;; (global-set-key (kbd "<f9>") 'open-note)
+;; (defun open-note ()
+;;   "Open stick note."
+;;   (interactive)(find-file (concat org-directory "/notes.org")))
 
 (global-set-key (kbd "C-x <f9>") 'open-computer-notes)
 (defun open-computer-notes ()
   "open-computer-notes"
-  (interactive)(find-file (concat org-directory "/computer_notes.org")))
+  (interactive) (helm-find-files-1 "~/projects/source-blog/source/notes/"))
 
-(global-set-key (kbd "<f10>") 'open-agenda-directory)
-(defun open-agenda-directory ()
-  "Open the directory of Org agenda files."
-  (interactive)(find-file (concat org-directory "/agenda")))
+;; (global-set-key (kbd "<f10>") 'open-agenda-directory)
+;; (defun open-agenda-directory ()
+;;   "Open the directory of Org agenda files."
+;;   (interactive)(find-file (concat org-directory "/agenda")))
 
-(global-set-key (kbd "C-x <f10>") 'open-nihongo-note)
-(defun open-nihongo-note ()
-  "Open nihongo note."
-  (interactive)(find-file (concat org-directory "/日本語のノート.org")))
+;; (global-set-key (kbd "C-x <f10>") 'open-nihongo-note)
+;; (defun open-nihongo-note ()
+;;   "Open nihongo note."
+;;   (interactive)(find-file (concat org-directory "/日本語のノート.org")))
 
-(global-set-key (kbd "C-x <f11>") 'open-diary)
-(defun open-diary ()
-  "Open diary."
-  (interactive)(find-file (concat org-directory "/diary/diary.org")))
+;; (global-set-key (kbd "C-x <f11>") 'open-diary)
+;; (defun open-diary ()
+;;   "Open diary."
+;;   (interactive)(find-file (concat org-directory "/diary/diary.org")))
 
-(global-set-key (kbd "<f11>") 'open-material-notes)
-(defun open-material-notes ()
-  "Open material notes."
-  (interactive)(find-file (concat org-directory "/materials.org")))
+;; (global-set-key (kbd "<f11>") 'open-material-notes)
+;; (defun open-material-notes ()
+;;   "Open material notes."
+;;   (interactive)(find-file (concat org-directory "/materials.org")))
 
-(defun open-blog-dir ()
-  (interactive)(find-file "~/Dropbox/Blog"))
-(global-set-key (kbd "C-x <f12>") 'open-blog-dir)
+;; (defun open-blog-dir ()
+;;   (interactive)(find-file "~/Dropbox/Blog"))
+;; (global-set-key (kbd "C-x <f12>") 'open-blog-dir)
 
 ;; StarDict
 ;; please install sdcv on your system first

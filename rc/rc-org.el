@@ -127,7 +127,7 @@
   (setq org-adapt-indentation nil)
   ;; Disable indenting on org-babel restclient edits
   (setq org-edit-src-content-indentation 0)
-
+  (setq org-src-preserve-indentation t)
   ;; active Babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
