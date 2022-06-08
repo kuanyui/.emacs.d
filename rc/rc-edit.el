@@ -1,4 +1,13 @@
 ;;; rc-edit.el ---                                -*- lexical-binding: t; -*-
+
+;; ======================================================
+;; Electric
+;; ======================================================
+(electric-pair-mode 1)
+
+;; ======================================================
+;; Align
+;; ======================================================
 (defun my-align (start end regexp)
   "Repeat alignment with respect to the given regular expression."
   (interactive "r\nsAlign regexp: ")
