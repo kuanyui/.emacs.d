@@ -1,7 +1,7 @@
 ;;; rc-edit.el ---                                -*- lexical-binding: t; -*-
 
 ;; ======================================================
-;; Electric
+;; Electric... Auto close quote or parenthesis
 ;; ======================================================
 (electric-pair-mode 1)
 
@@ -55,8 +55,6 @@
 (move-text-default-bindings)
 
 
-
-
 (if (window-system)
     (progn
       ;; Follow my VSCode configuration in GUI Emacs
@@ -100,6 +98,12 @@
   )
 ;; ace-jump
 (global-set-key (kbd "C-c SPC") 'ace-jump-word-mode)
+
+;; ======================================================
+;; Expand region
+;; ======================================================
+(global-set-key (kbd "C-'") 'er/expand-region)
+(global-set-key (kbd "C-\"") 'er/mark-inside-quotes)
 
 ;;======================================================
 ;; Abbrevs

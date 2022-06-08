@@ -21,7 +21,7 @@
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
 
-;; Make all URLs clickable
+;; Make all URLs/URIs/links clickable
 (add-hook 'prog-mode-hook 'goto-address-mode)
 ;; ======================================================
 ;; Flyspell
