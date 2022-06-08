@@ -344,7 +344,24 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (require 'hlinum)
 (hlinum-activate)
 
+;; ======================================================
+;; VSCode Behaviors
+;; ======================================================
 
+;; I've gotten used to VSCode's shift + click to select region. (And I
+;; suddenly found that the default behaviour of right-click is more
+;; convenient than VSCode)
+
+;; (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
+;; (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-set-mark) ;; Donno why it shows S-down-mouse-1 is undefined... Whatever.
+(define-key global-map (kbd "<S-mouse-1>") 'mouse-set-mark)
+
+;; auto delete selected region when typing
+(delete-selection-mode t)
+
+;; ======================================================
+;; Other shits
+;; ======================================================
 ;;當前行高亮顯示
 ;; (global-hl-line-mode 1)
 
