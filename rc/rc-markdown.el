@@ -22,6 +22,17 @@
 
 (setq markdown-enable-highlighting-syntax t)
 (setq markdown-fontify-whole-heading-line t)
+(setq markdown-indent-function 'indent-relative)
+;; (setq markdown-indent-function 'markdown-indent-line)
+
+(defun my-markdown-mode-hook ()
+  (setq indent-tabs-mode nil)
+  (setq tab-width 2))
+
+(add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
+
+;; (add-hook 'text-mode-hook 'my-markdown-mode-hook)
+
 ;; (require 'mmm-mode)
 ;; (setq mmm-global-mode 'maybe)
 
