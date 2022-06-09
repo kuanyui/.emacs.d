@@ -357,7 +357,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (define-key global-map (kbd "<S-mouse-1>") 'mouse-set-mark)
 
 ;; auto delete selected region when typing
-(delete-selection-mode t)
+(delete-selection-mode 1)
 
 ;; ======================================================
 ;; Other shits
