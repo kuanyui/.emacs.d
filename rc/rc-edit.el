@@ -1,9 +1,9 @@
 ;;; rc-edit.el ---                                -*- lexical-binding: t; -*-
 
 ;; ======================================================
-;; Electric... Auto close quote or parenthesis
+;; Electric... Auto close quote or parenthesis, But too annoying
 ;; ======================================================
-(electric-pair-mode 1)
+;; (electric-pair-mode -1)
 
 ;; ======================================================
 ;; Align
