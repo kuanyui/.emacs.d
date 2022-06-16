@@ -353,7 +353,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; convenient than VSCode)
 
 ;; (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
-;; (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-set-mark) ;; Donno why it shows S-down-mouse-1 is undefined... Whatever.
+(define-key global-map (kbd "<S-down-mouse-1>") 'mouse-set-mark)
 (define-key global-map (kbd "<S-mouse-1>") 'mouse-set-mark)
 
 ;; auto delete selected region when typing

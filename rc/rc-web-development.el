@@ -146,7 +146,7 @@
     :submode omg-scss-mode
     :face mmm-code-submode-face
     :front "^style\\.\n"
-    :back "^\n\n")
+    :back "^\n[^ ]")
    )
  )
 
