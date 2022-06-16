@@ -767,6 +767,11 @@ Otherwise, return DPI (1 inch = 2.54 cm)
  kept-old-versions 2
  version-control t)       ; use versioned backups
 
+;; Don't use .#FILENAME
+;; https://stackoverflow.com/questions/5738170/why-does-emacs-create-temporary-symbolic-links-for-modified-files/12974060#12974060
+;; Non-nil means use lockfiles to avoid editing collisions.
+(setq create-lockfiles nil)
+
 ;; ======================================================
 ;; God-mode
 ;; ======================================================
