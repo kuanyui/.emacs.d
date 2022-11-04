@@ -33,7 +33,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (require 'subr-x)
 (cond ((member system-type '(darwin gnu/linux))
        (setq shell-file-name "/bin/zsh")
-       (setq shell-command-switch "-ic")
+       (setq shell-command-switch "-c")
        (if (boundp 'exec-path-from-shell-initialize) (exec-path-from-shell-initialize))
        ;; (setenv "PATH" (string-join (list (getenv "PATH")
        ;;                                    "/usr/local/bin/"
