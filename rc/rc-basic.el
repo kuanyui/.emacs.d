@@ -362,8 +362,10 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; ======================================================
 ;; Other shits
 ;; ======================================================
+(global-set-key (kbd "M-z") 'toggle-truncate-lines)
+
 ;;當前行高亮顯示
-;; (global-hl-line-mode 1)
+(global-hl-line-mode 1)
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
