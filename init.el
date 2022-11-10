@@ -20,8 +20,8 @@
 (require 'rc-calendar)
 (require 'rc-term)
 
-(require 'rc-gnus)
-(require 'rc-twittering)
+;; (require 'rc-gnus)
+;; (require 'rc-twittering)
 
 (require 'rc-magit)
 (if (member system-type '(darwin gnu/linux))
