@@ -48,5 +48,26 @@
 ;; (chosen (ido-completing-read "Select a key: " keys)))
 ;; (setenv "GIT_SSH_COMMAND" (format "ssh -o 'IdentitiesOnly=yes' -i ~/.ssh/%s" chosen))))
 
+
+;; Copied From https://github.com/magit/magit/discussions/4826#discussioncomment-4389196
+
+(defun my/magit-refs-toggle-tags ()
+  "Toggle showing tags in `magit-refs-mode'.
+This only affects the current buffer and is useful if you do not
+show tags by default."
+  (interactive)
+  (let ((pos (point)))
+    (if (memq 'magit-insert-tags magit-refs-sections-hook)
+        (kill-local-variable 'magit-refs-sections-hook)
+      (setq-local magit-refs-sections-hook
+                  (append magit-refs-sections-hook
+                          '(magit-insert-tags))))
+    (magit-refresh-buffer)
+    (goto-char pos)))
+
+(with-eval-after-load 'magit-refs
+  (remove-hook 'magit-refs-sections-hook #'magit-insert-tags)
+  (define-key magit-refs-mode-map (kbd "C-c C-t") #'my/magit-refs-toggle-tags))
+
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
