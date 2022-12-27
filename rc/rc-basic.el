@@ -377,6 +377,8 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; Hide scroll bar
 (scroll-bar-mode -1)
 ;; (customize-set-variable 'scroll-bar-mode 'right)
+;; Scroll line one-by-one
+(setq scroll-step 1)
 
 (require 'hungry-delete)
 (global-hungry-delete-mode -1)
