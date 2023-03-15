@@ -9,7 +9,7 @@
 
 ;; Try another way...:
 ;;(font-lock-add-keywords 'js-mode '(("\\(TODO\\|FIXME\\)" 0 'font-lock-warning-face prepend)))
-
+(setq eldoc-echo-area-use-multiline-p t)
 ;; ======================================================
 ;; Company
 ;; ======================================================
