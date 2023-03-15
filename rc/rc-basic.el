@@ -135,6 +135,10 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (if (not global-diff-hl-mode)
       (global-diff-hl-mode 1)))
 (add-hook 'find-file-hooks 'my-enable-diff-hl-mode)
+
+;; Don't ignore .git/ when find-file
+(setq completion-ignored-extensions (remove ".git/" completion-ignored-extensions))
+
 ;; ======================================================
 ;; Make window status undo-able
 ;; ======================================================
