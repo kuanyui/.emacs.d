@@ -46,7 +46,9 @@
 ;; ======================================================
 ;; (require 'hexo)
 (autoload 'hexo "hexo" "A major mode for hexo" t)
-
+(setq hexo-posix-compatible-shell-file-path "/usr/bin/bash")
+(setq hexo-nvm-enabled t)
+(setq hexo-nvm-use-version "6")
 
 ;;======================================================
 ;; writing-utils.el 寫作加強
