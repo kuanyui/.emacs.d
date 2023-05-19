@@ -7,6 +7,36 @@
   (require 'magit)
   (setq git-commit-summary-max-length 600)
   (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
+
+  )
+(with-eval-after-load 'magit-log
+  ;; (defun --my-magit-log-hack ()
+  ;;   (put 'magit-log-mode 'magit-log-default-arguments
+  ;; 	 '("--graph" "-n256" "--decorate" "--color" "--decorate-refs-exclude=*_[0-9][0-9][0-9][0-9][0-9][0-9]"))
+  ;;   (put 'magit-log-select-mode 'magit-log-default-arguments
+  ;; 	 '("--graph" "-n256" "--decorate" "--color" "--decorate-refs-exclude=*_[0-9][0-9][0-9][0-9][0-9][0-9]"))
+  ;;   )
+  ;; (add-hook 'magit-log-mode-hook '--my-magit-log-hack)
+
+  ;; (transient-define-argument my-magit:--exclude-refs ()
+  ;;   :description "Exclude refs / tags"
+  ;;   :class 'transient-option
+  ;;   :key "=e"
+  ;;   :argument "--exclude-ref="
+  ;;   :reader #'my-magit-transient-read-glob-pattern)
+
+  ;; (defun my-magit-transient-read-glob-pattern (prompt initial-input history)
+  ;;   (magit-completing-read
+  ;;    prompt
+  ;;    (mapcar (lambda (line)
+  ;;              (save-excursion
+  ;; 		 (and (string-match "\\`[\s\t]+[0-9]+\t" line)
+  ;;                     (list (substring line (match-end 0))))))
+  ;;            (magit-git-lines "shortlog" "-n" "-s" "-e" "HEAD"))
+  ;;    nil nil initial-input history))
+
+  ;; (transient-append-suffix 'magit-log "T"
+  ;;   (my-magit:--exclude-ref))
   )
 (global-set-key (kbd "C-x g s") 'magit-status)
 (global-set-key (kbd "C-x g l") 'magit-log)
@@ -68,6 +98,65 @@ show tags by default."
 (with-eval-after-load 'magit-refs
   (remove-hook 'magit-refs-sections-hook #'magit-insert-tags)
   (define-key magit-refs-mode-map (kbd "C-c C-t") #'my/magit-refs-toggle-tags))
+
+;; https://stackoverflow.com/questions/23299314/finding-the-exit-code-of-a-shell-command-in-elisp
+(defun my-magit-run-process (program &rest args)
+  "Run PROGRAM with ARGS and return the exit code and output in a dotted tuple."
+  (with-temp-buffer
+    (cons (apply 'call-process program nil (current-buffer) nil args)
+          (buffer-string))))
+
+;; See magit-cherry-pick
+;; (magit-cherry-copy hash '("--ff"))
+(defun my-magit-cherry-pick-current-commit ()
+  (interactive)
+  (let* ((hash-head (car (string-split (shell-command-to-string "git rev-parse HEAD"))))
+	 (hash-cherrypicked (my-magit-log-get-hash-of-current-line))
+	 (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked))))
+    (if (not (eq cherrypick-result 0))
+	(progn
+	  (message "Cherry-pick failed. Please check manually.")
+	  )
+      (let* ((ori-msg (shell-command-to-string "git log -1 --pretty=%B"))
+	     (new-msg (format "%s
+--------------
+(This commit is cherry-picked from %s)" ori-msg hash-cherrypicked)))
+	(shell-command (format "git commit --amend -m \"%s\"" (my-shell-arg-escape new-msg)))
+	))
+    ))
+
+
+
+(defun my-shell-arg-escape (string)
+  "Replace html entities.
+Example:
+(html-enetities-convert \"&gt\;\")
+=> \">\""
+  (mapc (lambda (x)
+	  (if (string-match (car x) string)
+	      (setq string (string-replace (car x) (cdr x) string))
+	    ))
+        '(
+	  ("\"" . "\\\"")
+	  ("\`" . "\\\`")
+	  )
+	)
+  string)
+
+
+
+(defun my-shell-arg-escape (arg)
+  (string-replace "\"" "\\\"" new-msg)
+  )
+
+(defun my-magit-log-get-hash-of-current-line ()
+  (let* ((section (magit-current-section))
+	 (hash-short (oref section value))
+	 (hash-full (magit-rev-parse hash-short)))
+    hash-full))
+
+(with-eval-after-load 'magit
+  )
 
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
