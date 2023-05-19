@@ -99,6 +99,11 @@ show tags by default."
   (remove-hook 'magit-refs-sections-hook #'magit-insert-tags)
   (define-key magit-refs-mode-map (kbd "C-c C-t") #'my/magit-refs-toggle-tags))
 
+
+;; =======================================
+;; Enhanced git cherry-pick
+;; =======================================
+
 ;; https://stackoverflow.com/questions/23299314/finding-the-exit-code-of-a-shell-command-in-elisp
 (defun my-magit-run-process (program &rest args)
   "Run PROGRAM with ARGS and return the exit code and output in a dotted tuple."
@@ -118,12 +123,32 @@ show tags by default."
 	  (message "Cherry-pick failed. Please check manually.")
 	  )
       (let* ((ori-msg (shell-command-to-string "git log -1 --pretty=%B"))
+	     (fmtted-branches (mapconcat (lambda(x) (format "\`%s\`" x))
+					 (my-magit-get-branches-containing-commit hash-cherrypicked) ", "))
 	     (new-msg (format "%s
 --------------
-(This commit is cherry-picked from %s)" ori-msg hash-cherrypicked)))
+(This commit is cherry-picked from %s , which is contained in the following branch(s): %s)" ori-msg hash-cherrypicked fmtted-branches)))
 	(shell-command (format "git commit --amend -m \"%s\"" (my-shell-arg-escape new-msg)))
+	(message (shell-command-to-string "git log -1"))
 	))
     ))
+
+;; (defun aaa ()
+;; (interactive)
+;; (message "%S" (my-magit-get-branches-containing-commit (my-magit-log-get-hash-of-current-line))))
+
+
+(defun my-magit-get-branches-containing-commit (hash)
+  (let* ((result (my-magit-run-process "git" "branch" "--all" "--contains" hash))
+	 (lines (butlast (split-string (cdr result) "\n")))
+	 (branches-raw (mapcar (lambda (x) (substring x 2)) lines))
+	 (branches-filtered (cl-delete-duplicates
+			     (mapcar (lambda (x)
+				       (replace-regexp-in-string "^remotes/[^/]+/" "" x))
+				     branches-raw)
+			     :test #'equal)))
+
+    branches-filtered))
 
 
 
@@ -142,12 +167,6 @@ Example:
 	  )
 	)
   string)
-
-
-
-(defun my-shell-arg-escape (arg)
-  (string-replace "\"" "\\\"" new-msg)
-  )
 
 (defun my-magit-log-get-hash-of-current-line ()
   (let* ((section (magit-current-section))
