@@ -103,7 +103,11 @@ show tags by default."
 ;; =======================================
 ;; Enhanced git cherry-pick
 ;; =======================================
+(with-eval-after-load 'magit-log
+  (define-key magit-log-mode-map (kbd "M-A") #'my-magit-cherry-pick-current-commit)
+  )
 
+(require 'f)
 ;; https://stackoverflow.com/questions/23299314/finding-the-exit-code-of-a-shell-command-in-elisp
 (defun my-magit-run-process (program &rest args)
   "Run PROGRAM with ARGS and return the exit code and output in a dotted tuple."
@@ -111,27 +115,41 @@ show tags by default."
     (cons (apply 'call-process program nil (current-buffer) nil args)
           (buffer-string))))
 
+(defun my-magit-shell-command-to-string (cmd)
+  "Remove the newline in the end of file."
+  (car (string-split (shell-command-to-string cmd))))
+
 ;; See magit-cherry-pick
 ;; (magit-cherry-copy hash '("--ff"))
 (defun my-magit-cherry-pick-current-commit ()
   (interactive)
-  (let* ((hash-head (car (string-split (shell-command-to-string "git rev-parse HEAD"))))
+  (let* ((hash-head (my-magit-shell-command-to-string "git rev-parse HEAD"))
 	 (hash-cherrypicked (my-magit-log-get-hash-of-current-line))
-	 (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked))))
-    (if (not (eq cherrypick-result 0))
-	(progn
-	  (message "Cherry-pick failed. Please check manually.")
-	  )
-      (let* ((ori-msg (shell-command-to-string "git log -1 --pretty=%B"))
-	     (fmtted-branches (mapconcat (lambda(x) (format "\`%s\`" x))
-					 (my-magit-get-branches-containing-commit hash-cherrypicked) ", "))
-	     (new-msg (format "%s
+	 (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked)))
+	 (branch-head (format "`%s`" (my-magit-shell-command-to-string "git branch --show")))
+	 (branches-cherrypicked (mapconcat (lambda(x) (format "\`%s\`" x))
+					   (my-magit-get-branches-containing-commit hash-cherrypicked) ", "))
+	 (NEW_MSG_TEMPLATE "%s
 --------------
-(This commit is cherry-picked from %s , which is contained in the following branch(s): %s)" ori-msg hash-cherrypicked fmtted-branches)))
+(This commit is created via cherry-pick by HEAD branch %s. The cherry-picked source commit is %s , which is contained in the following branch(s): %s"))
+    (if (not (eq cherrypick-result 0))
+	(let* ((ori-msg-fpath (f-join (my-magit-shell-command-to-string "git rev-parse --show-toplevel") ".git/MERGE_MSG"))
+	       (ori-msg (f-read-text ori-msg-fpath 'utf-8))
+	       (new-msg (format NEW_MSG_TEMPLATE ori-msg branch-head hash-cherrypicked branches-cherrypicked)))
+	  (f-write-text new-msg 'utf-8 ori-msg-fpath)
+	  (message (propertize (format "
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+[ATTENTION] Cherry-pick failed. Please check manually.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\n\n%s" new-msg) :foreground "#ff6666"))
+	  )
+      (let* ((ori-msg (my-magit-shell-command-to-string "git log -1 --pretty=%B"))
+	     (new-msg (format NEW_MSG_TEMPLATE ori-msg branch-head hash-cherrypicked branches-cherrypicked)))
 	(shell-command (format "git commit --amend -m \"%s\"" (my-shell-arg-escape new-msg)))
-	(message (shell-command-to-string "git log -1"))
+	(message (my-magit-shell-command-to-string "git log -1"))
 	))
     ))
+
 
 ;; (defun aaa ()
 ;; (interactive)
