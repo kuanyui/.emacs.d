@@ -117,7 +117,7 @@ show tags by default."
 
 (defun my-magit-shell-command-to-string (cmd)
   "Remove the newline in the end of file."
-  (car (string-split (shell-command-to-string cmd))))
+  (string-join (butlast (split-string (shell-command-to-string cmd) "\n")) "\n"))
 
 ;; See magit-cherry-pick
 ;; (magit-cherry-copy hash '("--ff"))
@@ -125,10 +125,10 @@ show tags by default."
   (interactive)
   (let* ((hash-head (my-magit-shell-command-to-string "git rev-parse HEAD"))
 	 (hash-cherrypicked (my-magit-log-get-hash-of-current-line))
-	 (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked)))
 	 (branch-head (format "`%s`" (my-magit-shell-command-to-string "git branch --show")))
 	 (branches-cherrypicked (mapconcat (lambda(x) (format "\`%s\`" x))
 					   (my-magit-get-branches-containing-commit hash-cherrypicked) ", "))
+	 (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked)))
 	 (NEW_MSG_TEMPLATE "%s
 --------------
 (This commit is created via cherry-pick by HEAD branch %s. The cherry-picked source commit is %s , which is contained in the following branch(s): %s"))
