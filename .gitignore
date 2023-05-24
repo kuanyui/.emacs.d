@@ -1,5 +1,7 @@
 *.log
 *.pyc
+/elpy
+/projects
 *~
 -.#*
 .DS_Store
