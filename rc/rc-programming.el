@@ -59,6 +59,8 @@
 (define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
+(define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
+(define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 1.0)
 
