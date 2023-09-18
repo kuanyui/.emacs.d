@@ -20,7 +20,7 @@
 ;;======================================================
 ;;(delete "/usr/local/share/emacs/24.4/lisp/org" load-path)
 (with-eval-after-load 'org
-  (require 'org-install)
+  ;; (require 'org-install)  ;; deprecated since Emacs 29?
   (require 'org)
   (require 'org-habit)
   (require 'ox)
@@ -600,7 +600,7 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
 
   ;; capture jump to link
   (define-key global-map "\C-cx"
-    (lambda () (interactive) (org-capture nil "x")))
+	      (lambda () (interactive) (org-capture nil "x")))
 
   ;; used by org-clock-sum-today-by-tags
   (defun filter-by-tags ()
