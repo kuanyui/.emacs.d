@@ -56,6 +56,7 @@
 (require 'highlight-symbol)
 (define-key prog-mode-map (kbd "C-M-\"") 'highlight-symbol-at-point)
 (define-key prog-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
+(define-key prog-mode-map (kbd "C-M-\"") 'highlight-symbol-at-point)
 (define-key prog-mode-map (kbd "M-n")'highlight-symbol-next)
 (define-key prog-mode-map (kbd "M-p")'highlight-symbol-prev)
 (define-key prog-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
