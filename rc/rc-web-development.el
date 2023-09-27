@@ -99,9 +99,7 @@
 ;; Jade (Pug) + Embedded CoffeeScript (MMM-mode)
 ;; ======================================================
 
-
-
-(require 'coffee-mode)
+(require 'coffee-mode)  ; This cost 79ms when startup
 
 (custom-set-variables '(coffee-tab-width 2))
 
