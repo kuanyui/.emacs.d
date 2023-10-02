@@ -20,20 +20,6 @@
 (global-set-key (kbd "M-(") 'goto-last-change)
 (global-set-key (kbd "M-)") 'goto-last-change-reverse)
 
-;;======================================================
-;; Visual Regexp
-;;======================================================
-
-(require 'visual-regexp-steroids)
-(define-key global-map (kbd "C-c v r") 'vr/replace)
-(define-key global-map (kbd "C-c v q") 'vr/query-replace)
-;; if you use multiple-cursors, this is for you:
-(define-key global-map (kbd "C-c v m") 'vr/mc-mark)
-;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch, also include the following lines:
-(define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
-(define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
-
-
 ;; ======================================================
 ;; smartparens
 ;; ======================================================

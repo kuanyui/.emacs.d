@@ -309,19 +309,6 @@
             (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
             (define-key projectile-mode-map [remap projectile-find-file] #'pff))
           )
-;;======================================================
-;; Tree
-;;======================================================
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
-
-
-;; ======================================================
-;; Emacs-Refactor
-;; ======================================================
-(require 'emr-js)
-(define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
-(add-hook 'prog-mode-hook 'emr-initialize)
 
 ;; ======================================================
 ;; wgrep
