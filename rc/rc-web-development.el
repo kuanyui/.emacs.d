@@ -326,7 +326,6 @@
 ;; ======================================================
 ;; Firefox Controller
 ;; ======================================================
-(require 'firefox-controller)
 
 (require 'highlight-symbol)
 

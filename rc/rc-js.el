@@ -65,17 +65,6 @@
   (local-set-key "\C-c\C-l" 'js-send-buffer-and-go)
   (local-set-key "\C-cl" 'js-load-file-and-go)
   )
-(require 'flow-minor-mode)
-(defun my--js2-flow-autoconf ()
-  (when (my-js-flow-tag-exists-p)
-    ;; (flow-js2-mode) ; this still has lots of errors.
-    (js-mode)  ;; fallback to js-mode
-    ;; (flow-minor-mode)
-    ;; (lsp-js-flow-enable)
-    (require 'eglot)
-    (eglot-ensure)
-    (message "Flow detected, fallback to js-mode + flow-minor-mode"))
-  )
 
 (defun my-js-flow-tag-exists-p ()
   "Return true if the '// @flow' tag is present in the current buffer."
