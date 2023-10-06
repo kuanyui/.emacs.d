@@ -193,7 +193,25 @@ Example:
     hash-full))
 
 (with-eval-after-load 'magit
+  ;; Forked from magit-log.el
+  ;; Highlight [.*?], \(.*?\) in commit message.
+  (require 's)
+  (defvar magit-log-format-message-function #'my-magit-log-propertize-keywords)
+  (defun my-magit-log-propertize-keywords (_rev msg)
+    (let ((boundary 0))
+      (when (string-match "^\\(?:squash\\|fixup\\)! " msg boundary)
+	(setq boundary (match-end 0))
+	(magit--put-face (match-beginning 0) (1- boundary)
+			 'magit-keyword-squash msg))
+      (when magit-log-highlight-keywords
+	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'magit-keyword msg))
+	      (s-matched-positions-all "\\[.+\\]" msg 0))
+	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-type-face msg))
+	      (s-matched-positions-all "([^)]+?)" msg 0))
+	))
+    msg)
   )
+
 
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
