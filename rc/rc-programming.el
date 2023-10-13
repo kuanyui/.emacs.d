@@ -281,12 +281,15 @@
 ;; disable ido faces to see flx highlights.
 (setq ido-use-faces nil)
 (setq ido-enable-flex-matching t)
+(projectile-mode)
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
 (setq projectile-indexing-method 'alien)
 (setq projectile-enable-caching t)
 (setq projectile-sort-order 'recentf)  ;; [NOTICE] Not works in helm.
 
 ;; (projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
+(global-set-key (kbd "C-c p p") #'helm-projectile)
+(global-set-key (kbd "C-c p r") #'helm-projectile-switch-project)
 (global-set-key (kbd "C-c p s g") #'helm-projectile-grep)
 (global-set-key (kbd "C-c p s s") #'helm-projectile-ag)
 (global-set-key (kbd "C-c p r") #'projectile-recentf)
