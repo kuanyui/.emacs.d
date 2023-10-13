@@ -205,9 +205,9 @@ Example:
 			 'magit-keyword-squash msg))
       (when magit-log-highlight-keywords
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'magit-keyword msg))
-	      (s-matched-positions-all "\\[.+\\]" msg 0))
+	      (s-matched-positions-all "\\[[^ ]+\\]" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-type-face msg))
-	      (s-matched-positions-all "([^)]+?)" msg 0))
+	      (s-matched-positions-all "([^) ]+?)" msg 0))
 	))
     msg)
   )
