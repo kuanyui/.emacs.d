@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014  kuanyui
 
 ;; Author: kuanyui <azazabc123@gmail.com>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp")
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp")
 
 (provide 'rc-site-lisp)
 ;;; rc-site-lisp.el ends here
