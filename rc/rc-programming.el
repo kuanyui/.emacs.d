@@ -26,11 +26,14 @@
 ;; ======================================================
 ;; Flyspell
 ;; ======================================================
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-(setq ispell-program-name "aspell")
-;; force the English dictionary, support Camel Case spelling check (tested with aspell 0.6)
-(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together" "--run-together-limit=5" "--run-together-min=2"))
-
+(if (not (executable-find "aspell"))
+    (warn "Please install aspell on your system")
+  (progn
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    (setq ispell-program-name "aspell")
+    ;; force the English dictionary, support Camel Case spelling check (tested with aspell 0.6)
+    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together" "--run-together-limit=5" "--run-together-min=2"))
+))
 ;; ======================================================
 ;; Which Func
 ;; ======================================================
@@ -340,7 +343,6 @@
 ;; ======================================================
 (setq flycheck-keymap-prefix (kbd "C-x !"))
 
-(provide 'rc-programming)
 
 ;; ======================================================
 ;; LSP (eglot)
@@ -367,4 +369,7 @@ language-server/bin/php-language-server.php"))
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
   ;;(define-key eglot-mode-map (kbd "C-c M-p") 'eglot-rename)
   )
+
+(provide 'rc-programming)
+
 ;;; rc-programming.el ends here
