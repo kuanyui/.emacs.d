@@ -267,8 +267,6 @@
   (rainbow-delimiters-mode)
   (flycheck-mode 1)
   (company-mode-on)
-  (require 'eglot)
-  (eglot-ensure)
   )
 
 

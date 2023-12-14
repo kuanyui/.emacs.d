@@ -46,8 +46,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
        )
       ((member system-type 'cygwin) (setq shell-file-name "/bin/bash")))
 
-(getenv "PATH")
-(executable-find "flow-language-server")
+
+
 ;;(require 'whitespace)
 ;; (global-whitespace-mode)
 ;; (whitespace-mode)
@@ -120,6 +120,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (interactive)
   (revert-buffer nil t)
   (message "Buffer reverted."))
+(global-auto-revert-mode t)
 
 ;; Always split window vertically. (e.g. Magit, ibuffer)
 
@@ -158,6 +159,12 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (defadvice ffap-file-finder (after auto-goto-eol activate)
   (move-end-of-line 1))
 
+
+
+;; ============================================
+;; Coldnew's Font Size Conf for Org-Table
+;; ============================================
+
 (defun get-screen-pixel-density ()
   "Return nil on terminal.
 Otherwise, return DPI (1 inch = 2.54 cm)
@@ -172,11 +179,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
         nil
       (* 25.4 (/ w-px (float w-mm)))
       )))
-
-
-;; ============================================
-;; Coldnew's Font Size Conf for Org-Table
-;; ============================================
 ;; 特殊字型設定
 (defun my-setup-font ()
   (interactive)
@@ -933,10 +935,12 @@ mouse-1: Display Line and Column Mode Menu"))))))
 ;; ======================================================
 ;; File Backup Path
 ;; ======================================================
+;; https://www.emacswiki.org/emacs/BackupDirectory
+
 (defvar --backup-directory (concat user-emacs-directory "_backups"))
 (if (not (file-exists-p --backup-directory))
     (make-directory --backup-directory t))
-(setq backup-directory-alist `(("." . ,--backup-directory)))
+(setq backup-directory-alist `((".*" . ,--backup-directory)))
 (setq make-backup-files t               ; backup of a file the first time it is saved.
       backup-by-copying t               ; don't clobber symlinks
       version-control t                 ; version numbers for backup files
