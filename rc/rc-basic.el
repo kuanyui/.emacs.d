@@ -502,19 +502,131 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
 
 ;;Emacs內建的自動補完hippie-expand
+
+;; Documentation for new try-functions is copied from hippie-exp.el.gz as reference:
+;;
+;;    To write new try-functions, consider the following:
+;;
+;;    Each try-function takes one argument OLD which is nil the first
+;;    time the function is called and true in succeeding calls for the
+;;    same string to complete.
+;;
+;;    The first time the function has to extract the string before
+;;    point to complete, and substitute the first completion
+;;    alternative for it.
+;;
+;;    On following calls it has to substitute the next possible
+;;    completion for the last tried string.
+;;
+;;    The try-function is to return t as long as it finds new possible
+;;    completions.  When there are no more alternatives it has to
+;;    restore the text before point to its original contents, and
+;;    return nil (don't beep or message or anything).
+;;
+;;    `he-init-string' : Initializes the text to substitute to the
+;;      contents of the region BEGIN to END.  Also sets the variable
+;;      `he-search-string' to the text to expand.
+;;
+;;    `he-substitute-string' : substitutes STR into the region
+;;      initialized with `he-init-string'.  (An optional second argument
+;;      TRANS-CASE non-nil, means transfer of case from the abbreviation
+;;      to the expansion is ok if that is enabled in the buffer.)
+;;
+;;    `he-reset-string' : Resets the initialized region to its original
+;;      contents.
+;;
+;;     There is also a variable: `he-tried-table' which is meant to contain
+;;     all tried expansions so far.  The try-function can check this
+;;     variable to see whether an expansion has already been tried
+;;     (hint: `he-string-member').
+
+
+(defun myhe-try-complete-git-commit (old)
+  ""
+  (if
+      ;; If not inside git commit buffer, skip directly. (return nil)
+      (not (myhe--is-inside-git-commit-buffer))
+      '()
+    ;; If inside git commit buffer (COMMIT_EDITMSG):
+    (progn
+      ;; If first time to expand with this function, initialize candidates list
+      (if (not old)
+	  (progn
+	    ;; mark range of currently inputted prefix, and store the prefix as variable `he-search-string'
+	    (he-init-string (he-file-name-beg) (point))
+	    ;; add current prefix into `he-tried-table'  (donno why do this for now)
+	    (if (not (he-string-member he-search-string he-tried-table))
+		(setq he-tried-table (cons he-search-string he-tried-table)))
+	    ;; Set candidates
+	    (setq he-expand-list (all-completions
+				  he-search-string
+				  (myhe--get-filelist-in-git-commit-buffer)))))
+      ;; if candidate is already tried, remove it from candidates
+      (while (and he-expand-list
+		  (he-string-member (car he-expand-list) he-tried-table))
+	(setq he-expand-list (cdr he-expand-list)))
+      (if (null he-expand-list)
+	  (progn
+	    (if old (he-reset-string))
+	    ())  ;; Return nil, means no more candidates.
+	(progn
+	  (he-substitute-string (car he-expand-list))
+	  (setq he-expand-list (cdr he-expand-list))
+	  t)))))
+
+(defun myhe--get-visible-magit-diff-buffers ()
+  "Unused currently"
+  (let* ((windows (cl-remove-if-not
+		   (lambda (win)
+		     (with-current-buffer (window-buffer win)
+		       (eq major-mode 'magit-diff-mode)))
+		   (window-list)))
+	 (buffers (mapcar #'window-buffer windows))
+	 (files ()))
+    buffers))
+
+(defun myhe--is-inside-git-commit-buffer ()
+  (and (boundp 'git-commit-mode) git-commit-mode))
+
+(defun myhe--get-filelist-in-git-commit-buffer ()
+  ""
+  (if (not (myhe--is-inside-git-commit-buffer))
+      '()
+    (let ((bound (save-mark-and-excursion
+		   (beginning-of-buffer)
+		   (re-search-forward "# Changes not staged for commit:" nil 'no-error)
+		   (point)))
+	  (filepathes '())
+	  (filenames '())
+	  )
+      (save-match-data
+	(save-mark-and-excursion
+	  (beginning-of-buffer)
+	  (re-search-forward "# Changes to be committed:" nil 'no-error)
+	  (while (re-search-forward "#	[a-z ]+: +\\([A-Za-z0-9._/-]+\\)" bound 'no-error)
+	    (message "%s" (match-string-no-properties 1))
+	    (push (match-string-no-properties 1) filepathes)
+	    (push (file-name-nondirectory (match-string-no-properties 1)) filenames)
+	    )))
+      (append filenames filepathes))))
+
 (global-set-key [(meta ?/)] 'hippie-expand)
 (setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev
-        try-expand-dabbrev-visible
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill
-        try-complete-file-name-partially
-        try-complete-file-name
-        try-expand-all-abbrevs
-        try-expand-list
-        try-expand-line
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol))
+      '(myhe-try-complete-git-commit
+	try-expand-dabbrev
+	try-expand-dabbrev-visible
+	try-expand-dabbrev-all-buffers
+	try-expand-dabbrev-from-kill
+	try-complete-file-name-partially
+	try-complete-file-name
+	try-expand-all-abbrevs
+	try-expand-list
+	try-expand-line
+	try-complete-lisp-symbol-partially
+	try-complete-lisp-symbol
+	))
+
+
 
 (load "~/.emacs.d/lisps/complete-with-calc.el")
 
