@@ -1083,6 +1083,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
 ;; Show description in M-x
 (marginalia-mode)
 
+;; Fuzzy search (via orderless.el)
 (require 'orderless)
 (setq completion-styles '(orderless))
 (setq completion-category-defaults nil)
