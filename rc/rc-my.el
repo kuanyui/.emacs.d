@@ -199,7 +199,7 @@
 (global-set-key (kbd "C-x C-r") 'kissrecents-files)
 (global-set-key (kbd "C-x C-d") 'kissrecents-directories)
 (global-set-key (kbd "C-x C-p") 'kissrecents-projects)
-(setq kissrecents-ignore-path-patterns '("node_modules/" "\\.gitignore$" "\\.gitmodules$"))
+(setq kissrecents-ignore-path-patterns '("node_modules/" "/COMMIT_EDITMSG$"))
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
