@@ -193,9 +193,8 @@
 ;; ======================================================
 ;; recentz
 ;; ======================================================
-(autoload 'recentz-files "recentz" "List recently opened files.")
-(autoload 'recentz-directories "recentz" "List recently opened directories.")
-(autoload 'recentz-projects "recentz" "List recently opened projects.")
+
+(require 'recentz)
 (global-set-key (kbd "C-x C-r") 'recentz-files)
 (global-set-key (kbd "C-x C-d") 'recentz-directories)
 (global-set-key (kbd "C-x C-p") 'recentz-projects)
