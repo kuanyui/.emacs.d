@@ -191,15 +191,15 @@
 
 
 ;; ======================================================
-;; KISS recents
+;; recentz
 ;; ======================================================
-(autoload 'kissrecents-files "kissrecents" "List recently opened files.")
-(autoload 'kissrecents-directories "kissrecents" "List recently opened directories.")
-(autoload 'kissrecents-projects "kissrecents" "List recently opened projects.")
-(global-set-key (kbd "C-x C-r") 'kissrecents-files)
-(global-set-key (kbd "C-x C-d") 'kissrecents-directories)
-(global-set-key (kbd "C-x C-p") 'kissrecents-projects)
-(setq kissrecents-ignore-path-patterns '("node_modules/" "/COMMIT_EDITMSG$"))
+(autoload 'recentz-files "recentz" "List recently opened files.")
+(autoload 'recentz-directories "recentz" "List recently opened directories.")
+(autoload 'recentz-projects "recentz" "List recently opened projects.")
+(global-set-key (kbd "C-x C-r") 'recentz-files)
+(global-set-key (kbd "C-x C-d") 'recentz-directories)
+(global-set-key (kbd "C-x C-p") 'recentz-projects)
+(setq recentz-ignore-path-patterns '("node_modules/" "/COMMIT_EDITMSG$"))
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
