@@ -13,6 +13,9 @@
 [submodule "git/moedict"]
 	path = git/source/moedict
 	url = git@github.com:kuanyui/moedict.el.git
+[submodule "git/kissrecents"]
+	path = git/source/kissrecents
+	url = git@github.com:kuanyui/kissrecents.el.git
 [submodule "git/tldr"]
 	path = git/source/tldr
 	url = git@github.com:kuanyui/tldr.el.git
