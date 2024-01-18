@@ -45,3 +45,7 @@ recentf
 /elpa/archives/
 /session.*
 /_backups
+*.eln
+eln-cache/
+transient/
+.kissrecents-data
