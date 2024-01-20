@@ -132,6 +132,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 (global-display-line-numbers-mode 1)
 
+
 (defun my-enable-diff-hl-mode ()
   (if (not global-diff-hl-mode)
       (global-diff-hl-mode 1)))
@@ -343,8 +344,8 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (setq size-indication-mode t)
 
 ;; Highlight line number
-(require 'hlinum)
-(hlinum-activate)
+;; (require 'hlinum)
+;; (hlinum-activate)
 
 ;; ======================================================
 ;; VSCode Behaviors
