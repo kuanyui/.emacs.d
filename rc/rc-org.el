@@ -548,7 +548,6 @@ If OTHERS is true, skip all entries that do not correspond to TAG."
   (global-set-key (kbd "C-c C-x C-x") 'org-clock-in-last)
   (global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
   (global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
-  (add-to-list 'recentf-exclude ".+org-clock-save\\.el$")
                                         ;Now that OrgMode and RememberMode are included in Emacs (as of Emacs 23), activation is as simple as:
   ;;(org-remember-insinuate)
   ;;This excellent feature inspired Capture in OrgMode and that is now (Aug2010) recommended for new users, see http://orgmode.org/manual/Capture.html#Capture

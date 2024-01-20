@@ -274,14 +274,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key (kbd "C-M-_") 'undo-tree-redo)
 (global-set-key (kbd "M-?") 'undo-tree-redo)
 
-;;recents最近開啟的檔案，C-x C-r
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 35)
-;;(global-set-key (kbd "C-x C-r") 'recentf-open-files)
-(global-set-key (kbd "C-x C-r") 'helm-recentf)
-
-;;(run-with-timer 0 (* 10 60) 'recentf-save-list)
 (setq calc-group-char " ")
 (setq calc-group-digits 4)
 
