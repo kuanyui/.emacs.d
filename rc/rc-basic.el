@@ -635,14 +635,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;(autoload 'company-mode "company" nil t)
 ;;(company-mode 1)
 
-;;popup-kill-ring
-(add-to-list 'load-path "~/.emacs.d/lisps/popup-kill-ring/")
-;;(require 'popup)
-(require 'pos-tip)
-(require 'popup-kill-ring)
-
-;;(global-set-key "\M-y" 'popup-kill-ring)
-
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ;; 使用 Ctrl-x r j <char> 就可以進行快速跳轉至檔案，其中 <char> 為以下所設。
