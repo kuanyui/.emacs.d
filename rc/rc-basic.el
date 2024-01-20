@@ -437,9 +437,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;(setq show-paren-style 'parentheses)
 (setq show-paren-style 'expression) ;;另一種突顯方式(突顯整個括號範圍)
 
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-
 ;;X Clipboard在游標處插入，而不是滑鼠點擊的地方插入。
 (setq mouse-yank-at-point t)
 
