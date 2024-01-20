@@ -69,7 +69,7 @@
 (with-eval-after-load 'sgml-mode (define-key html-mode-map (kbd "C-c i l") 'insert-link-with-title))
 
 ;; [自用] 把livedoor Reader輸出的opml檔轉成markdown，然後吐到hexo目錄。
-(require 'livedoor-opml-to-markdown)
+;; (require 'livedoor-opml-to-markdown)
 
 ;;======================================================
 ;; moe-theme.el
