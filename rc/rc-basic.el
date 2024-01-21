@@ -367,8 +367,8 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; ======================================================
 (global-set-key (kbd "M-z") 'toggle-truncate-lines)
 
-;;當前行高亮顯示
-(global-hl-line-mode 1)
+;; Highlight current line?
+(global-hl-line-mode -1)
 
 ;;emacs內建書籤存檔
 (setq bookmark-save-flag 1)
@@ -377,9 +377,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (setq frame-title-format "%n%b (%f) - %F")
 ;;(setq frame-title-format '((:eval default-directory)))
 
-;; Hide scroll bar
-(scroll-bar-mode -1)
-;; (customize-set-variable 'scroll-bar-mode 'right)
 ;; Scroll line one-by-one
 (setq scroll-step 1)
 
@@ -628,7 +625,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ;; 使用 Ctrl-x r j <char> 就可以進行快速跳轉至檔案，其中 <char> 為以下所設。
-(require 'cl)
 (dolist
     (r `(
          (?e (file . "~/.emacs.d/init.el"))
@@ -1050,6 +1046,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
 ;; ======================================================
 ;; vertico - vertical interactive completion M-x. Zsh-liked
 ;; ======================================================
+
 (setq vertico-multiform-commands
       '((describe-symbol (vertico-sort-function . vertico-sort-alpha))))
 (setq vertico-multiform-categories
@@ -1064,6 +1061,9 @@ mouse-1: Display Line and Column Mode Menu"))))))
 (vertico-grid-mode -1)
 ;; Show description in M-x
 (marginalia-mode)
+
+;; Save Minibuffer History
+(savehist-mode t)
 
 ;; Fuzzy search (via orderless.el)
 (require 'orderless)

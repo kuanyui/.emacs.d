@@ -11,7 +11,6 @@
 (package-initialize)
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
-(add-hook 'after-init-hook (lambda () (message (emacs-init-time))))
 
 (add-to-list 'load-path "~/.emacs.d/rc")
 (require 'rc-basic)
@@ -64,6 +63,7 @@
 
 (require 'rc-site-lisp)
 
+(message (emacs-init-time))
 ;;======================================================
 ;; customize 以下為Emacs自動生成，不要動
 ;;======================================================

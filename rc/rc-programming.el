@@ -155,7 +155,6 @@
 ;;======================================================
 (require 'rainbow-delimiters)
 ;; 只在程式相關mode中使用
-(require 'cl)
 (dolist (x '(emacs-lisp-mode-hook
              lisp-mode-hook
              lisp-interaction-mode-hook
