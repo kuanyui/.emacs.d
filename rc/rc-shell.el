@@ -21,12 +21,13 @@
 ;;                         '((font-lock-system-command . 'font-lock-system-command-face)))
 
 ;; One-key to run script with Bash
-(require 'sh-script)
-(define-key sh-mode-map (kbd "<f5>") 'run-current-sh)
-(defun run-current-sh ()
-  (interactive)
-  (save-buffer)(shell-command (format "bash %s" (buffer-real-name))))
-
+;; (require 'sh-script)
+(with-eval-after-load 'sh-script
+  (define-key sh-mode-map (kbd "<f5>") 'run-current-sh)
+  (defun run-current-sh ()
+    (interactive)
+    (save-buffer)(shell-command (format "bash %s" (buffer-real-name))))
+  )
 
 (provide 'rc-shell)
 ;;; rc-shell.el ends here

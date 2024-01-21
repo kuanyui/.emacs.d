@@ -216,7 +216,7 @@ the previous directory."
 (defun dired-add-to-smplayer-playlist ()
   "Add a multimedia file or all multimedia files under a directory into SMPlayer's playlist via Dired."
   (interactive)
-  (require 'cl)
+  (require 'cl-lib)
   (let* ((PATTERN "\\(\\.mp4\\|\\.flv\\|\\.rmvb\\|\\.mkv\\|\\.avi\\|\\.rm\\|\\.mp3\\|\\.wav\\|\\.wma\\|\\.m4a\\|\\.mpeg\\|\\.aac\\|\\.ogg\\|\\.flac\\|\\.ape\\|\\.mp2\\|\\.wmv\\|.m3u\\|.webm\\|.3gpp\\)$")
          (FILE (dired-get-filename nil t)))
     (if (file-directory-p FILE)    ;if it's a dir.

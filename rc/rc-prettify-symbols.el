@@ -2,7 +2,7 @@
 
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 (setq prettify-symbols-patterns
       (let ((lispen '(emacs-lisp-mode
