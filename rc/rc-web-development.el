@@ -75,9 +75,9 @@
 ;; ======================================================
 
 (autoload 'yajade-mode "yajade-mode" "A customized major mode for Jade/Pug" t)
-(add-to-list 'auto-mode-alist '("\\.styl$" . stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
 (add-to-list 'auto-mode-alist '("\\.pug" . yajade-mode))
+(add-to-list 'auto-mode-alist '("\\.styl$" . stylus-mode))
 (add-to-list 'auto-mode-alist '("\\.ejs$" . web-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.jade$" . yajade-mode))
 
@@ -85,7 +85,7 @@
 
 (add-hook 'js-mode-hook 'hl-line-mode)
 
-(require 'smart-tab)
+(require 'smart-tab)  ;; NOTE: What the fuck is this?
 ;;(global-smart-tab-mode 1)
 
 (defun set-tab-width-to-2 ()
@@ -113,13 +113,6 @@
 
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
-
-(defun ttt ()
-  (interactive)
-  (let ((whitespace-style '(trailing space-before-tab indentation empty space-after-tab)))
-    (whitespace-cleanup)))
-;;       =================== test ===================================
-
 
 (require 'mmm-mode)
 
@@ -327,9 +320,9 @@
 ;; Firefox Controller
 ;; ======================================================
 
-(require 'highlight-symbol)
 
 (with-eval-after-load 'nxml-mode
+  (require 'highlight-symbol)
   (define-key nxml-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
   (define-key nxml-mode-map (kbd "M-n")'highlight-symbol-next)
   (define-key nxml-mode-map (kbd "M-p")'highlight-symbol-prev)
