@@ -194,11 +194,11 @@
 ;; Tree-mode 樹狀顯示檔案清單
 ;;======================================================
 
-(require 'tree-mode)
-(require 'windata)
-(require 'dirtree)
-(define-key dirtree-mode-map (kbd "TAB") 'tree-mode-toggle-expand)
-(set-face-foreground 'widget-button "orange")
+;; (require 'tree-mode)
+;; (require 'windata)
+;; (require 'dirtree)
+;; (define-key dirtree-mode-map (kbd "TAB") 'tree-mode-toggle-expand)
+;; (set-face-foreground 'widget-button "orange")
 
 ;;======================================================
 ;; Highlight-indentation
