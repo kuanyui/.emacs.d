@@ -198,7 +198,7 @@
 (global-set-key (kbd "C-x C-r") 'recentz-files)
 (global-set-key (kbd "C-x C-d") 'recentz-directories)
 (global-set-key (kbd "C-x C-p") 'recentz-projects)
-(setq recentz-ignore-path-patterns '("node_modules/" "/COMMIT_EDITMSG$"))
+(add-to-list recentz-ignore-path-patterns "node_modules/")
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
