@@ -198,7 +198,12 @@
 (global-set-key (kbd "C-x C-r") 'recentz-files)
 (global-set-key (kbd "C-x C-d") 'recentz-directories)
 (global-set-key (kbd "C-x C-p") 'recentz-projects)
-(add-to-list recentz-ignore-path-patterns "node_modules/")
+(setq recentz-max-history
+      '((files . 550)
+	(directories . 150)
+	(projects . 50)))
+
+(add-to-list 'recentz-ignore-path-patterns "node_modules/")
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
