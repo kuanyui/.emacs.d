@@ -885,10 +885,10 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
-
-(require 'rich-minority)
-(rich-minority-mode 1)
-(setf rm-blacklist "")
+(when nil
+  (require 'rich-minority)
+  (rich-minority-mode 1)
+  (setf rm-blacklist "")
 
 (defface projectile-mode-line
   '((((class color) (background light)) (:foreground "#444" :bold t))
@@ -965,7 +965,7 @@ mouse-1: Display Line and Column Mode Menu"))))
                 'help-echo "Column number\n\
 mouse-1: Display Line and Column Mode Menu"))))))
       )
-
+)
 (global-set-key [f6] 'point-to-register)
 (global-set-key [f7] 'jump-to-register)
 
