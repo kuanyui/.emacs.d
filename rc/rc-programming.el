@@ -369,6 +369,13 @@ language-server/bin/php-language-server.php"))
   ;;(define-key eglot-mode-map (kbd "C-c M-p") 'eglot-rename)
   )
 
+;; ======================================================
+;; AppArmor
+;; ======================================================
+
+(add-to-list 'auto-mode-alist '(".*/apparmor.d/.*" . apparmor-mode))
+
+
 (provide 'rc-programming)
 
 ;;; rc-programming.el ends here
