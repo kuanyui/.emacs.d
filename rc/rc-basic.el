@@ -6,6 +6,16 @@
 
 (set-locale-environment "UTF-8")
 
+(setq byte-compile-warnings '(not nresolved
+                                  free-vars
+                                  callargs
+                                  redefine
+                                  obsolete
+                                  noruntime
+                                  cl-functions
+                                  interactive-only
+                                  ))
+
 (defmacro buffer-real-name ()
   "This macro will return the real filename of current
 buffer (without parent directory) Because `uniquify' could cause
