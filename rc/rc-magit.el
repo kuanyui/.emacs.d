@@ -210,7 +210,43 @@ Example:
       ))
   msg)
 
+;; ======================================================
+;; toggle excludeDecoration
+;; ======================================================
+
+(defun my-magit-toggle-exclude-decoration-in-git-config ()
+  "Toggle the comment marks at BOL of `excludeDecoration = ...` in `CURRENT_REPO/.git/config`
+
+This will toggle between:
+
+  # excludeDecoration =
+
+and
+
+  excludeDecoration =
+"
+  (interactive)
+  (let* ((git-root (locate-dominating-file "." ".git/config"))
+	 (git-config (file-name-concat git-root ".git/config")))
+    (with-temp-buffer
+      (insert-file-contents git-config)
+      (goto-char (point-min))
+      (when (re-search-forward "\\[log\\]" nil t)
+	(while (re-search-forward "\\([[:space:]]+\\)\\(# *\\)?\\(excludeDecoration *= *.+\\)" nil 'no-error)
+	  (if (match-string 2)
+	      (replace-match "\\1\\3")
+	    (replace-match "\\1# \\3"))
+	  )
+	)
+      (write-region (point-min) (point-max) git-config nil 'silent))
+    )
+  (magit-refresh)
+  )
+
+(with-eval-after-load 'magit-log
+  (define-key magit-log-mode-map (kbd "M-E") #'my-magit-toggle-exclude-decoration-in-git-config)
+  )
 
 
-(provide 'rc-magit)
+ (provide 'rc-magit)
 ;;; rc-magit.el ends here
