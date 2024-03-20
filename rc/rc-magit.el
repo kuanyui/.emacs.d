@@ -247,6 +247,11 @@ and
   (define-key magit-log-mode-map (kbd "M-E") #'my-magit-toggle-exclude-decoration-in-git-config)
   )
 
+(with-eval-after-load 'magit-status
+  (define-key magit-hunk-section-map (kbd "M-U") #'magit-smerge-keep-upper)
+  (define-key magit-hunk-section-map (kbd "M-L") #'magit-smerge-keep-lower)
+  )
+
 
  (provide 'rc-magit)
 ;;; rc-magit.el ends here
