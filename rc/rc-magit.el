@@ -214,6 +214,35 @@ Example:
 ;; toggle excludeDecoration
 ;; ======================================================
 
+(defun my-git-get-repo-paths (from-path)
+  "Returns a plist"
+  (let* ((parent-dir (or (locate-dominating-file from-path ".git") ""))
+	 (git-file-or-dir (file-name-concat parent-dir ".git")))
+    (cond ((null parent-dir)
+	   '())
+	  ((file-regular-p git-file-or-dir)  ; A .git file
+	   (let* ((git-file-content (with-temp-buffer (insert-file-contents git-file-or-dir) (buffer-string)))
+		  (git-dir-relpath (progn
+				     (string-match "gitdir: *\\(.+\\)" git-file-content)
+				     (match-string 1 git-file-content)))
+		  (git-dir-abspath (file-truename (file-name-concat parent-dir git-dir-relpath))))  ; Note: file-truename chases symlink.
+	     (list :type 'submodule :project-dir parent-dir :git-dir git-dir-abspath :git-config (file-name-concat git-dir-abspath "config"))))
+	  ((file-directory-p git-file-or-dir)
+	   (list :type 'regular :project-dir parent-dir :git-dir git-file-or-dir :git-config (file-name-concat git-file-or-dir "config")))
+	  )
+    ))
+;; TESTS:
+;; (my-git-get-repo-paths "../git/source/recentz")
+;; (my-git-get-repo-paths ".")
+
+(defun my-magit-find-file-git-config ()
+  (interactive)
+  (let ((pathes (my-git-get-project-root-dir ".")))
+    (if (not pathes)
+	(message "Not inside a git repo. Aborted.")
+      (find-file (plist-get pathes :git-config)))))
+
+
 (defun my-magit-toggle-exclude-decoration-in-git-config ()
   "Toggle the comment marks at BOL of `excludeDecoration = ...` in `CURRENT_REPO/.git/config`
 
@@ -226,8 +255,7 @@ and
   excludeDecoration =
 "
   (interactive)
-  (let* ((git-root (locate-dominating-file "." ".git/config"))
-	 (git-config (file-name-concat git-root ".git/config")))
+  (let* ((git-config (plist-get (my-git-get-repo-paths ".") :git-config)))
     (with-temp-buffer
       (insert-file-contents git-config)
       (goto-char (point-min))
