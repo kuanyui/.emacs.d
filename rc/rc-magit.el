@@ -280,6 +280,45 @@ and
   (define-key magit-hunk-section-map (kbd "M-L") #'magit-smerge-keep-lower)
   )
 
+;; ======================================================
+;; Copy branch + tag for quickly pasting to issue tracker
+;; ======================================================
 
- (provide 'rc-magit)
+(defun my-git-branch-contains (commit-hash)
+  (let* ((raw (shell-command-to-string (format "git branch --contains %s" commit-hash)))
+	 (lines (string-split (string-trim-right raw) "\n"))
+	 (lines (mapcar (lambda (s) (substring s 2)) lines))
+	 (lines (cl-delete "" lines :test #'equal)))
+    lines
+    ))
+
+(defun my-git-nearest-tags (commit-hash)
+  (let* ((raw (shell-command-to-string (format "git describe --long --tags %s" commit-hash)))
+	 (oldest-tagname (save-match-data   ; the oldest tag on the nearest commit which has at least one tag.
+			   (string-match "\\(.+\\)-[0-9]+-[a-zA-Z0-9]+$" raw)
+			   (match-string 1 raw)))
+	 (tags (string-split (shell-command-to-string (format "git tag --points-at \"%s\"" oldest-tagname)))))
+    (reverse tags)
+    ))
+
+(defun my-magit-log-copy-branch-tag-info-for-issue ()
+  (interactive)
+  (let* ((commit-hash (magit-commit-p (magit-commit-at-point)))
+         (tags (my-git-nearest-tags commit-hash))
+ 	 (branches (my-git-branch-contains commit-hash))
+	 (tag (or (magit-tag-at-point)
+		  (and (> (length tags) 0)
+		       (ido-completing-read "Tag: " tags nil t))))
+ 	 (branch (or (magit-branch-at-point)
+		     (if (= (length branches) 1) (car branches))
+		     (ido-completing-read "Branch: " branches nil t)))
+	 (msg (format "This issue is fixed at a commit (`%s`) in branch `%s`, and should be available in versions **newer than** `%s`" commit-hash branch tag)))
+    (message "%S" msg)))
+
+(with-eval-after-load 'magit-log
+  (define-key magit-log-mode-map (kbd "C-x g i") #'my-magit-log-copy-branch-tag-info-for-issue)
+  )
+
+
+(provide 'rc-magit)
 ;;; rc-magit.el ends here
