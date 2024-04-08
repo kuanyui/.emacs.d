@@ -301,6 +301,11 @@ and
     (reverse tags)
     ))
 
+(defun my-copy-to-clipboard (str)
+  (with-temp-buffer
+    (insert str)
+    (clipboard-kill-ring-save (point-min) (point-max))))
+
 (defun my-magit-log-copy-branch-tag-info-for-issue ()
   (interactive)
   (let* ((commit-hash (magit-commit-p (magit-commit-at-point)))
@@ -313,10 +318,21 @@ and
 		     (if (= (length branches) 1) (car branches))
 		     (ido-completing-read "Branch: " branches nil t)))
 	 (msg (format "This issue is fixed at a commit (`%s`) in branch `%s`, and should be available in versions **newer than** `%s`" commit-hash branch tag)))
+    (my-copy-to-clipboard msg)
     (message "%S" msg)))
 
+(defun my-magit-log-copy-tag ()
+  (interactive)
+  (let* ((commit-hash (magit-commit-p (magit-commit-at-point)))
+	 (tags (my-git-nearest-tags commit-hash)))
+    (my-copy-to-clipboard
+     (or (magit-tag-at-point)
+	 (and (> (length tags) 0)
+	      (ido-completing-read "Copy tag name to clipboard: " tags nil t))))))
+
 (with-eval-after-load 'magit-log
-  (define-key magit-log-mode-map (kbd "C-x g i") #'my-magit-log-copy-branch-tag-info-for-issue)
+  (define-key magit-log-mode-map (kbd "C-c g i") #'my-magit-log-copy-branch-tag-info-for-issue)
+  (define-key magit-log-mode-map (kbd "C-c g t") #'my-magit-log-copy-tag)
   )
 
 ;; ======================================================
