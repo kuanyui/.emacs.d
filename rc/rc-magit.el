@@ -448,5 +448,16 @@ and
 
 (add-to-list 'hippie-expand-try-functions-list #'myhe-try-complete-git-commit)
 
+;; ======================================================
+;; Forge. Fucking Pull Request
+;; ======================================================
+(with-eval-after-load 'magit-log
+  (setq browse-url-browser-function 'browse-url-chromium)
+  (define-key magit-mode-map (kbd "C-c f i") #'forge-browse-issues)
+  (define-key magit-mode-map (kbd "C-c f p") #'forge-browse-pullreqs)
+  )
+
+
+
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
