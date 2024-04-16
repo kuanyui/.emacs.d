@@ -16,5 +16,5 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
-(setq gc-cons-threshold (* 63 1000 1000)
+(setq gc-cons-threshold (* 63 1000 1000)  ; default 8MB -> 63MB
       gc-cons-percentage 0.6)

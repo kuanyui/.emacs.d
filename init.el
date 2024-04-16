@@ -13,6 +13,9 @@
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (add-to-list 'load-path "~/.emacs.d/rc")
+;; (profiler-start 'cpu)
+;; (profiler-stop)
+;; (profiler-report)
 (require 'rc-basic)
 (require 'rc-programming)
 (require 'rc-web-development)
@@ -28,9 +31,9 @@
 ;; (require 'rc-twittering)
 
 (require 'rc-magit)
-(if (member system-type '(darwin gnu/linux))
-    (require 'rc-emms)
-  )
+;; (if (member system-type '(darwin gnu/linux))
+;; (require 'rc-emms)
+;; )
 (require 'rc-eww)
 
 (require 'rc-org)
