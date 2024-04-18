@@ -451,10 +451,18 @@ and
 ;; ======================================================
 ;; Forge. Fucking Pull Request
 ;; ======================================================
+(add-hook 'magit-mode-hook 'my-magit-set-default-browser)
+(defun my-magit-set-default-browser ()
+  "Mainly for forge. Open link with different browser according to current path."
+  (if (string-match "company" default-directory)
+      (setq-local browse-url-browser-function 'browse-url-chromium)
+    )
+  )
 (with-eval-after-load 'magit-log
-  (setq browse-url-browser-function 'browse-url-chromium)
   (define-key magit-mode-map (kbd "C-c f i") #'forge-browse-issues)
   (define-key magit-mode-map (kbd "C-c f p") #'forge-browse-pullreqs)
+  (define-key magit-mode-map (kbd "C-c f c") #'forge-browse-commit)
+  ;; (add-to-list 'auth-sources "~/.authinfo")  ; default location is ~/.authinfo(.gpg)  https://magit.vc/manual/ghub/Storing-a-Token.html
   )
 
 
