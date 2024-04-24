@@ -1,4 +1,4 @@
-;;; basic.el ---                                     -*- lexical-binding: t; -*-
+;;; basic.el ---                                     -*- lexical-binding: t; -*-\
 
 ;;kuanyui's ~/.emacs
 ;;(setq user-mail-address "azazabc123@gmail.com")
@@ -910,6 +910,7 @@ mouse-1: Display Line and Column Mode Menu"))))))
        (setq elscreen-display-tab nil)
        (elscreen-start)
        (global-set-key (kbd "C-x 5 2") 'elscreen-create)
+       (global-set-key (kbd "C-x 5 0") 'elscreen-kill)
        (global-set-key (kbd "<f11>") 'elscreen-previous)
        (global-set-key (kbd "<f12>") 'elscreen-next)
        ;; (elscreen-get-screen-list)
