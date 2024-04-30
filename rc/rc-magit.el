@@ -467,7 +467,72 @@ and
   ;; (add-to-list 'auth-sources "~/.authinfo")  ; default location is ~/.authinfo(.gpg)  https://magit.vc/manual/ghub/Storing-a-Token.html
   )
 
+;; ======================================================
+;; Exclude some custom branches when magit-log
+;; ======================================================
+(defun my-magit-get-exclude-branch-from-gitconfig ()
+  "Please specify the patterns of branches which you want to exclude in .git/config:
+[log]
+	magitExcludeBranch = \"master\"
+	magitExcludeBranch = \"foo*\"
+  "
+  (let* ((git-config (plist-get (my-git-get-repo-paths ".") :git-config))
+	 (branches '()))
+    (with-temp-buffer
+      (insert-file-contents git-config)
+      (goto-char (point-min))
+      (when (re-search-forward "\\[log\\]" nil t)
+	(while (re-search-forward "\\([[:space:]]+\\)\\(# *\\)?magitExcludeBranch *= \\(.+\\)" nil 'no-error)
+	  (let ((branch (match-string 3)))
+	    (if (or (string-match "^\".+\"$" branch)
+		    (string-match "^'.+'$" branch))
+		(push (substring branch 1 -1) branches)
+	      (push branch branches))
+	    ))))
+    branches
+    ))
 
+(defun my-magit-get-exclude-options (type)
+  "
+   When `git log`:
+
+   1. For --branches + --remotes:
+
+       --exclude='foo' --exclude='master*' --branches
+       --exclude='*/foo' --exclude='*/master*' --exclude='*/HEAD' --remotes
+
+   2. If use `--all`, we only need:
+
+       --exclude='refs/tags/*' --exclude='refs/remotes/origin/HEAD' --exclude='**/foo' --exclude='**/master*' --all
+  "
+  (mapcar (lambda (patt) (concat "--exclude=" patt))
+	  (cond ((eq type 'all)
+		 `("refs/tags/*"
+		   "refs/remotes/origin/HEAD"
+		   ,@(mapcar (lambda (patt) (format "**/%s" patt)) (my-magit-get-exclude-branch-from-gitconfig))))
+		((eq type 'branches)
+		 (my-magit-get-exclude-branch-from-gitconfig))
+		((eq type 'remotes)
+		 `("*/HEAD"
+		   ,@(mapcar (lambda (patt) (format "*/%s" patt)) (my-magit-get-exclude-branch-from-gitconfig))))
+		)))
+
+
+(defun magit-log-all-branches (&optional args files)
+  "Show log for all local and remote branches and `HEAD'."
+  (interactive (magit-log-arguments))
+  (magit-log-setup-buffer (if (magit-get-current-branch)
+                              `(,@(my-magit-get-exclude-options 'branches) "--branches" ,@(my-magit-get-exclude-options 'remotes) "--remotes")
+			    `("HEAD" ,@(my-magit-get-exclude-options 'branches) "--branches" ,@(my-magit-get-exclude-options 'remotes) "--remotes"))
+			  args files))
+
+(defun magit-log-all (&optional args files)
+  "Show log for all references and `HEAD'."
+  (interactive (magit-log-arguments))
+  (magit-log-setup-buffer (if (magit-get-current-branch)
+                              `(,@(my-magit-get-exclude-options 'all) "--all")
+                            `("HEAD" ,@(my-magit-get-exclude-options 'all) "--all"))
+			  args files))
 
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
