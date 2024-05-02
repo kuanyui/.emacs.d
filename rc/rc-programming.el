@@ -267,22 +267,6 @@
 ;;======================================================
 ;; Projectile
 ;;======================================================
-(require 'ido)
-(setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
-
-(defun bind-ido-keys ()
-  "Keybindings for ido mode."
-  (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
-  (define-key ido-completion-map (kbd "<up>")   'ido-prev-match))
-(add-hook 'ido-setup-hook #'bind-ido-keys)
-
-(require 'flx-ido)
-;;(ido-mode 1)
-;;(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
-(setq ido-enable-flex-matching t)
 (projectile-mode)
 (setq projectile-globally-ignored-directories '("venv" "migrations"))
 (setq projectile-indexing-method 'alien)

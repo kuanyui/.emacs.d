@@ -943,9 +943,35 @@ mouse-1: Display Line and Column Mode Menu"))))))
       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       )
+;; ======================================================
+;; Minibuffer: Ido
+;; ======================================================
+
+(require 'ido)
+;; Show items vertically
+(setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
+
+;; Use up/down keys to navigate among Ido candidates
+(defun my-ido-bind-key-for-vertical ()
+  "Keybindings for vertically-displayed ido-mode candidates list.
+(Use up/down to navigate among candidates)"
+  (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
+  (define-key ido-completion-map (kbd "<up>")   'ido-prev-match))
+(add-hook 'ido-setup-hook #'my-ido-bind-key-for-vertical)
+
+;; Fuzzy searching for Ido... But actually I only want its highlight feature... The fuzzy searching in ido is useless for me.
+;; TODO: Implement a highlight-only feature for ido?
+(require 'flx-ido)
+(flx-ido-mode 1)  ;; TODO: Is this possible to enable via (let ...) ?
+
+;; Disable ido faces to see highlights provided by flx-ido.
+(setq ido-use-faces nil)
+
+;;;  Flexible matching means that if the entered string does not match any item, any item containing the entered characters in the given sequence will match.
+;;; (setq ido-enable-flex-matching t)
 
 ;; ======================================================
-;; vertico - vertical interactive completion M-x. Zsh-liked
+;; Minibuffer :: vertico - vertical interactive completion M-x. Zsh-liked
 ;; ======================================================
 
 (setq vertico-multiform-commands
@@ -954,19 +980,21 @@ mouse-1: Display Line and Column Mode Menu"))))))
       '((symbol (vertico-sort-function . vertico-sort-alpha))
 	))
 (vertico-mode t)
+(vertico-grid-mode -1) ;; Show items line-by-line
 (define-key vertico-map "?" #'minibuffer-completion-help)
 ;;(define-key vertico-map (kbd "C-j") #'minibuffer-force-complete-and-exit)
 
 (define-key vertico-map (kbd "TAB") #'minibuffer-complete)
 (define-key vertico-map (kbd "M-g") #'vertico-grid-mode)
-(vertico-grid-mode -1)
-;; Show description in M-x
-(marginalia-mode)
+;; ======================================================
+;; Minibuffer :: Marginalia
+;; ======================================================
+(marginalia-mode)      ;; Show elisp description summary in M-x
+(savehist-mode t)      ;; Save Minibuffer History
 
-;; Save Minibuffer History
-(savehist-mode t)
-
-;; Fuzzy search (via orderless.el)
+;; ======================================================
+;; Minibuffer :: Fuzzy searching for find-file / M-x  -- orderless.el
+;; ======================================================
 (require 'orderless)
 (setq completion-styles '(orderless))
 (setq completion-category-defaults nil)
