@@ -5,6 +5,7 @@
 ;;======================================================
 (with-eval-after-load 'magit
   (require 'magit)
+  (require 'forge)
   (setq git-commit-summary-max-length 600)
   (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
 
