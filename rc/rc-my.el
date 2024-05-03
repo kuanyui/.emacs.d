@@ -198,10 +198,11 @@
 (global-set-key (kbd "C-x C-r") 'recentz-files)
 (global-set-key (kbd "C-x C-d") 'recentz-directories)
 (global-set-key (kbd "C-x C-p") 'recentz-projects)
+(global-set-key (kbd "C-x C-S-p") 'recentz-find-file-in-project)
 (setq recentz-max-history
-      '((files . 550)
+      '((files . 750)
 	(directories . 150)
-	(projects . 50)))
+	(projects . 150)))
 
 (add-to-list 'recentz-ignore-path-patterns "node_modules/")
 
