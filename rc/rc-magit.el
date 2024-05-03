@@ -534,5 +534,48 @@ and
                             `("HEAD" ,@(my-magit-get-exclude-options 'all) "--all"))
 			  args files))
 
+;; ======================================================
+;; minibuffer history for magit branch creating
+;; ======================================================
+
+(defvar magit-branch-read-history '()
+  "Minibuffer read history of `magit-branch-read-args'. Mainly for
+adding the starting branch (or the current branch) to the minibufffer
+history list before entering the name of new branch.")
+
+(defun magit-branch-read-args (prompt &optional default-start)
+  (if magit-branch-read-upstream-first
+      (let ((choice (magit-read-starting-point prompt nil default-start)))
+	(cond
+	 ((magit-rev-verify choice)
+	  (push choice magit-branch-read-history)   ;; patch
+	  (list (magit-read-string-ns
+		 (if magit-completing-read--silent-default
+		     (format "%s (starting at `%s')" prompt choice)
+		   "Name for new branch")
+		 (let ((def (mapconcat #'identity
+				       (cdr (split-string choice "/"))
+				       "/")))
+		   (and (member choice (magit-list-remote-branch-names))
+			(not (member def (magit-list-local-branch-names)))
+			def))
+		 'magit-branch-read-history)   ;; patch
+		choice))
+	 ((eq magit-branch-read-upstream-first 'fallback)
+	  (list choice
+		(magit-read-starting-point prompt choice default-start)))
+	 ((user-error "Not a valid starting-point: %s" choice))))
+    (progn
+      (push (or (magit-branch-at-point) (magit-get-current-branch)) magit-branch-read-history)
+      (let ((branch (magit-read-string-ns (concat prompt " named") nil 'magit-branch-read-history)))
+	(if (magit-branch-p branch)
+	    (magit-branch-read-args
+	     (format "Branch `%s' already exists; pick another name" branch)
+	     default-start)
+	  (list branch (magit-read-starting-point prompt branch default-start)))))))
+
+;; (setq magit-branch-read-upstream-first nil)  ;; Don't sure what behavior do you prefer, so not implement
+;; (magit-branch-read-args "AAA")
+
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
