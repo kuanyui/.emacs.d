@@ -217,23 +217,32 @@ Example:
   (defun my-git-get-repo-paths (from-path)
     "Returns a plist"
     (let* ((parent-dir (or (locate-dominating-file from-path ".git") ""))
-	   (git-file-or-dir (file-name-concat parent-dir ".git")))
+	   (parent-dir (if parent-dir (file-truename parent-dir)))
+	   (git-file-or-dir-filepath (file-name-concat parent-dir ".git")))
       (cond ((null parent-dir)
 	     '())
-	    ((file-regular-p git-file-or-dir)  ; A .git file
-	     (let* ((git-file-content (with-temp-buffer (insert-file-contents git-file-or-dir) (buffer-string)))
-		    (git-dir-relpath (progn
-				       (string-match "gitdir: *\\(.+\\)" git-file-content)
-				       (match-string 1 git-file-content)))
-		    (git-dir-abspath (file-truename (file-name-concat parent-dir git-dir-relpath))))  ; Note: file-truename chases symlink.
-	       (list :type 'submodule :project-dir parent-dir :git-dir git-dir-abspath :git-config (file-name-concat git-dir-abspath "config"))))
-	    ((file-directory-p git-file-or-dir)
-	     (list :type 'regular :project-dir parent-dir :git-dir git-file-or-dir :git-config (file-name-concat git-file-or-dir "config")))
-	    )
-      ))
+	    ((file-regular-p git-file-or-dir-filepath)  ; A .git file (submodule)
+	     (let* ((git-file--raw-content (with-temp-buffer (insert-file-contents git-file-or-dir-filepath) (buffer-string)))
+		    (gitdir-relpath (progn
+				      (string-match "gitdir: *\\(.+\\)" git-file--raw-content)
+				      (match-string 1 git-file--raw-content)))
+		    (gitdir-abspath (file-truename (file-name-concat parent-dir gitdir-relpath)))  ; Note: file-truename chases symlink.
+		    (root-project-dir (file-truename (concat (locate-dominating-file gitdir-abspath ".git"))))
+		    (commondir-filepath (file-name-concat gitdir-abspath "commondir")))  ; worktree
+	       (cond ((file-exists-p commondir-filepath)
+		      (let* ((commondir--raw-content (with-temp-buffer (insert-file-contents commondir-filepath) (buffer-string)))
+			     )
+			(list :type 'worktree :root-project-dir root-project-dir :project-dir parent-dir :git-dir gitdir-abspath :git-config (file-name-concat gitdir-abspath "config"))
+			))
+		     (t
+		      (list :type 'submodule :root-project-dir root-project-dir :project-dir parent-dir :git-dir gitdir-abspath :git-config (file-name-concat gitdir-abspath "config"))))))
+
+	    ((file-directory-p git-file-or-dir-filepath)
+	     (list :type 'regular :root-project-dir parent-dir :project-dir parent-dir :git-dir git-file-or-dir-filepath :git-config (file-name-concat git-file-or-dir-filepath "config"))))))
   ;; TESTS:
   ;; (my-git-get-repo-paths "../git/source/recentz")
   ;; (my-git-get-repo-paths ".")
+  ;; (my-git-get-repo-paths "~/company/worktree/webui/master")
 
   (defun my-magit-find-file-git-config ()
     (interactive)
