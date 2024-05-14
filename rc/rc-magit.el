@@ -213,27 +213,51 @@ Example:
   ;; ======================================================
   ;; toggle excludeDecoration
   ;; ======================================================
+  (defun my-git-cmd (fmt &rest args)
+    (let ((raw (shell-command-to-string (apply #'format fmt args))))
+      (if (string-suffix-p "\n" raw)
+	  (setq raw (substring raw 0 -1)))
+      raw))
 
   (defun my-git-get-repo-paths (from-path)
     "Returns a plist"
-    (let* ((parent-dir (or (locate-dominating-file from-path ".git") ""))
-	   (git-file-or-dir (file-name-concat parent-dir ".git")))
-      (cond ((null parent-dir)
-	     '())
-	    ((file-regular-p git-file-or-dir)  ; A .git file
-	     (let* ((git-file-content (with-temp-buffer (insert-file-contents git-file-or-dir) (buffer-string)))
-		    (git-dir-relpath (progn
-				       (string-match "gitdir: *\\(.+\\)" git-file-content)
-				       (match-string 1 git-file-content)))
-		    (git-dir-abspath (file-truename (file-name-concat parent-dir git-dir-relpath))))  ; Note: file-truename chases symlink.
-	       (list :type 'submodule :project-dir parent-dir :git-dir git-dir-abspath :git-config (file-name-concat git-dir-abspath "config"))))
-	    ((file-directory-p git-file-or-dir)
-	     (list :type 'regular :project-dir parent-dir :git-dir git-file-or-dir :git-config (file-name-concat git-file-or-dir "config")))
-	    )
-      ))
+    (let* ((default-directory (if from-path (expand-file-name from-path) default-directory))
+	   (nearest-git-parent (file-truename (locate-dominating-file from-path ".git")))  ;; ex: `~/.emacs.d/`
+	   (is-regular (file-directory-p (file-name-concat nearest-git-parent ".git")))
+	   ;; priority 1; submodule; superproject-nearest-git-parent
+	   (raw-submodule (my-git-cmd "git rev-parse --show-superproject-working-tree"))
+	   ;; priority 2, regular (oneline) + worktree (oneline) + submodule (multilines);
+	   (raw-commondir (my-git-cmd "git rev-parse --show-superproject-working-tree --path-format=absolute --git-common-dir"))
+	   (git-config-abspath (expand-file-name (my-git-cmd "git rev-parse --git-path config")))
+	   )
+      (cond ((null git-config-abspath) nil)
+	    (is-regular
+	     (list :type 'regular
+		   :superproject-workingdir nearest-git-parent
+		   :project-workingdir nearest-git-parent
+		   :git-config git-config-abspath
+		   ))
+	    ((> (length raw-submodule) 0)
+	     (list :type 'submodule
+		   :superproject-workingdir raw-submodule
+		   :project-workingdir nearest-git-parent
+		   :git-config git-config-abspath
+		   )
+	     )
+	    (t
+	     (list :type 'worktree
+		   :superproject-workingdir raw-commondir
+		   :project-workingdir nearest-git-parent
+		   :git-config git-config-abspath
+		   )
+	     ))))
+
   ;; TESTS:
-  ;; (my-git-get-repo-paths "../git/source/recentz")
+  ;;
   ;; (my-git-get-repo-paths ".")
+  ;; (my-git-get-repo-paths "~/.emacs.d")
+  ;; (my-git-get-repo-paths "~/.emacs.d/elpa/")
+
 
   (defun my-magit-find-file-git-config ()
     (interactive)
