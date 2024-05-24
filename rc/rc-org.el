@@ -26,6 +26,7 @@
   (require 'ox)
   (require 'ox-md)
   (require 'ox-odt)
+  (require 'ox-gfm nil t)
 
   (add-to-list 'load-path "~/.emacs.d/git/org-ioslide")
   (require 'ox-ioslide)
