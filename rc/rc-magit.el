@@ -341,8 +341,8 @@ and
  	   (branch (or (magit-branch-at-point)
 		       (if (= (length branches) 1) (car branches))
 		       (ido-completing-read "Branch: " branches nil t)))
-	   (msg (format "This issue is fixed at/since commit ([`%s`](%s)) in branch `%s`, and should be available in versions **newer than** `%s`"
-			commit-hash (forge-get-url :commit commit-hash)
+	   (msg (format "Repository %s is ready at/since commit ([`%s`](%s)) in branch `%s`, and should be available in versions **newer than** `%s`"
+			(forge-get-url :remote "origin") commit-hash (forge-get-url :commit commit-hash)
 			branch tag)))
       (my-copy-to-clipboard msg)
       (message "%S" msg)))
