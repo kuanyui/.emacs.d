@@ -506,7 +506,7 @@ and
 	(insert-file-contents git-config)
 	(goto-char (point-min))
 	(when (re-search-forward "\\[log\\]" nil t)
-	  (while (re-search-forward "\\([[:space:]]+\\)magitExcludeBranch *= \\(.+\\)" nil 'no-error)
+	  (while (re-search-forward "^\\([[:space:]]+\\)magitExcludeBranch *= \\(.+\\)" nil 'no-error)
 	    (let ((branch (match-string 2)))
 	      (if (or (string-match "^\".+\"$" branch)
 		      (string-match "^'.+'$" branch))
