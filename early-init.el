@@ -9,6 +9,7 @@
 (setq site-run-file nil)
 (setq inhibit-default-init t)
 
+(setq warning-minimum-level :emergency)
 
 ;; hide some UI elements in the early-init.el to gain some performance.
 ;; https://medium.com/@danielorihuelarodriguez/optimize-emacs-start-up-time-ae314201e04f
