@@ -541,7 +541,7 @@ and
 		     ,@(mapcar (lambda (patt) (format "*/%s" patt)) (my-magit-get-exclude-branch-from-gitconfig))))
 		  )))
 
-
+  ;; Overwrite magit's function
   (defun magit-log-all-branches (&optional args files)
     "Show log for all local and remote branches and `HEAD'."
     (interactive (magit-log-arguments))
@@ -550,6 +550,7 @@ and
 			      `("HEAD" ,@(my-magit-get-exclude-options 'branches) "--branches" ,@(my-magit-get-exclude-options 'remotes) "--remotes"))
 			    args files))
 
+  ;; Overwrite magit's function
   (defun magit-log-all (&optional args files)
     "Show log for all references and `HEAD'."
     (interactive (magit-log-arguments))
