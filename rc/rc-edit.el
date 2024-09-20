@@ -65,7 +65,7 @@
     ))
 
 (define-key mc/mark-more-like-this-extended-keymap (kbd "DEL") 'backward-delete-char-untabify)
-
+(define-key mc/keymap (kbd "<return>") 'newline)   ;; default behavior is exit the multiple-cursor mode, very weird.
 
 ;; set-mark, multiple-cursors & cua-mode
 ;; (cua-mode t)
