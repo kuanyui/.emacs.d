@@ -195,7 +195,7 @@ Example:
   ;; Forked from magit-log.el
   ;; Highlight [.*?], \(.*?\) in commit message.
   (require 's)
-  (defvar magit-log-format-message-function #'my-magit-log-propertize-keywords)
+  (setq magit-log-format-message-function #'my-magit-log-propertize-keywords)
   (defun my-magit-log-propertize-keywords (_rev msg)
     (let ((boundary 0))
       (when (string-match "^\\(?:squash\\|fixup\\)! " msg boundary)
