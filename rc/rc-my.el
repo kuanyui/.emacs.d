@@ -195,9 +195,10 @@
 ;; ======================================================
 
 (require 'recentz)
-(global-set-key (kbd "C-x C-r") 'helm-recentz-files)
-(global-set-key (kbd "C-x C-d") 'helm-recentz-directories)
-(global-set-key (kbd "C-x C-p") 'helm-recentz-projects)
+(setq recentz-ui 'helm)
+(global-set-key (kbd "C-x C-r") 'recentz-files)
+(global-set-key (kbd "C-x C-d") 'recentz-directories)
+(global-set-key (kbd "C-x C-p") 'recentz-projects)
 (setq recentz-max-history
       '((files . 750)
 	(directories . 150)
