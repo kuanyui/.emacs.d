@@ -111,6 +111,11 @@
   (add-hook 'less-css-mode-hook 'rainbow-mode)
   )
 
+(with-eval-after-load 'nxml-mode
+  ;; for SVG file
+  (add-hook 'nxml-mode-hook 'rainbow-mode)
+  )
+
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
 
