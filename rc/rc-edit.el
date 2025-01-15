@@ -21,6 +21,19 @@
 (global-set-key (kbd "M-)") 'goto-last-change-reverse)
 
 ;; ======================================================
+;; Highlight TODO
+;; ======================================================
+(global-hl-todo-mode 1)
+(setq hl-todo-keyword-faces
+      '(
+        ("FIXME"      . "#FF0000")
+	("TODO"       . "#FFCC00")
+        ("WARNING"    . "#FFCC00")
+        ("NOTE"       . "#22eeff")
+        ("REFACTOR"   . "#22eeff")
+        ("DEBUG"      . "#E030F0")
+	))
+;; ======================================================
 ;; smartparens
 ;; ======================================================
 
