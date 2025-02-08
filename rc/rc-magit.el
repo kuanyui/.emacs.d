@@ -111,16 +111,14 @@ show tags by default."
 
   (defun my-magit-move-cursor-to-next-branch (&optional reverse)
     (interactive)
-    (let* ((all-branch-faces '(magit-branch-current
-			       magit-branch-local
-			       magit-branch-remote
-			       magit-branch-remote-head
-			       magit-branch-upstream
-			       magit-branch-warning))
-	   (intersected-faces (cl-intersection all-branch-faces (my-magit-get-faces (point))))
-	   (other-faces (cl-set-difference all-branch-faces intersected-faces))   ; target faces
-	   (pos (point))  ; target pos
-	   (stop nil))
+    (let ((all-branch-faces '(magit-branch-current
+			      magit-branch-local
+			      magit-branch-remote
+			      magit-branch-remote-head
+			      magit-branch-upstream
+			      magit-branch-warning))
+	  (pos (point))  ; target pos
+	  (stop nil))
       (save-excursion
 	(while (and (not (null pos))
 		    (null stop))
