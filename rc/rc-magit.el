@@ -100,6 +100,47 @@ show tags by default."
     (define-key magit-refs-mode-map (kbd "C-c C-t") #'my/magit-refs-toggle-tags))
 
 
+  ;; ======================================================
+  ;; Jump cursor via <TAB> between branches in magit-log
+  ;; ======================================================
+
+  (defun my-magit-get-faces (&optional pos)
+    (let ((val (get-text-property (or pos (point)) 'face)))
+      (cond ((listp val) val)
+	    (t (list val)))))
+
+  (defun my-magit-move-cursor-to-next-branch (&optional reverse)
+    (interactive)
+    (let* ((all-branch-faces '(magit-branch-current
+			       magit-branch-local
+			       magit-branch-remote
+			       magit-branch-remote-head
+			       magit-branch-upstream
+			       magit-branch-warning))
+	   (intersected-faces (cl-intersection all-branch-faces (my-magit-get-faces (point))))
+	   (other-faces (cl-set-difference all-branch-faces intersected-faces))   ; target faces
+	   (pos (point))  ; target pos
+	   (stop nil))
+      (save-excursion
+	(while (and (not (null pos))
+		    (null stop))
+	  (if reverse
+	      (setq pos (previous-single-property-change pos 'face))
+	    (setq pos (next-single-property-change pos 'face)))
+	  (if (cl-intersection all-branch-faces (my-magit-get-faces pos))
+	      (setq stop 't))
+	  ))
+      (if pos (goto-char pos))))
+
+  (defun my-magit-move-cursor-to-previous-branch ()
+    (interactive)
+    (my-magit-move-cursor-to-next-branch t))
+
+  (with-eval-after-load 'magit-log
+    (define-key magit-log-mode-map (kbd "<tab>") #'my-magit-move-cursor-to-next-branch)
+    (define-key magit-log-mode-map (kbd "<backtab>") #'my-magit-move-cursor-to-previous-branch)
+    )
+
   ;; =======================================
   ;; Enhanced git cherry-pick
   ;; =======================================
