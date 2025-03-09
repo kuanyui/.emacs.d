@@ -742,7 +742,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;======================================================
 
 ;;discover-mode
-(global-discover-mode 1)
+;; (global-discover-mode 1)
 
 
 ;;有時會按錯C-x C-c，所以叫Emace確認後再關掉！
