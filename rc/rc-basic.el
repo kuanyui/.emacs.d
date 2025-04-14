@@ -304,7 +304,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key (kbd "M-Z") 'windmove-left)
 
 ;; Show line-number in the mode line
-(line-number-mode 1)
+(line-number-mode t)
 ;; Show column-number in the mode line
 (column-number-mode t)
 
