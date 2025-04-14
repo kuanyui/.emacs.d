@@ -297,10 +297,10 @@ Example:
   ;; (my-git-get-repo-paths "~/.emacs.d")
   ;; (my-git-get-repo-paths "~/.emacs.d/elpa/")
 
-
-  (defun my-magit-find-file-git-config ()
+  (global-set-key (kbd "C-x g c") 'my-git-find-file-git-config)
+  (defun my-git-find-file-git-config ()
     (interactive)
-    (let ((pathes (my-git-get-project-root-dir ".")))
+    (let ((pathes (my-git-get-repo-paths ".")))
       (if (not pathes)
 	  (message "Not inside a git repo. Aborted.")
 	(find-file (plist-get pathes :git-config)))))
