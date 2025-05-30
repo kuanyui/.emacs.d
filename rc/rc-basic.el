@@ -158,6 +158,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;; ======================================================
 ;; Find file at point
+;; (ffap: Auto detect file path under cursor when `find-file`)
 ;; ======================================================
 (require 'ffap)
 (global-set-key (kbd "C-x C-f") 'find-file-at-point)

@@ -278,6 +278,7 @@
 (global-set-key (kbd "C-c p r") #'helm-projectile-switch-project)
 (global-set-key (kbd "C-c p s g") #'helm-projectile-grep)
 (global-set-key (kbd "C-c p s s") #'helm-projectile-ag)
+(global-set-key (kbd "C-c p s a") #'helm-projectile-ack)
 (global-set-key (kbd "C-c p r") #'projectile-recentf)
 (global-set-key (kbd "C-c p k") #'projectile-kill-buffers)
 
