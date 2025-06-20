@@ -242,12 +242,16 @@ Example:
 	(magit--put-face (match-beginning 0) (1- boundary)
 			 'magit-keyword-squash msg))
       (when magit-log-highlight-keywords
-	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'magit-keyword msg))
-	      (s-matched-positions-all "\\[[^ ]+\\]" msg 0))
+	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'magit-keyword msg))    ; magit-keyword
+	      (s-matched-positions-all "\\[.+\\]" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-type-face msg))
 	      (s-matched-positions-all "([^) ]+?)" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-variable-name-face msg))
 	      (s-matched-positions-all "`.+?`" msg 0))
+	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-function-name-face msg))
+	      (s-matched-positions-all "<.+?>" msg 0))
+	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-keyword-face msg))
+	      (s-matched-positions-all "\\('.+?'\\|\".+?\"\\)" msg 1))
 	))
     msg)
 
