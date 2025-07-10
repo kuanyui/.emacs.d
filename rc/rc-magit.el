@@ -251,7 +251,7 @@ Example:
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-function-name-face msg))
 	      (s-matched-positions-all "<.+?>" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-keyword-face msg))
-	      (s-matched-positions-all "\\('.+?'\\|\".+?\"\\)" msg 1))
+	      (s-matched-positions-all "\\('[^\s]+?'\\|\".+?\"\\)" msg 1))
 	))
     msg)
 
