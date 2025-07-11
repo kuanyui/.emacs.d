@@ -217,13 +217,14 @@
   (interactive)
   (if (null whitespace-style)
       (message "Saved without my-whitespace-cleanup!")
-    (let ((whitespace-style '(empty trailing)))
+    (let ((whitespace-style '(trailing)))
       (whitespace-cleanup)
-      (if (string-suffix-p ".jade" (buffer-name))
-          (save-excursion
-            (goto-char (point-max))
-            (insert "\n\n\n")
-            )))))
+      ;; (if (string-suffix-p ".jade" (buffer-name))
+      ;; (save-excursion
+      ;; (goto-char (point-max))
+      ;; (insert "\n\n\n")
+      ;; ))
+      )))
 
 (remove-hook 'before-save-hook 'my-whitespace-cleanup)
 (remove-hook 'after-save-hook 'swoop-cache-clear)
