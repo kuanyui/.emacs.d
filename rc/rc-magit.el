@@ -14,6 +14,12 @@
   (require 'forge)
   (setq git-commit-summary-max-length 600)
   (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
+
+  ;; Add weekday to timestamp in magit-log margin.
+  ;; (setq system-time-locale "ja_JP.UTF-8")
+  ;; (setq system-time-locale "zh_TW.UTF-8")
+  (setq magit-log-margin '(t "%Y-%02m-%d %a %H:%M:%S" magit-log-margin-width t 18))
+
   (with-eval-after-load 'magit-log
     ;; (defun --my-magit-log-hack ()
     ;;   (put 'magit-log-mode 'magit-log-default-arguments
