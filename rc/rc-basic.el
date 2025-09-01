@@ -1026,6 +1026,16 @@ mouse-1: Display Line and Column Mode Menu"))))))
 ;; (global-set-key (kbd "C-<tab>")  'centaur-tabs-forward)
 ;; (global-set-key (kbd "<C-S-iso-lefttab>") 'centaur-tabs-backward)
 
+;; ======================================================
+;; systemd units
+;; ======================================================
+(add-to-list 'auto-mode-alist '("\\.service\\'" . conf-unix-mode))
+(add-to-list 'auto-mode-alist '("\\.socket\\'" . conf-unix-mode))
+(add-to-list 'auto-mode-alist '("\\.timer\\'" . conf-unix-mode))
+(add-to-list 'auto-mode-alist '("\\.target\\'" . conf-unix-mode))
+(add-to-list 'auto-mode-alist '("\\.mount\\'" . conf-unix-mode))
+(add-to-list 'auto-mode-alist '("\\.path\\'" . conf-unix-mode))
+
 
 (provide 'rc-basic)
 ;;; basic.el ends here
