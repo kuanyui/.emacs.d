@@ -69,14 +69,14 @@
   ;; elpy
   ;; ======================================================
 
-  (elpy-enable)
-  (setq elpy-modules '(elpy-module-sane-defaults
-                       elpy-module-company
-                       elpy-module-eldoc
-                       elpy-module-flymake
-                       elpy-module-pyvenv
-                       elpy-module-yasnippet
-                       elpy-module-django))
+  ;; (elpy-enable)
+  ;; (setq elpy-modules '(elpy-module-sane-defaults
+  ;;                      elpy-module-company
+  ;;                      elpy-module-eldoc
+  ;;                      elpy-module-flymake
+  ;;                      elpy-module-pyvenv
+  ;;                      elpy-module-yasnippet
+  ;;                      elpy-module-django))
   ;;======================================================
   ;; Company-Jedi : Completion for Python
   ;;======================================================
