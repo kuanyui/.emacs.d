@@ -151,18 +151,18 @@ abbrev for it."
 ;; pangu-spacing： 中英文之間自動插入空白
 ;;======================================================
 
-(require 'pangu-spacing)
+;; (require 'pangu-spacing)
 
 ;; 只在 org-mode 和 markdown-mode 中啟用 pangu-spacing
 ;; (add-hook 'org-mode-hook
 ;;           '(lambda ()
 ;;              (set (make-local-variable 'pangu-spacing-real-insert-separtor) nil)))
-(add-hook 'markdown-mode-hook
-          '(lambda ()
-             (pangu-spacing-mode 1)
-             (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+;; (add-hook 'markdown-mode-hook
+;;           '(lambda ()
+;;              (pangu-spacing-mode 1)
+;;              (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
 
-(setq pangu-spacing-real-insert-separtor t)
+;; (setq pangu-spacing-real-insert-separtor t)
 
 ;;(remove-hook 'org-mode-hook
 ;;	     '(lambda ()
