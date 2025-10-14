@@ -277,11 +277,21 @@
 ;; (projectile-global-mode t)  ; FIXME: This slow down initialization of Emacs.
 (global-set-key (kbd "C-c p p") #'helm-projectile)
 (global-set-key (kbd "C-c p r") #'helm-projectile-switch-project)
-(global-set-key (kbd "C-c p s g") #'helm-projectile-grep)
-(global-set-key (kbd "C-c p s s") #'helm-projectile-ag)
-(global-set-key (kbd "C-c p s a") #'helm-projectile-ack)
+(global-set-key (kbd "C-c p s") #'my-projectile-search-text)
 (global-set-key (kbd "C-c p r") #'projectile-recentf)
 (global-set-key (kbd "C-c p k") #'projectile-kill-buffers)
+
+(defun my-projectile-search-text (&optional args)
+  (interactive)
+  (let ((current-prefix-arg current-prefix-arg)
+	(fn (cond
+	     ((executable-find "rg") #'helm-projectile-rg)
+	     ((executable-find "ag") #'helm-projectile-ag)
+	     ((executable-find "ack") #'helm-projectile-ack)
+	     ((executable-find "grep") #'helm-projectile-grep)
+	     )))
+    (call-interactively fn)
+    ))
 
 
 ;;Helm integration with Projectile
@@ -292,14 +302,15 @@
 ;;  )
 ;; (helm-projectile-on)  // I just want to use its ag/ack/grep/recentf support
 (add-hook 'projectile-mode-hook
-          (lambda ()
-            (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
-            (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
-            (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
-            (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
-            (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
-            (define-key projectile-mode-map [remap projectile-find-file] #'pff))
-          )
+	  (lambda ()
+	    (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
+	    (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
+	    (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
+	    (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
+	    (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
+	    (define-key projectile-mode-map [remap projectile-rg] #'helm-projectile-rg)
+	    (define-key projectile-mode-map [remap projectile-find-file] #'pff))
+	  )
 
 ;; ======================================================
 ;; wgrep
