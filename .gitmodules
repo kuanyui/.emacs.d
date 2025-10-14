@@ -49,9 +49,6 @@
 [submodule "git/browser-f5"]
 	path = git/source/browser-f5
 	url = git@github.com:kuanyui/browser-f5.el.git
-[submodule "git/flow-js2-mode"]
-	path = git/forks/flow-js2-mode
-	url = git@github.com:Fuco1/flow-js2-mode.git
 [submodule "git/pff"]
 	path = git/source/pff
 	url = git@github.com:kuanyui/pff.el.git
@@ -61,9 +58,6 @@
 [submodule "git/coffee-mode"]
 	path = git/forks/coffee-mode
 	url = git@github.com:kuanyui/coffee-mode.git
-[submodule "git/forks/eglot"]
-	path = git/forks/eglot
-	url = git@github.com:joaotavora/eglot.git
 [submodule "git/magit-popup"]
 	path = git/forks/magit-popup
 	url = git@github.com:magit/magit-popup.git

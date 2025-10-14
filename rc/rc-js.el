@@ -36,8 +36,6 @@
 ;; ======================================================
 ;; My JavaScript config
 ;; ======================================================
-;; (add-to-list 'load-path "~/.emacs.d/git/flow-js2-mode")
-;; (require 'flow-js2-mode)
 
 (add-hook 'js2-mode-hook 'my-js2-conf)
 (defun my-js2-conf ()
