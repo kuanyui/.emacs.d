@@ -12,7 +12,7 @@
   (add-to-list 'find-directory-functions 'my-dired-noselect)
   (defun my-dired-noselect (dir-path)
     "Make Dired+ can be lazy-loaded before the first-time opening of dired buffer"
-    (require 'dired+)
+    ;; (require 'dired+)
     (require 'dired-aux)
     (dired-noselect dir-path)
     )
