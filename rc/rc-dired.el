@@ -13,11 +13,11 @@
   (defun my-dired-noselect (dir-path)
     "Make Dired+ can be lazy-loaded before the first-time opening of dired buffer"
     ;; (require 'dired+)
-    (require 'dired-aux)
     (dired-noselect dir-path)
     )
+  (require 'dired-aux)
   ;;(require 'dired-async)
-
+  (diredfl-global-mode 1)
   (setq dired-dwim-target t)
   ;; M-RET to call `kde-open` to open file.
 
