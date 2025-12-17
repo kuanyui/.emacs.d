@@ -53,7 +53,7 @@
 ;; CSS / Stylus keymap
 ;; ======================================================
 ;;======================================================
-;; Highlight-symbol
+;; `highlight-symbol' (deprecated), `symbol-overlay'
 ;;======================================================
 
 (require 'symbol-overlay)
@@ -67,8 +67,8 @@
   (define-key makefile-mode-map (kbd "M-n")'symbol-overlay-jump-next)
   (define-key makefile-mode-map (kbd "M-p")'symbol-overlay-jump-prev)
   )
-(add-hook 'prog-mode-hook 'highlight-symbol-mode)
-(setq highlight-symbol-idle-delay 1.0)
+;; (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+;; (setq highlight-symbol-idle-delay 1.0)
 
 (mapc
  (lambda (name)
