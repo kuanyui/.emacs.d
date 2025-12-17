@@ -271,7 +271,12 @@ Example:
       raw))
 
   (defun my-git-get-repo-paths (from-path)
-    "Returns a plist"
+    "Returns a plist. `FROM-PATH' \".\" means PWD."
+    ;; (expand-file-name rel-path anchor-path) to get abs path
+    ;; [EXAMPLE] `expand-file-name'
+    ;; (expand-file-name "foo/bar")
+    ;; (expand-file-name "foo/bar" "hello")
+    ;; (expand-file-name "foo/bar" "/hello")
     (let* ((default-directory (if from-path (expand-file-name from-path) default-directory))
 	   (nearest-git-parent (file-truename (locate-dominating-file from-path ".git")))  ;; ex: `~/.emacs.d/`
 	   (is-regular (file-directory-p (file-name-concat nearest-git-parent ".git")))
@@ -279,8 +284,14 @@ Example:
 	   (raw-submodule (my-git-cmd "git rev-parse --show-superproject-working-tree"))
 	   ;; priority 2, regular (oneline) + worktree (oneline) + submodule (multilines);
 	   (raw-commondir (my-git-cmd "git rev-parse --show-superproject-working-tree --path-format=absolute --git-common-dir"))
-	   (git-config-abspath (expand-file-name (my-git-cmd "git rev-parse --git-path config")))
-	   )
+	   ;; Fix for TRAMP remote file
+	   ;; [EXAMPLE]
+	   ;; default-directory                    /ssh:admin@192.168.1.1#8000:/home/user/repo/sub
+	   ;; `git rev-parse --git-path config`    /home/user/repo/.git/modules/sub/config
+	   ;; file-local-name
+	   (git-config-abspath (let ((cfg-relpath (my-git-cmd "git rev-parse --git-path config")))
+				 (concat (file-remote-p default-directory)    ;
+					 (expand-file-name cfg-relpath (file-local-name default-directory))))))
       (cond ((null git-config-abspath) nil)
 	    (is-regular
 	     (list :type 'regular
