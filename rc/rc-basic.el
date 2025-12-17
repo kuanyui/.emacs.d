@@ -55,6 +55,93 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
        )
       ((member system-type 'cygwin) (setq shell-file-name "/bin/bash")))
 
+;; ======================================================
+;; Centralized backup / temporary files
+;; ======================================================
+;; Don't use .#FILENAME
+;; https://stackoverflow.com/questions/5738170/why-does-emacs-create-temporary-symbolic-links-for-modified-files/12974060#12974060
+;; Non-nil means use lockfiles to avoid editing collisions.
+(setq create-lockfiles nil)  ;; Nobody cares multiple editors are editing the same file.
+
+(setq backup-by-copying t)
+(setq delete-old-versions t)
+(setq kept-new-versions 8)
+(setq kept-old-versions 3)
+(setq version-control t)
+
+;; https://www.emacswiki.org/emacs/BackupDirectory
+;; Local
+(defvar my-autosavelist-directory      (concat user-emacs-directory "_tmp/autosavelist/") "Auto-save list files (e.g. .saves-*, save-*).")
+(defvar my-backup-directory            (concat user-emacs-directory "_tmp/backups/") "Centralized backup files (e.g. file~, file.~N~).")
+(defvar my-autosave-directory          (concat user-emacs-directory "_tmp/autosave/") "Centralized auto-save files (e.g. #file#).")
+(defvar my-undotree-directory          (concat user-emacs-directory "_tmp/undotree/") "Persistent undo-tree history files (e.g. ~undo-tree~*).")
+;; TRAMP
+(defvar my-tramp-backup-directory      (concat user-emacs-directory "_tmp/tramp/backups/") "For TRAMP.")
+(defvar my-tramp-autosave-directory    (concat user-emacs-directory "_tmp/tramp/autosave/") "For TRAMP.")
+(defvar my-tramp-persistency-file      (concat user-emacs-directory "_tmp/tramp/tramp_persistency") "For TRAMP.")
+;; Other State
+(defvar my-desktop-directory           (concat user-emacs-directory "_tmp/state/desktop/") "For `desktop-save-mode'. See variable `desktop-dirname'")
+(defvar my-save-place-file             (concat user-emacs-directory "_tmp/state/save-place") "For `save-place-mode'. See variable `save-place-file'")
+
+;; Ensure the directories are created
+(dolist (dir (list my-autosavelist-directory
+		   my-backup-directory
+		   my-autosave-directory
+		   my-undotree-directory
+		   my-tramp-backup-directory
+		   my-tramp-autosave-directory
+		   my-desktop-directory
+		   ))
+  (make-directory dir t))
+
+(setq auto-save-list-file-prefix (concat my-autosavelist-directory "save-"))
+(setq backup-directory-alist `((".*" . ,my-backup-directory)))
+(setq auto-save-file-name-transforms `((".*" ,my-autosave-directory t)))
+(setq undo-tree-history-directory-alist `((".*" . ,my-undotree-directory)))
+
+(setq tramp-backup-directory-alist `((".*" . ,my-tramp-backup-directory)))
+(setq tramp-auto-save-directory my-tramp-autosave-directory)
+(setq tramp-persistency-file-name my-tramp-persistency-file)
+(setq desktop-dirname my-desktop-directory)
+(setq save-place-file my-save-place-file)
+;; Set some directories as exceptions (in these directories, auto-save
+;; / backup / undo-tree should not be copy to outside, the centralized
+;; folder. Instead, set to nil, means same directory of the original
+;; file.)
+(dir-locals-set-class-variables
+ 'no-write-outside
+ '((nil
+    . ((auto-save-default . nil)
+       (make-backup-files . nil)
+       (undo-tree-auto-save-history . nil)))))
+
+(dir-locals-set-directory-class (expand-file-name "~/.ssh") 'no-write-outside)
+(dir-locals-set-directory-class (expand-file-name "~/.gnupg") 'no-write-outside)
+(dir-locals-set-directory-class (expand-file-name "~/.config") 'no-write-outside)
+(dir-locals-set-directory-class (expand-file-name "~/.local") 'no-write-outside)
+(dir-locals-set-directory-class (expand-file-name "~/.mozilla") 'no-write-outside)
+(dir-locals-set-directory-class (expand-file-name "/etc") 'no-write-outside)
+
+(defun my-no-write-outside-for-sensitive-files ()
+  "Disable centralized auto-save/backup/undo-tree for sensitive file types."
+  (when (and buffer-file-name
+             (member (file-name-extension buffer-file-name)
+                     '("pem" "crt" "cer" "der" "key" "p12" "pfx" "asc")))
+    ;; Don't write to centralized folder
+    (setq-local backup-directory-alist nil)
+    (setq-local auto-save-file-name-transforms nil)
+    (setq-local undo-tree-history-directory-alist nil)))
+
+(add-hook 'find-file-hook #'my-no-write-outside-for-sensitive-files)
+
+
+;; ======================================================
+;; `desktop-mode' (save session state when starting/quitting emacs)
+;; ======================================================
+;; auto-save desktop
+;; (setq desktop-save t)
+;; (desktop-save-mode 1)
+(save-place-mode 1)  ; Store cursor places after closing buffer
 
 
 ;;(require 'whitespace)
@@ -755,117 +842,89 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
 
 ;;======================================================
-;; Emacs 自動備份 Auto backup
-;;======================================================
-
-;; Emacs會自動給你編輯的檔案備份（以~為結尾，例如編輯test，會產生test~）
-;; 然而這樣常常會把目錄弄得很亂，所以以下設定可以讓這些備份檔統統塞
-;; 進~/.saves中，保持屁屁和工作目錄的乾爽。
-
-(setq
- backup-by-copying t      ; don't clobber symlinks
- backup-directory-alist
- '(("." . "~/.saves"))    ; don't litter my fs tree
- delete-old-versions t
- kept-new-versions 6
- kept-old-versions 2
- version-control t)       ; use versioned backups
-
-;; Don't use .#FILENAME
-;; https://stackoverflow.com/questions/5738170/why-does-emacs-create-temporary-symbolic-links-for-modified-files/12974060#12974060
-;; Non-nil means use lockfiles to avoid editing collisions.
-(setq create-lockfiles nil)
-
-;; ======================================================
-;; God-mode
-;; ======================================================
-
-;; (global-set-key (kbd "M-z") 'god-local-mode)
-
-;;======================================================
 ;; Shorten indicators in Mode-line
 ;;======================================================
-(when nil
-  (require 'rich-minority)
-  (rich-minority-mode 1)
-  (setf rm-blacklist "")
 
-(defface projectile-mode-line
-  '((((class color) (background light)) (:foreground "#444" :bold t))
-    (((class color) (background dark)) (:foreground "#444" :bold t)))
-  "Face for title. ex:"
-  :group 'projectile-faces)
+;; (require 'rich-minority)
+;; (rich-minority-mode 1)
+;; (setf rm-blacklist "")
 
-(setq projectile-mode-line '(:eval
-                             (propertize
-                              (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
-                              'face 'projectile-mode-line
-                              )))
+;; (defface projectile-mode-line
+;;   '((((class color) (background light)) (:foreground "#444" :bold t))
+;;     (((class color) (background dark)) (:foreground "#444" :bold t)))
+;;   "Face for title. ex:"
+;;   :group 'projectile-faces)
 
-(add-hook 'find-file-hook 'my-lazy-load-flycheck)
-(defun my-lazy-load-flycheck ()
-  (require 'flycheck)
-  ;; (message "Lazy loaded flycheck.")  ; FIXME: This load whenever a file opened...
-  )
-;; (require 'flycheck)
-(eval-after-load 'flycheck-mode
-  (setq flycheck-mode-line-prefix "Fc")
-  )
+;; (setq projectile-mode-line '(:eval
+;;                              (propertize
+;; 			      (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
+;; 			      'face 'projectile-mode-line
+;; 			      )))
 
-;; ======================================================
-;; Mode-line
-;; ======================================================
-(setq-default mode-line-format
-	      '(
-		(god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
-		"%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
-		(vc-mode vc-mode)
-		mode-line-modes
-		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
-		" "
-		(auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
-		(lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
-		projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+;; (add-hook 'find-file-hook 'my-lazy-load-flycheck)
+;; (defun my-lazy-load-flycheck ()
+;;   (require 'flycheck)
+;;   ;; (message "Lazy loaded flycheck.")  ; FIXME: This load whenever a file opened...
+;;   )
+;; ;; (require 'flycheck)
+;; (eval-after-load 'flycheck-mode
+;;   (setq flycheck-mode-line-prefix "Fc")
+;;   )
 
-(setq mode-line-position
-      `((1 ,(propertize
-             " %p"
-             'local-map mode-line-column-line-number-mode-map
-             'mouse-face 'mode-line-highlight
-             ;; XXX needs better description
-             'help-echo "Size indication mode\n\
-mouse-1: Display Line and Column Mode Menu"))
-        (size-indication-mode
-         (2 ,(propertize
-              "/%I"
-              'local-map mode-line-column-line-number-mode-map
-              'mouse-face 'mode-line-highlight
-              ;; XXX needs better description
-              'help-echo "Size indication mode\n\
-mouse-1: Display Line and Column Mode Menu")))
-        (line-number-mode
-         ((column-number-mode
-           (1 ,(propertize
-                "(%l,%c)"
-                'local-map mode-line-column-line-number-mode-map
-                'mouse-face 'mode-line-highlight
-                'help-echo "Line number and Column number\n\
-mouse-1: Display Line and Column Mode Menu"))
-           (1 ,(propertize
-                "L%l"
-                'local-map mode-line-column-line-number-mode-map
-                'mouse-face 'mode-line-highlight
-                'help-echo "Line Number\n\
-mouse-1: Display Line and Column Mode Menu"))))
-         ((column-number-mode
-           (1 ,(propertize
-                "C%c"
-                'local-map mode-line-column-line-number-mode-map
-                'mouse-face 'mode-line-highlight
-                'help-echo "Column number\n\
-mouse-1: Display Line and Column Mode Menu"))))))
-      )
-)
+;; ;; ======================================================
+;; ;; Mode-line
+;; ;; ======================================================
+;; (setq-default mode-line-format
+;; 	      '(
+;; 		(god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
+;; 		"%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
+;; 		(vc-mode vc-mode)
+;; 		mode-line-modes
+;; 		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
+;; 		" "
+;; 		(auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
+;; 		(lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
+;; 		projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+
+;; (setq mode-line-position
+;;       `((1 ,(propertize
+;;              " %p"
+;;              'local-map mode-line-column-line-number-mode-map
+;;              'mouse-face 'mode-line-highlight
+;;              ;; XXX needs better description
+;;              'help-echo "Size indication mode\n\
+;; mouse-1: Display Line and Column Mode Menu"))
+;;         (size-indication-mode
+;;          (2 ,(propertize
+;; 	      "/%I"
+;; 	      'local-map mode-line-column-line-number-mode-map
+;; 	      'mouse-face 'mode-line-highlight
+;; 	      ;; XXX needs better description
+;; 	      'help-echo "Size indication mode\n\
+;; mouse-1: Display Line and Column Mode Menu")))
+;;         (line-number-mode
+;;          ((column-number-mode
+;;            (1 ,(propertize
+;;                 "(%l,%c)"
+;;                 'local-map mode-line-column-line-number-mode-map
+;;                 'mouse-face 'mode-line-highlight
+;;                 'help-echo "Line number and Column number\n\
+;; mouse-1: Display Line and Column Mode Menu"))
+;;            (1 ,(propertize
+;;                 "L%l"
+;;                 'local-map mode-line-column-line-number-mode-map
+;;                 'mouse-face 'mode-line-highlight
+;;                 'help-echo "Line Number\n\
+;; mouse-1: Display Line and Column Mode Menu"))))
+;;          ((column-number-mode
+;;            (1 ,(propertize
+;;                 "C%c"
+;;                 'local-map mode-line-column-line-number-mode-map
+;;                 'mouse-face 'mode-line-highlight
+;;                 'help-echo "Column number\n\
+;; mouse-1: Display Line and Column Mode Menu"))))))
+;;       )
+
 (global-set-key [f6] 'point-to-register)
 (global-set-key [f7] 'jump-to-register)
 
