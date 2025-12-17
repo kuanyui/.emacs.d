@@ -901,27 +901,62 @@ mouse-1: Display Line and Column Mode Menu"))))))
   (interactive)
   (find-file (format "/sudo::%s" (read-file-name "Find file as root: "))))
 
-
-;; ======================================================
-;; Elscreen
-;; ======================================================
-
-(cond ((window-system)
-       (setq elscreen-display-tab nil)
-       (elscreen-start)
-       (global-set-key (kbd "C-x 5 2") 'elscreen-create)
-       (global-set-key (kbd "C-x 5 0") 'elscreen-kill)
-       (global-set-key (kbd "<f11>") 'elscreen-previous)
-       (global-set-key (kbd "<f12>") 'elscreen-next)
-       ;; (elscreen-get-screen-list)
-       ;; (elscreen-get-current-screen)
-       )
-      (t
-       (global-set-key (kbd "<f11>") (lambda () (interactive) (other-frame 1)))
-       (global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
-       ))
-
 (setq tramp-default-method "ssh")
+(setq enable-remote-dir-locals nil)
+;; (setq tramp-completion-reread-directory-timeout nil)
+(setq remote-file-name-inhibit-cache 10)
+
+;; ======================================================
+;; Elscreen & frame (replaced by `tab-bar-mode')
+;; ======================================================
+
+;; (cond ((window-system)
+;;        (setq elscreen-display-tab nil)
+;;        (elscreen-start)
+;;        (global-set-key (kbd "C-x 5 2") 'elscreen-create)
+;;        (global-set-key (kbd "C-x 5 0") 'elscreen-kill)
+;;        (global-set-key (kbd "<f11>") 'elscreen-previous)
+;;        (global-set-key (kbd "<f12>") 'elscreen-next)
+;;        ;; (elscreen-get-screen-list)
+;;        ;; (elscreen-get-current-screen)
+;;        )
+;;       (t
+;;        (global-set-key (kbd "<f11>") (lambda () (interactive) (other-frame 1)))
+;;        (global-set-key (kbd "<f12>") (lambda () (interactive) (other-frame -1)))
+;;        ))
+
+;; ======================================================
+;; `tab-bar-mode' (built-in since Emacs 27) to replace `elscreen'
+;; ======================================================
+(setq tab-bar-show nil)
+(tab-bar-mode 1)
+
+(global-set-key (kbd "<f11>") 'tab-bar-switch-to-prev-tab)
+(global-set-key (kbd "<f12>") 'tab-bar-switch-to-next-tab)
+
+(require 'cl-lib)
+(defun my-list-insert-at (lst index elem)
+  "Return a new list with ELEM inserted at INDEX."
+  (append (cl-subseq lst 0 index)
+	  (list elem)
+	  (cl-subseq lst index)))
+
+(defun my-mode-line-tab-bar-index ()
+  "Get formatted `tab-bar--current-tab-index' for `mode-line-format'."
+  (when (and (bound-and-true-p tab-bar-mode)
+	     (fboundp 'tab-bar--current-tab-index))
+    (format "[%d] " (tab-bar--current-tab-index))))
+(defvar my-mode-line-tab-bar-index '(:eval (my-mode-line-tab-bar-index))
+  "Used in `mode-line-format' to show the index of `tab-bar-mode'")
+
+;; Setup `mode-line-format' to show tab-bar index in modeline
+(let* ((already-inserted (member my-mode-line-tab-bar-index mode-line-format))
+       (vc-index (cl-position '(vc-mode vc-mode) mode-line-format :test #'equal)))
+  (when (and vc-index (not already-inserted))
+    (setq-default mode-line-format
+		  (my-list-insert-at mode-line-format
+				     vc-index
+				     my-mode-line-tab-bar-index))))
 
 ;; ======================================================
 ;; File Backup Path
