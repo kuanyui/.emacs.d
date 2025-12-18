@@ -238,7 +238,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (global-diff-hl-mode 1)   ; Indicate modified lines according to VC
 (diff-hl-margin-mode 1)   ; Also show character (+-) instead of only color.
 (diff-hl-flydiff-mode 1)  ; Real-time update state
-(add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
+(add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote) ; In Dired buffer
+(add-hook 'vc-dir-mode-hook #'diff-hl-dir-mode)  ; In `vc-dir' buffer
 ;; (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
 
 ;; Don't ignore .git/ when find-file
@@ -1045,7 +1046,7 @@ Otherwise, return DPI (1 inch = 2.54 cm)
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       )
 ;; ======================================================
-;; Minibuffer: Ido
+;; Minibuffer: `ido'
 ;; ======================================================
 
 (require 'ido)
@@ -1072,29 +1073,32 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;; (setq ido-enable-flex-matching t)
 
 ;; ======================================================
-;; Minibuffer :: vertico - vertical interactive completion M-x. Zsh-liked
+;; Minibuffer
+;; ======================================================
+(savehist-mode t)      ;; Save Minibuffer History
+
+;; ======================================================
+;; Minibuffer :: `vertico' - vertical interactive Zsh-liked completion  (debian)
 ;; ======================================================
 
 (setq vertico-multiform-commands
       '((describe-symbol (vertico-sort-function . vertico-sort-alpha))))
 (setq vertico-multiform-categories
-      '((symbol (vertico-sort-function . vertico-sort-alpha))
-	))
+      '((symbol (vertico-sort-function . vertico-sort-alpha))))
 (vertico-mode t)
 (vertico-grid-mode -1) ;; Show items line-by-line
 (define-key vertico-map "?" #'minibuffer-completion-help)
-;;(define-key vertico-map (kbd "C-j") #'minibuffer-force-complete-and-exit)
-
 (define-key vertico-map (kbd "TAB") #'minibuffer-complete)
 (define-key vertico-map (kbd "M-g") #'vertico-grid-mode)
-;; ======================================================
-;; Minibuffer :: Marginalia
-;; ======================================================
-(marginalia-mode)      ;; Show elisp description summary in M-x
-(savehist-mode t)      ;; Save Minibuffer History
+;;(define-key vertico-map (kbd "C-j") #'minibuffer-force-complete-and-exit)
 
 ;; ======================================================
-;; Minibuffer :: Fuzzy searching for find-file / M-x  -- orderless.el
+;; Minibuffer :: `marginalia' - Show extra info in right-side
+;; ======================================================
+(marginalia-mode)      ;; Show elisp description summary in M-x
+
+;; ======================================================
+;; Minibuffer :: `orderless' - Fuzzy searching for `find-file' & `M-x'
 ;; ======================================================
 (require 'orderless)
 (setq completion-styles '(orderless))
