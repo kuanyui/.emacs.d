@@ -232,11 +232,14 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 (global-display-line-numbers-mode 1)
 
-
-(defun my-enable-diff-hl-mode ()
-  (if (not global-diff-hl-mode)
-      (global-diff-hl-mode 1)))
-(add-hook 'find-file-hooks 'my-enable-diff-hl-mode)
+;; ======================================================
+;; `diff-hl-mode' for VC (highlight modified lines)
+;; ======================================================
+(global-diff-hl-mode 1)   ; Indicate modified lines according to VC
+(diff-hl-margin-mode 1)   ; Also show character (+-) instead of only color.
+(diff-hl-flydiff-mode 1)  ; Real-time update state
+(add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
+;; (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
 
 ;; Don't ignore .git/ when find-file
 (setq completion-ignored-extensions (remove ".git/" completion-ignored-extensions))
