@@ -71,20 +71,22 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;; https://www.emacswiki.org/emacs/BackupDirectory
 ;; Local
-(defvar my-autosavelist-directory      (concat user-emacs-directory "_tmp/autosavelist/") "Auto-save list files (e.g. .saves-*, save-*).")
-(defvar my-backup-directory            (concat user-emacs-directory "_tmp/backups/") "Centralized backup files (e.g. file~, file.~N~).")
-(defvar my-autosave-directory          (concat user-emacs-directory "_tmp/autosave/") "Centralized auto-save files (e.g. #file#).")
-(defvar my-undotree-directory          (concat user-emacs-directory "_tmp/undotree/") "Persistent undo-tree history files (e.g. ~undo-tree~*).")
+(defvar my-emacs-tmp-directory       (concat user-emacs-directory "_tmp/") "All directories and files under this folder should be mode of 0o700 and 0o600")
+(defvar my-autosavelist-directory    (concat user-emacs-directory "_tmp/autosavelist/") "Auto-save list files (e.g. .saves-*, save-*). See variable `auto-save-list-file-prefix'")
+(defvar my-backup-directory          (concat user-emacs-directory "_tmp/backups/") "Centralized backup files (e.g. file~, file.~N~). See variable `backup-directory-alist'")
+(defvar my-autosave-directory        (concat user-emacs-directory "_tmp/autosave/") "Centralized auto-save files (e.g. #file#). See variable `auto-save-file-name-transforms'")
+(defvar my-undotree-directory        (concat user-emacs-directory "_tmp/undotree/") "Persistent undo-tree history files (e.g. ~undo-tree~*). See variable `undo-tree-history-directory-alist'")
 ;; TRAMP
-(defvar my-tramp-backup-directory      (concat user-emacs-directory "_tmp/tramp/backups/") "For TRAMP.")
-(defvar my-tramp-autosave-directory    (concat user-emacs-directory "_tmp/tramp/autosave/") "For TRAMP.")
-(defvar my-tramp-persistency-file      (concat user-emacs-directory "_tmp/tramp/tramp_persistency") "For TRAMP.")
+(defvar my-tramp-backup-directory    (concat user-emacs-directory "_tmp/tramp/backups/") "For TRAMP. See variable `tramp-backup-directory-alist'")
+(defvar my-tramp-autosave-directory  (concat user-emacs-directory "_tmp/tramp/autosave/") "For TRAMP. See variable `tramp-auto-save-directory'")
+(defvar my-tramp-persistency-file    (concat user-emacs-directory "_tmp/tramp/tramp_persistency") "For TRAMP. See variable `tramp-persistency-file-name'")
 ;; Other State
-(defvar my-desktop-directory           (concat user-emacs-directory "_tmp/state/desktop/") "For `desktop-save-mode'. See variable `desktop-dirname'")
-(defvar my-save-place-file             (concat user-emacs-directory "_tmp/state/save-place") "For `save-place-mode'. See variable `save-place-file'")
+(defvar my-desktop-directory         (concat user-emacs-directory "_tmp/state/desktop/") "For `desktop-save-mode'. See variable `desktop-dirname'")
+(defvar my-save-place-file           (concat user-emacs-directory "_tmp/state/save-place") "For `save-place-mode'. See variable `save-place-file'")
 
 ;; Ensure the directories are created
-(dolist (dir (list my-autosavelist-directory
+(dolist (dir (list my-emacs-tmp-directory
+		   my-autosavelist-directory
 		   my-backup-directory
 		   my-autosave-directory
 		   my-undotree-directory
@@ -92,7 +94,8 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 		   my-tramp-autosave-directory
 		   my-desktop-directory
 		   ))
-  (make-directory dir t))
+  (make-directory dir t)
+  (set-file-modes dir #o700))
 
 (setq auto-save-list-file-prefix (concat my-autosavelist-directory "save-"))
 (setq backup-directory-alist `((".*" . ,my-backup-directory)))
@@ -104,6 +107,7 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 (setq tramp-persistency-file-name my-tramp-persistency-file)
 (setq desktop-dirname my-desktop-directory)
 (setq save-place-file my-save-place-file)
+
 ;; Set some directories as exceptions (in these directories, auto-save
 ;; / backup / undo-tree should not be copy to outside, the centralized
 ;; folder. Instead, set to nil, means same directory of the original
