@@ -16,15 +16,14 @@
   (define-key markdown-mode-map (kbd "M-<up>") 'move-text-up)
   )
 
-(setq markdown-enable-math t)
 (setq markdown-command "/usr/lib/node_modules/marked/bin/marked")
+(setq markdown-enable-math t)
 (setq markdown-fontify-code-blocks-natively t)
-
 (setq markdown-enable-highlighting-syntax t)
 (setq markdown-fontify-whole-heading-line t)
 (setq markdown-indent-function 'indent-relative)
 ;; (setq markdown-indent-function 'markdown-indent-line)
-
+(setq markdown-header-scaling t)
 (defun my-markdown-mode-hook ()
   (setq indent-tabs-mode nil)
   (setq tab-width 2))

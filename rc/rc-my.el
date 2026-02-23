@@ -81,9 +81,9 @@
 (require 'moe-theme-flavours)
 
 (setq moe-theme-colorize-modeline-by-frame-id t)
-;; (setq moe-theme-resize-title-markdown '(1.5 1.4 1.3 1.2 1.0 1.0))
-;; (setq moe-theme-resize-title-org '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
-;; (setq moe-theme-resize-title-rst '(1.5 1.4 1.3 1.2 1.1 1.0))
+(setq moe-theme-resize-title-markdown '(2.0 1.5 1.3 1.1 1.0 1.0))
+(setq moe-theme-resize-title-org '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+(setq moe-theme-resize-title-rst '(1.5 1.4 1.3 1.2 1.1 1.0))
 (if (string-prefix-p (expand-file-name "~/company") (expand-file-name default-directory))
     (load-theme 'moe-light t nil)
   (load-theme 'moe-dark t nil)
