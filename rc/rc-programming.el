@@ -281,7 +281,9 @@
 (global-set-key (kbd "C-c p r") #'projectile-recentf)
 (global-set-key (kbd "C-c p k") #'projectile-kill-buffers)
 
+(setq helm-rg-thing-at-point '()) ; Disable the annoying auto prefilled minibuffer.
 (defun my-projectile-search-text (&optional args)
+  "Try rg, ag, ack, grep one-by-one."
   (interactive)
   (let ((current-prefix-arg current-prefix-arg)
 	(fn (cond
