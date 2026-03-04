@@ -27,6 +27,7 @@
                ("Markdown" (or
                             (name . "^diary$")
                             (mode . markdown-mode)))
+               ("AsciiDoc" (or (mode . adoc-mode)))
                ("C/C++ header" (name . "\\.h$"))
                ("C/C++ source" (or (mode . c-mode)
                                    (mode . c++-mode)))
@@ -97,12 +98,17 @@
                                    (mode . sh-mode)))
                ("Perl"  (or (mode . cperl-mode)
                             (mode . perl-mode)))
+               ("Lua"  (or (mode . lua-mode)))
                ("Twitter" (mode . twittering-mode))
                ("Magit" (or (name . "*magit*")
-                            (mode . magit-mode)))
+                            (mode . magit-mode)
+                            (name . "^magit.*:")
+			    ))
                ("Emacs" (or
-                         (name . "^\\*Messages\\*$")
-                         (name . "^\\*Compile-Log\\*$")))
+                         (name . "^\\*\\(Warnings\\|Messages\\|Backtrace\\|Completions\\|Async-native-compile-log\\|Shell Command Output\\)\\*$")))
+               ("Emacs :: Custom" (or
+				   (name . "^\\*Custom")
+				   ))
                ("Help" (or (mode . woman-mode)
                            (mode . man-mode)
                            (mode . info-mode)
@@ -120,6 +126,7 @@
                        (name . "^\\*Calendar\\*$")))
                ("helm" (name . "*helm"))
                ("Ag" (name . "^\\*ag search"))
+	       ("Magit" (or (mode . magit-mode)))
                ))))
 
 
