@@ -19,6 +19,7 @@
   :hostmode 'poly-dockerfile-hostmode
   :innermodes '(poly-jinja2-docker-innermode))
 
-(add-to-list 'auto-mode-alist '("\\.dockerfile\\.j2\\'" . poly-docker-jinja2-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(containerfile\\|dockerfile\\)\\.j2\\'" . poly-docker-jinja2-mode))
+(add-to-list 'auto-mode-alist '("\\(Containerfile\\|Dockerfile\\)\\.j2\\'" . poly-docker-jinja2-mode))
 
 (provide 'rc-polymode)
