@@ -59,6 +59,7 @@
 (require 'rc-sql)
 (require 'rc-qt)
 (require 'rc-makefile)
+(require 'rc-polymode)
 
 (require 'rc-my)
 
