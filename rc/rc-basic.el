@@ -296,7 +296,9 @@ Otherwise, return DPI (1 inch = 2.54 cm)
               emacs-english-font "Consolas"))
 
     (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
-    (defvar emacs-cjk-font "Noto Sans CJK JP" "The font name for CJK.")
+    (defvar emacs-cjk-font (seq-find (lambda (f) (find-font (font-spec :name f)))
+				     '("Noto Sans CJK JP" "Noto Sans CJK TC" "DejaVu Sans Mono"))
+      "The font name for CJK.")
   ;;; for test
     ;; (find-font (font-spec :name "LiHei Pro"))
     ;; (font-family-list)

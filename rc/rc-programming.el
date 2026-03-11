@@ -73,11 +73,11 @@
 (mapc
  (lambda (name)
    (let ((mode-symbol      (intern (concat name "-mode")))
-         (mode-hook-symbol (intern (concat name "-mode-hook")))
-         (mode-map-symbol  (intern (concat name "-mode-map"))))
+	 (mode-hook-symbol (intern (concat name "-mode-hook")))
+	 (mode-map-symbol  (intern (concat name "-mode-map"))))
      (eval-after-load mode-symbol
        `(progn
-          (add-hook   (quote ,mode-hook-symbol) 'symbol-overlay-mode)
+	  (add-hook   (quote ,mode-hook-symbol) 'symbol-overlay-mode)
 	  (define-key ,mode-map-symbol (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
 	  (define-key ,mode-map-symbol (kbd "C-c M-n") 'symbol-overlay-put)
 	  (define-key ,mode-map-symbol (kbd "C-M-\"") 'symbol-overlay-put)
@@ -156,13 +156,13 @@
 (require 'rainbow-delimiters)
 ;; 只在程式相關mode中使用
 (dolist (x '(emacs-lisp-mode-hook
-             lisp-mode-hook
-             lisp-interaction-mode-hook
-             ))
+	     lisp-mode-hook
+	     lisp-interaction-mode-hook
+	     ))
   (add-hook x
-            (lambda ()
-              (rainbow-delimiters-mode t)
-              (setq show-trailing-whitespace t))))
+	    (lambda ()
+	      (rainbow-delimiters-mode t)
+	      (setq show-trailing-whitespace t))))
 
 ;;======================================================
 ;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
@@ -213,6 +213,10 @@
 ;; Whitespace
 ;;======================================================
 (require 'whitespace)
+(setq whitespace-action '(auto-cleanup))
+(setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
+(global-whitespace-mode t)
+
 (defun my-whitespace-cleanup ()
   (interactive)
   (if (null whitespace-style)
@@ -225,10 +229,9 @@
       ;; (insert "\n\n\n")
       ;; ))
       )))
-
-(remove-hook 'before-save-hook 'my-whitespace-cleanup)
-(remove-hook 'after-save-hook 'swoop-cache-clear)
 (add-hook 'before-save-hook 'my-whitespace-cleanup)
+
+(remove-hook 'after-save-hook 'swoop-cache-clear)
 
 ;;======================================================
 ;; Helm-dash - Looking up documents
@@ -242,9 +245,9 @@
     (let ((name-symbol (replace-regexp-in-string "[_ ]" "-" (downcase name-string))))
       `(defalias (quote ,(intern (concat "dash:" name-symbol)))
 	 (function (lambda ()
-                     (interactive)
-                     (let ((helm-dash-common-docsets (quote (,name-string))))
-                       (helm-dash)))))))
+		     (interactive)
+		     (let ((helm-dash-common-docsets (quote (,name-string))))
+		       (helm-dash)))))))
 
   (helm-dash-generate-doc-function "Python 3")
   (helm-dash-generate-doc-function "Qt")
@@ -327,9 +330,9 @@
 ;; ======================================================
 (setq svg-path-d-keyword
       '(
-        ("[A-z]" (0 font-lock-builtin-face append))
-        ("," (0 font-lock-constant-face append))
-        ))
+	("[A-z]" (0 font-lock-builtin-face append))
+	("," (0 font-lock-constant-face append))
+	))
 ;;(qml--gen-font-lock-keywords '("aaa") 'font-lock-keyword-face)
 (setq svg-path-d-keywords '(svg-path-d-keyword))
 
@@ -346,21 +349,21 @@
 ;; LSP (eglot)
 ;; ======================================================
 (setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
-                              (python-mode . ("pyls"))
-                              ((js-mode
-                                js2-mode
-                                typescript-mode
-                                rjsx-mode) . ("javascript-typescript-stdio"))
-                              (sh-mode . ("bash-language-server" "start"))
-                              ((c++-mode c-mode) . ("ccls"))
-                              (ruby-mode
-                               . ("solargraph" "socket" "--port"
-                                  :autoport))
-                              (php-mode . ("php" "vendor/felixfbecker/\
+			      (python-mode . ("pyls"))
+			      ((js-mode
+				js2-mode
+				typescript-mode
+				rjsx-mode) . ("javascript-typescript-stdio"))
+			      (sh-mode . ("bash-language-server" "start"))
+			      ((c++-mode c-mode) . ("ccls"))
+			      (ruby-mode
+			       . ("solargraph" "socket" "--port"
+				  :autoport))
+			      (php-mode . ("php" "vendor/felixfbecker/\
 language-server/bin/php-language-server.php"))
-                              (haskell-mode . ("hie-wrapper"))
-                              (kotlin-mode . ("kotlin-language-server"))
-                              (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
+			      (haskell-mode . ("hie-wrapper"))
+			      (kotlin-mode . ("kotlin-language-server"))
+			      (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
 
 (with-eval-after-load 'eglot
   (define-key eglot-mode-map (kbd "<f2>") 'xref-find-definitions)

@@ -116,9 +116,6 @@
   (add-hook 'nxml-mode-hook 'rainbow-mode)
   )
 
-(setq whitespace-action '(auto-cleanup))
-(setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
-
 (require 'mmm-mode)
 
 
