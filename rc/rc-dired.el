@@ -33,11 +33,13 @@
       "Highlight for SELinux context (u:r:t)"
       (font-lock-add-keywords
        nil				; apply on current buffer only
-       '(("\\([a-zA-Z_0-9]+_u\\):\\([a-zA-Z_0-9]+_r\\):\\([a-zA-Z_0-9]+_t\\)"
+       '(("\\([a-zA-Z_0-9]+_u\\):\\([a-zA-Z_0-9]+_r\\):\\([a-zA-Z_0-9]+_t\\)\\(?::\\([a-zA-Z_0-9.-]+\\)\\)?\\(?::\\([a-zA-Z_0-9.-]+\\)\\)?"
 	  ;; Use `:override' to force override `diredfl-global-mode'.
 	  (1 '(:inherit font-lock-keyword-face :override t))       ; User
 	  (2 '(:inherit font-lock-function-name-face :override t)) ; Role
-	  (3 '(:inherit font-lock-type-face :override t))          ; Type
+	  (3 '(:inherit font-lock-variable-name-face :override t)) ; Type
+	  (4 '(:inherit font-lock-type-face :override t))          ; Sensitivity (optional)
+	  (5 '(:inherit font-lock-string-face :override t))        ; Category (optional, but Sensitivity must be visible)
 	  ))
        'append)  ; Append after default rules of Dired
       )
