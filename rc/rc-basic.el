@@ -1111,10 +1111,18 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; Treemacs - Sidebar File Manager
 ;; ======================================================
 
+(global-set-key (kbd "C-S-b") #'treemacs)
+
 (with-eval-after-load 'treemacs
   ;; prefer to expand/collpase nodes with a single mouse click
   (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
+  ;; (global-set-key (kbd "C-S-b") #'treemacs-display-current-project-exclusively)
+  (global-set-key (kbd "C-S-b") #'treemacs)
+
+  (treemacs-follow-mode 1)
+  (treemacs-project-follow-mode 1)
   )
+
 
 ;; ======================================================
 ;; Centaur-tabs - tabs
