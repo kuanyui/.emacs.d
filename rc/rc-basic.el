@@ -86,14 +86,14 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 
 ;; Ensure the directories are created
 (dolist (dir (list my-emacs-tmp-directory
-		   my-autosavelist-directory
-		   my-backup-directory
-		   my-autosave-directory
-		   my-undotree-directory
-		   my-tramp-backup-directory
-		   my-tramp-autosave-directory
-		   my-desktop-directory
-		   ))
+                   my-autosavelist-directory
+                   my-backup-directory
+                   my-autosave-directory
+                   my-undotree-directory
+                   my-tramp-backup-directory
+                   my-tramp-autosave-directory
+                   my-desktop-directory
+                   ))
   (make-directory dir t)
   (set-file-modes dir #o700))
 
@@ -290,14 +290,14 @@ Otherwise, return DPI (1 inch = 2.54 cm)
   (interactive)
   (when (window-system)
     (if (eq system-type 'windows-nt)
-	(set-face-attribute 'default nil :font "Consolas-9"))
+        (set-face-attribute 'default nil :font "Consolas-9"))
     (if (eq system-type 'windows-nt)
-	(setq emacs-cjk-font "Consolas"
+        (setq emacs-cjk-font "Consolas"
               emacs-english-font "Consolas"))
 
     (defvar emacs-english-font "DejaVu Sans Mono" "The font name of English.")
     (defvar emacs-cjk-font (seq-find (lambda (f) (find-font (font-spec :name f)))
-				     '("Noto Sans CJK JP" "Noto Sans CJK TC" "DejaVu Sans Mono"))
+                                     '("Noto Sans CJK JP" "Noto Sans CJK TC" "DejaVu Sans Mono"))
       "The font name for CJK.")
   ;;; for test
     ;; (find-font (font-spec :name "LiHei Pro"))
@@ -317,16 +317,16 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
     (defvar emacs-font-size-pair-list
       '(( 5 .  6) (9 . 10) (10 . 12)(12 . 14)
-	(13 . 16) (15 . 18) (17 . 20) (19 . 22)
-	(20 . 24) (21 . 26) (24 . 28) (26 . 32)
-	(28 . 34) (30 . 36) (34 . 40) (36 . 44))
+        (13 . 16) (15 . 18) (17 . 20) (19 . 22)
+        (20 . 24) (21 . 26) (24 . 28) (26 . 32)
+        (28 . 34) (30 . 36) (34 . 40) (36 . 44))
       "This list is used to store matching (englis . chinese) font-size.")
 
     (defun font-exist-p (fontname)
       "Test if this font is exist or not."
       (if (or (not fontname) (string= fontname ""))
           nil
-	(if (not (x-list-fonts fontname)) nil t)))
+        (if (not (x-list-fonts fontname)) nil t)))
 
     (defun set-font (english chinese size-pair)
       "Setup emacs English and Chinese font on x window-system."
@@ -344,11 +344,11 @@ Otherwise, return DPI (1 inch = 2.54 cm)
     (defun emacs-step-font-size (step)
       "Increase/Decrease emacs's font size."
       (let ((scale-steps emacs-font-size-pair-list))
-	(if (< step 0) (setq scale-steps (reverse scale-steps)))
-	(setq emacs-font-size-pair
+        (if (< step 0) (setq scale-steps (reverse scale-steps)))
+        (setq emacs-font-size-pair
               (or (cadr (member emacs-font-size-pair scale-steps))
                   emacs-font-size-pair))
-	(when emacs-font-size-pair
+        (when emacs-font-size-pair
           (message "emacs font size set to %.1f" (car emacs-font-size-pair))
           (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair))))
 
@@ -601,18 +601,18 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key [(meta ?/)] 'hippie-expand)
 (setq hippie-expand-try-functions-list
       '(
-	try-expand-dabbrev
-	try-expand-dabbrev-visible
-	try-expand-dabbrev-all-buffers
-	try-expand-dabbrev-from-kill
-	try-complete-file-name-partially
-	try-complete-file-name
-	try-expand-all-abbrevs
-	try-expand-list
-	try-expand-line
-	try-complete-lisp-symbol-partially
-	try-complete-lisp-symbol
-	))
+        try-expand-dabbrev
+        try-expand-dabbrev-visible
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol
+        ))
 
 ;;補全另一選擇company-mode
 ;;(add-to-list 'load-path "~/.emacs.d/lisps/company")
@@ -867,9 +867,9 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
 ;; (setq projectile-mode-line '(:eval
 ;;                              (propertize
-;; 			      (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
-;; 			      'face 'projectile-mode-line
-;; 			      )))
+;;			      (if (file-remote-p default-directory) " Pj" (format " %s" (projectile-project-name)))
+;;			      'face 'projectile-mode-line
+;;			      )))
 
 ;; (add-hook 'find-file-hook 'my-lazy-load-flycheck)
 ;; (defun my-lazy-load-flycheck ()
@@ -885,16 +885,16 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; ;; Mode-line
 ;; ;; ======================================================
 ;; (setq-default mode-line-format
-;; 	      '(
-;; 		(god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
-;; 		"%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
-;; 		(vc-mode vc-mode)
-;; 		mode-line-modes
-;; 		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
-;; 		" "
-;; 		(auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
-;; 		(lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
-;; 		projectile-mode-line mode-line-misc-info mode-line-end-spaces))
+;;	      '(
+;;		(god-local-mode (:eval (propertize "G" 'face 'compilation-error)))
+;;		"%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification mode-line-position
+;;		(vc-mode vc-mode)
+;;		mode-line-modes
+;;		(flycheck-mode (:eval (flycheck-mode-line-status-text)))
+;;		" "
+;;		(auto-revert-mode (:eval (propertize "A" 'face 'compilation-mode-line-exit)))
+;;		(lsp-mode (:eval (propertize "LSP" 'face 'font-lock-keyword-face)))
+;;		projectile-mode-line mode-line-misc-info mode-line-end-spaces))
 
 ;; (setq mode-line-position
 ;;       `((1 ,(propertize
@@ -906,11 +906,11 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;; mouse-1: Display Line and Column Mode Menu"))
 ;;         (size-indication-mode
 ;;          (2 ,(propertize
-;; 	      "/%I"
-;; 	      'local-map mode-line-column-line-number-mode-map
-;; 	      'mouse-face 'mode-line-highlight
-;; 	      ;; XXX needs better description
-;; 	      'help-echo "Size indication mode\n\
+;;	      "/%I"
+;;	      'local-map mode-line-column-line-number-mode-map
+;;	      'mouse-face 'mode-line-highlight
+;;	      ;; XXX needs better description
+;;	      'help-echo "Size indication mode\n\
 ;; mouse-1: Display Line and Column Mode Menu")))
 ;;         (line-number-mode
 ;;          ((column-number-mode
@@ -1007,13 +1007,13 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (defun my-list-insert-at (lst index elem)
   "Return a new list with ELEM inserted at INDEX."
   (append (cl-subseq lst 0 index)
-	  (list elem)
-	  (cl-subseq lst index)))
+          (list elem)
+          (cl-subseq lst index)))
 
 (defun my-mode-line-tab-bar-index ()
   "Get formatted `tab-bar--current-tab-index' for `mode-line-format'."
   (when (and (bound-and-true-p tab-bar-mode)
-	     (fboundp 'tab-bar--current-tab-index))
+             (fboundp 'tab-bar--current-tab-index))
     (format "[%d] " (tab-bar--current-tab-index))))
 (defvar my-mode-line-tab-bar-index '(:eval (my-mode-line-tab-bar-index))
   "Used in `mode-line-format' to show the index of `tab-bar-mode'")
@@ -1023,9 +1023,9 @@ Otherwise, return DPI (1 inch = 2.54 cm)
        (vc-index (cl-position '(vc-mode vc-mode) mode-line-format :test #'equal)))
   (when (and vc-index (not already-inserted))
     (setq-default mode-line-format
-		  (my-list-insert-at mode-line-format
-				     vc-index
-				     my-mode-line-tab-bar-index))))
+                  (my-list-insert-at mode-line-format
+                                     vc-index
+                                     my-mode-line-tab-bar-index))))
 
 ;; ======================================================
 ;; File Backup Path

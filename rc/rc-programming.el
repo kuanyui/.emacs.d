@@ -73,18 +73,18 @@
 (mapc
  (lambda (name)
    (let ((mode-symbol      (intern (concat name "-mode")))
-	 (mode-hook-symbol (intern (concat name "-mode-hook")))
-	 (mode-map-symbol  (intern (concat name "-mode-map"))))
+         (mode-hook-symbol (intern (concat name "-mode-hook")))
+         (mode-map-symbol  (intern (concat name "-mode-map"))))
      (eval-after-load mode-symbol
        `(progn
-	  (add-hook   (quote ,mode-hook-symbol) 'symbol-overlay-mode)
-	  (define-key ,mode-map-symbol (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
-	  (define-key ,mode-map-symbol (kbd "C-c M-n") 'symbol-overlay-put)
-	  (define-key ,mode-map-symbol (kbd "C-M-\"") 'symbol-overlay-put)
-	  (define-key ,mode-map-symbol (kbd "M-n") 'symbol-overlay-jump-next)
-	  (define-key ,mode-map-symbol (kbd "M-p") 'symbol-overlay-jump-prev)
-	  (define-key ,mode-map-symbol (kbd "C-c M-p") 'symbol-overlay-rename)
-	  )))
+          (add-hook   (quote ,mode-hook-symbol) 'symbol-overlay-mode)
+          (define-key ,mode-map-symbol (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
+          (define-key ,mode-map-symbol (kbd "C-c M-n") 'symbol-overlay-put)
+          (define-key ,mode-map-symbol (kbd "C-M-\"") 'symbol-overlay-put)
+          (define-key ,mode-map-symbol (kbd "M-n") 'symbol-overlay-jump-next)
+          (define-key ,mode-map-symbol (kbd "M-p") 'symbol-overlay-jump-prev)
+          (define-key ,mode-map-symbol (kbd "C-c M-p") 'symbol-overlay-rename)
+          )))
    )
  '("css" "stylus" "jade" "yajade"
    "conf" "conf-colon"
@@ -156,13 +156,13 @@
 (require 'rainbow-delimiters)
 ;; 只在程式相關mode中使用
 (dolist (x '(emacs-lisp-mode-hook
-	     lisp-mode-hook
-	     lisp-interaction-mode-hook
-	     ))
+             lisp-mode-hook
+             lisp-interaction-mode-hook
+             ))
   (add-hook x
-	    (lambda ()
-	      (rainbow-delimiters-mode t)
-	      (setq show-trailing-whitespace t))))
+            (lambda ()
+              (rainbow-delimiters-mode t)
+              (setq show-trailing-whitespace t))))
 
 ;;======================================================
 ;; Rainbow-mode 自動顯示色碼顏色，如 #ffeeaa
@@ -214,7 +214,7 @@
 ;;======================================================
 (require 'whitespace)
 (setq whitespace-action '(auto-cleanup))
-(setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
+(setq whitespace-style '(trailing empty))  ;; Don't use `space-before-tab' `indentation' `space-after-tab', they will breaks .editorconfig and breaks Makefile. So stupid.
 (global-whitespace-mode t)
 
 (defun my-whitespace-cleanup ()
@@ -244,10 +244,10 @@
   (defmacro helm-dash-generate-doc-function(name-string)
     (let ((name-symbol (replace-regexp-in-string "[_ ]" "-" (downcase name-string))))
       `(defalias (quote ,(intern (concat "dash:" name-symbol)))
-	 (function (lambda ()
-		     (interactive)
-		     (let ((helm-dash-common-docsets (quote (,name-string))))
-		       (helm-dash)))))))
+         (function (lambda ()
+                     (interactive)
+                     (let ((helm-dash-common-docsets (quote (,name-string))))
+                       (helm-dash)))))))
 
   (helm-dash-generate-doc-function "Python 3")
   (helm-dash-generate-doc-function "Qt")
@@ -289,12 +289,12 @@
   "Try rg, ag, ack, grep one-by-one."
   (interactive)
   (let ((current-prefix-arg current-prefix-arg)
-	(fn (cond
-	     ((executable-find "rg") #'helm-projectile-rg)
-	     ((executable-find "ag") #'helm-projectile-ag)
-	     ((executable-find "ack") #'helm-projectile-ack)
-	     ((executable-find "grep") #'helm-projectile-grep)
-	     )))
+        (fn (cond
+             ((executable-find "rg") #'helm-projectile-rg)
+             ((executable-find "ag") #'helm-projectile-ag)
+             ((executable-find "ack") #'helm-projectile-ack)
+             ((executable-find "grep") #'helm-projectile-grep)
+             )))
     (call-interactively fn)
     ))
 
@@ -307,15 +307,15 @@
 ;;  )
 ;; (helm-projectile-on)  // I just want to use its ag/ack/grep/recentf support
 (add-hook 'projectile-mode-hook
-	  (lambda ()
-	    (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
-	    (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
-	    (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
-	    (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
-	    (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
-	    (define-key projectile-mode-map [remap projectile-rg] #'helm-projectile-rg)
-	    (define-key projectile-mode-map [remap projectile-find-file] #'pff))
-	  )
+          (lambda ()
+            (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
+            (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
+            (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
+            (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
+            (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
+            (define-key projectile-mode-map [remap projectile-rg] #'helm-projectile-rg)
+            (define-key projectile-mode-map [remap projectile-find-file] #'pff))
+          )
 
 ;; ======================================================
 ;; wgrep
@@ -330,9 +330,9 @@
 ;; ======================================================
 (setq svg-path-d-keyword
       '(
-	("[A-z]" (0 font-lock-builtin-face append))
-	("," (0 font-lock-constant-face append))
-	))
+        ("[A-z]" (0 font-lock-builtin-face append))
+        ("," (0 font-lock-constant-face append))
+        ))
 ;;(qml--gen-font-lock-keywords '("aaa") 'font-lock-keyword-face)
 (setq svg-path-d-keywords '(svg-path-d-keyword))
 
@@ -349,21 +349,21 @@
 ;; LSP (eglot)
 ;; ======================================================
 (setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
-			      (python-mode . ("pyls"))
-			      ((js-mode
-				js2-mode
-				typescript-mode
-				rjsx-mode) . ("javascript-typescript-stdio"))
-			      (sh-mode . ("bash-language-server" "start"))
-			      ((c++-mode c-mode) . ("ccls"))
-			      (ruby-mode
-			       . ("solargraph" "socket" "--port"
-				  :autoport))
-			      (php-mode . ("php" "vendor/felixfbecker/\
+                              (python-mode . ("pyls"))
+                              ((js-mode
+                                js2-mode
+                                typescript-mode
+                                rjsx-mode) . ("javascript-typescript-stdio"))
+                              (sh-mode . ("bash-language-server" "start"))
+                              ((c++-mode c-mode) . ("ccls"))
+                              (ruby-mode
+                               . ("solargraph" "socket" "--port"
+                                  :autoport))
+                              (php-mode . ("php" "vendor/felixfbecker/\
 language-server/bin/php-language-server.php"))
-			      (haskell-mode . ("hie-wrapper"))
-			      (kotlin-mode . ("kotlin-language-server"))
-			      (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
+                              (haskell-mode . ("hie-wrapper"))
+                              (kotlin-mode . ("kotlin-language-server"))
+                              (go-mode . ("go-langserver" "-mode=stdio" "-gocodecompletion"))))
 
 (with-eval-after-load 'eglot
   (define-key eglot-mode-map (kbd "<f2>") 'xref-find-definitions)

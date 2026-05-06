@@ -206,10 +206,17 @@
 
 (setq recentz-max-history
       '((files . 750)
-	(directories . 150)
-	(projects . 150)))
+        (directories . 150)
+        (projects . 150)))
 
 (add-to-list 'recentz-ignore-path-patterns "node_modules/")
+
+
+;; ======================================================
+;; AppArmor
+;; ======================================================
+
+(require 'apparmor-mode)
 
 (provide 'rc-my)
 ;;; rc-my.el ends here
