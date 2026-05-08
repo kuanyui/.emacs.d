@@ -1,7 +1,6 @@
-;;; rc-hl-occurs.el ---                              -*- lexical-binding: t; -*-
+;;; rc-hloccur.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  ono
-
+;; Copyright (C) 2026 ono ono
 
 ;;======================================================
 ;; Enhance `symbol-overlay' and wrap it.
@@ -13,6 +12,7 @@
 ;; ======================================================
 ;; face cycling
 ;; ======================================================
+
 (defvar hloccur-faces '(hi-yellow hi-pink hi-green hi-blue hi-salmon hi-aquamarine))
 (defvar hloccur-face-index 0)
 
@@ -26,11 +26,10 @@
 ;; aliases to upstream commands
 ;; ======================================================
 
-(defalias 'hloccur-jump-next      'symbol-overlay-jump-next)
-(defalias 'hloccur-jump-prev      'symbol-overlay-jump-prev)
-(defalias 'hloccur-rename         'symbol-overlay-rename)
-(defalias 'hloccur-remove-symbols 'symbol-overlay-remove-all)
-(defalias 'hloccur-mode           'symbol-overlay-mode)
+(defalias 'hloccur-jump-next 'symbol-overlay-jump-next)
+(defalias 'hloccur-jump-prev 'symbol-overlay-jump-prev)
+(defalias 'hloccur-rename    'symbol-overlay-rename)
+(defalias 'hloccur-mode      'symbol-overlay-mode)
 
 ;; ======================================================
 ;; commands
@@ -41,19 +40,6 @@
   (let ((str (regexp-quote (buffer-substring-no-properties beg end))))
     (deactivate-mark)
     (highlight-regexp str (hloccur-next-face))))
-
-(defun hloccur-unhighlight ()
-  "Remove symbol-overlay at point if any, else fall back to unhighlight-regexp."
-  (interactive)
-  (if (symbol-overlay-assoc (symbol-overlay-get-symbol nil t))
-      (symbol-overlay-put)
-    (call-interactively #'unhighlight-regexp)))
-
-(defun hloccur-remove-all ()
-  "Remove all highlights from both symbol-overlay and hi-lock."
-  (interactive)
-  (symbol-overlay-remove-all)
-  (unhighlight-regexp t))
 
 (defun hloccur-face-at-point-p ()
   "Return non-nil if point is on any hi-lock or symbol-overlay highlight."
@@ -66,8 +52,9 @@
      (seq-some (lambda (f) (memq f hloccur-faces))
                (if (listp face) face (list face))))))
 
-(defun hloccur-unhighlight-at-point ()
+(defun hloccur-remove-at-point ()
   "Remove highlight at point, whether symbol-overlay or hi-lock."
+  (interactive)
   (let ((removed nil))
     ;; Try symbol-overlay first.
     (when (and (thing-at-point 'symbol)
@@ -86,13 +73,19 @@
               (setq removed t))))))
     removed))
 
+(defun hloccur-remove-all ()
+  "Remove all highlights from both symbol-overlay and hi-lock."
+  (interactive)
+  (symbol-overlay-remove-all)
+  (unhighlight-regexp t))
+
 (defun hloccur-toggle ()
   "Highlight region literally / symbol at point. Remove highlight if already on one."
   (interactive)
   (cond
    ;; Point sits on an existing highlight -> remove it.
    ((and (not (use-region-p)) (hloccur-face-at-point-p))
-    (hloccur-unhighlight-at-point))
+    (hloccur-remove-at-point))
    ;; Active region -> literal highlight.
    ((use-region-p)
     (call-interactively #'hloccur-region-literal))
@@ -108,7 +101,7 @@
   "Bind hloccur commands in MAP."
   (define-key map (kbd "C-c M-n")     #'hloccur-toggle)
   (define-key map (kbd "C-M-\"")      #'hloccur-toggle)
-  (define-key map (kbd "C-c C-M-\"")  #'hloccur-remove-symbols)
+  (define-key map (kbd "C-c C-M-\"")  #'hloccur-remove-all)
   (define-key map (kbd "M-n")         #'hloccur-jump-next)
   (define-key map (kbd "M-p")         #'hloccur-jump-prev)
   (define-key map (kbd "C-c M-p")     #'hloccur-rename))
@@ -120,7 +113,7 @@
 (hloccur-bind-keys prog-mode-map)
 
 (global-set-key (kbd "M-s h SPC") #'hloccur-toggle)
-(global-set-key (kbd "M-s h u")   #'hloccur-unhighlight)
+(global-set-key (kbd "M-s h u")   #'hloccur-remove-at-point)
 (global-set-key (kbd "M-s h U")   #'hloccur-remove-all)
 
 ;; ======================================================
