@@ -1,69 +1,69 @@
-[submodule "git/moe-theme"]
+[submodule "git/source/moe-theme"]
 	path = git/source/moe-theme
 	url = git@github.com:kuanyui/moe-theme.el.git
-[submodule "git/fm-bookmarks"]
+[submodule "git/source/fm-bookmarks"]
 	path = git/source/fm-bookmarks
 	url = git@github.com:kuanyui/fm-bookmarks.el.git
-[submodule "git/hexo"]
+[submodule "git/source/hexo"]
 	path = git/source/hexo
 	url = git@github.com:kuanyui/hexo.el.git
-[submodule "git/kaomoji"]
+[submodule "git/source/kaomoji"]
 	path = git/source/kaomoji
 	url = git@github.com:kuanyui/kaomoji.el.git
-[submodule "git/moedict"]
+[submodule "git/source/moedict"]
 	path = git/source/moedict
 	url = git@github.com:kuanyui/moedict.el.git
-[submodule "git/recentz"]
+[submodule "git/source/recentz"]
 	path = git/source/recentz
 	url = git@github.com:kuanyui/recentz.el.git
-[submodule "git/tldr"]
+[submodule "git/source/tldr"]
 	path = git/source/tldr
 	url = git@github.com:kuanyui/tldr.el.git
-[submodule "git/taiwan-holidays"]
+[submodule "git/source/taiwan-holidays"]
 	path = git/source/taiwan-holidays
 	url = git@github.com:emacs-tw/taiwan-holidays.el.git
-[submodule "git/org-ioslide"]
+[submodule "git/forks/org-ioslide"]
 	path = git/forks/org-ioslide
 	url = git@github.com:coldnew/org-ioslide.git
-[submodule "git/fsc"]
+[submodule "git/source/fsc"]
 	path = git/source/fsc
 	url = git@github.com:kuanyui/fsc.el.git
-[submodule "git/writing-utils"]
+[submodule "git/source/writing-utils"]
 	path = git/source/writing-utils
 	url = git@github.com:kuanyui/writing-utils.el.git
-[submodule "git/ta"]
+[submodule "git/source/ta"]
 	path = git/source/ta
 	url = git@github.com:kuanyui/ta.el.git
-[submodule "git/qml-mode"]
+[submodule "git/forks/qml-mode"]
 	path = git/forks/qml-mode
 	url = git@github.com:kuanyui/qml-mode.git
-[submodule "git/company-qml"]
+[submodule "git/forks/company-qml"]
 	path = git/forks/company-qml
 	url = git@github.com:cute-jumper/company-qml.git
-[submodule "git/yajade-mode"]
+[submodule "git/source/yajade-mode"]
 	path = git/source/yajade-mode
 	url = git@github.com:kuanyui/yajade-mode.git
-[submodule "git/cakecrumbs"]
+[submodule "git/source/cakecrumbs"]
 	path = git/source/cakecrumbs
 	url = git@github.com:kuanyui/cake-crumbs.el.git
-[submodule "git/browser-f5"]
+[submodule "git/source/browser-f5"]
 	path = git/source/browser-f5
 	url = git@github.com:kuanyui/browser-f5.el.git
-[submodule "git/pff"]
+[submodule "git/source/pff"]
 	path = git/source/pff
 	url = git@github.com:kuanyui/pff.el.git
 [submodule "elpa"]
 	path = elpa
 	url = git@github.com:kuanyui/elpa.git
-[submodule "git/coffee-mode"]
+[submodule "git/forks/coffee-mode"]
 	path = git/forks/coffee-mode
 	url = git@github.com:kuanyui/coffee-mode.git
-[submodule "git/magit-popup"]
+[submodule "git/forks/magit-popup"]
 	path = git/forks/magit-popup
 	url = git@github.com:magit/magit-popup.git
-[submodule "git/magit"]
+[submodule "git/forks/magit"]
 	path = git/forks/magit
 	url = git@github.com:magit/magit.git
-[submodule "git/apparmor-mode"]
+[submodule "git/forks/apparmor-mode"]
 	path = git/forks/apparmor-mode
 	url = git@gitlab.com:kuanyui/apparmor-mode.git
