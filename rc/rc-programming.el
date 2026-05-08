@@ -52,65 +52,6 @@
 ;; ======================================================
 ;; CSS / Stylus keymap
 ;; ======================================================
-;;======================================================
-;; `highlight-symbol' (deprecated), `symbol-overlay'
-;;======================================================
-
-(require 'symbol-overlay)
-(define-key prog-mode-map (kbd "C-c M-n") 'symbol-overlay-put)
-(define-key prog-mode-map (kbd "C-M-\"") 'symbol-overlay-put)
-(define-key prog-mode-map (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
-(define-key prog-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
-(define-key prog-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)
-(define-key prog-mode-map (kbd "C-c M-p") 'symbol-overlay-rename)
-(with-eval-after-load 'make-mode
-  (define-key makefile-mode-map (kbd "M-n")'symbol-overlay-jump-next)
-  (define-key makefile-mode-map (kbd "M-p")'symbol-overlay-jump-prev)
-  )
-;; (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-;; (setq highlight-symbol-idle-delay 1.0)
-
-(mapc
- (lambda (name)
-   (let ((mode-symbol      (intern (concat name "-mode")))
-         (mode-hook-symbol (intern (concat name "-mode-hook")))
-         (mode-map-symbol  (intern (concat name "-mode-map"))))
-     (eval-after-load mode-symbol
-       `(progn
-          (add-hook   (quote ,mode-hook-symbol) 'symbol-overlay-mode)
-          (define-key ,mode-map-symbol (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
-          (define-key ,mode-map-symbol (kbd "C-c M-n") 'symbol-overlay-put)
-          (define-key ,mode-map-symbol (kbd "C-M-\"") 'symbol-overlay-put)
-          (define-key ,mode-map-symbol (kbd "M-n") 'symbol-overlay-jump-next)
-          (define-key ,mode-map-symbol (kbd "M-p") 'symbol-overlay-jump-prev)
-          (define-key ,mode-map-symbol (kbd "C-c M-p") 'symbol-overlay-rename)
-          )))
-   )
- '("css" "stylus" "jade" "yajade"
-   "conf" "conf-colon"
-   "c++" "c" "java"
-   "qml" "makefile"
-   "js" "js2" "javascript"
-   "prog"))
-
-(with-eval-after-load 'cc-mode
-  (define-key c++-mode-map (kbd "C-c M-n") 'symbol-overlay-put)
-  (define-key c++-mode-map (kbd "C-M-\"") 'symbol-overlay-put)
-  (define-key c++-mode-map (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
-  (define-key c++-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
-  (define-key c++-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)
-  (define-key c++-mode-map (kbd "C-c M-p") 'symbol-overlay-rename)
-  (define-key c-mode-map (kbd "C-c M-n") 'symbol-overlay-put)
-  (define-key c-mode-map (kbd "C-M-\"") 'symbol-overlay-put)
-  (define-key c-mode-map (kbd "C-c C-M-\"") 'symbol-overlay-remove-all)
-  (define-key c-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
-  (define-key c-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)
-  (define-key c-mode-map (kbd "C-c M-p") 'symbol-overlay-rename)
-  )
-;; (define-key makefile-mode-map (kbd "C-c M-n") 'highlight-symbol-at-point)
-;; (define-key makefile-mode-map (kbd "M-n")'highlight-symbol-next)
-;; (define-key makefile-mode-map (kbd "M-p")'highlight-symbol-prev)
-;; (define-key makefile-mode-map (kbd "C-c M-p") 'highlight-symbol-query-replace)
 ;; ======================================================
 ;; imenu
 ;; ======================================================

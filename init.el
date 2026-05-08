@@ -21,6 +21,7 @@
 (require 'rc-web-development)
 (require 'rc-templates)
 (require 'rc-edit)
+(require 'rc-hloccur)
 (require 'rc-dired)
 (require 'rc-ibuffer)
 (require 'rc-eshell)
