@@ -42,13 +42,6 @@
     (deactivate-mark)
     (highlight-regexp str (hloccur-next-face))))
 
-(defun hloccur-put ()
-  "Highlight region literally if active, otherwise toggle symbol-overlay at point."
-  (interactive)
-  (if (use-region-p)
-      (call-interactively #'hloccur-region-literal)
-    (call-interactively #'symbol-overlay-put)))
-
 (defun hloccur-unhighlight ()
   "Remove symbol-overlay at point if any, else fall back to unhighlight-regexp."
   (interactive)
@@ -62,14 +55,59 @@
   (symbol-overlay-remove-all)
   (unhighlight-regexp t))
 
+(defun hloccur-face-at-point-p ()
+  "Return non-nil if point is on any hi-lock or symbol-overlay highlight."
+  (or
+   ;; symbol-overlay: check for any symbol-overlay overlay at point
+   (seq-some (lambda (ov) (overlay-get ov 'symbol-overlay))
+             (overlays-at (point)))
+   ;; hi-lock: check whether the face property includes one of our faces
+   (let ((face (get-text-property (point) 'face)))
+     (seq-some (lambda (f) (memq f hloccur-faces))
+               (if (listp face) face (list face))))))
+
+(defun hloccur-unhighlight-at-point ()
+  "Remove highlight at point, whether symbol-overlay or hi-lock."
+  (let ((removed nil))
+    ;; Try symbol-overlay first.
+    (when (and (thing-at-point 'symbol)
+               (symbol-overlay-assoc (symbol-overlay-get-symbol t)))
+      (symbol-overlay-put)
+      (setq removed t))
+    ;; Fall back to hi-lock: locate the pattern whose face matches point.
+    (unless removed
+      (let* ((face (get-text-property (point) 'face))
+             (faces (if (listp face) face (list face)))
+             (hit (seq-find (lambda (f) (memq f hloccur-faces)) faces)))
+        (when hit
+          (dolist (pat hi-lock-interactive-patterns)
+            (when (eq (hi-lock-keyword->face pat) hit)
+              (unhighlight-regexp (car pat))
+              (setq removed t))))))
+    removed))
+
+(defun hloccur-toggle ()
+  "Highlight region literally / symbol at point. Remove highlight if already on one."
+  (interactive)
+  (cond
+   ;; Point sits on an existing highlight -> remove it.
+   ((and (not (use-region-p)) (hloccur-face-at-point-p))
+    (hloccur-unhighlight-at-point))
+   ;; Active region -> literal highlight.
+   ((use-region-p)
+    (call-interactively #'hloccur-region-literal))
+   ;; Default -> symbol-overlay toggle (already a toggle upstream).
+   (t
+    (call-interactively #'symbol-overlay-put))))
+
 ;; ======================================================
 ;; keybinding helper
 ;; ======================================================
 
 (defun hloccur-bind-keys (map)
   "Bind hloccur commands in MAP."
-  (define-key map (kbd "C-c M-n")     #'hloccur-put)
-  (define-key map (kbd "C-M-\"")      #'hloccur-put)
+  (define-key map (kbd "C-c M-n")     #'hloccur-toggle)
+  (define-key map (kbd "C-M-\"")      #'hloccur-toggle)
   (define-key map (kbd "C-c C-M-\"")  #'hloccur-remove-symbols)
   (define-key map (kbd "M-n")         #'hloccur-jump-next)
   (define-key map (kbd "M-p")         #'hloccur-jump-prev)
@@ -81,7 +119,7 @@
 
 (hloccur-bind-keys prog-mode-map)
 
-(global-set-key (kbd "M-s h SPC") #'hloccur-put)
+(global-set-key (kbd "M-s h SPC") #'hloccur-toggle)
 (global-set-key (kbd "M-s h u")   #'hloccur-unhighlight)
 (global-set-key (kbd "M-s h U")   #'hloccur-remove-all)
 
