@@ -26,12 +26,11 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
 ;; packages which is not installed via packages.el
 (add-to-list 'load-path "~/.emacs.d/lisps")
 
-
-(mapc (lambda (path) (add-to-list 'load-path path))
-      (directory-files "~/.emacs.d/git/source" t "^[^\.]"))
-
-(mapc (lambda (path) (add-to-list 'load-path path))
-      (directory-files "~/.emacs.d/git/forks" t "^[^\.]"))
+;; Add all ~/.emacs.d/git/*/* into `load-path'
+(mapc (lambda (category)
+        (mapc (lambda (path) (add-to-list 'load-path path))
+              (directory-files category t "^[^.]")))
+      (directory-files "~/.emacs.d/git" t "^[^.]"))
 
 ;; Packges.el
 (require 'package)
