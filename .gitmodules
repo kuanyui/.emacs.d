@@ -64,3 +64,6 @@
 [submodule "git/magit"]
 	path = git/forks/magit
 	url = git@github.com:magit/magit.git
+[submodule "git/apparmor-mode"]
+	path = git/forks/apparmor-mode
+	url = git@gitlab.com:kuanyui/apparmor-mode.git
