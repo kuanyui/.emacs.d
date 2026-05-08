@@ -106,35 +106,44 @@
    '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc
 	      org-mhe org-rmail org-w3m))
  '(package-selected-packages
-   '(hl-todo forge pyvenv markdown-mode apparmor-mode esup
-	     helm-projectile benchmark-init helm-core helm git-modes
-	     git-timemachine company expand-region lua-mode magit
-	     orderless org-roam diff-hl toc-org treemacs marginalia
-	     vertico move-text duplicate-thing multiple-cursors
-	     request visual-regexp eslint-fix js2-mode company-flow
-	     flycheck-flow manage-minor-mode flow-minor-mode golint
-	     column-marker col-highlight pug-mode anaconda-mode
-	     company-anaconda jedi-core flymake-json editorconfig
-	     vue-mode projectile yaml-mode xterm-color wgrep-ag
-	     wgrep-ack web-mode web-beautify visual-regexp-steroids
-	     virtualenvwrapper undo-tree twittering-mode tuareg swoop
-	     sudden-death stylus-mode sr-speedbar sqlup-mode
-	     sql-indent smooth-scrolling smartparens smart-tab
-	     smart-operator slime-company sicp scss-mode rich-minority
-	     rainbow-mode rainbow-identifiers rainbow-delimiters
-	     python-info pylint py-smart-operator powerline php-mode
-	     paradox pangu-spacing ox-html5slide oauth nodejs-repl
-	     neotree mmm-mode mediawiki less-css-mode json-mode
-	     js2-refactor js-comint jade-mode indent-guide
-	     ibuffer-projectile hungry-delete htmlize highlight-symbol
-	     haml-mode goto-chg google-translate go-mode gh ggtags
-	     geiser flymake-shell flymake-python-pyflakes flymake-haml
-	     flymake-css flycheck flx-ido fiplr f esqlite
-	     enh-ruby-mode emr emms-state emms-player-mpv emmet-mode
-	     elpy discover direx dired+ company-jedi company-c-headers
-	     cmake-mode cmake-ide calfw bbdb-csv-import bbdb-
-	     aggressive-indent ag ack ace-jump-mode ac-slime ac-js2
-	     ac-inf-ruby ac-haskell-process))
+   '(ac-haskell-process
+     ac-inf-ruby ac-js2 ac-slime ace-jump-mode ack ag
+     aggressive-indent anaconda-mode bbdb-
+     bbdb-csv-import benchmark-init calfw cmake-ide
+     cmake-mode col-highlight column-marker company
+     company-anaconda company-c-headers
+     company-flow company-jedi diff-hl dired+ direx
+     discover duplicate-thing editorconfig elpy
+     emmet-mode emms-player-mpv emms-state emr
+     enh-ruby-mode eslint-fix esqlite esup
+     expand-region f fiplr flow-minor-mode flx-ido
+     flycheck flycheck-flow flymake-css
+     flymake-haml flymake-json
+     flymake-python-pyflakes flymake-shell forge
+     geiser ggtags gh git-modes git-timemachine
+     go-mode golint google-translate goto-chg
+     haml-mode helm helm-core helm-projectile
+     highlight-symbol hl-todo htmlize hungry-delete
+     ibuffer-projectile indent-guide jade-mode
+     jedi-core js-comint js2-mode js2-refactor
+     json-mode less-css-mode lua-mode magit
+     manage-minor-mode marginalia markdown-mode
+     mediawiki mmm-mode move-text multiple-cursors
+     neotree nodejs-repl oauth orderless org-roam
+     ox-html5slide pangu-spacing paradox php-mode
+     powerline projectile pug-mode
+     py-smart-operator pylint python-info pyvenv
+     rainbow-delimiters rainbow-identifiers
+     rainbow-mode request rich-minority scss-mode
+     sicp slime-company smart-operator smart-tab
+     smartparens smooth-scrolling sql-indent
+     sqlup-mode sr-speedbar stylus-mode
+     sudden-death swoop toc-org treemacs tuareg
+     twittering-mode undo-tree vertico
+     virtualenvwrapper visual-regexp
+     visual-regexp-steroids vue-mode web-beautify
+     web-mode wgrep-ack wgrep-ag xterm-color
+     yaml-mode))
  '(paradox-github-token t)
  '(safe-local-variable-directories '("/etc/"))
  '(safe-local-variable-values
