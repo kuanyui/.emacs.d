@@ -47,6 +47,8 @@ recentf
 /_backups
 *.eln
 eln-cache/
-transient/
+/transient/*
 .recentz-data
 _tmp/
+/history
+/forge-database.sqlite
