@@ -51,7 +51,10 @@
     )
 
   ;; (global-git-gutter-mode +1)
-  ;; (setq magit-diff-refine-hunk 'all)
+
+  ;; Highlight modified characters in modified line
+  (setq magit-diff-refine-hunk 'all)
+
   ;; (setq magit-last-seen-setup-instructions "1.4.0")
   ;; (setq git-commit-summary-max-length 500)
   ;; (add-to-list 'load-path "~/.emacs.d/lisps/magit/lisp/")

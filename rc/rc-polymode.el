@@ -85,4 +85,6 @@
                  ))
   (add-to-list 'auto-mode-alist entry))
 
+(add-to-list 'auto-mode-alist '("\\.aa$" . apparmor-mode))
+
 (provide 'rc-polymode)
