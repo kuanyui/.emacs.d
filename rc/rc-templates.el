@@ -27,38 +27,56 @@
 ;;======================================================
 ;; `auto-insert' Templates
 ;;======================================================
-(require 'autoinsert)
-(setq auto-insert-query nil)
-(setq auto-insert-directory "~/.emacs.d/templates/")
-(auto-insert-mode t)
 
-;; Python
-(define-auto-insert
-  '("\\.py\\'" . "Python")
-  '(nil
-    "# -*- coding: utf-8 -*-\n"
-    ))
+;; `auto-insert' is merely a pile of shit. Shitty UI / UX.
+;;
+;; 1. Every time creating an `*.el' file, it force you to entering the
+;;    fucking template arguments.  And this even also happened in
+;;    non-interactive calling, such as `custom.el'.
+;;
+;; 2. When creating an `*.el' file, it endlessly prompt you multiple
+;;    fucking "Keywords", and even don't tell you how to apply the
+;;    result in the fucking idiot minibuffer prompt string. When you
+;;    angrily press `RET', it merely keeps appending "c, c, c, c, c,
+;;    ..." until you finally ask LLM that what the fuck is this and it
+;;    tell you "Hahaha, you should press `C-RET' to accept."
+;;
+;; I think those who don't know what is UI/UX should never write any
+;; code which effects UI.
 
-;; Org
-(define-auto-insert
-  '("\\.org\\'" . "Org")
-  '(nil
-    "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-real-name))) "\n"
-    "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
-    "#+AUTHOR: " user-full-name "\n"
-    "#+EMAIL: " user-mail-address "\n"
-    "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \\n:nil ^:t arch:headline\n"
-    "#+OPTIONS: author:t c:nil creator:comment d:(not \"LOGBOOK\") date:t\n"
-    "#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t\n"
-    "#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t\n"
-    "#+CREATOR: " (format "Emacs %s (Org mode %s)"
-                          emacs-version (org-version nil nil)) "\n"
-                          "#+DESCRIPTION:\n"
-                          "#+EXCLUDE_TAGS: noexport\n"
-                          "#+KEYWORDS:\n"
-                          "#+LANGUAGE: en\n"
-                          "#+SELECT_TAGS: export\n"
-                          ))
+;; (require 'autoinsert)
+;; (setq auto-insert-query nil)
+;; (setq auto-insert-directory "~/.emacs.d/templates/")
+;; ;; (setq auto-insert-alist nil)   ;; Disable annoying built-in templates
+;; (auto-insert-mode t)
+
+;; ;; Python
+;; (define-auto-insert
+;;   '("\\.py\\'" . "Python")
+;;   '(nil
+;;     "# -*- coding: utf-8 -*-\n"
+;;     ))
+
+;; ;; Org
+;; (define-auto-insert
+;;   '("\\.org\\'" . "Org")
+;;   '(nil
+;;     "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-real-name))) "\n"
+;;     "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
+;;     "#+AUTHOR: " user-full-name "\n"
+;;     "#+EMAIL: " user-mail-address "\n"
+;;     "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \\n:nil ^:t arch:headline\n"
+;;     "#+OPTIONS: author:t c:nil creator:comment d:(not \"LOGBOOK\") date:t\n"
+;;     "#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t\n"
+;;     "#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t\n"
+;;     "#+CREATOR: " (format "Emacs %s (Org mode %s)"
+;;                           emacs-version (org-version nil nil)) "\n"
+;;     "#+DESCRIPTION:\n"
+;;     "#+EXCLUDE_TAGS: noexport\n"
+;;     "#+KEYWORDS:\n"
+;;     "#+LANGUAGE: en\n"
+;;     "#+SELECT_TAGS: export\n"
+;;     ))
 
 ;; gitignore
 (defun touch-gitignore ()
