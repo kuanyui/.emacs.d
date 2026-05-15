@@ -52,3 +52,4 @@ eln-cache/
 _tmp/
 /history
 /forge-database.sqlite
+/.custom.el
