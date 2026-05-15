@@ -9,6 +9,49 @@
 
 (add-to-list 'auto-mode-alist '(".gitmodules" . conf-mode))
 
+(with-eval-after-load 'magit-diff
+  ;; Dirty hack for `magit-insert-revision-headers' to replace the ambiguous wording
+  ;; (`Merged', `Contained') with clearer labels and add tooltips.
+  (defvar my-magit-related-refs-rename
+    '(("Merged"
+       :to "Merged into"
+       :help "[git branch --merged <this commit>]\nThis commit is already merged into these branches:")
+      ("Contained"
+       :to "Ancestor of"
+       :help "[git branch --contains <this commit>]\nThis commit is a parent of these branches:"))
+    "Rewrite rules for Magit related-refs section headings.
+       Each entry is (ORIGINAL :to NEW :help TOOLTIP).")
+
+  (define-advice magit--insert-related-refs
+      (:filter-args (args) my-rename-related-refs-heading)
+    "Rename the Merged / Contained section headings."
+    (if-let* ((orig (nth 2 args))
+              (rule (cdr (assoc orig my-magit-related-refs-rename))))
+        (let ((new  (plist-get rule :to))
+              (tip  (plist-get rule :help)))
+          (list (nth 0 args)
+                (nth 1 args)
+                (propertize new 'help-echo tip)
+                (nth 3 args)))
+      args))
+
+  ;; Override built-in `magit--insert-related-refs' in `magit-diff.el'
+  (defun magit--insert-related-refs (rev arg title remote)
+    (when-let ((refs (magit-list-related-branches arg rev (and remote "-a"))))
+      (insert title ":" (make-string (- 12 (length title)) ?\s))   ;; <--- Upstream was 10
+      (dolist (branch refs)
+        (if (<= (+ (current-column) 1 (length branch))
+                (window-width))
+            (insert ?\s)
+          (insert ?\n (make-string 14 ?\s)))    ;; <--- Upstream was 12
+        (magit-insert-section (branch branch)
+          (insert (propertize branch 'font-lock-face
+                              (if (string-prefix-p "remotes/" branch)
+                                  'magit-branch-remote
+                                'magit-branch-local)))))
+      (insert ?\n)))
+  )
+
 (with-eval-after-load 'magit
   (require 'magit)
   (require 'forge)
@@ -90,10 +133,10 @@
 
   ;; Copied From https://github.com/magit/magit/discussions/4826#discussioncomment-4389196
 
-  (defun my/magit-refs-toggle-tags ()
+  (defun my-magit-refs-toggle-tags ()
     "Toggle showing tags in `magit-refs-mode'.
-This only affects the current buffer and is useful if you do not
-show tags by default."
+       This only affects the current buffer and is useful if you do not
+       show tags by default."
     (interactive)
     (let ((pos (point)))
       (if (memq 'magit-insert-tags magit-refs-sections-hook)
@@ -106,7 +149,7 @@ show tags by default."
 
   (with-eval-after-load 'magit-refs
     (remove-hook 'magit-refs-sections-hook #'magit-insert-tags)
-    (define-key magit-refs-mode-map (kbd "C-c C-t") #'my/magit-refs-toggle-tags))
+    (define-key magit-refs-mode-map (kbd "C-c C-t") #'my-magit-refs-toggle-tags))
 
 
   ;; ======================================================
@@ -178,18 +221,18 @@ show tags by default."
 					     (my-magit-get-branches-containing-commit hash-cherrypicked) ", "))
 	   (cherrypick-result (car (my-magit-run-process "git" "cherry-pick" "--ff" hash-cherrypicked)))
 	   (NEW_MSG_TEMPLATE "%s
---------------
-(This commit is created via cherry-pick by HEAD branch %s. The cherry-picked source commit is %s , which is contained in the following branch(s): %s"))
+       --------------
+       (This commit is created via cherry-pick by HEAD branch %s. The cherry-picked source commit is %s , which is contained in the following branch(s): %s"))
       (if (not (eq cherrypick-result 0))
 	  (let* ((ori-msg-fpath (f-join (my-magit-shell-command-to-string "git rev-parse --show-toplevel") ".git/MERGE_MSG"))
 		 (ori-msg (f-read-text ori-msg-fpath 'utf-8))
 		 (new-msg (format NEW_MSG_TEMPLATE ori-msg branch-head hash-cherrypicked branches-cherrypicked)))
 	    (f-write-text new-msg 'utf-8 ori-msg-fpath)
 	    (message (propertize (format "
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-[ATTENTION] Cherry-pick failed. Please check manually.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-\n\n%s" new-msg) :foreground "#ff6666"))
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          [ATTENTION] Cherry-pick failed. Please check manually.
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          \n\n%s" new-msg) :foreground "#ff6666"))
 	    )
 	(let* ((ori-msg (my-magit-shell-command-to-string "git log -1 --pretty=%B"))
 	       (new-msg (format NEW_MSG_TEMPLATE ori-msg branch-head hash-cherrypicked branches-cherrypicked)))
@@ -220,9 +263,9 @@ show tags by default."
 
   (defun my-shell-arg-escape (string)
     "Replace html entities.
-Example:
-(html-enetities-convert \"&gt\;\")
-=> \">\""
+          Example:
+          (html-enetities-convert \"&gt\;\")
+          => \">\""
     (mapc (lambda (x)
 	    (if (string-match (car x) string)
 		(setq string (string-replace (car x) (cdr x) string))
@@ -335,14 +378,14 @@ Example:
   (defun my-magit-toggle-exclude-decoration-in-git-config ()
     "Toggle the comment marks at BOL of `excludeDecoration = ...` in `CURRENT_REPO/.git/config`
 
-This will toggle between:
+       This will toggle between:
 
-  # excludeDecoration =
+       # excludeDecoration =
 
-and
+       and
 
-  excludeDecoration =
-"
+       excludeDecoration =
+       "
     (interactive)
     (let* ((git-config (plist-get (my-git-get-repo-paths ".") :git-config)))
       (with-temp-buffer
@@ -408,7 +451,7 @@ and
 		       (ido-completing-read "Branch: " branches nil t)))
 	   (msg (format "The issue is fixed in the repository %s , at/since commit ([`%s`](%s)) in branch `%s`, and should be available in versions **newer than** `%s` .
 
-(NOTE: The exact version number is currently undetermined as it will be generated by CI/CD. To use the fixed version, please request a developer with CI/CD permissions (or trigger it yourself if you have access) to manually run the build pipeline.)"
+       (NOTE: The exact version number is currently undetermined as it will be generated by CI/CD. To use the fixed version, please request a developer with CI/CD permissions (or trigger it yourself if you have access) to manually run the build pipeline.)"
 			(forge-get-url :remote "origin") commit-hash (forge-get-url :commit commit-hash)
 			branch tag)))
       (my-copy-to-clipboard msg)
@@ -563,10 +606,10 @@ and
   ;; ======================================================
   (defun my-magit-get-exclude-branch-from-gitconfig ()
     "Please specify the patterns of branches which you want to exclude in .git/config:
-[log]
-	magitExcludeBranch = \"master\"
-	magitExcludeBranch = \"foo*\"
-  "
+       [log]
+       magitExcludeBranch = \"master\"
+       magitExcludeBranch = \"foo*\"
+       "
     (let* ((git-config (plist-get (my-git-get-repo-paths ".") :git-config))
 	   (branches '()))
       (with-temp-buffer
@@ -585,17 +628,17 @@ and
 
   (defun my-magit-get-exclude-options (type)
     "
-   When `git log`:
+       When `git log`:
 
-   1. For --branches + --remotes:
+       1. For --branches + --remotes:
 
        --exclude='foo' --exclude='master*' --branches
        --exclude='*/foo' --exclude='*/master*' --exclude='*/HEAD' --remotes
 
-   2. If use `--all`, we only need:
+       2. If use `--all`, we only need:
 
        --exclude='refs/tags/*' --exclude='refs/remotes/origin/HEAD' --exclude='**/foo' --exclude='**/master*' --all
-  "
+       "
     (mapcar (lambda (patt) (concat "--exclude=" patt))
 	    (cond ((eq type 'all)
 		   `("refs/tags/*"
@@ -632,8 +675,8 @@ and
 
   (defvar magit-branch-read-history '()
     "Minibuffer read history of `magit-branch-read-args'. Mainly for
-adding the starting branch (or the current branch) to the minibufffer
-history list before entering the name of new branch.")
+       adding the starting branch (or the current branch) to the minibufffer
+       history list before entering the name of new branch.")
 
   (defun magit-branch-read-args (prompt &optional default-start)
     (if magit-branch-read-upstream-first
@@ -663,8 +706,8 @@ history list before entering the name of new branch.")
 	  (if (magit-branch-p branch)
 	      (magit-branch-read-args
 	       (format "Branch `%s' already exists; pick another name" branch)
-	       default-start)
-	    (list branch (magit-read-starting-point prompt branch default-start)))))))
+       default-start)
+      (list branch (magit-read-starting-point prompt branch default-start)))))))
   )
 ;; (setq magit-branch-read-upstream-first nil)  ;; Don't sure what behavior do you prefer, so not implement
 ;; (magit-branch-read-args "AAA")
