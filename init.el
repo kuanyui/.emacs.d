@@ -23,6 +23,7 @@
 ;; (profiler-stop)
 ;; (profiler-report)
 (require 'rc-basic)
+(require 'rc-spell)
 (require 'rc-programming)
 (require 'rc-web-development)
 (require 'rc-templates)

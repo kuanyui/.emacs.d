@@ -560,18 +560,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 ;;完全隱藏歡迎畫面
 (setq inhibit-splash-screen t)
 
-(setq initial-scratch-message
-      ";; If you have no shadows, you're not in the light
-;; -- Lady Gaga
-")
-
-;; aspell
-(setq ispell-program-name "aspell")
-(setq ispell-extra-args '("--sug-mode=normal" "--lang=en_US" "--dont-run-together"))
-;; (setq ispell-extra-args '("--sug-mode=ultra"))
-(setq ispell-dictionary "american")
-
-
 ;;靠近螢幕邊緣三行時就開始捲動，比較容易看上下文
 (setq scroll-margin 3)
 
@@ -638,16 +626,6 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
 (global-set-key (kbd "C-x <f2>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f2>") 'kmacro-end-or-call-macro)
-
-;;自動啟動flyspell-mode拼字檢查
-;;(setq-default flyspell-mode t)
-;;flyspell-prog-mode是為程式設計師的輔模式，Emacs将只在注释和字符串里高亮错误的拼写。
-;;(setq-default flyspell-prog-mode t)
-(global-set-key (kbd "C-x <f3>") 'flyspell-mode)
-(global-set-key (kbd "C-c <f3>") 'flyspell-buffer)
-(global-set-key (kbd "<f3>") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-x <f4>") 'ispell-buffer)
-(global-set-key (kbd "<f4>") 'ispell-word) ;;M-$，有夠難記，很容易跟query-replace的M-%搞混
 
 
 ;; (global-set-key (kbd "<f9>") 'open-note)
