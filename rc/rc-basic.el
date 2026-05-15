@@ -329,16 +329,15 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 
     (defun set-font (english chinese size-pair)
       "Setup emacs English and Chinese font on x window-system."
+      (when (font-exist-p english)
+        ;; also update default face, avoid font size restore to default  (ex: entering Magit's commit editor)
+        (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" english (car size-pair)))
+        (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
 
-      (if (font-exist-p english)
-          (set-frame-font (format "%s:pixelsize=%d" english (car size-pair)) t))
-
-      (if (font-exist-p chinese)
-          (dolist (charset '(kana han symbol cjk-misc bopomofo))
-            (set-fontset-font (frame-parameter nil 'font) charset
-                              (font-spec :family chinese :size (cdr size-pair))))))
-    ;; Setup font size based on emacs-font-size-pair
-    (set-font emacs-english-font emacs-cjk-font emacs-font-size-pair)
+      (when (font-exist-p chinese)
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          ;; Use `t' instead of (frame-parameter nil 'font), to apply fontset globally.
+          (set-fontset-font t charset (font-spec :family chinese :size (cdr size-pair))))))
 
     (defun emacs-step-font-size (step)
       "Increase/Decrease emacs's font size."
