@@ -221,12 +221,9 @@ e.g. ruby main.rb => ruby main.rb:directory_name"
   (message "Buffer reverted."))
 (global-auto-revert-mode t)
 
-;; Always split window vertically. (e.g. Magit, ibuffer)
-
-;; Because I prefer tiny fonts under terminal.
-;; By default, when height greater than some degree, Emacs will split window horizontally.
+;; Always split window left-side & right-side. (e.g. Magit)
 (setq split-height-threshold nil)
-(setq split-width-threshold 280)
+(setq split-width-threshold 180)
 
 
 (global-display-line-numbers-mode 1)
