@@ -15,7 +15,7 @@
   (defvar my-magit-related-refs-rename
     '(("Merged"
        :to "Merged into"
-       :help "[git branch --merged <this commit>]\nThis commit is already merged into these branches:")
+       :help "[git branch --merged <this commit>]\nThis commit was already merged into these branches:")
       ("Contained"
        :to "Ancestor of"
        :help "[git branch --contains <this commit>]\nThis commit is a parent of these branches:"))
@@ -56,6 +56,21 @@
   (require 'magit)
   (require 'forge)
   (setq git-commit-summary-max-length 600)
+
+  ;; Don't trim file path in `magit-diff' if possible
+  ;; (setq magit-diff-extra-stat-arguments '("--stat-width=200" "--stat-name-width=200"))
+  (setq magit-diff-extra-stat-arguments
+        (lambda ()
+          (let* ((width (window-width))
+                 (overhead 10)  ; "| 12345 "
+                 (name (- width overhead))
+                 ;;(graph (- width name overhead))
+                 )
+            (list (format "--stat-width=%d" width)
+                  (format "--stat-name-width=%d" name)
+                  ;; (format "--stat-graph-width=%d" graph)
+                  ))))
+
   (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
 
   ;; Add weekday to timestamp in magit-log margin.
