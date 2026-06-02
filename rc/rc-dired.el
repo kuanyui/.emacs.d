@@ -7,6 +7,10 @@
 ;; ======================================================
 ;; Dired+
 ;; ======================================================
+;; Don't neglect `.` `_` when sorting list
+(setenv "LC_COLLATE" "C")
+(setq ls-lisp-use-string-collate nil)
+
 ;; Lazy-load Dired+
 (with-eval-after-load 'dired
   (add-to-list 'find-directory-functions 'my-dired-noselect)
