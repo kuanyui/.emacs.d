@@ -1124,6 +1124,12 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (add-to-list 'auto-mode-alist '("\\.mount\\'" . conf-unix-mode))
 (add-to-list 'auto-mode-alist '("\\.path\\'" . conf-unix-mode))
 
+;; ======================================================
+;; Project (Built-in replacement of Projectile)
+;; ======================================================
+
+(global-set-key (kbd "C-x p s") #'project-find-regexp)
+
 
 (provide 'rc-basic)
 ;;; basic.el ends here
