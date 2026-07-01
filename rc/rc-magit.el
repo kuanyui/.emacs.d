@@ -74,6 +74,7 @@
   (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
 
   ;; Add weekday to timestamp in magit-log margin.
+  (setq system-time-locale "en_US.UTF-8")
   ;; (setq system-time-locale "ja_JP.UTF-8")
   ;; (setq system-time-locale "zh_TW.UTF-8")
   (setq magit-log-margin '(t "%Y-%02m-%d %a %H:%M:%S" magit-log-margin-width t 18))
