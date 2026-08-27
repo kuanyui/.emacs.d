@@ -313,7 +313,7 @@
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-type-face msg))
 	      (s-matched-positions-all "([^)]+?)" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'magit-keyword msg))    ; magit-keyword
-	      (s-matched-positions-all "\\[.+\\]" msg 0))
+	      (s-matched-positions-all "\\[.+?\\]" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-variable-name-face msg))
 	      (s-matched-positions-all "`.+?`" msg 0))
 	(mapc (lambda (x) (magit--put-face (car x) (cdr x) 'font-lock-function-name-face msg))
@@ -722,8 +722,8 @@
 	  (if (magit-branch-p branch)
 	      (magit-branch-read-args
 	       (format "Branch `%s' already exists; pick another name" branch)
-       default-start)
-      (list branch (magit-read-starting-point prompt branch default-start)))))))
+               default-start)
+            (list branch (magit-read-starting-point prompt branch default-start)))))))
   )
 ;; (setq magit-branch-read-upstream-first nil)  ;; Don't sure what behavior do you prefer, so not implement
 ;; (magit-branch-read-args "AAA")
