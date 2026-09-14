@@ -911,8 +911,9 @@ Otherwise, return DPI (1 inch = 2.54 cm)
 (global-set-key [f6] 'point-to-register)
 (global-set-key [f7] 'jump-to-register)
 
-(define-key Info-mode-map "q" #'Info-up)
-(define-key Info-mode-map "Q" #'quit-window)
+(with-eval-after-load 'info
+  (define-key Info-mode-map "q" #'Info-up)
+  (define-key Info-mode-map "Q" #'quit-window))
 
 
 ;; ======================================================
