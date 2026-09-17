@@ -77,7 +77,11 @@
 
 (message (emacs-init-time))
 
-;;======================================================
-;; customize 以下為Emacs自動生成，不要動
-;;======================================================
-;;
+;; Custom settings, loaded last so they win over the rc files above
+;; (e.g. `delete-selection-mode' and `line-number-mode' stay off).
+;;   custom-shared.el : in git, shared by every machine, hand-edited.
+;;   custom-file       : .custom.el, per-machine, the only file Custom writes.
+;; The early load of `custom-file' above stays: if init breaks halfway,
+;; saving Custom must not wipe it.
+(load (expand-file-name "custom-shared.el" user-emacs-directory))
+(load custom-file)
