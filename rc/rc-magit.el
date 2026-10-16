@@ -728,5 +728,14 @@
 ;; (setq magit-branch-read-upstream-first nil)  ;; Don't sure what behavior do you prefer, so not implement
 ;; (magit-branch-read-args "AAA")
 
+;; ======================================================
+;; Add a `git submodule update --init --recursive` because Magit doesn't provide a simple way to do this
+;; ======================================================
+
+(defun my-magit-submodule-update-init-recursive ()
+  (interactive)
+  (if (yes-or-no-p "Attention! Are you sure to run `git submodule update --init --recursive`?")
+      (shell-command "git submodule update --init --recursive")))
+
 (provide 'rc-magit)
 ;;; rc-magit.el ends here
